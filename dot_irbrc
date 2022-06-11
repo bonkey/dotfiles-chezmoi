@@ -1,0 +1,168 @@
+require 'awesome_print'
+require 'fileutils'
+require 'json'
+require 'pathname'
+require 'uri'
+require 'yaml'
+
+# require 'irb/ext/save-history'
+
+IRB.conf[:USE_READLINE] = true
+IRB.conf[:AUTO_INDENT]  = false
+
+# Save History between irb sessions
+IRB.conf[:SAVE_HISTORY] = 1000
+IRB.conf[:HISTORY_FILE] = "#{ENV['HOME']}/.irb-history"
+
+# load libraries
+begin
+  require 'rubygems'
+rescue
+  nil
+end
+
+
+class Object
+  def local_methods
+    (methods - Object.instance_methods).sort
+  end
+end
+
+IRB.conf[:AUTO_INDENT] = true
+
+ANSI = {
+  RESET: "\e[0m", BOLD: "\e[1m", UNDERLINE: "\e[4m",
+  LGRAY: "\e[0;37m", GRAY: "\e[1;30m", RED: "\e[31m",
+  GREEN: "\e[32m", YELLOW: "\e[33m", BLUE: "\e[34m",
+  MAGENTA: "\e[35m", CYAN: "\e[36m", WHITE: "\e[37m"
+}.freeze
+
+# Loading extensions of the console. This is wrapped
+# because some might not be included in your Gemfile
+# and errors will be raised
+def extend_console(name, care = true, required = true)
+  if care
+    require name if required
+    yield if block_given?
+    $console_extensions << "#{ANSI[:GREEN]}#{name}#{ANSI[:RESET]}"
+  else
+    $console_extensions << "#{ANSI[:GRAY]}#{name}#{ANSI[:RESET]}"
+  end
+rescue LoadError
+  $console_extensions << "#{ANSI[:RED]}#{name}#{ANSI[:RESET]}"
+end
+$console_extensions = []
+
+# Wirble is a gem that handles coloring the IRB
+# output and history
+extend_console 'wirble' do
+  Wirble.init(history_uniq: false)
+  Wirble.colorize
+end
+
+# Hirb makes tables easy.
+extend_console 'hirb' do
+  require 'hirb/import_object'
+  Hirb.enable
+  extend Hirb::Console
+end
+
+# When you're using Rails 3 console, show queries in the console
+extend_console 'rails3', defined?(ActiveSupport::Notifications), false do
+  $odd_or_even_queries = false
+  ActiveSupport::Notifications.subscribe('sql.active_record') do |*args|
+    $odd_or_even_queries = !$odd_or_even_queries
+    color = $odd_or_even_queries ? ANSI[:CYAN] : ANSI[:MAGENTA]
+    event = ActiveSupport::Notifications::Event.new(*args)
+    time  = '%.1fms' % event.duration
+    name  = event.payload[:name]
+    sql   = event.payload[:sql].tr("\n", ' ').squeeze(' ')
+    puts "  #{ANSI[:UNDERLINE]}#{color}#{name} (#{time})#{ANSI[:RESET]}  #{sql}"
+  end
+end
+
+# Add a method pm that shows every method on an object
+# Pass a regex to filter these
+extend_console 'pm', true, false do
+  def pm(obj, *options) # Print methods
+    methods = obj.methods
+    methods -= Object.methods unless options.include? :more
+    filter  = options.select { |opt| opt.is_a? Regexp }.first
+    methods = methods.select { |name| name =~ filter } if filter
+
+    data = methods.sort.collect do |name|
+      method = obj.method(name)
+      if method.arity == 0
+        args = '()'
+      elsif method.arity > 0
+        n = method.arity
+        args = "(#{(1..n).collect { |i| "arg#{i}" }.join(', ')})"
+      elsif method.arity < 0
+        n = -method.arity
+        args = "(#{(1..n).collect { |i| "arg#{i}" }.join(', ')}, ...)"
+      end
+      klass = Regexp.last_match(1) if method.inspect =~ /Method: (.*?)#/
+      [name.to_s, args, klass]
+    end
+    max_name = data.collect { |item| item[0].size }.max
+    max_args = data.collect { |item| item[1].size }.max
+    data.each do |item|
+      print " #{ANSI[:YELLOW]}#{item[0].to_s.rjust(max_name)}#{ANSI[:RESET]}"
+      print "#{ANSI[:BLUE]}#{item[1].ljust(max_args)}#{ANSI[:RESET]}"
+      print "   #{ANSI[:GRAY]}#{item[2]}#{ANSI[:RESET]}\n"
+    end
+    data.size
+  end
+end
+
+['bond', 'ctx', 'net-http-spy', 'interactive_editor', 'nokogiri', 'open-uri'].each do |gem|
+  extend_console gem do
+    # no configuration needed
+  end
+end
+
+# Show results of all extension-loading
+
+module DynamicPrompt
+  def self.apply!
+    IRB.conf[:PROMPT][:INFORMATIVE] = {
+      PROMPT_I: '>>'.tap do |s|
+        def s.dup
+          gsub('>>', DynamicPrompt.normal)
+        end
+      end,
+      PROMPT_S: "\e[0;35m%n\e[0m   ",
+      PROMPT_C: "\e[0;35m%n\e[0m>   ",
+      RETURN: "\e[1;35m=>\e[0m %.2048s\n"
+    }
+    IRB.conf[:PROMPT_MODE] = :INFORMATIVE
+  end
+
+  def self.normal
+    color1 = "\e[0;35m%n \e[35m[\e[1;35m"
+    color2 = "\e[0;35m]::\e[1;34m"
+    color3 = "\e[0;35m]\e[0m> "
+    color1 + current_ruby + color2 + cwd + color3
+  end
+
+  def self.current_ruby
+    @@current_ruby ||= `rtx version`.split(' ')[0]
+  end
+
+  def self.cwd
+    if Dir.pwd == '/'
+      '/'
+    elsif Dir.pwd == ENV['HOME']
+      '~'
+    else
+      Dir.pwd.split('/').last
+    end
+  end
+end
+
+DynamicPrompt.apply!
+AwesomePrint.irb!
+
+# IRB.conf[:ECHO] = false
+
+puts "#{ANSI[:GRAY]}~> Console extensions:#{ANSI[:RESET]} #{$console_extensions.join(' ')}#{ANSI[:RESET]}"

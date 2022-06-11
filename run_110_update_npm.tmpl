@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+exec_unless_recently_modified $file "npm install npm@latest --location=global ; npm update --location=global"

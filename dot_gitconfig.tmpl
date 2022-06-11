@@ -1,0 +1,112 @@
+[user]
+name = Daniel Bauke
+email = {{ .email | quote }}
+signingkey = {{ .gpgkey }}
+
+[core]
+excludesfile = ~/.gitignore_global
+ignorecase = false
+quotepath = false
+
+[color]
+diff = auto
+status = auto
+branch = auto
+interactive = auto
+ui = true
+grep = auto
+decorate = auto
+showbranch = auto
+
+[color "diff-highlight"]
+oldNormal = red bold
+oldHighlight = red bold 52
+newNormal = green bold
+newHighlight = green bold 22
+
+[color "diff"]
+meta = 11
+frag = magenta bold
+func = 146 bold
+commit = yellow bold
+old = red bold
+new = green bold
+whitespace = red reverse
+
+[alias]
+c = commit -am
+a = add
+co = checkout
+wc = whatchanged -p --abbrev-commit --pretty=medium
+amend = commit -a --amend
+out = log origin..HEAD
+lo = log --oneline --graph
+l1 = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %Cblue[%cn]%Creset' --abbrev-commit --date=relative
+lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+
+[mergetool]
+prompt = false
+
+[merge]
+tool = Kaleidoscope
+conflictstyle = diff3
+
+[difftool]
+prompt = false
+
+[init]
+defaultBranch = main
+
+[diff]
+tool = Kaleidoscope
+colorMoved = default
+
+[push]
+default = upstream
+
+[tag]
+forceSignAnnotated = false
+
+[branch]
+sort = -committerdate
+
+[pull]
+rebase = true
+
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
+[pager]
+diff = delta
+log = delta
+reflog = delta
+show = delta
+
+[interactive]
+diffFilter = delta --color-only --features=interactive
+
+[delta]
+navigate = true # use n and N to move between diff sections
+
+[gpg]
+program = /opt/homebrew/bin/gpg
+
+#[url "git@github.com:"]
+#    insteadOf = https://github.com/
+#[url "git@github.com:"]
+#    pushInsteadOf = "git://github.com/"
+#[url "git@github.com:"]
+#    pushInsteadOf = "https://github.com/"
+
+[mergetool "Kaleidoscope"]
+cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+trustexitcode = true
+
+[difftool "Kaleidoscope"]
+cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[commit]
+gpgsign = true

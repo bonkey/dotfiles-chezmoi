@@ -1,0 +1,129 @@
+if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace ; fi
+
+script_dir=${0:A:h}
+script_name=$(basename "${ZSH_SCRIPT:-$0}")
+
+set -o pipefail
+
+if [ -t 1 ]; then IS_TERMINAL=true; fi
+
+color() {
+    color=$1
+    text=$2
+    if [ -n "${IS_TERMINAL}" ]; then
+        echo "${color}${text}%f%b%k"
+    else
+        echo "${text}"
+    fi
+}
+
+msg_prefix() {
+    color "%B%F{blue}" ">>> "
+}
+
+log_message() {
+    print -P "$(msg_prefix)$*."
+}
+
+log_error() {
+    print -P "$(msg_prefix)Error: $(color "%B%K{red}%F{white}" $*)."
+}
+
+_exec() {
+    local cmd exec_start exec_finish
+    cmd=$*
+    print -P "$(msg_prefix)Executing: $(color %B%K{blue}%F{white} ${cmd})"
+    exec_start=$(timestamp)
+    eval "${cmd}"
+    ret=$?
+    exec_finish=$(timestamp)
+    elapsed="$(round 3 $(((exec_finish - exec_start) / 1000.0))) s."
+
+    print -P "$(msg_prefix)Elapsed: $(color %B%F{blue} $elapsed)"
+    if [[ $ret -ne 0 ]]; then
+        print -P "$(msg_prefix)Error executing: $(color "%B%K{red}%F{white}" $cmd). Check the output above and run it again"
+        if [[ "$script_name" != "_common.zsh" ]]; then 
+            exit $ret
+        else
+            return $ret
+        fi
+    fi
+}
+
+timestamp() {
+    print -P '%D{%s%3.}'
+}
+
+round() {
+    printf "%.${1}f" $2
+}
+
+exec_unless_recently_modified() {
+    max_mtime=12h
+    min_mtime=5m
+    file=$1
+    cmd=$2
+
+    test -z $(find $file -mtime -${max_mtime} -mtime "+${min_mtime}" 2>/dev/null)
+    is_modified=$?
+
+    if [[ $is_modified -eq 1 && -z "$RECENTLY_EXEC_FORCE" ]]; then
+        print -P "$(msg_prefix)File $file modified in last $max_mtime-$min_mtime. Skipping: '$cmd'"
+        print -P "$(msg_prefix)Force run: RECENTLY_EXEC_FORCE=1 <command>"
+    else
+        _exec $cmd
+        touch $file
+    fi
+}
+
+realpath() { for f in "$@"; do echo ${f}(:A); done }
+
+tsrc() { for src in $* ; test -s "$src" && source "$src" }
+
+eval_managers() {
+    if [ -x /opt/homebrew/bin/brew ]; then # For Apple M1
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /usr/local/bin/brew ]; then # For Intel
+        eval "$(/usr/local/bin/brew shellenv)"
+    else
+        echo "warning: brew not found"
+    fi
+
+    if /usr/bin/which -s rtx ; then
+        eval "$(rtx activate zsh)"
+    elif /usr/bin/which -s rbenv ; then
+        if [[ -z "$RBENV_SHELL" ]]; then
+            export RBENV_ROOT=$HOME/.rbenv
+            eval "$(rbenv init --no-rehash -)"
+            (rbenv rehash &) 2>/dev/null
+        fi
+    else
+        echo "warning: rtx or rbenv not found"
+    fi
+
+    if /usr/bin/which -s pyenv ; then
+        if [[ -z "$PYENV_SHELL" ]]; then
+            eval "$(pyenv init -)"
+        fi
+    else
+        echo "warning: pyenv not found"
+    fi
+
+    [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+    if /usr/bin/which -s xcenv; then
+        if [[ -z "$XCENV_SHELL" ]]; then
+            eval "$(xcenv init -)"
+        fi
+    fi
+}
+
+_eval_for_cmd() {
+    cmd=$1
+    shift
+
+    if /usr/bin/which -s $cmd; then
+        output=$(eval "$@")
+        eval "$output"
+    fi
+}

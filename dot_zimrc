@@ -1,0 +1,15 @@
+zmodule environment
+zmodule input
+zmodule git
+zmodule fzf
+
+zmodule ellie/atuin
+
+zmodule wfxr/forgit
+
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-autosuggestions
+
+zmodule jeffreytse/zsh-vi-mode
+
+zmodule completion

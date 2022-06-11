@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+log_message "Setting defaults for Xcode"
+
+# doesn't work
+# defaults write com.apple.dt.Xcode IDECodeCompletionFuzzyMode 3
+# defaults write com.apple.dt.Xcode IDEWorkaroundForRadar6288283 3
+
+# doesn't work
+# defaults write com.apple.dt.Xcode IDEBuildOperationMaxNumberOfConcurrentCompileTasks `sysctl -n hw.ncpu`
+
+# defaults write com.apple.dt.Xcode IDESourceKitServiceLogLevel 3
+
+defaults write com.apple.dt.Xcode ShowBuildOperationDuration YES
+
+defaults write com.apple.iphonesimulator AllowFullscreenMode -bool YES

@@ -1,0 +1,273 @@
+set nocompatible
+
+set autoread
+set autowrite
+set binary
+
+set hlsearch
+set ignorecase
+set smartcase
+set incsearch
+
+set modelines=5
+set modeline
+
+set sts=2
+set ts=2
+set sw=2
+set expandtab
+set smarttab
+
+set wildmenu
+set wildmode=longest:full,list:full
+
+set lazyredraw
+set ttyfast
+set visualbell
+set scrolloff=4
+set sidescrolloff=2
+set ruler
+set laststatus=2
+set number
+set cursorline
+
+set nobackup
+set timeoutlen=500
+set history=1000
+
+set backspace=indent,eol,start
+set cinoptions=:0,(s,u0,U1,g0,t0
+set completeopt=menuone,preview
+
+set autoindent
+set smartindent
+set showmatch
+set matchtime=3
+
+set foldenable
+set foldmethod=syntax
+set foldnestmax=10
+set formatoptions=tcqn
+
+set keywordprg=:Dash
+
+filetype on
+filetype indent on
+filetype plugin on
+
+set background=dark
+syntax on
+
+colorscheme lavalamp
+exe 'hi Todo' .bg_purple_med . fg_yellow_med
+exe 'hi Error' .bg_white . fg_red_med
+
+" --- Key Mappings ---
+
+set pastetoggle=<F2>
+
+let mapleader = "\<Space>"
+nnoremap ; :
+if has("gui_macvim")
+  let macvim_skip_cmd_opt_movement = 1
+endif
+
+" Comments
+map <D-/> <plug>NERDCommenterToggle
+imap <D-/> <ESC><plug>NERDCommenterToggle i
+
+" Panes + search
+nmap <silent> <D-J> :NERDTreeFind<CR>
+nmap <silent> <d-1> <plug>NERDTreeTabsToggle<CR>
+nmap <silent> <d-2> :TagbarToggle<CR>
+map <C-F> :Ag 
+
+" Move around windows
+map <d-down> <c-w>j
+map <d-up> <c-w>k
+map <d-left> <c-w>h
+map <d-right> <c-w>l
+
+" Errors
+noremap <silent> <D-]> :cnext<CR>
+noremap <silent> <D-[> :cprevious<CR>
+noremap <silent> <D-\> :clist<CR>
+
+" Indent whole file
+nmap <F4> gg=G''
+
+" Replace current word
+nmap <leader>R yiw:%s#\<<C-R>0\>##gc<left><left><left>
+
+" Use Q for formatting the current paragraph (or selection)
+vmap Q gq
+nmap Q gqap
+
+" Select last paste in visual mode
+nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
+
+" List
+nmap <silent> <leader>l :set invlist<cr>
+
+" Wrap
+nmap <silent> <leader>w :set invwrap<cr>
+
+" Syntax
+nmap <silent> <leader>y :if exists("g:syntax_on") <Bar>
+      \   syntax off <Bar>
+      \ else <Bar>
+      \   syntax enable <Bar>
+      \ endif <CR>
+
+" Search highlight
+nmap <silent> <leader>h :set invhlsearch<cr>
+
+" Incremental search
+nmap <silent> <leader>is :set invincsearch<cr>
+
+" Remove empty lines
+map <silent> <leader>rl :g/^[ \t]*$/d<cr>
+
+" Edit / source VIMRC
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" Make file executable
+nmap <silent> <leader>x :!chmod +x %<CR>
+
+" Common functions
+nnoremap <Leader>o :CtrlP<CR>
+nnoremap <Leader>s :w<CR>
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+" Quick scrolling
+map <A-Up> 10<Up>
+map <A-Down> 10<Down>
+
+" Folding
+map <S-Down> zR
+map <S-Up> zM
+map <S-Right> zo
+map <S-Left> zc
+
+" Delete word on cmd-bspace
+imap <M-BS> <C-W>
+map <M-BS> db
+
+" NERDTree
+let NERDTreeChDirMode = 2
+let NERDTreeShowBookmarks = 1
+let NERDTreeDirArrows=1
+let NERDTreeShowHidden=1
+" let NERDTreeQuitOnOpen=1
+
+" NERDTreeTabs
+let g:nerdtree_tabs_open_on_gui_startup = 0
+let g:nerdtree_tabs_focus_on_files = 1
+let g:nerdtree_tabs_autofind = 1
+
+" emmet
+let g:user_emmet_leader_key = '<c-k>'
+let g:user_emmet_expandabbr_key = '<c-e>'
+
+" SuperTab
+let g:SuperTabDefaultCompletionType = "context"
+
+" syntastic
+let g:syntastic_mode_map = { 'mode': 'active',
+      \ 'active_filetypes': ['ruby', 'php', 'objc', 'json', 'javascript',
+      \ 'haml', 'coffee', 'css', 'cucumber', 'html', 'sh', 'scss', 'tex',
+      \ 'text', 'xml', 'xslt', 'yaml', 'zsh'],
+      \ 'passive_filetypes': [ 'java' ] }
+
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_ruby_checkers = ["mri", "rubocop"]
+
+" MatchTagAlways
+let g:mta_filetypes = { 'html':1, 'xhtml':1, 'php':1, 'ruby':1, 'xml':1, 'jinja':1 }
+
+" neocomplete
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 0
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+" airline
+let g:airline_powerline_fonts = 1
+
+" vim-instant-markdown
+let g:instant_markdown_slow = 1
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+"startify.vim
+let g:startify_update_oldfiles = 1
+let g:startify_change_to_dir = 1
+let g:startify_change_to_vcs_root = 1
+
+let g:ale_fixers = {
+\   'ruby': ['rubocop'],
+\}
+
+let g:ale_fix_on_save = 1
+set rtp+=/usr/local/opt/fzf
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'airblade/vim-gitgutter'
+Plug 'blackbirdtheme/vim'
+Plug 'cfdrake/vim-carthage'
+Plug 'darfink/vim-plist'
+Plug 'ddollar/nerdcommenter'
+Plug 'dietsche/vim-lastplace'
+Plug 'EinfachToll/DidYouMean'
+Plug 'ervandew/supertab'
+Plug 'gorkunov/smartpairs.vim'
+Plug 'honza/vim-snippets'
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'junegunn/fzf.vim'
+Plug 'keith/xcconfig.vim'
+Plug 'KohPoll/vim-less'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'majutsushi/tagbar'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'martinda/Jenkinsfile-vim-syntax'
+Plug 'mattn/emmet-vim'
+Plug 'milch/vim-fastlane'
+Plug 'mileszs/ack.vim'
+Plug 'modille/groovy.vim'
+Plug 'moll/vim-node'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'pindexis/qfc'
+Plug 'ryanoasis/vim-devicons'
+Plug 'scrooloose/nerdtree'
+Plug 'sheerun/vim-polyglot'
+Plug 'SirVer/ultisnips'
+Plug 'sjl/gundo.vim'
+Plug 't9md/vim-ruby-xmpfilter'
+Plug 'tmhedberg/matchit'
+Plug 'tomtom/tlib_vim'
+Plug 'Townk/vim-autoclose'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-vinegar'
+Plug 'udalov/kotlin-vim'
+Plug 'Valloric/MatchTagAlways'
+Plug 'vim-airline/vim-airline'
+Plug 'xolox/vim-misc'
+
+call plug#end()
+

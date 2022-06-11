@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+# hash: {{ include "dot_zimrc" | sha256sum }}
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+zimfw() {
+    source ${HOME}/.zim/zimfw.zsh "${@}"
+}
+
+_exec "rm -rf ${HOME}/.zim/modules"
+_exec "zimfw install"
+
+_exec "zimfw clean"
+_exec "zimfw compile"

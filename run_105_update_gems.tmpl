@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+set +o pipefail
+
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+exec_unless_recently_modified $file "gem update --system; yes | gem update -f ; yes | gem cleanup"

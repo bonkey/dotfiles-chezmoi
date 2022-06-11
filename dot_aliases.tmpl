@@ -1,0 +1,779 @@
+source ${HOME}/bin/_common.zsh
+
+# --- Paths / Globals
+
+alias -g ddw='"$HOME/Downloads"'
+alias -g ddc='"$HOME/Documents"'
+alias -g dvb='"$HOME/.vim/bundle"'
+
+{{- if eq .chezmoi.hostname "dbauke-mac" }}
+
+alias -g dis='"$HOME/Projects/ios-sdk"'
+alias -g dis1=dis
+alias -g dis2='"$HOME/Projects/ios-sdk-2nd-copy"'
+alias -g dis3='"$HOME/Projects/ios-sdk-3rd-copy"'
+
+alias -g ddb='"$HOME/Projects/dbauke"'
+alias -g dgt='"$HOME/Projects/dbauke/GenesisTheming"'
+alias -g ddt='"$HOME/Projects/dbauke/DevTrainingApp"'
+alias -g dpp='"$HOME/Projects/dbauke/swiftui-club/planning-poker/planning-poker-ios-app"'
+
+alias -g dss='"$HOME/Projects/league-sdk-samples-ios/ios-sdk-spm/"'
+alias -g dlic='"$HOME/Projects/league-ios-cli"'
+alias -g dlpc='"$HOME/Projects/league-platform-contract-ios"'
+alias -g dlcp='"$HOME/Projects/league-ios-sdk-cocoapods"'
+
+alias -g dco='"$HOME/Projects/league-circleci-orbs"'
+alias -g dtf='"$HOME/Projects/terraform"'
+
+alias -g defi='"$HOME/Projects/engen-capability-forms-ios"'
+
+alias -g dpch='"$HOME/Projects/pchealth-ios/Project"'
+alias -g dhm='"$HOME/Projects/highmark-ios"'
+alias -g dopt='"$HOME/Projects/optum-ios"'
+
+xccom() {
+  xco dis "GenesisComponentBrowser/GenesisComponentBrowser.xcworkspace"
+}
+
+xccor() {
+  xco dis "GenesisCoreBrowserApp/GenesisCoreBrowserApp.xcodeproj"
+}
+
+xcsp() {
+  xco dis "sdk-presenter/ios-sdk-spm/ios-sdk-spm.xcodeproj"
+}
+
+xcefi() {
+  xco dis "FormsLibraryApp/FormsLibraryApp.xcodeproj"
+}
+
+{{- end }}
+
+
+alias -g X="| xargs"
+alias -g X0="| xargs -0"
+alias -g XG="| xargs -0 grep"
+alias -g CDL="| colordiff | less"
+alias -g H='| head'
+alias -g T='| tail'
+alias -g G='| grep'
+alias -g L="| less"
+alias -g LL="2>&1 | less"
+# alias -g CA="2>&1 | cat -A"
+alias -g NE="2> /dev/null"
+alias -g NUL="> /dev/null 2>&1"
+alias -g SU="| sort | uniq"
+
+# --- System
+
+
+flush_dns() {
+  sudo killall -HUP mDNSResponder
+  sudo killall mDNSResponderHelper
+  sudo dscacheutil -flushcache
+}
+
+notify() {
+  if /usr/bin/which -s noti ; then
+    _exec noti "$*"
+  else
+    _exec "$*"
+  fi
+}
+
+cz() {
+  chezmoi $*
+}
+
+alias '??'="source \"$HOMEBREW_PREFIX/opt/clipea/clipea.zsh\""
+
+alias ced="cz edit --apply"
+alias cap="cz apply"
+alias cad="cz add"
+alias cra="cz re-add"
+alias cup="cz update"
+alias cma="cz merge-all"
+alias cfo="cz forget"
+
+alias hyf="hyperfine -m 3"
+
+alias src='source ~/.zshrc'
+alias alg='alias | grep'
+
+alias ex="exa --group-directories-first --color-scale -m"
+alias e="ex -1"
+alias el="ex -lg --git -h"
+alias ea="el -a"
+unalias l ll la 2> /dev/null
+alias l=e ll=el la=ea
+alias lt="l -s modified -r"
+alias llt="ll -m -s modified -r"
+
+alias cal="gcal -s 1"
+
+alias brs="brew search"
+alias bri="brew install"
+alias bric="bri --cask"
+alias brf="brew info"
+alias brl="brew list"
+alias bru="brew uninstall"
+
+alias lsg="lsof | grep -i"
+alias lsig="lsof -i | grep -i"
+alias psg="ps aux | grep -i"
+alias top="glances --process-short-name"
+alias dfh="dfc -blw"
+alias duh="du -csh"
+alias du="du -h"
+
+x86() {
+  arch -x86_64 "$@"
+}
+
+alias m=make
+
+o() {
+  if [[ -z "$1" ]]; then
+    open .
+  else
+    open $*
+  fi
+}
+
+alias xdq="xattr -d com.apple.quarantine"
+
+alias xf="xmllint --format"
+
+alias v=vim
+alias g=gvim
+gvim() {
+  vimer -t $*
+}
+
+c() {
+  if [[ -z "$1" ]]; then
+    code-insiders .
+  else
+    code-insiders $*
+  fi
+}
+
+alias diff=colordiff
+alias diffstat="diffstat -f3 -C"
+
+cat() {
+  type glow >/dev/null 2>&1
+  has_glow=$?
+
+  if [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
+    glow -p $1
+  else
+    bat $*
+  fi
+}
+
+cata() {
+  cat --style=header $*
+}
+
+clear_ascii() {
+  cat $* | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g"
+}
+
+dm() {
+  if [[ -d /Applications/Dash.app || /Applications/SetApp/Dash.app ]]; then
+    url=$(printf %s "manpages:$1"|jq -sRr @uri)
+    open "dash://${url}"
+  else
+    /usr/bin/man $*
+  fi
+}
+
+man() {
+  tldr $* || dm $*
+}
+
+# --- zsh
+
+_shell_init_files=${HOME}/{bin/{_common.zsh,Brewfile},.{zshenv,zprofile,zshrc,aliases,zimrc},.config/bonkey.omp.json}
+cvz() {
+  ced $(eval "echo $_shell_init_files")
+  source ${HOME}/.zshrc
+}
+
+cvzl() {
+  c $(eval "echo $_shell_init_files")
+  source ${HOME}/.zshrc
+}
+
+# --- Network
+
+alias h="http"
+alias hv="h -v"
+alias hf="h --follow"
+alias hvf="hv --follow"
+
+cj() {
+  curl -s -L $* | jq .
+}
+
+hj() {
+  local u f
+  u=$1
+  f=$2
+  test -z "$1" -o -z "$2" && echo "usage: $0 <url> <file>" && return
+  h "$u" | jq . > $f
+  echo "File '$f' saved."
+}
+
+alias mtr="sudo mtr"
+alias p1="ping 1.1.1.1"
+alias m1="mtr 1.1.1.1"
+alias m8="mtr 8.8.8.8"
+alias mg="mtr google.com"
+
+ping() {
+  if type gping 2>&1 > /dev/null ; then
+    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 $*
+  else
+    /sbin/ping $*
+  fi
+}
+
+
+alias digs="dig +short"
+
+# --- Search
+
+f() { fd --follow $* }
+f0() { f $* --print0 }
+
+ff() { f --type f $* }
+ff0() { f0 --type f $* }
+
+alias fda="fd -HI"
+
+alias ag='ag --color-path "3;32" --color-line-number "0;36" --color-match "1;31;40"'
+alias agw="ag -w"
+alias aga="ag -u"
+alias agh="ag -U --hidden"
+alias agl="ag -l"
+
+agz() {
+  ag $* $_shell_init_files
+}
+
+ags() {
+  ag --ignore=Carthage --ignore=Pods --ignore=\*.framework --objc --objcpp --swift $*
+}
+
+agsw() {
+  ags -w $*
+}
+
+agst() {
+  agsw " *(protocol|actor|struct|typealias|class) +$1"
+}
+
+agc() {
+  ag -c $* | awk -F: 'BEGIN { c = 0} { c += $2 } END { print "found:", c}'
+}
+
+# --- Node / nvm
+
+nvm-init() {
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+}
+
+# --- Media
+
+unalias gm 2> /dev/null
+
+img_diff() {
+  img1=$1
+  img2=$2
+  dst="diff_${img1}-${img2}.png"
+
+  _exec "compare -verbose -density 300 '$img1' '$img2' -compose src '$dst'"
+}
+
+montage() {
+  tile=$1
+  [[ -z "$3" ]] && echo "montage <XxY> <file...> <output_file>" && return
+  shift
+  gm montage +frame +shadow +label -tile $tile -geometry +1+1 $*
+}
+
+ff_silent_sound() {
+  for i in $* ; do
+    dst=${i:r}-nosound.${i:e}
+    echo ffmpeg -i "$i" -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -shortest -c:v copy -c:a aac $dst
+  done
+}
+
+ff_m4v() {
+  ff_format m4v $*
+}
+
+ff_webm() {
+  ff_format webm $*
+}
+
+ff_format() {
+  local i
+  emulate -L zsh
+  format=$1
+  shift
+
+  if [[ -z "$1" ]]; then
+    log_error "Please provide output format file extension (e.g. 'webm') and files to convert"
+    return 1
+  fi
+
+  for i in $* ; do
+    ffmpeg -y -i "$i" "${i:r}.${format}" && rm -f "$i"
+  done
+}
+
+
+ff_fps() {
+  local i
+  fps=$1 ; shift
+  for i in $* ; do
+    dst=${i:r}-fps${fps}.${i:e}
+    ffmpeg -i "$i" -r $fps -qscale 0 $dst
+  done
+}
+
+ff_trim() {
+  emulate -L zsh
+
+  help="Help: $0 <input_movie> <output_movie> <start> <length>"
+
+  test -z "$1" && echo "${help}" && return 1
+  test -z "$2" && echo "No OUTPUT given. ${help}" && return 2
+  test -z "$3" && echo "No START given. ${help}" && return 3
+  test -z "$4" && echo "No LENGTH given. ${help}" && return 4
+
+  in=$1
+  out=$2
+  ine=${in:e}
+  outn=${out:r}
+  start=$3
+  len=$4
+
+  ffmpeg -i "${in}" -codec copy -y -ss $start -t $len "${outn}.${ine}"
+}
+
+ff_gif() {
+  input=$1
+  output="${input:r}.gif"
+
+  fps=${2:-10}
+  width=${3:-600}
+  height=${4:--1}
+  ffmpeg -i "$input" -filter_complex "[0:v] fps=${fps},scale=w=${width}:h=${height},split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" -f gif -y -hide_banner "${output}"
+}
+
+# --- iOS
+
+alias bef="bundle exec fastlane"
+
+alias xcs="sudo xcode-select"
+alias xcss="sudo xcode-select -s"
+alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
+alias xcsx="echo -n 'Selected Xcode: ' && xcsv"
+
+xcs14() { xcodes select 14.3.1 }
+xcs15() { xcodes select 15 }
+
+clean_xcode() {
+  _exec "rm -rf \"$HOME/Library/Caches/org.swift.swiftpm\""
+  _exec "rm -rf \"$HOME/Library/org.swift.swiftpm\""
+  _exec "rm -rf \"$HOME/Library/Developer/Xcode/DerivedData/\""
+}
+
+alias simlog="xcrun simctl spawn booted log stream --color always --debug --style compact"
+
+simlogg() {
+  simlog --predicate "$1"
+}
+simlogge() {
+  simlogg "eventMessage contains '$1'"
+}
+
+ticket_from_branch() {
+  local BRANCH TICKET
+  BRANCH=$(git symbolic-ref --short HEAD)
+  (echo $BRANCH | grep -q "/") || return
+  TICKET=$(echo $BRANCH | sed -E 's#.*/([A-Z]+-[0-9]+)[^/]*#\1#')
+  [[ -z "$TICKET" ]] && return
+  echo $TICKET
+}
+
+find_xcode_proj() {
+  local xcode_proj
+
+  if [[ -e "$1" ]]; then
+    xcode_proj=$1
+  else
+    projects=(*.{xcworkspace,xcodeproj}(N) Package.swift)
+    xcode_proj=$projects[1]
+  fi
+
+  test -z "$xcode_proj" && echo "No xcworkspace/xcodeproj file provider, nor found in the current directory." && return 1
+  echo $xcode_proj
+}
+
+xc13r() {
+  arch -x86_64 /Applications/Xcode-13.3.1.app/Contents/MacOS/Xcode $*
+}
+
+alias xc > /dev/null && unalias xc
+xc() {
+  local xcode_proj xcode
+
+  xcode_proj=$(find_xcode_proj "$1")
+  [ $? -ne 0 ] && echo "$xcode_proj" && return
+
+  if [[ -f .xcode-version ]]; then
+    xcode_version=$(cat .xcode-version)
+    (xcrun xcodebuild -version | head -1 | grep -q ${xcode_version}) || \
+      (echo Selecting Xcode ${xcode_version}... && xcversion select $xcode_version)
+  fi
+  xcode=$(xcode-select -p)
+  xcode=${xcode:s/\/Contents\/Developer/}
+  echo "Opening ${xcode_proj} with ${xcode} ($fg_bold[green]$(xcsv)$reset_color)"
+
+  open -a "$xcode" "${xcode_proj}"
+}
+
+xco() {
+  dir=$1
+  project=$2
+
+  if [[ ! -e $project ]]; then
+    cd $dir
+  fi
+
+  log_message "Dir: $(pwd)"
+
+  xc $project
+}
+
+_pod() {
+  if [[ -f "Gemfile" || -f "../Gemfile" ]]; then
+    bundle exec pod "$@"
+  else
+    pod "$@"
+  fi
+}
+
+alias poi="_pod install"
+alias poir="_pod install --repo-update"
+alias pou="_pod update"
+alias poun="_pod update --no-repo-update"
+alias poo="_pod outdated"
+alias pos="_pod search"
+
+# --- git
+
+alias gt > /dev/null && unalias gt
+gt() {
+  while [[ ! -d .git && "$PWD" != "/" ]] ; do cd .. ; done
+  gittower .
+}
+
+alias gf > /dev/null && unalias gf
+gf() {
+  while [[ ! -d .git && "$PWD" != "/" ]] ; do cd .. ; done
+  fork .
+}
+
+gl-pr-changelog() {
+  git log --pretty='format:* %s' $* | sd '[A-Z]{3,}-[0-9]+: ' ''
+}
+
+alias gip="gitup"
+
+alias gl="git pull --autostash"
+alias gd="git diff"
+alias gdn="gd --names-only"
+alias gst="git status"
+
+alias gco="git checkout"
+alias gcd="gco develop"
+alias gcm="gco main"
+alias gcr="gco release"
+
+gbf() {
+  test -z "$1" && echo "Provide feature/XXX suffix" && return
+  git checkout -b "feature/$1"
+}
+
+alias glog1="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gl1m="glog1 --merges"
+alias gl1="glog1 --no-merges"
+
+alias gmd="git merge develop --no-edit"
+alias gmm="git merge --no-edit"
+alias gbvv="gb -vv"
+
+alias gcl="git clone --recurse-submodules --progress"
+
+alias gds="gd | diffstat"
+alias gdn="gd --name-only"
+alias gdd="gd develop"
+alias gdds="gd develop | diffstat"
+
+alias gdt="git difftool"
+alias gdtd="git difftool develop"
+
+git-merged-show() {
+  git branch --merged develop|tr -d ' '| grep -vE '^(develop|master|main)$'
+}
+
+git-merged-remove() {
+  git branch -d $(git-merged-show)
+}
+
+unalias gpu 2> /dev/null
+gpu() {
+  test -z "$1" && echo "$0 <remote_name>" && return
+  git push -u $1 $(git name-rev --name-only HEAD)
+}
+
+alias gpo="gpu origin"
+
+gpe() {
+  git commit -m "Retrigger checks" --allow-empty
+  gpo
+}
+
+ghd() {
+  gh dash $*
+}
+
+ghprs() {
+  gh pr list --state all --search $*
+}
+
+ghprv() {
+  gh pr view $*
+}
+
+ghprco() {
+  gh pr checkout $*
+}
+
+ghprcr() {
+  gh pr create $*
+}
+
+ghprdr() {
+  ghprc --draft --fill $*
+}
+
+gdum() {
+  dummy=$(git rev-parse --show-toplevel)/.dummy-commit
+  date >! $dummy
+  git add $dummy
+  git commit -m 'Dummy commit' $dummy
+  git push
+}
+
+git_pull_and_back() {
+  local merging_branch stashed
+
+  type ghf 2>&1 > /dev/null && ghf
+
+  if [[ -z "$1" ]]; then
+    echo "Please provide branch in git_pull_and_back"
+    exit 1
+  fi
+  merging_branch=$1; shift
+
+  stashed=$(git stash --include-untracked)
+  echo "STASH: $stashed"
+
+  cmd="git checkout $merging_branch && \
+    git pull && \
+    git checkout - && \
+    $*"
+  echo "CMD: $cmd"
+  _exec $cmd
+  # eval $cmd
+
+  [[ $stashed != "No local changes to save" ]] && git stash pop
+
+  type ghu 2>&1 > /dev/null && ghu
+}
+
+gpm() {
+  src_branch=${1:-main}
+  git_pull_and_back $src_branch "git merge --no-edit $src_branch"
+}
+
+gpr() {
+  src_branch=${1:-main}
+  git_pull_and_back $src_branch "git rebase $src_branch"
+}
+
+alias gic="git commit -am"
+
+gicp() {
+  if [ -z "$1" ]; then
+    echo git commit and push
+    echo usage: gicp "message"
+  else
+    git add -A . && gic "$1" && git pull && git push
+  fi
+}
+
+gicpa() {
+  gicp "Changed $(git ls-files -md --exclude-standard --others | uniq | tr '\n' ' ')"
+}
+
+alias gpmd="gpm develop"
+alias gls="git ls-files"
+alias glsm="gls -m"
+
+gmem() {
+  [ -z "$1" ] && dst_branch=main|| dst_branch=$1
+  branch=$(git name-rev --name-only HEAD)
+  [ "$branch" = "$dst_branch" ] && echo "Can't merge two same branches" && return
+  git checkout $dst_branch || return
+  git pull || return
+  git merge $branch --no-edit || return
+  echo now you can:
+  echo git push
+}
+
+# -- Python
+
+# -- Ruby
+
+alias bu="bundle"
+alias bue="bundle exec"
+alias buu="bundle update"
+alias buo="bundle outdated"
+alias bui="bundle install"
+
+# -- Jira
+
+jira-ticket-in-branch() {
+  local git_branch
+  git_branch=$(git symbolic-ref --short HEAD 2> /dev/null)
+  (echo $git_branch | grep -q "/") || return
+  echo $git_branch | sed -E 's#.+/([A-Z]+-[0-9]+)?[^/]*$#\1#'
+}
+
+jira-ticket-summary() {
+  local ticket
+  ticket=$(jira-ticket-in-branch)
+  if [[ -n "${ticket}" ]]; then
+    http GET "${JIRA_SERVER}/rest/api/3/issue/${ticket}" --auth "${JIRA_USER}:${JIRA_API_TOKEN}" | jq -r '.fields.summary'
+  fi
+}
+
+jira-extract-tickets() {
+  local i
+  for i in $* ; do
+    echo "$i" | grep -E '[A-Z0-9]+[0-9]+' | sd '([A-Z0-9]+-[0-9]+)' '>>>>>$1<<<<<'|sd '.*>>>>>' '' | sd '<<<<<.*' ''
+  done | sort -u
+}
+
+_git-branches-in-jira() {
+  jira ls -q "key in ($(jira-extract-tickets $* | sd '\n' ' '|xargs|tr ' ' ','))"
+}
+
+git-branches-in-jira-all() {
+  _git-branches-in-jira $(git branch)
+}
+
+git-branches-in-jira-merged() {
+  _git-branches-in-jira $(git-merged-show)
+}
+
+j() {
+  echo "Running: jira $*" | tr "\n" " "
+  echo
+  jira $*
+}
+
+jt() {
+    j $* $(ticket_from_branch)
+}
+
+jcmd() {
+  local cmd
+  cmd=$1
+  shift
+
+  if [[ -n "$1" ]]; then
+    j $cmd $*
+  else
+    jt $cmd
+  fi
+}
+
+{{- if eq .chezmoi.hostname "dbauke-mac" }}
+
+gbfm() {
+  test -z "$1" && echo "Provide ticket number for feature/MOVE-XXX" && return
+  gbf "MOVE-$1"
+}
+
+alias jnt="jcr new-task"
+alias jnc="jcr new-crash -b"
+jcr() { j create -t $* }
+
+jed() {
+  jcmd edit $*
+}
+
+jd() {
+  jcmd done $*
+}
+
+jv() {
+  jcmd view $*
+}
+
+jip() {
+  jcmd in-progress $*
+}
+
+ji() {
+  local ticket
+  if [[ -z "$1" ]]; then
+    ticket=$(ticket_from_branch)
+    _ji_open_ticket $ticket
+  else
+    for ticket in $* ; do
+      _ji_open_ticket $ticket
+    done
+  fi
+}
+
+jbl() {
+  query="id in ($(git branch --format '%(refname:short)'| grep -E '[A-Z]{3,}-[0-9]+' | sd '.*/([A-Z]{3,}-[0-9])+' '$1' | sd "\n" ","|sd ",$" ""))"
+  j ls -q "$query"
+}
+
+jicr() {
+  jt trans 'In code review' --noedit $*
+}
+
+_ji_open_ticket() {
+  url=https://everlong.atlassian.net/jira/$1
+  echo "Opening $url"
+  open "$url"
+}
+
+{{- end }}
+
+# vim:set ft=zsh:

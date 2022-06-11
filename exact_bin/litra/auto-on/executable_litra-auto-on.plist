@@ -1,0 +1,13 @@
+<!DOCTYPE plist SYSTEM "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<key>Label</key>
+<string>litra-auto-on</string>
+<key>ProgramArguments</key>
+<array>
+<string>/Library/LaunchDaemons/litra-auto-on.sh</string>
+</array>
+<key>RunAtLoad</key>
+<true/>
+</dict>
+</plist>

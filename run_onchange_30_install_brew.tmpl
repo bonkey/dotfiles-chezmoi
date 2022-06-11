@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+
+{{- $brewfile:= joinPath .chezmoi.sourceDir "/exact_bin/Brewfile" -}}
+
+# hash: {{ include $brewfile | sha256sum }}
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+brewfile="$(chezmoi source-path)/exact_bin/Brewfile"
+
+if ! /usr/bin/which -s brew; then
+  log_message "Brew is missing. Installing"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+_exec "brew bundle check --file '{{- $brewfile -}}' || brew bundle install --file '{{- $brewfile -}}'"
+_exec "rm -f '{{- $brewfile -}}.json'"

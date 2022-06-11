@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+pipupgrade --self
+exec_unless_recently_modified $file "pipupgrade --latest -y"

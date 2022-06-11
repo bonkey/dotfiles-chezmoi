@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+
+# hash: {{ output "sw_vers" | sha256sum }}
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+log_message "Setting defaults for macOS"
+
+# skip veryfing dmg
+defaults write com.apple.frameworks.diskimages skip-verify -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+
+# select text in quick look
+defaults write com.apple.finder QLEnableTextSelection -bool true
+
+# press and hold for umlauts (might not work with "u")
+defaults write -g ApplePressAndHoldEnabled -bool false
+
+# Enable Tab in modal dialogs.
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+# Screensaver lock delay
+defaults write com.apple.screensaver askForPasswordDelay -int 5
+
+killall Finder

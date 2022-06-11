@@ -1,0 +1,29 @@
+{{- $email := "" -}}
+{{- if hasKey . "email" -}}
+{{-   $email = .email -}}
+{{- else -}}
+{{-   $email = promptString "email" -}}
+{{- end -}}
+
+{{- $gpgkey := "" -}}
+{{- if hasKey . "gpgkey" -}}
+{{-   $gpgkey = .gpgkey -}}
+{{- else -}}
+{{-   $gpgkey = promptString "gpgkey" -}}
+{{- end -}}
+
+[data]
+    email = {{ $email | quote }}
+    gpgkey = {{ $gpgkey | quote }}
+
+[edit]
+    command = "code-insiders"
+    args = ["--wait", "--new-window"]
+
+[git]
+    autoCommit = true
+    autoPush = true
+
+[diff]
+    exclude = ["scripts"]
+

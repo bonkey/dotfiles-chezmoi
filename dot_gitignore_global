@@ -1,0 +1,11 @@
+.idea
+.DS_Store
+*.swp
+*.pyc
+.svn
+xcuserdata
+tags
+.vscode
+local-storage.json
+.zcompdump
+xcodebuild*.log

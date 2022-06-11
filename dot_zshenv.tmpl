@@ -1,0 +1,56 @@
+source ${HOME}/bin/_common.zsh
+
+export EDITOR=vim
+export CLICOLOR=1
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+export BAT_THEME="gruvbox-dark"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+export GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
+export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
+export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_ACCESS_TOKEN
+
+export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PALM_KEY.value -}}"
+
+{{- if eq .chezmoi.hostname "dbauke-mac" }}
+
+# https://start.1password.com/open/i?a=OZFXTXMCQJHO5G6KV3FU55JZ3I&v=xorpczupr2kurbbiwa7ifs5t44&i=c5abdfjbih6jhqripu6yfudc4a&h=everlong.1password.com
+
+export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"
+export CIRCLECI_CLI_TOKEN=$CIRCLECI_TOKEN
+
+export JIRA_API_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_API_TOKEN.value -}}"
+export JIRA_SERVER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_SERVER.value -}}"
+export JIRA_USER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_USER.value -}}"
+
+{{- end }}
+
+{{- if eq .chezmoi.hostname "Daniels-MacBook-Air" }}
+
+export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
+export AI_DEVS_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").AI_DEVS_API_KEY.value -}}"
+
+{{- end }}
+
+export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
+export ANDROID_HOME=$ANDROID_SDK_ROOT
+export JAVA_HOME=$(/usr/libexec/java_home)
+
+export FASTLANE_HIDE_CHANGELOG=true
+
+export GO111MODULE=ohe
+export GOPATH=${HOME}/.go
+
+export BUN_INSTALL="$HOME/.bun"
+
+export ITERM2_SQUELCH_MARK=1
+
+export ATUIN_NOBIND="true"
+
+eval_managers
+
+export PATH="$HOME/.mint/bin:$HOME/bin/jetbrains:$ANDROID_HOME/platform-tools:$HOME/bin:$HOME/.local/bin:$HOME/bin/raycast:$GOPATH/bin:$BUN_INSTALL/bin:$PATH:$PATH"
+
+# vim:set ft=zsh:

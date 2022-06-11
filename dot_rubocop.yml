@@ -1,0 +1,20 @@
+Metrics/MethodLength:
+  Max: 15
+
+Layout/LineLength:
+  Max: 140
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+AllCops:
+  NewCops: enable

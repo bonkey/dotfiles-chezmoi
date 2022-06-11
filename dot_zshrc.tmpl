@@ -1,0 +1,64 @@
+source ${HOME}/bin/_common.zsh
+
+zstyle ':autocomplete:tab:*' fzf yes
+zstyle ':autocomplete:tab:*' insert-unambiguous yes
+zstyle ':autocomplete:*complete*:*' insert-unambiguous yes
+zstyle ':autocomplete:*history*:*' insert-unambiguous yes
+zstyle ':autocomplete:menu-search:*' insert-unambiguous yes
+
+#### ZIM START
+zstyle ':zim:zmodule' use 'degit'
+
+ZIM_HOME=~/.zim
+
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+      https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+fi
+
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
+
+#### ZIM END
+
+tsrc "${HOME}/.iterm2_shell_integration.zsh"
+tsrc "${HOME}/.aliases"
+
+# search history with arrow keys and text prefix
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search # Up
+bindkey "^[[B" down-line-or-beginning-search # Down
+
+after_zvm() {
+  bindkey '^r' _atuin_search_widget
+}
+zvm_after_init_commands+=(after_zvm)
+
+_eval_for_cmd chezmoi "chezmoi completion zsh"
+_eval_for_cmd rtx "rtx completion zsh"
+_eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
+_eval_for_cmd gh "gh completion -s zsh"
+
+{{- if eq .chezmoi.hostname "dbauke-mac" }}
+iterm2_print_user_vars() {
+    {
+    summary=$(jira-ticket-summary)
+    if [[ -n "$summary" ]]; then
+        iterm2_set_user_var jira_ticket_summary "$summary"
+    else
+        iterm2_set_user_var jira_ticket_summary "No jira ticket found."
+    fi
+    } &!
+}
+{{- end }}
+
+# vim:set ft=zsh:

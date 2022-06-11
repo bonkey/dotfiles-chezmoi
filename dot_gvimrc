@@ -1,0 +1,7 @@
+set macligatures
+set guifont=CommitMono:h16
+set lsp=2
+set columns=140
+set lines=45
+
+autocmd FocusLost * redraw!

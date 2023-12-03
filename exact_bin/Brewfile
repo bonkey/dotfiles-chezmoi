@@ -160,6 +160,7 @@ cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of 
 cask 'font-roboto-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-commit-mono' # Neutral programming typeface
 cask 'font-monaspace'
+cask 'font-reddit-sans'
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles

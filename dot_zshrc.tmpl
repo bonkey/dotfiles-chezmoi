@@ -44,7 +44,7 @@ after_zvm() {
 zvm_after_init_commands+=(after_zvm)
 
 _eval_for_cmd chezmoi "chezmoi completion zsh"
-_eval_for_cmd rtx "rtx completion zsh"
+# _eval_for_cmd rtx "rtx completion zsh"
 _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 _eval_for_cmd gh "gh completion -s zsh"
 

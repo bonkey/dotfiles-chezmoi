@@ -624,17 +624,16 @@ gpr() {
 
 alias gic="git commit -am"
 
-gicp() {
-  if [ -z "$1" ]; then
-    echo git commit and push
-    echo usage: gicp "message"
-  else
-    git add -A . && gic "$1" && git pull && git push
-  fi
-}
-
 gicpa() {
-  gicp "Changed $(git ls-files -md --exclude-standard --others | uniq | tr '\n' ' ')"
+  git add -A .
+
+  if [[ -n "$1" ]]; then
+    msg=$1
+  else
+    msg="Changed $(git diff --cached --name-only | uniq | tr '\n' ' ')"
+  fi
+
+  gic "$msg" && git pull && git push
 }
 
 alias gpmd="gpm develop"

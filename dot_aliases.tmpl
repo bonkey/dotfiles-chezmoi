@@ -700,80 +700,23 @@ git-branches-in-jira-merged() {
   _git-branches-in-jira $(git-merged-show)
 }
 
-j() {
-  echo "Running: jira $*" | tr "\n" " "
-  echo
-  jira $*
-}
-
-jt() {
-    j $* $(ticket_from_branch)
-}
-
-jcmd() {
-  local cmd
-  cmd=$1
-  shift
-
-  if [[ -n "$1" ]]; then
-    j $cmd $*
-  else
-    jt $cmd
-  fi
+alias j=jira
+jc() {
+  j issue create $*
 }
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 
-gbfm() {
-  test -z "$1" && echo "Provide ticket number for feature/MOVE-XXX" && return
-  gbf "MOVE-$1"
+jcpr() {
+  jc -pREL $*
 }
 
-alias jnt="jcr new-task"
-alias jnc="jcr new-crash -b"
-jcr() { j create -t $* }
-
-jed() {
-  jcmd edit $*
+jcpm() {
+  jc -pMPS $*
 }
 
-jd() {
-  jcmd done $*
-}
-
-jv() {
-  jcmd view $*
-}
-
-jip() {
-  jcmd in-progress $*
-}
-
-ji() {
-  local ticket
-  if [[ -z "$1" ]]; then
-    ticket=$(ticket_from_branch)
-    _ji_open_ticket $ticket
-  else
-    for ticket in $* ; do
-      _ji_open_ticket $ticket
-    done
-  fi
-}
-
-jbl() {
-  query="id in ($(git branch --format '%(refname:short)'| grep -E '[A-Z]{3,}-[0-9]+' | sd '.*/([A-Z]{3,}-[0-9])+' '$1' | sd "\n" ","|sd ",$" ""))"
-  j ls -q "$query"
-}
-
-jicr() {
-  jt trans 'In code review' --noedit $*
-}
-
-_ji_open_ticket() {
-  url=https://everlong.atlassian.net/jira/$1
-  echo "Opening $url"
-  open "$url"
+jcpg() {
+  jc -pGDS $*
 }
 
 {{- end }}

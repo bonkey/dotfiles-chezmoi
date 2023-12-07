@@ -671,10 +671,13 @@ jira-ticket-in-branch() {
 }
 
 jira-ticket-summary() {
-  local ticket
+  local ticket summary
   ticket=$(jira-ticket-in-branch)
   if [[ -n "${ticket}" ]]; then
-    http GET "${JIRA_SERVER}/rest/api/3/issue/${ticket}" --auth "${JIRA_USER}:${JIRA_API_TOKEN}" | jq -r '.fields.summary'
+    summary=http GET "${JIRA_SERVER}/rest/api/3/issue/${ticket}" --auth "${JIRA_USER}:${JIRA_API_TOKEN}" | jq -r '.fields.summary'
+    echo "${ticket}: ${summary}"
+  else
+    echo "No jira ticket found."
   fi
 }
 

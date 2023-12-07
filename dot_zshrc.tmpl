@@ -51,12 +51,7 @@ _eval_for_cmd gh "gh completion -s zsh"
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 iterm2_print_user_vars() {
     {
-    summary=$(jira-ticket-summary)
-    if [[ -n "$summary" ]]; then
-        iterm2_set_user_var jira_ticket_summary "$summary"
-    else
-        iterm2_set_user_var jira_ticket_summary "No jira ticket found."
-    fi
+      iterm2_set_user_var jira_ticket_summary "$(jira-ticket-summary)"
     } &!
 }
 {{- end }}

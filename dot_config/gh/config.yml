@@ -19,3 +19,4 @@ aliases:
     d: dash
     rv: repo view
     rvw: repo view -w
+version: "1"

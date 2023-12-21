@@ -389,7 +389,7 @@ alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 alias xcsx="echo -n 'Selected Xcode: ' && xcsv"
 
 xcs14() { xcodes select 14.3.1 }
-xcs15() { xcodes select 15 }
+xcs15() { xcodes select 15.0.1 }
 
 clean_xcode() {
   _exec "rm -rf \"$HOME/Library/Caches/org.swift.swiftpm\""

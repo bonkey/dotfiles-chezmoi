@@ -89,8 +89,8 @@ eval_managers() {
         echo "warning: brew not found"
     fi
 
-    if /usr/bin/which -s rtx ; then
-        eval "$(rtx activate zsh)"
+    if /usr/bin/which -s mise; then
+        eval "$(mise activate zsh)"
     elif /usr/bin/which -s rbenv ; then
         if [[ -z "$RBENV_SHELL" ]]; then
             export RBENV_ROOT=$HOME/.rbenv
@@ -98,7 +98,7 @@ eval_managers() {
             (rbenv rehash &) 2>/dev/null
         fi
     else
-        echo "warning: rtx or rbenv not found"
+        echo "warning: mise or rbenv not found"
     fi
 
     if /usr/bin/which -s pyenv ; then

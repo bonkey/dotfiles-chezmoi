@@ -35,6 +35,7 @@ brew 'the_silver_searcher' # Code-search similar to ack
 brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'fx'
 brew 'clipea'
+brew 'ugrep'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate

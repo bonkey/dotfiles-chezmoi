@@ -5,6 +5,9 @@ require 'json'
 require 'rainbow'
 require 'English'
 
+devices_to_create = /^(iPad (Air.*5th|Pro.*12.*6th|Pro.*11.*4rd|mini.*6th)|iPhone (1[45]|8)|Apple Watch Series [89])/
+runtimes_to_use = /^(iOS 1[56]|watchOS)/
+
 class SimulatorPopulator
   def initialize
     @device_types = JSON.parse `xcrun simctl list -j devicetypes`
@@ -18,7 +21,7 @@ class SimulatorPopulator
   def remove_all
     @devices['devices'].each do |_, runtime_devices|
       runtime_devices.each do |device|
-        puts 'Removing: ' + \
+        puts 'Removing: ' +
              Rainbow("#{device['name']} (#{device['udid']})").color(:red).bright
         `xcrun simctl delete #{device['udid']}`
       end
@@ -26,7 +29,7 @@ class SimulatorPopulator
   end
 
   def create(device_names: :all, runtimes: :all, options: {})
-    remove_all unless options[:"no-remove-existing"] == true
+    remove_all unless options[:'no-remove-existing'] == true
 
     @available_runtimes.each do |runtime|
       next unless runtimes == :all || runtime['name']&.match?(runtimes)
@@ -62,8 +65,6 @@ if options[:help]
 end
 
 # Update with every Xcode
-devices_to_create = /^(iPad (Air.*4th|Pro.*12.*5th|Pro.*11.*3rd|mini.*6th)|iPhone (1[34]|8)|Apple Watch Series [78])/
-runtimes_to_use = /^(iOS 1[56]|watchOS)/
 
 SimulatorPopulator.new.create(device_names: devices_to_create,
                               runtimes: runtimes_to_use,

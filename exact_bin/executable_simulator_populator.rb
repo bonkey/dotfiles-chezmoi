@@ -5,7 +5,8 @@ require 'json'
 require 'rainbow'
 require 'English'
 
-devices_to_create = /^(iPad (Air.*5th|Pro.*12.*6th|Pro.*11.*4rd|mini.*6th)|iPhone (1[45]|8)|Apple Watch Series [89])/
+# Update it for your needs
+devices_to_create = /^(iPad (Air.*5th|Pro.*12.*6th|Pro.*11.*4rd|mini.*6th)|iPhone (1[45]|8|SE.*3rd)|Apple Watch Series [89])/
 runtimes_to_use = /^(iOS 1[56]|watchOS)/
 
 class SimulatorPopulator
@@ -63,8 +64,6 @@ if options[:help]
   puts option_parser
   exit
 end
-
-# Update with every Xcode
 
 SimulatorPopulator.new.create(device_names: devices_to_create,
                               runtimes: runtimes_to_use,

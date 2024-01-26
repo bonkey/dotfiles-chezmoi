@@ -72,7 +72,7 @@ brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'hyperfine' # Command-line benchmarking tool
 
 # Tools for package management
-brew 'jdxcode/tap/rtx' # Multi-language runtime manager
+brew 'mise' # Multi-language runtime manager
 brew 'node' # Platform built on V8 to build network applications
 
 # Tools for version control
@@ -98,7 +98,7 @@ brew 'swift-sh' # Scripting with easy zero-conf dependency imports
 brew 'xcbeautify' # Little beautifier tool for xcodebuild
 brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
-brew 'xcodesorg/made/xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
+brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 
 # Tools for networking

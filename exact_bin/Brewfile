@@ -10,7 +10,6 @@ tap 'jakehilborn/jakehilborn'
 tap 'jandedobbeleer/oh-my-posh'
 tap 'jdxcode/tap'
 tap 'kylef/formulae'
-tap 'robotsandpencils/made'
 tap 'ycd/tap'
 tap 'samwho/spacer'
 tap 'dave1010/clipea'
@@ -99,7 +98,7 @@ brew 'swift-sh' # Scripting with easy zero-conf dependency imports
 brew 'xcbeautify' # Little beautifier tool for xcodebuild
 brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
-brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
+brew 'xcodesorg/made/xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 
 # Tools for networking

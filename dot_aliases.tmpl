@@ -670,7 +670,7 @@ alias bui="bundle install"
 jira-ticket-in-branch() {
   local git_branch
   git_branch=$(git symbolic-ref --short HEAD 2> /dev/null)
-  (echo $git_branch | grep -qE "[A-Z]{3,}-") || return
+  (echo $git_branch | grep -qE "[A-Z]{3,}-[0-9]+") || return
   echo $git_branch | sd '.*([A-Z]{3,}-[0-9]+).*' '$1'
 }
 

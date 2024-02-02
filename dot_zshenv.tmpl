@@ -25,6 +25,8 @@ export JIRA_API_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 export JIRA_SERVER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_SERVER.value -}}"
 export JIRA_USER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_USER.value -}}"
 
+export FIGMA_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").FIGMA_API_KEY.value -}}"
+
 {{- end }}
 
 {{- if eq .chezmoi.hostname "Daniels-MacBook-Air" }}

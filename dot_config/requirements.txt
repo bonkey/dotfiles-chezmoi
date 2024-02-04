@@ -3,3 +3,7 @@ llm
 csvkit
 httpie
 yt-dlp
+aider-chat
+pipupgrade
+stormssh
+git-filter-repo

@@ -11,7 +11,7 @@ if ! pyenv versions --bare | grep -q "^${PYTHON_VERSION}$"; then
     _exec "pyenv global $PYTHON_VERSION"
 fi
 
-_exec "pip install -r '$(chezmoi source-path)/dot_config/requirements.txt' | grep -v 'Requirement already satisfied'"
+_exec "pip install -r '$(chezmoi source-path)/dot_config/requirements.txt' | grep -v 'Requirement already satisfied' || true"
 
 _exec "pip install --upgrade pip"
 

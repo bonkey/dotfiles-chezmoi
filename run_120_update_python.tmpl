@@ -1,8 +1,17 @@
 #!/usr/bin/env zsh
 
+PYTHON_VERSION=3.12.1
+
 source "$(chezmoi source-path)/exact_bin/_common.zsh"
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+if ! pyenv versions --bare | grep -q "^${PYTHON_VERSION}$"; then
+    pyenv install -s $PYTHON_VERSION
+    pyenv global $PYTHON_VERSION
+fi
+
+pip install -r "$(chezmoi source-path)/dot_config/requirements.txt"
 
 pipupgrade --self
 exec_unless_recently_modified $file "pipupgrade --latest -y"

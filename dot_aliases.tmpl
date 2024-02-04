@@ -198,7 +198,7 @@ man() {
 
 # --- zsh
 
-_shell_init_files=${HOME}/{bin/{_common.zsh,Brewfile},.{zshenv,zprofile,zshrc,aliases,zimrc},.config/bonkey.omp.json}
+_shell_init_files=${HOME}/{bin/{_common.zsh,Brewfile},.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{bonkey.omp.json,requirements.txt}}
 cvz() {
   ced $(eval "echo $_shell_init_files")
   source ${HOME}/.zshrc

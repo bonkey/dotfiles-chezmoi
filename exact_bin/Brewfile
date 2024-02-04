@@ -18,8 +18,6 @@ tap 'dave1010/clipea'
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
 brew 'choose-rust' # Human-friendly and fast alternative to cut and (sometimes) awk
 brew 'colordiff' # Color-highlighted diff(1) output
-brew 'csvkit' # Suite of command-line tools for converting to and working with CSV
-brew 'diff-pdf' # Visually compare two PDF files
 brew 'diff-so-fancy' # Good-lookin' diffs with diff-highlight and more
 brew 'glow' # Render markdown on the CLI
 brew 'fastgron' # High-performance JSON to GRON converter
@@ -33,7 +31,6 @@ brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'the_silver_searcher' # Code-search similar to ack
 brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'fx'
-brew 'clipea'
 brew 'ugrep'
 
 # GNU tools
@@ -104,7 +101,6 @@ cask 'xcodes' # Install and switch between multiple versions of Xcode
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading
 brew 'dstp' # Run common networking tests against your site
-brew 'httpie' # User-friendly cURL replacement (command-line HTTP client)
 brew 'mtr' # 'traceroute' and 'ping' in a single tool
 brew 'nmap' # Port scanning utility for large networks
 brew 'stormssh' # Command-line tool to manage your ssh connections

@@ -7,12 +7,14 @@ source "$(chezmoi source-path)/exact_bin/_common.zsh"
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
 if ! pyenv versions --bare | grep -q "^${PYTHON_VERSION}$"; then
-    pyenv install -s $PYTHON_VERSION
-    pyenv global $PYTHON_VERSION
+    _exec "pyenv install -s $PYTHON_VERSION"
+    _exec "pyenv global $PYTHON_VERSION"
 fi
 
-pip install -r "$(chezmoi source-path)/dot_config/requirements.txt" | grep -v 'Requirement already satisfied'
-pip install --upgrade pip
+_exec "pip install -r '$(chezmoi source-path)/dot_config/requirements.txt' | grep -v 'Requirement already satisfied'"
 
-pipupgrade --self
+_exec "pip install --upgrade pip"
+
+_exec "pipupgrade --self"
+
 exec_unless_recently_modified $file "pipupgrade --latest -y"

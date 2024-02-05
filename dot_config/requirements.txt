@@ -1,9 +1,10 @@
-llm
+aider-chat
 # clipea
 csvkit
+git-filter-repo
 httpie
-yt-dlp
-aider-chat
+jc
+llm
 pipupgrade
 stormssh
-git-filter-repo
+yt-dlp

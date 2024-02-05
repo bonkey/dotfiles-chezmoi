@@ -8,8 +8,9 @@ file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
 if ! pyenv versions --bare | grep -q "^${PYTHON_VERSION}$"; then
     _exec "pyenv install -s $PYTHON_VERSION"
-    _exec "pyenv global $PYTHON_VERSION"
 fi
+
+_exec "pyenv global $PYTHON_VERSION"
 
 _exec "pip install -r '$(chezmoi source-path)/dot_config/requirements.txt'"
 

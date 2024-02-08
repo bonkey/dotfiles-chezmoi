@@ -4560,6 +4560,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>CustomTabBarFontSize</key>
+	<real>11</real>
 	<key>Default Bookmark Guid</key>
 	<string>3B825298-6BBB-4FF8-8030-95A43DEF752F</string>
 	<key>DeleteProfile_SilenceUntil</key>
@@ -5302,13 +5304,13 @@
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Name</key>
-			<string></string>
+			<string>Login shell</string>
 			<key>Non Ascii Font</key>
 			<string>Monaco 12</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>HackNFM-Regular 16</string>
+			<string>HackNFM-Regular 20</string>
 			<key>Only The Default BG Color Uses Transparency</key>
 			<true/>
 			<key>Open Password Manager Automatically</key>
@@ -5684,7 +5686,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Title Components</key>
-			<integer>66</integer>
+			<integer>3</integer>
 			<key>Transparency</key>
 			<real>0.059337325507614218</real>
 			<key>Unicode Normalization</key>
@@ -7919,7 +7921,7 @@
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Name</key>
-			<string>Clean ZSH</string>
+			<string>Empty ZSH</string>
 			<key>Non Ascii Font</key>
 			<string>Monaco 12</string>
 			<key>Non-ASCII Anti Aliased</key>
@@ -8410,6 +8412,8 @@
 	<key>TraditionalVisualBell</key>
 	<true/>
 	<key>UseBorder</key>
+	<false/>
+	<key>UseCustomTabBarFontSize</key>
 	<false/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>

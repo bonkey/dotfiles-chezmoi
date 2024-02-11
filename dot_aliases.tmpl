@@ -114,12 +114,17 @@ alias llt="ll -m -s modified -r"
 
 alias cal="gcal -s 1"
 
-alias brs="brew search"
-alias bri="brew install"
+br() {
+  brew $*
+}
+
+alias brs="br search"
+alias bri="br install"
 alias bric="bri --cask"
-alias brf="brew info"
-alias brl="brew list"
-alias bru="brew uninstall"
+alias brf="br info"
+alias brl="br list"
+alias bru="br uninstall"
+alias brup="br upgrade"
 
 alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"

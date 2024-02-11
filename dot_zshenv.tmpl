@@ -10,7 +10,11 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 export GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
 export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
+
 export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_ACCESS_TOKEN
+export HOMEBREW_BAT=true
+export HOMEBREW_BOOTSNAP=true
+export HOMEBREW_NO_ENV_HINTS=true
 
 export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PALM_KEY.value -}}"
 

@@ -118,13 +118,20 @@ br() {
   brew $*
 }
 
+brup() {
+  if [[ -z "$1" ]]; then
+    br upgrade $*
+  else 
+    br update
+  fi
+}
+
 alias brs="br search"
 alias bri="br install"
 alias bric="bri --cask"
 alias brf="br info"
 alias brl="br list"
 alias bru="br uninstall"
-alias brup="br upgrade"
 
 alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"

@@ -16,6 +16,9 @@ aliases:
     pl: pr list
     pcd: pr create --draft --fill
     ps: pr list --state all --search
+    prs: pr squash
+    prsa: prs --auto
+    prsad: prms --delete-branch
     d: dash
     rv: repo view
     rvw: repo view -w

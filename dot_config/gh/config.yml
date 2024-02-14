@@ -22,4 +22,5 @@ aliases:
     d: dash
     rv: repo view
     rvw: repo view -w
+    al: alias list
 version: "1"

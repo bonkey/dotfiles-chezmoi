@@ -130,9 +130,9 @@ brup() {
 alias brs="br search"
 alias bri="br install"
 alias bric="bri --cask"
-alias brf="br info"
+alias brin="br info"
 alias brl="br list"
-alias bru="br uninstall"
+alias brun="br uninstall"
 
 alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"
@@ -721,22 +721,22 @@ git-branches-in-jira-merged() {
 }
 
 alias j=jira
-jc() {
+jic() {
   j issue create $*
 }
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 
 jcpr() {
-  jc -pREL $*
+  jic -pREL $*
 }
 
 jcpm() {
-  jc -pMPS $*
+  jic -pMPS $*
 }
 
 jcpg() {
-  jc -pGDS $*
+  jic -pGDS $*
 }
 
 {{- end }}

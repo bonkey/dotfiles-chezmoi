@@ -5480,6 +5480,25 @@
 					<key>regex</key>
 					<string>(^| +)((^|[^\/])([A-z0-9-]+\/[A-z0-9-]+))</string>
 				</dict>
+				<dict>
+					<key>actions</key>
+					<array>
+						<dict>
+							<key>action</key>
+							<integer>1</integer>
+							<key>parameter</key>
+							<string>https://\1/\2</string>
+							<key>title</key>
+							<string>Open URL</string>
+						</dict>
+					</array>
+					<key>notes</key>
+					<string>GitHub git URL</string>
+					<key>precision</key>
+					<string>very_low</string>
+					<key>regex</key>
+					<string>git@(.+):(.+).git</string>
+				</dict>
 			</array>
 			<key>Status Bar Layout</key>
 			<dict>
@@ -5689,6 +5708,17 @@
 			<integer>3</integer>
 			<key>Transparency</key>
 			<real>0.059337325507614218</real>
+			<key>Triggers</key>
+			<array>
+				<dict>
+					<key>action</key>
+					<string>iTermUserNotificationTrigger</string>
+					<key>partial</key>
+					<true/>
+					<key>regex</key>
+					<string>git@(.+):(.+).git</string>
+				</dict>
+			</array>
 			<key>Unicode Normalization</key>
 			<integer>3</integer>
 			<key>Unicode Version</key>

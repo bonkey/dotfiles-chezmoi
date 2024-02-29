@@ -1,7 +1,7 @@
 [user]
 name = Daniel Bauke
 email = {{ .email | quote }}
-signingkey = {{ .gpgkey }}
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOHVbldBG6YD5sO9ukNttd7xi+jCYqeWJpqr1eVWh9xI
 
 [core]
 excludesfile = ~/.gitignore_global
@@ -97,7 +97,7 @@ diffFilter = delta --color-only --features=interactive
 navigate = true # use n and N to move between diff sections
 
 [gpg]
-program = /opt/homebrew/bin/gpg
+format = ssh
 
 #[url "git@github.com:"]
 #    insteadOf = https://github.com/
@@ -115,3 +115,6 @@ cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$RE
 
 [commit]
 gpgsign = true
+
+[gpg "ssh"]
+program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign

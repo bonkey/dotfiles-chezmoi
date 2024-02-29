@@ -121,9 +121,9 @@ br() {
 
 brup() {
   if [[ -z "$1" ]]; then
-    br upgrade $*
-  else 
     br update
+  else 
+    br upgrade $*
   fi
 }
 

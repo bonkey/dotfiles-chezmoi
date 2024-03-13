@@ -4,7 +4,6 @@
 
 tap '1password/tap'
 tap 'abhimanyu003/sttr'
-tap 'homebrew/cask-drivers'
 tap 'homebrew/cask-fonts'
 tap 'jakehilborn/jakehilborn'
 tap 'jandedobbeleer/oh-my-posh'
@@ -45,7 +44,7 @@ brew 'wget' # Internet file retriever
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
-brew 'exa' # Modern replacement for 'ls'
+brew 'eza' # Modern replacement for 'ls'
 brew 'fd' # Simple, fast and user-friendly alternative to find
 brew 'fzf' # Command-line fuzzy finder written in Go
 brew 'gcal' # Program for calculating and printing calendars

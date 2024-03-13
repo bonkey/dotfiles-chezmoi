@@ -116,9 +116,7 @@ brew 'launchctl-completion' # Bash completion for Launchctl
 brew 'maven-completion' # Bash completion for Maven
 brew 'open-completion' # Bash completion for open
 brew 'pip-completion' # Bash completion for Pip
-brew 'rake-completion' # Bash completion for Rake
 brew 'ruby-completion' # Bash completion for Ruby
-brew 'stormssh-completion' # Completion for storm-ssh
 brew 'yarn-completion' # Bash completion for Yarn
 brew 'zsh-completion' # Additional completion definitions for zsh
 

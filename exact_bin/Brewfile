@@ -69,6 +69,7 @@ brew 'hyperfine' # Command-line benchmarking tool
 
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
+brew 'pyenv'
 brew 'node' # Platform built on V8 to build network applications
 
 # Tools for version control

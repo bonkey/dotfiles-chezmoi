@@ -144,7 +144,7 @@ cask 'raycast' # Control your tools with a few keystrokes
 cask 'rectangle-pro' # Window snapping tool
 cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
-cask 'smoothscroll' # Smooth mouse scrolling utility
+cask 'mos' # Smooth mouse scrolling utility
 
 # Fonts for developers
 cask 'font-fira-code' # Free monospaced font with programming ligatures

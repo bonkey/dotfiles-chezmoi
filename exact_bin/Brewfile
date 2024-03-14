@@ -1,4 +1,4 @@
-## To describe all "brew" commands:
+# To describe all "brew" commands:
 #
 # ~/bin/brewfile-describe.rb < ~/bin/Brewfile | pbcopy
 
@@ -84,7 +84,6 @@ brew 'tokei' # Program that allows you to count code, quickly
 
 # Tools for developers
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
-cask 'coscreen' # Collaboration tool with multi-user screen sharing
 cask 'fork' # GIT client
 cask 'gitup' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
@@ -130,7 +129,6 @@ brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 # Tools for productivity and automation
 cask '1password-cli' # Command-line interface for 1Password
-cask 'bruno'
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them

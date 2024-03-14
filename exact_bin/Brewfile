@@ -97,6 +97,7 @@ brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 cask 'xcodes' # Install and switch between multiple versions of Xcode
+cask 'minisim'
 
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading

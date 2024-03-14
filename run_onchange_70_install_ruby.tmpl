@@ -7,3 +7,5 @@ log_message "Installing latest ruby"
 _exec "mise install ruby@latest"
 
 eval "$(mise activate zsh)"
+
+_exec "mise use --global ruby@latest"

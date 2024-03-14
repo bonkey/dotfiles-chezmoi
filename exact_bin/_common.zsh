@@ -67,6 +67,8 @@ exec_unless_recently_modified() {
     test -z $(find $file -mtime -${max_mtime} -mtime "+${min_mtime}" 2>/dev/null)
     is_modified=$?
 
+    echo "### FILE ${file} IS_MOD=${is_modified}"
+
     if [[ $is_modified -eq 1 && -z "$RECENTLY_EXEC_FORCE" ]]; then
         print -P "$(msg_prefix)File $file modified in last $max_mtime-$min_mtime. Skipping: '$cmd'"
         print -P "$(msg_prefix)Force run: RECENTLY_EXEC_FORCE=1 <command>"

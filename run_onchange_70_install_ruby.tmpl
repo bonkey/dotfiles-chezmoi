@@ -4,9 +4,6 @@ source "$(chezmoi source-path)/exact_bin/_common.zsh"
 
 log_message "Installing latest ruby"
 
-ruby_version=$(rbenv install -l 2> /dev/null | grep -v - | tail -1)
+_exec "mise install ruby@latest"
 
-rbenv install $ruby_version
-rbenv global $ruby_version
-
-eval "$(rbenv init -)"
+eval "$(mise activate zsh)"

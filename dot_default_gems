@@ -13,7 +13,6 @@ net-http-spy
 nokogiri
 rainbow
 rcodetools
-rubocop
 sqlite3
 update_xcode_plugins
 wirble

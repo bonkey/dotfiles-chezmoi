@@ -86,7 +86,7 @@
 			<key>Swift_Online</key>
 			<dict>
 				<key>date</key>
-				<date>2024-03-09T04:00:33Z</date>
+				<date>2024-03-14T00:20:50Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -124,7 +124,7 @@
 			<key>iOS_Online</key>
 			<dict>
 				<key>date</key>
-				<date>2024-03-09T04:00:33Z</date>
+				<date>2024-03-14T00:20:50Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -182,17 +182,17 @@
 			<key>http://kapeli.com/feeds/Man_Pages.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-06-03T09:30:01Z</date>
+				<date>2024-03-14T00:20:48Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-06-03T09:29:37Z</date>
+				<date>2024-03-14T00:20:48Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Ruby_3.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-06-03T09:30:23Z</date>
+				<date>2024-03-14T00:20:54Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>

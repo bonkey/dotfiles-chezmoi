@@ -145,6 +145,7 @@ cask 'rectangle-pro' # Window snapping tool
 cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'mos' # Smooth mouse scrolling utility
+cask 'deepl'
 
 # Fonts for developers
 cask 'font-fira-code' # Free monospaced font with programming ligatures

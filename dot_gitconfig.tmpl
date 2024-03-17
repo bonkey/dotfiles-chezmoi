@@ -96,9 +96,6 @@ diffFilter = delta --color-only --features=interactive
 [delta]
 navigate = true # use n and N to move between diff sections
 
-[gpg]
-format = ssh
-
 #[url "git@github.com:"]
 #    insteadOf = https://github.com/
 #[url "git@github.com:"]
@@ -112,6 +109,9 @@ trustexitcode = true
 
 [difftool "Kaleidoscope"]
 cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[gpg]
+format = ssh
 
 [commit]
 gpgsign = true

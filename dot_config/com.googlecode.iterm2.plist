@@ -5712,7 +5712,9 @@
 			<array>
 				<dict>
 					<key>action</key>
-					<string>iTermUserNotificationTrigger</string>
+					<string>iTermHyperlinkTrigger</string>
+					<key>parameter</key>
+					<string>https://\0\1</string>
 					<key>partial</key>
 					<true/>
 					<key>regex</key>

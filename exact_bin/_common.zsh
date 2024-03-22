@@ -109,7 +109,7 @@ eval_managers() {
         echo "warning: pyenv not found"
     fi
 
-    [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+    tsrc "$HOME/.bun/_bun"
 
     if /usr/bin/which -s xcenv; then
         if [[ -z "$XCENV_SHELL" ]]; then

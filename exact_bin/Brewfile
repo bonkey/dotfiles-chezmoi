@@ -12,7 +12,6 @@ tap 'kylef/formulae'
 tap 'ycd/tap'
 tap 'samwho/spacer'
 tap 'dave1010/clipea'
-tap 'ynqa/tap'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -33,7 +32,6 @@ brew 'fx'
 brew 'ugrep'
 brew 'nushell'
 brew 'dfc'
-brew 'jnv'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate

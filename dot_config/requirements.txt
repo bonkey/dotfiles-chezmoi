@@ -1,4 +1,3 @@
-aider-chat
 # clipea
 csvkit
 git-filter-repo
@@ -8,3 +7,4 @@ llm
 pipupgrade
 stormssh
 yt-dlp
+pip-autoremove

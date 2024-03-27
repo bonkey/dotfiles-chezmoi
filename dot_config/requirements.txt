@@ -8,3 +8,4 @@ pipupgrade
 stormssh
 yt-dlp
 pip-autoremove
+pipx

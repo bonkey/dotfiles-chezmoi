@@ -1,11 +1,9 @@
-# clipea
+aider-chat
+clipea-cli
 csvkit
 git-filter-repo
 httpie
 jc
 llm
-pipupgrade
 stormssh
 yt-dlp
-pip-autoremove
-pipx

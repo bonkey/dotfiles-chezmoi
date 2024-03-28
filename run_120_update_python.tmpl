@@ -4,18 +4,21 @@ PYTHON_VERSION=3.12.1
 
 source "$(chezmoi source-path)/exact_bin/_common.zsh"
 
-file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
-requirements="{{- .chezmoi.sourceDir}}/dot_config/requirements.txt"
+this_file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+requirements_file="{{- .chezmoi.sourceDir}}/dot_config/requirements.txt"
 
 if ! pyenv versions --bare | grep -q "^${PYTHON_VERSION}$"; then
     _exec "pyenv install -s $PYTHON_VERSION"
     _exec "pyenv global $PYTHON_VERSION"
 fi
 
-exec_unless_recently_modified $requirements "pip install -r $requirements"
+exec_unless_recently_modified $this_file "pip install --upgrade --quiet pip"
+exec_unless_recently_modified $this_file "pip install --upgrade --quiet pipx"
 
-exec_unless_recently_modified $file "pip install --upgrade pip"
-
-exec_unless_recently_modified $file "pipupgrade --self"
-
-exec_unless_recently_modified $file "pipupgrade --latest -y"
+if is_recently_modified $requirements_file; then
+    for req in $(cat $requirements_file); do
+        _exec "pipx install -q $req"
+    done
+else
+    exec_unless_recently_modified $this_file "pipx upgrade-all"
+fi

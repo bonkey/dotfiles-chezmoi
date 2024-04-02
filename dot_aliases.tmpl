@@ -481,9 +481,9 @@ xco() {
 
 _pod() {
   if [[ -f "Gemfile" || -f "../Gemfile" ]]; then
-    bundle exec pod "$@"
+    _exec "bundle exec pod $@"
   else
-    pod "$@"
+    _exec "pod $@"
   fi
 }
 
@@ -670,11 +670,14 @@ gmem() {
 
 # -- Ruby
 
-alias bu="bundle"
-alias bue="bundle exec"
-alias buu="bundle update"
-alias buo="bundle outdated"
-alias bui="bundle install"
+bu() {
+  _exec "bundle $@"
+}
+
+alias bue="bu exec"
+alias buu="bu update"
+alias buo="bu outdated"
+alias bui="bu install"
 
 # -- Jira
 

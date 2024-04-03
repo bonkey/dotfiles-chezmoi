@@ -1,10 +1,9 @@
 aider-chat
-# clipea
+clipea-cli
 csvkit
 git-filter-repo
 httpie
 jc
 llm
-pipupgrade
 stormssh
 yt-dlp

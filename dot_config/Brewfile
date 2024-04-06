@@ -29,10 +29,10 @@ brew 'sd' # Intuitive find & replace CLI
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'the_silver_searcher' # Code-search similar to ack
 brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
-brew 'fx'
-brew 'ugrep'
-brew 'nushell'
-brew 'dfc'
+brew 'fx' # Terminal JSON viewer
+brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
+brew 'nushell' # Modern shell for the GitHub era
+brew 'dfc' # Display graphs and colors of file system space/usage
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -51,7 +51,7 @@ brew 'fd' # Simple, fast and user-friendly alternative to find
 brew 'fzf' # Command-line fuzzy finder written in Go
 brew 'gcal' # Program for calculating and printing calendars
 brew 'liblockfile' # Library providing functions to lock standard mailboxes
-brew 'libyaml'
+brew 'libyaml' # YAML Parser
 brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
 brew 'oh-my-posh' # Prompt theme engine for any shell
 brew 'p7zip' # 7-Zip (high compression file archiver) implementation
@@ -72,10 +72,10 @@ brew 'hyperfine' # Command-line benchmarking tool
 
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
-brew 'pyenv'
+brew 'pyenv' # Python version management
 
 brew 'node' # Platform built on V8 to build network applications
-brew 'bun'
+brew 'bun' # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)
@@ -100,7 +100,7 @@ brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 cask 'xcodes' # Install and switch between multiple versions of Xcode
-cask 'minisim'
+cask 'minisim' # App for launching iOS and Android simulators
 
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading
@@ -148,7 +148,7 @@ cask 'rectangle-pro' # Window snapping tool
 cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'mos' # Smooth mouse scrolling utility
-cask 'deepl'
+cask 'deepl' # Trains AIs to understand and translate texts
 
 # Fonts for developers
 cask 'font-fira-code' # Free monospaced font with programming ligatures
@@ -156,8 +156,8 @@ cask 'font-hack-nerd-font' # Developer targeted fonts with a high number of glyp
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-roboto-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-commit-mono' # Neutral programming typeface
-cask 'font-monaspace'
-cask 'font-reddit-sans'
+cask 'font-monaspace' # Superfamily of fonts for code
+cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
@@ -168,7 +168,7 @@ cask 'quicklook-csv' # QuickLook plugin for CSV files
 cask 'quicklook-json' # QuickLook plugin for JSON files
 cask 'quicklookapk' # Quick Look plugin for Android packages
 cask 'webpquicklook' # QuickLook plugin for webp files
-cask 'syntax-highlight'
+cask 'syntax-highlight' # Quicklook extension for source files
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

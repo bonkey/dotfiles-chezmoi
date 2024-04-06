@@ -12,6 +12,7 @@ tap 'kylef/formulae'
 tap 'ycd/tap'
 tap 'samwho/spacer'
 tap 'dave1010/clipea'
+tap 'oven-sh/bun'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -72,7 +73,9 @@ brew 'hyperfine' # Command-line benchmarking tool
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
 brew 'pyenv'
+
 brew 'node' # Platform built on V8 to build network applications
+brew 'bun'
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)

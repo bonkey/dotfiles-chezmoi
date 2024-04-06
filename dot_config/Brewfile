@@ -1,6 +1,6 @@
 # To describe all "brew" commands:
 #
-# ~/bin/brewfile-describe.rb < ~/bin/Brewfile | pbcopy
+# ~/bin/brewfile-describe.rb Brewfile
 
 tap '1password/tap'
 tap 'abhimanyu003/sttr'

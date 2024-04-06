@@ -1,6 +1,8 @@
 # To describe all "brew" commands:
 #
 # ~/bin/brewfile-describe.rb Brewfile
+# or
+# ruby $HOME/.local/share/chezmoi/exact_bin/executable_brewfile-describe.rb $HOME/.local/share/chezmoi/dot_config/Brewfile
 
 tap '1password/tap'
 tap 'abhimanyu003/sttr'

@@ -1,0 +1,183 @@
+# To describe all "brew" commands:
+#
+# ~/bin/brewfile-describe.rb < ~/bin/Brewfile | pbcopy
+
+tap '1password/tap'
+tap 'abhimanyu003/sttr'
+tap 'homebrew/cask-fonts'
+tap 'jakehilborn/jakehilborn'
+tap 'jandedobbeleer/oh-my-posh'
+tap 'jdxcode/tap'
+tap 'kylef/formulae'
+tap 'ycd/tap'
+tap 'samwho/spacer'
+tap 'dave1010/clipea'
+tap 'oven-sh/bun'
+
+# Tools for working with text files
+brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
+brew 'choose-rust' # Human-friendly and fast alternative to cut and (sometimes) awk
+brew 'colordiff' # Color-highlighted diff(1) output
+brew 'diff-so-fancy' # Good-lookin' diffs with diff-highlight and more
+brew 'glow' # Render markdown on the CLI
+brew 'fastgron' # High-performance JSON to GRON converter
+brew 'jless' # Command-line pager for JSON data
+brew 'jo' # JSON output from a shell
+brew 'jq' # Lightweight and flexible command-line JSON processor
+brew 'rga' # Wrapper around ripgrep that adds multiple rich file types
+brew 'sd' # Intuitive find & replace CLI
+brew 'sttr' # A cross-platform, cli app to perform various string operations.
+brew 'the_silver_searcher' # Code-search similar to ack
+brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew 'fx'
+brew 'ugrep'
+brew 'nushell'
+brew 'dfc'
+
+# GNU tools
+brew 'findutils' # Collection of GNU find, xargs, and locate
+brew 'gawk' # GNU awk utility
+brew 'gnu-indent' # C code prettifier
+brew 'gnu-sed' # GNU implementation of the famous stream editor
+brew 'gnu-tar' # GNU version of the tar archiving utility
+brew 'grep' # GNU grep, egrep and fgrep
+brew 'wget' # Internet file retriever
+
+# Shell power-ups
+brew 'atuin' # Improved shell history for zsh and bash
+brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
+brew 'eza' # Modern replacement for 'ls'
+brew 'fd' # Simple, fast and user-friendly alternative to find
+brew 'fzf' # Command-line fuzzy finder written in Go
+brew 'gcal' # Program for calculating and printing calendars
+brew 'liblockfile' # Library providing functions to lock standard mailboxes
+brew 'libyaml'
+brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
+brew 'oh-my-posh' # Prompt theme engine for any shell
+brew 'p7zip' # 7-Zip (high compression file archiver) implementation
+brew 'pstree' # Show ps output as a tree
+brew 'tldr' # Simplified and community-driven man pages
+brew 'tree' # Display directories as trees (with optional color/HTML output)
+brew 'noti' # Trigger notifications when a process completes
+brew 'fswatch' # Monitor a directory for changes and run a shell command
+brew 'spacer' # Small command-line utility for adding spacers to command output
+
+# Other shell tools
+brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
+brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
+brew 'mas' # Mac App Store command-line interface
+brew 'mediainfo' # Unified display of technical and tag data for audio/video
+brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
+brew 'hyperfine' # Command-line benchmarking tool
+
+# Tools for package management
+brew 'mise' # Multi-language runtime manager
+brew 'pyenv'
+
+brew 'node' # Platform built on V8 to build network applications
+brew 'bun'
+
+# Tools for version control
+brew 'ctags' # Reimplementation of ctags(1)
+brew 'gh' # GitHub command-line tool
+brew 'git-delta' # Syntax-highlighting pager for git and diff output
+brew 'git-extras' # Small git utilities
+brew 'git-lfs' # Git extension for versioning large files
+brew 'git' # Distributed revision control system
+brew 'tokei' # Program that allows you to count code, quickly
+
+# Tools for developers
+cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
+cask 'fork' # GIT client
+cask 'gitup' # Git interface focused on visual interaction
+cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
+cask 'sublime-merge' # Git client
+
+# Tools for Xcode
+brew 'swift-sh' # Scripting with easy zero-conf dependency imports
+brew 'xcbeautify' # Little beautifier tool for xcodebuild
+brew 'xcenv' # Xcode version manager
+brew 'xcinfo' # Tool to get information about and install available Xcode versions
+brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
+cask 'xcodes' # Install and switch between multiple versions of Xcode
+cask 'minisim'
+
+# Tools for networking
+brew 'aria2' # Download with resuming and segmented downloading
+brew 'dstp' # Run common networking tests against your site
+brew 'mtr' # 'traceroute' and 'ping' in a single tool
+brew 'nmap' # Port scanning utility for large networks
+
+# Tools for working with media files
+brew 'ffmpeg' # Play, record, convert, and stream audio and video
+brew 'gifsicle' # GIF image/animation creator/editor
+brew 'graphicsmagick' # Image processing tools collection
+
+# Tools for shell and command-line completion
+brew 'brew-cask-completion' # Fish completion for brew-cask
+brew 'bundler-completion' # Bash completion for Bundler
+brew 'gem-completion' # Bash completion for gem
+brew 'gradle-completion' # Bash and Zsh completion for Gradle
+brew 'launchctl-completion' # Bash completion for Launchctl
+brew 'maven-completion' # Bash completion for Maven
+brew 'open-completion' # Bash completion for open
+brew 'pip-completion' # Bash completion for Pip
+brew 'ruby-completion' # Bash completion for Ruby
+brew 'yarn-completion' # Bash completion for Yarn
+brew 'zsh-completion' # Additional completion definitions for zsh
+
+# Tools for cryptography
+brew 'openssl' # Cryptography and SSL/TLS Toolkit
+brew 'gpg' # GNU Pretty Good Privacy (PGP) package
+brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
+brew 'pinentry-mac' # Pinentry for GPG on Mac
+
+# Tools for productivity and automation
+cask '1password-cli' # Command-line interface for 1Password
+cask 'contexts' # Allows switching between application windows
+cask 'daisydisk' # Disk space visualizer
+cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
+cask 'force-paste' #
+cask 'handbrake' # Open-source video transcoder
+cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+cask 'karabiner-elements' # Keyboard customizer
+cask 'keyboard-maestro' # Automation software
+cask 'macvim' # Text editor
+cask 'raycast' # Control your tools with a few keystrokes
+cask 'rectangle-pro' # Window snapping tool
+cask 'rocket' # Emoji picker optimized for blind people
+cask 'setapp' # Collection of apps available by subscription
+cask 'mos' # Smooth mouse scrolling utility
+cask 'deepl'
+
+# Fonts for developers
+cask 'font-fira-code' # Free monospaced font with programming ligatures
+cask 'font-hack-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-roboto-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-commit-mono' # Neutral programming typeface
+cask 'font-monaspace'
+cask 'font-reddit-sans'
+
+# QuickLook plugins
+cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
+cask 'qlimagesize' # Display image info and preview unsupported formats in QuickLook
+cask 'qlprettypatch' # QuickLook plugin to view patch files
+cask 'qlvideo' # Thumbnails, static previews, cover art and metadata for video files
+cask 'quicklook-csv' # QuickLook plugin for CSV files
+cask 'quicklook-json' # QuickLook plugin for JSON files
+cask 'quicklookapk' # Quick Look plugin for Android packages
+cask 'webpquicklook' # QuickLook plugin for webp files
+cask 'syntax-highlight'
+
+mas 'Amphetamine', id: 937_984_704
+mas 'DevCleaner for Xcode', id: 1_388_020_431
+mas 'Drafts', id: 1_435_957_248
+mas 'Jiffy', id: 1_502_527_999
+mas 'Keka', id: 470_158_793
+mas 'Mactracker', id: 430_255_202
+mas 'Pixelmator Pro', id: 1_289_583_905
+mas 'PopClip', id: 445_189_367
+mas 'Telegram', id: 747_648_890
+mas 'Things 3', id: 904_280_696
+mas 'Messenger', id: 1_480_068_668

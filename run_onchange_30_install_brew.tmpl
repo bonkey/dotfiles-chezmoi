@@ -1,12 +1,12 @@
 #!/usr/bin/env zsh
 
-{{- $brewfile:= joinPath .chezmoi.sourceDir "/exact_bin/Brewfile" -}}
+{{- $brewfile:= joinPath .chezmoi.sourceDir "/dot_config/Brewfile" -}}
 
 # hash: {{ include $brewfile | sha256sum }}
 
 source "$(chezmoi source-path)/exact_bin/_common.zsh"
 
-brewfile="$(chezmoi source-path)/exact_bin/Brewfile"
+brewfile="$(chezmoi source-path)/dot_config/Brewfile"
 
 if ! /usr/bin/which -s brew; then
   log_message "Brew is missing. Installing"

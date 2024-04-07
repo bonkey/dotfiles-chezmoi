@@ -75,6 +75,7 @@ brew 'hyperfine' # Command-line benchmarking tool
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
 brew 'pyenv' # Python version management
+brew 'direnv' # Load/unload environment variables based on $PWD
 
 brew 'node' # Platform built on V8 to build network applications
 brew 'bun' # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
@@ -151,6 +152,7 @@ cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'mos' # Smooth mouse scrolling utility
 cask 'deepl' # Trains AIs to understand and translate texts
+cask 'typora'
 
 # Fonts for developers
 cask 'font-fira-code' # Free monospaced font with programming ligatures

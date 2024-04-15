@@ -58,18 +58,26 @@ round() {
     printf "%.${1}f" $2
 }
 
+is_recently_modified() {
+    local max_mtime min_mtime file is_modified
+
+    file=$1
+    max_mtime=-12h
+    min_mtime=\+5m
+
+    test -n "$(find $file -mtime ${max_mtime} -mtime ${min_mtime})"
+    is_modified=$?
+
+    return $is_modified
+}
+
 exec_unless_recently_modified() {
-    max_mtime=12h
-    min_mtime=5m
+    local file cmd
     file=$1
     cmd=$2
 
-    test -z $(find $file -mtime -${max_mtime} -mtime "+${min_mtime}" 2>/dev/null)
-    is_modified=$?
-
-    if [[ $is_modified -eq 1 && -z "$RECENTLY_EXEC_FORCE" ]]; then
-        print -P "$(msg_prefix)File $file modified in last $max_mtime-$min_mtime. Skipping: '$cmd'"
-        print -P "$(msg_prefix)Force run: RECENTLY_EXEC_FORCE=1 <command>"
+    if is_recently_modified "$file" ; then
+        print -P "$(msg_prefix)Command '$cmd' recently run, skipping (based on $file)."
     else
         _exec $cmd
         touch $file

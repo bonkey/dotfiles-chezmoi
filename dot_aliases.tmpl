@@ -692,7 +692,8 @@ jira-ticket-summary() {
   local ticket summary
   ticket=$(jira-ticket-in-branch)
   if [[ -n "${ticket}" ]]; then
-    summary=$(http --verify="$SSL_CERT_FILE" GET "${JIRA_SERVER}/rest/api/3/issue/${ticket}" --auth "${JIRA_USER}:${JIRA_API_TOKEN}" | jq -r '.fields.summary')
+    # --verify='' to skip SSL errors with Netskope
+    summary=$(http --verify='' GET "${JIRA_SERVER}/rest/api/3/issue/${ticket}" --auth "${JIRA_USER}:${JIRA_API_TOKEN}" | jq -r '.fields.summary')
     echo "${ticket}: ${summary}"
   else
     echo "No jira ticket found."

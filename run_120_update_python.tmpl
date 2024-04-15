@@ -15,10 +15,8 @@ fi
 exec_unless_recently_modified $this_file "pip install --upgrade --quiet pip"
 exec_unless_recently_modified $this_file "pip install --upgrade --quiet pipx"
 
-if is_recently_modified $requirements_file; then
+if is_recently_modified $this_file; then
     for req in $(cat $requirements_file); do
-        _exec "pipx install -q $req"
+        _exec "pipx upgrade $req || pipx install -q $req"
     done
-else
-    exec_unless_recently_modified $this_file "pipx upgrade-all"
 fi

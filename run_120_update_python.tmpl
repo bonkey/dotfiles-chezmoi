@@ -12,10 +12,10 @@ if ! pyenv versions --bare | grep -q "^${PYTHON_VERSION}$"; then
     _exec "pyenv global $PYTHON_VERSION"
 fi
 
-exec_unless_recently_modified $this_file "pip install --upgrade --quiet pip"
-exec_unless_recently_modified $this_file "pip install --upgrade --quiet pipx"
+if is_outdated $this_file; then
+    pip install --upgrade --quiet pip
+    pip install --upgrade --quiet pipx
 
-if is_recently_modified $this_file; then
     for req in $(cat $requirements_file); do
         _exec "pipx upgrade $req || pipx install -q $req"
     done

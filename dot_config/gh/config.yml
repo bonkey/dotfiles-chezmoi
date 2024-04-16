@@ -23,4 +23,5 @@ aliases:
     rv: repo view
     rvw: repo view -w
     al: alias list
+    prlm: pr list --author "@me"
 version: "1"

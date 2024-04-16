@@ -58,7 +58,7 @@ round() {
     printf "%.${1}f" $2
 }
 
-is_recently_modified() {
+is_outdated() {
     local max_mtime min_mtime file is_modified
 
     file=$1
@@ -68,7 +68,11 @@ is_recently_modified() {
     test -n "$(find $file -mtime ${max_mtime} -mtime ${min_mtime})"
     is_modified=$?
 
-    return $is_modified
+    if [[ $is_modified -eq 0 ]]; then
+        return 1
+    else
+        return 0
+    fi
 }
 
 exec_unless_recently_modified() {
@@ -76,11 +80,11 @@ exec_unless_recently_modified() {
     file=$1
     cmd=$2
 
-    if is_recently_modified "$file" ; then
-        print -P "$(msg_prefix)Command '$cmd' recently run, skipping (based on $file)."
-    else
+    if is_outdated "$file" ; then
         _exec $cmd
         touch $file
+    else
+        print -P "$(msg_prefix)Command '$cmd' recently run, skipping (based on $file)."
     fi
 }
 

@@ -4,5 +4,6 @@ csvkit
 git-filter-repo
 httpie
 jc
-llm
 yt-dlp
+llmstudio
+llm

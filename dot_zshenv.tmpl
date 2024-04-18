@@ -51,7 +51,7 @@ export SENTRY_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 
 {{- end }}
 
-{{- if eq .chezmoi.hostname "Daniels-MacBook-Air" }}
+{{- if eq .chezmoi.hostname "danbau-personal" }}
 
 export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
 export AI_DEVS_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").AI_DEVS_API_KEY.value -}}"

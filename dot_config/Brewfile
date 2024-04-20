@@ -44,6 +44,7 @@ brew 'gnu-sed' # GNU implementation of the famous stream editor
 brew 'gnu-tar' # GNU version of the tar archiving utility
 brew 'grep' # GNU grep, egrep and fgrep
 brew 'wget' # Internet file retriever
+brew 'curlie' # curl alternative with syntax highlighting and more
 
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash

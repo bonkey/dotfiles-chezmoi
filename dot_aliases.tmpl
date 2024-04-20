@@ -229,9 +229,12 @@ alias hv="h -v"
 alias hf="h --follow"
 alias hvf="hv --follow"
 
+alias curl="curlie --curl"
+
 cj() {
   curl -s -L $* | jq .
 }
+
 
 hj() {
   local u f

@@ -5606,7 +5606,7 @@
 					<key>partial</key>
 					<true/>
 					<key>regex</key>
-					<string>([A-z\.-]+):([A-z-]+/[A-z-]+)\.git</string>
+					<string>([A-z\.-]+):([A-z-]+/[A-z-]+)(\.git)?</string>
 				</dict>
 			</array>
 			<key>Unicode Normalization</key>

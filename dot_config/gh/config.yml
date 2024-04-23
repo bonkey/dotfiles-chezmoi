@@ -13,15 +13,15 @@ aliases:
     pvw: pr view -w
     pc: pr create
     pcw: pr create -w
-    pl: pr list
     pcd: pr create --draft --fill
     ps: pr list --state all --search
-    prs: pr squash
-    prsa: pr squash --auto
-    prsad: pr squash --auto --delete-branch
+    pl: pr list
+    plm: pr list --author "@me"
+    psq: pr squash
+    psqa: pr squash --auto
+    psqad: pr squash --auto --delete-branch
     d: dash
     rv: repo view
     rvw: repo view -w
     al: alias list
-    prlm: pr list --author "@me"
 version: "1"

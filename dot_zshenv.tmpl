@@ -34,8 +34,6 @@ export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulf
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 
-export SSL_CERT_FILE='/Library/Application Support/Netskope/STAgent/data/nscacert.pem'
-
 # https://start.1password.com/open/i?a=OZFXTXMCQJHO5G6KV3FU55JZ3I&v=xorpczupr2kurbbiwa7ifs5t44&i=c5abdfjbih6jhqripu6yfudc4a&h=everlong.1password.com
 
 export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"

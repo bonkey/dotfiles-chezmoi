@@ -2,8 +2,8 @@
 
 {{- $mise_dir:= joinPath .chezmoi.sourceDir "/dot_config/mise" -}}
 
-# source "$(chezmoi source-path)/exact_bin/_common.zsh"
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
 
-# file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
-# exec_unless_recently_modified $file "mise -C '$mise_dir' --yes upgrade"
+exec_unless_recently_modified $file "mise -C '{{- $mise_dir -}}' --yes upgrade"

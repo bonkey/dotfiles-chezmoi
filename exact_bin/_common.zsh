@@ -113,6 +113,14 @@ eval_managers() {
         echo "warning: mise or rbenv not found"
     fi
 
+    if /usr/bin/which -s pyenv ; then
+        if [[ -z "$PYENV_SHELL" ]]; then
+            eval "$(pyenv init -)"
+        fi
+    else
+        echo "warning: pyenv not found"
+    fi
+
     tsrc "$HOME/.bun/_bun"
 
     if /usr/bin/which -s xcenv; then

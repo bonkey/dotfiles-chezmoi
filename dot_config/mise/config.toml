@@ -1,3 +1,11 @@
 [tools]
 ruby = "latest"
 python = "latest"
+swiftformat = "latest"
+swiftlint = "latest"
+bun = "latest"
+node = "latest"
+"pipx:llm" = "latest"
+
+[settings]
+experimental = true

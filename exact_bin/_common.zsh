@@ -103,9 +103,25 @@ eval_managers() {
 
     if /usr/bin/which -s mise; then
         eval "$(mise activate zsh)"
+    elif /usr/bin/which -s rbenv ; then
+        if [[ -z "$RBENV_SHELL" ]]; then
+            export RBENV_ROOT=$HOME/.rbenv
+            eval "$(rbenv init --no-rehash -)"
+            (rbenv rehash &) 2>/dev/null
+        fi
     else
-        echo "warning: mise not found"
+        echo "warning: mise or rbenv not found"
     fi
+
+    if /usr/bin/which -s pyenv ; then
+        if [[ -z "$PYENV_SHELL" ]]; then
+            eval "$(pyenv init -)"
+        fi
+    else
+        echo "warning: pyenv not found"
+    fi
+
+    tsrc "$HOME/.bun/_bun"
 
     if /usr/bin/which -s xcenv; then
         if [[ -z "$XCENV_SHELL" ]]; then

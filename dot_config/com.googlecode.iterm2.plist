@@ -6523,7 +6523,7 @@
 			<key>Columns</key>
 			<integer>150</integer>
 			<key>Command</key>
-			<string>zsh -i -c "rtx exec ruby -- irb"</string>
+			<string>zsh -i -c "mise exec ruby -- irb"</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Blue Component</key>

@@ -149,6 +149,28 @@
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
+	<key>DHSwiftRepo</key>
+	<dict>
+		<key>installed</key>
+		<dict>
+			<key>https://github.com/fastlane/fastlane</key>
+			<dict>
+				<key>date</key>
+				<date>2024-04-27T16:25:45Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>fastlane/fastlane</string>
+					<key>platform</key>
+					<string>docc</string>
+					<key>uniqueIdentifier</key>
+					<string>https://github.com/fastlane/fastlane</string>
+				</dict>
+			</dict>
+		</dict>
+		<key>uninstalled</key>
+		<dict/>
+	</dict>
 	<key>DHUserRepo</key>
 	<dict>
 		<key>installed</key>

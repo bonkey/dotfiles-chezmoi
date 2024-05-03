@@ -31,7 +31,6 @@ brew 'sd' # Intuitive find & replace CLI
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'the_silver_searcher' # Code-search similar to ack
 brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
-brew 'fx' # Terminal JSON viewer
 brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
 brew 'nushell' # Modern shell for the GitHub era
 brew 'dfc' # Display graphs and colors of file system space/usage

@@ -13,6 +13,7 @@ node = "latest"
 "pipx:httpie" = "latest"
 "pipx:jc" = "latest"
 "pipx:yt-dlp" = "latest"
+"npm:fx" = "latest"
 
 [settings]
 experimental = true

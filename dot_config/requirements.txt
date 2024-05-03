@@ -1,8 +1,0 @@
-aider-chat
-clipea-cli
-csvkit
-git-filter-repo
-httpie
-jc
-yt-dlp
-llm

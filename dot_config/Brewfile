@@ -101,6 +101,8 @@ brew 'xcodes' # Best command-line tool to install and switch between multiple ve
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 cask 'minisim' # App for launching iOS and Android simulators
 
+brew 'ollama'
+
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading
 brew 'dstp' # Run common networking tests against your site

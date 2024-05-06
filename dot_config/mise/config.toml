@@ -13,6 +13,7 @@ node = "latest"
 "pipx:httpie" = "latest"
 "pipx:jc" = "latest"
 "pipx:yt-dlp" = "latest"
+"pipx:google-cloud-aiplatform" = "latest"
 "npm:fx" = "latest"
 
 [settings]

@@ -26,8 +26,11 @@ export GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj64
 export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
 export GH_TOKEN=$GITHUB_ACCESS_TOKEN
 
-export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_ACCESS_TOKEN
+export HOMEBREW_AUTOREMOVE=true
 export HOMEBREW_BAT=true
+export HOMEBREW_CASK_OPTS="--no-quarantine"
+export HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=5
+export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_ACCESS_TOKEN
 export HOMEBREW_NO_ENV_HINTS=true
 
 export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PALM_KEY.value -}}"

@@ -14,7 +14,7 @@ tap 'kylef/formulae'
 tap 'ycd/tap'
 tap 'samwho/spacer'
 tap 'dave1010/clipea'
-tap 'oven-sh/bun'
+tap 'context-labs/mactop' 
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -63,6 +63,7 @@ brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'noti' # Trigger notifications when a process completes
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'spacer' # Small command-line utility for adding spacers to command output
+brew 'mactop'
 
 # Other shell tools
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.

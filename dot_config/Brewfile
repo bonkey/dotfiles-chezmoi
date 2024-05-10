@@ -14,7 +14,7 @@ tap 'kylef/formulae'
 tap 'ycd/tap'
 tap 'samwho/spacer'
 tap 'dave1010/clipea'
-tap 'context-labs/mactop' 
+tap 'context-labs/mactop' 'https://github.com/context-labs/mactop'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration

@@ -102,7 +102,7 @@ eval_managers() {
     fi
 
     if /usr/bin/which -s mise; then
-        eval "$(mise activate zsh)"
+        eval "$(mise activate zsh --shims)"
     else
         echo "warning: mise not found"
     fi

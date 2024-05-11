@@ -6,5 +6,6 @@ set +o pipefail
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
-eval "$(mise activate zsh --shims)"
+eval "$(mise hook-env)"
+
 exec_unless_recently_modified $file "gem update --system; yes | gem update -f ; yes | gem cleanup"

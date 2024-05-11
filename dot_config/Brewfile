@@ -153,6 +153,7 @@ cask 'mac-mouse-fix'
 cask 'deepl' # Trains AIs to understand and translate texts
 cask 'typora'
 cask 'brave-browser@beta'
+cask 'openrgb'
 
 # Fonts for developers
 cask 'font-fira-code' # Free monospaced font with programming ligatures

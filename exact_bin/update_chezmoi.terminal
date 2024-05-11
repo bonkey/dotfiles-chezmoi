@@ -48,7 +48,7 @@
 		<key>CommandString</key>
 		<string>~/bin/update_chezmoi.sh</string>
 		<key>RunCommandAsShell</key>
-		<false/>
+		<true/>
 		<key>WindowTitle</key>
 		<string>Chezmoi Update</string>
 		<key>columnCount</key>

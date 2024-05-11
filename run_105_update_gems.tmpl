@@ -6,7 +6,5 @@ set +o pipefail
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
-echo $PATH
-eval "$(mise activate zsh)"
-echo $PATH
+eval "$(mise activate zsh --shims)"
 exec_unless_recently_modified $file "gem update --system; yes | gem update -f ; yes | gem cleanup"

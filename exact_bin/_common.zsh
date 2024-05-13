@@ -101,12 +101,10 @@ eval_managers() {
         echo "warning: brew not found"
     fi
 
-    if [[ -z "$MISE_SHELL" ]]; then
-        if /usr/bin/which -s mise && ; then
-            eval "$(mise activate zsh)"
-        else
-            echo "warning: mise not found"
-        fi
+    if /usr/bin/which -s mise && ; then
+        eval "$(mise activate zsh)"
+    else
+        echo "warning: mise not found"
     fi
 
     if /usr/bin/which -s xcenv; then

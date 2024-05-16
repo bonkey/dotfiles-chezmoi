@@ -68,7 +68,78 @@
 	<key>DHRubyRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>fastlane-plugin-appicon</key>
+			<dict>
+				<key>date</key>
+				<date>2024-05-15T17:24:16Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>fastlane-plugin-appicon</string>
+					<key>platform</key>
+					<string>rubyGems</string>
+					<key>uniqueIdentifier</key>
+					<string>fastlane-plugin-appicon</string>
+				</dict>
+			</dict>
+			<key>fastlane-plugin-aws_s3</key>
+			<dict>
+				<key>date</key>
+				<date>2024-05-15T17:32:15Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>fastlane-plugin-aws_s3</string>
+					<key>platform</key>
+					<string>rubyGems</string>
+					<key>uniqueIdentifier</key>
+					<string>fastlane-plugin-aws_s3</string>
+				</dict>
+			</dict>
+			<key>fastlane-plugin-bugsnag</key>
+			<dict>
+				<key>date</key>
+				<date>2024-05-15T17:24:18Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>fastlane-plugin-bugsnag</string>
+					<key>platform</key>
+					<string>rubyGems</string>
+					<key>uniqueIdentifier</key>
+					<string>fastlane-plugin-bugsnag</string>
+				</dict>
+			</dict>
+			<key>fastlane-plugin-bundletool</key>
+			<dict>
+				<key>date</key>
+				<date>2024-05-15T17:24:13Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>fastlane-plugin-bundletool</string>
+					<key>platform</key>
+					<string>rubyGems</string>
+					<key>uniqueIdentifier</key>
+					<string>fastlane-plugin-bundletool</string>
+				</dict>
+			</dict>
+			<key>fastlane-plugin-emerge</key>
+			<dict>
+				<key>date</key>
+				<date>2024-05-15T17:32:03Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>fastlane-plugin-emerge</string>
+					<key>platform</key>
+					<string>rubyGems</string>
+					<key>uniqueIdentifier</key>
+					<string>fastlane-plugin-emerge</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -156,7 +227,7 @@
 			<key>https://github.com/fastlane/fastlane</key>
 			<dict>
 				<key>date</key>
-				<date>2024-04-27T16:25:45Z</date>
+				<date>2024-05-15T17:12:49Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>

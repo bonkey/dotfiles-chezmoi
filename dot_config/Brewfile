@@ -156,13 +156,13 @@ cask 'brave-browser@beta'
 cask 'openrgb'
 
 # Fonts for developers
-cask 'font-fira-code' # Free monospaced font with programming ligatures
-cask 'font-hack-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-roboto-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-commit-mono' # Neutral programming typeface
-cask 'font-monaspace' # Superfamily of fonts for code
-cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
+brew 'font-fira-code' # Free monospaced font with programming ligatures
+brew 'font-hack-nerd-font' # Developer targeted fonts with a high number of glyphs
+brew 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
+brew 'font-roboto-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
+brew 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
+brew 'font-monaspace' # Superfamily of fonts for code
+brew 'font-commit-mono' # Neutral programming typeface
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles

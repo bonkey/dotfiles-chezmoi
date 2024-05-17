@@ -156,13 +156,8 @@ cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 
 # Fonts for developers
-cask 'font-fira-code' # Free monospaced font with programming ligatures
-cask 'font-hack-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-roboto-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
-cask 'font-monaspace' # Superfamily of fonts for code
-cask 'font-commit-mono' # Neutral programming typeface
 
 cask "font-consolas-for-powerline" # 
 cask "font-dejavu-sans-mono-for-powerline" # 

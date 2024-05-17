@@ -63,7 +63,7 @@ brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'noti' # Trigger notifications when a process completes
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'spacer' # Small command-line utility for adding spacers to command output
-brew 'mactop'
+brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
 
 # Other shell tools
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
@@ -102,7 +102,7 @@ brew 'xcodes' # Best command-line tool to install and switch between multiple ve
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 cask 'minisim' # App for launching iOS and Android simulators
 
-brew 'ollama'
+brew 'ollama' # Create, run, and share large language models (LLMs)
 
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading
@@ -149,11 +149,11 @@ cask 'raycast' # Control your tools with a few keystrokes
 cask 'rectangle-pro' # Window snapping tool
 cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
-cask 'mac-mouse-fix'
+cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
 cask 'deepl' # Trains AIs to understand and translate texts
-cask 'typora'
-cask 'brave-browser@beta'
-cask 'openrgb'
+cask 'typora' # Configurable document editor that supports Markdown
+cask 'brave-browser@beta' # Web browser focusing on privacy
+cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 
 # Fonts for developers
 cask 'font-fira-code' # Free monospaced font with programming ligatures
@@ -164,91 +164,91 @@ cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
 cask 'font-monaspace' # Superfamily of fonts for code
 cask 'font-commit-mono' # Neutral programming typeface
 
-cask "font-consolas-for-powerline"
-cask "font-dejavu-sans-mono-for-powerline"
-cask "font-droid-sans-mono-for-powerline"
-cask "font-fira-mono-for-powerline"
-cask "font-inconsolata-dz-for-powerline"
-cask "font-inconsolata-for-powerline"
-cask "font-inconsolata-for-powerline-bold"
-cask "font-inconsolata-g-for-powerline"
-cask "font-liberation-mono-for-powerline"
-cask "font-menlo-for-powerline"
-cask "font-meslo-for-powerline"
-cask "font-monofur-for-powerline"
-cask "font-noto-mono-for-powerline"
-cask "font-roboto-mono-for-powerline"
-cask "font-sf-mono-for-powerline"
-cask "font-source-code-pro-for-powerline"
+cask "font-consolas-for-powerline" # 
+cask "font-dejavu-sans-mono-for-powerline" # 
+cask "font-droid-sans-mono-for-powerline" # 
+cask "font-fira-mono-for-powerline" # 
+cask "font-inconsolata-dz-for-powerline" # 
+cask "font-inconsolata-for-powerline" # 
+cask "font-inconsolata-for-powerline-bold" # 
+cask "font-inconsolata-g-for-powerline" # 
+cask "font-liberation-mono-for-powerline" # 
+cask "font-menlo-for-powerline" # 
+cask "font-meslo-for-powerline" # 
+cask "font-monofur-for-powerline" # 
+cask "font-noto-mono-for-powerline" # 
+cask "font-roboto-mono-for-powerline" # 
+cask "font-sf-mono-for-powerline" # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
+cask "font-source-code-pro-for-powerline" # 
 
-cask "font-0xproto-nerd-font"
-cask "font-3270-nerd-font"
-cask "font-agave-nerd-font"
-cask "font-anonymice-nerd-font"
-cask "font-arimo-nerd-font"
-cask "font-aurulent-sans-mono-nerd-font"
-cask "font-bigblue-terminal-nerd-font"
-cask "font-bitstream-vera-sans-mono-nerd-font"
-cask "font-blex-mono-nerd-font"
-cask "font-caskaydia-cove-nerd-font"
-cask "font-caskaydia-mono-nerd-font"
-cask "font-code-new-roman-nerd-font"
-cask "font-comic-shanns-mono-nerd-font"
-cask "font-commit-mono-nerd-font"
-cask "font-cousine-nerd-font"
-cask "font-d2coding-nerd-font"
-cask "font-daddy-time-mono-nerd-font"
-cask "font-dejavu-sans-mono-nerd-font"
-cask "font-droid-sans-mono-nerd-font"
-cask "font-envy-code-r-nerd-font"
-cask "font-fantasque-sans-mono-nerd-font"
-cask "font-fira-code-nerd-font"
-cask "font-fira-mono-nerd-font"
-cask "font-geist-mono-nerd-font"
-cask "font-go-mono-nerd-font"
-cask "font-gohufont-nerd-font"
-cask "font-hack-nerd-font"
-cask "font-hasklug-nerd-font"
-cask "font-heavy-data-nerd-font"
-cask "font-hurmit-nerd-font"
-cask "font-im-writing-nerd-font"
-cask "font-inconsolata-go-nerd-font"
-cask "font-inconsolata-lgc-nerd-font"
-cask "font-inconsolata-nerd-font"
-cask "font-intone-mono-nerd-font"
-cask "font-iosevka-nerd-font"
-cask "font-iosevka-term-nerd-font"
-cask "font-iosevka-term-slab-nerd-font"
-cask "font-jetbrains-mono-nerd-font"
-cask "font-lekton-nerd-font"
-cask "font-liberation-nerd-font"
-cask "font-lilex-nerd-font"
-cask "font-martian-mono-nerd-font"
-cask "font-meslo-lg-nerd-font"
-cask "font-monaspace-nerd-font"
-cask "font-monocraft-nerd-font"
-cask "font-monofur-nerd-font"
-cask "font-monoid-nerd-font"
-cask "font-mononoki-nerd-font"
-cask "font-mplus-nerd-font"
-cask "font-noto-nerd-font"
-cask "font-open-dyslexic-nerd-font"
-cask "font-overpass-nerd-font"
-cask "font-profont-nerd-font"
-cask "font-proggy-clean-tt-nerd-font"
-cask "font-recursive-mono-nerd-font"
-cask "font-roboto-mono-nerd-font"
-cask "font-sauce-code-pro-nerd-font"
-cask "font-shure-tech-mono-nerd-font"
-cask "font-space-mono-nerd-font"
-cask "font-symbols-only-nerd-font"
-cask "font-terminess-ttf-nerd-font"
-cask "font-tinos-nerd-font"
-cask "font-ubuntu-mono-nerd-font"
-cask "font-ubuntu-nerd-font"
-cask "font-ubuntu-sans-nerd-font"
-cask "font-victor-mono-nerd-font"
-cask "font-zed-mono-nerd-font"
+cask "font-0xproto-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-3270-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-agave-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-anonymice-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-arimo-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-aurulent-sans-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-bigblue-terminal-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-bitstream-vera-sans-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-blex-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-caskaydia-cove-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-caskaydia-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-code-new-roman-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-comic-shanns-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-commit-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-cousine-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-d2coding-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-daddy-time-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-dejavu-sans-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-droid-sans-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-envy-code-r-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-fantasque-sans-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-fira-code-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-fira-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-geist-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-go-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-gohufont-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-hack-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-hasklug-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-heavy-data-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-hurmit-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-im-writing-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-inconsolata-go-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-inconsolata-lgc-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-inconsolata-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-intone-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-iosevka-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-iosevka-term-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-iosevka-term-slab-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-jetbrains-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-lekton-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-liberation-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-lilex-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-martian-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-meslo-lg-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-monaspace-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-monocraft-nerd-font" # Monospaced font inspired by the Minecraft typeface patched to add Nerd glyphs
+cask "font-monofur-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-monoid-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-mononoki-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-mplus-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-noto-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-open-dyslexic-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-overpass-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-profont-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-proggy-clean-tt-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-recursive-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-roboto-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-sauce-code-pro-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-shure-tech-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-space-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-symbols-only-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-terminess-ttf-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-tinos-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-ubuntu-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-ubuntu-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-ubuntu-sans-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-victor-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
+cask "font-zed-mono-nerd-font" # Developer targeted fonts with a high number of glyphs
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles

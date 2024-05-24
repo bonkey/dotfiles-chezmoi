@@ -9,4 +9,6 @@ source "$(chezmoi source-path)/exact_bin/_common.zsh"
 
 _exec "mise -C '{{- $mise_dir -}}' --yes install"
 
+eval "$(mise hook-env)"
+
 _exec "pip install --user pipx"

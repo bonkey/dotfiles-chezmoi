@@ -59,8 +59,8 @@ set background=dark
 syntax on
 
 colorscheme habamax
-exe 'hi Todo' .bg_purple_med . fg_yellow_med
-exe 'hi Error' .bg_white . fg_red_med
+"exe 'hi Todo' .bg_purple_med . fg_yellow_med
+"exe 'hi Error' .bg_white . fg_red_med
 
 " --- Key Mappings ---
 

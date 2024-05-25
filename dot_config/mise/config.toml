@@ -15,7 +15,6 @@ node = "latest"
 "pipx:yt-dlp" = "latest"
 "pipx:google-cloud-aiplatform" = "latest"
 "npm:fx" = "latest"
-"npm:fast-cli" = "latest"
 
 [settings]
 experimental = true

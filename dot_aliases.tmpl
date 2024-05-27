@@ -534,9 +534,8 @@ gbf() {
   git checkout -b "feature/$1"
 }
 
-alias glog1="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias gl1m="glog1 --merges"
-alias gl1="glog1 --no-merges"
+alias gl1m="git lg --merges"
+alias gl1="git lg --no-merges"
 
 alias gmd="git merge develop --no-edit"
 alias gmm="git merge --no-edit"

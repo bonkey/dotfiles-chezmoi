@@ -407,6 +407,25 @@ alias xcsx="echo -n 'Selected Xcode: ' && xcsv"
 
 alias pkk="pkill -9 Xcode"
 
+xcresolve() {
+  proj=$1
+  shift
+
+  test -d $proj || (echo "$proj not found" && exit 1)
+
+  if [[ "$proj" == *.xcworkspace ]]; then
+    arg="-workspace"
+    scheme=$(basename $proj .xcworkspace)
+  else 
+    arg="-project"
+    scheme=$(basename $proj .xcodeproj)
+  fi
+
+  _exec "find $proj -name Package.resolved -delete"
+  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme $@"
+
+}
+
 clean_xcode() {
   _exec "rm -rf \"$HOME/Library/Caches/org.swift.swiftpm\""
   _exec "rm -rf \"$HOME/Library/org.swift.swiftpm\""

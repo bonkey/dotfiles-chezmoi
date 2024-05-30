@@ -411,7 +411,10 @@ xcresolve() {
   proj=$1
   shift
 
-  test -d $proj || (echo "$proj not found" && exit 1)
+  if [[ ! -d $proj ]]; then
+    echo "$proj not found"
+    exit 1
+  fi
 
   if [[ "$proj" == *.xcworkspace ]]; then
     arg="-workspace"

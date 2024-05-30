@@ -431,7 +431,7 @@ xcresolve() {
   fi
 
   _exec "find $proj -name Package.resolved -delete"
-  _exec "xcrun xcodebuild clean $arg $proj | xcbeautify"
+  _exec "xcrun xcodebuild clean $arg $proj -scheme $scheme | xcbeautify"
   _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify"
 }
 

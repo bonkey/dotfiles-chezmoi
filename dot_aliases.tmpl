@@ -410,6 +410,8 @@ alias pkk="pkill -9 Xcode"
 xcresolve() {
   proj=$1
   shift
+  scheme=$1
+  shift
 
   if [[ ! -d $proj ]]; then
     echo "$proj not found"
@@ -418,14 +420,18 @@ xcresolve() {
 
   if [[ "$proj" == *.xcworkspace ]]; then
     arg="-workspace"
-    scheme=$(basename $proj .xcworkspace)
+    if [[ -z "$scheme" ]]; then
+      scheme=$(basename $proj .xcworkspace)
+    fi
   else 
     arg="-project"
-    scheme=$(basename $proj .xcodeproj)
+    if [[ -z "$scheme" ]]; then
+      scheme=$(basename $proj .xcodeproj)
+    fi
   fi
 
   _exec "find $proj -name Package.resolved -delete"
-  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme $@ | xcbeautify"
+  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify"
 }
 
 clean_xcode() {

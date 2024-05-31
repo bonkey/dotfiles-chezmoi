@@ -511,6 +511,7 @@ xco() {
 
 _pod() {
   if [[ -f "Gemfile" || -f "../Gemfile" ]]; then
+    _exec "bundle check || bundle install"
     _exec "bundle exec pod $@"
   else
     _exec "pod $@"

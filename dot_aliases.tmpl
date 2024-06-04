@@ -701,6 +701,7 @@ gmem() {
 # -- Ruby
 
 bu() {
+  _exec "bundle check || bundle install"
   _exec "bundle $@"
 }
 

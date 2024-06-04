@@ -49,6 +49,9 @@ defaults:
 keybindings:
   issues: []
   prs: []
-repoPaths: {}
+repoPaths:
+  EverlongProject/ios-sdk: ~/Projects/ios-sdk
+  # :owner/:repo: ~/src/github.com/:owner/:repo # template if you always clone github repos in a consistent location
+
 pager:
   diff: ""

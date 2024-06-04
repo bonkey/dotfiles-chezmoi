@@ -701,11 +701,15 @@ gmem() {
 # -- Ruby
 
 bu() {
-  _exec "bundle check || bundle install"
   _exec "bundle $@"
 }
 
-alias bue="bu exec"
+buc() {
+  _exec "bundle check || bundle install"
+  bu $@
+}
+
+alias bue="buc exec"
 alias buu="bu update"
 alias buo="bu outdated"
 alias bui="bu install"

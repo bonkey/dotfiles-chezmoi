@@ -51,6 +51,7 @@ keybindings:
   prs: []
 repoPaths:
   EverlongProject/ios-sdk: ~/Projects/ios-sdk
+  EverlongProject/league-ios-cli: ~/Projects/league-ios-cli
   # :owner/:repo: ~/src/github.com/:owner/:repo # template if you always clone github repos in a consistent location
 
 pager:

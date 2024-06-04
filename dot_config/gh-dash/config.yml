@@ -24,6 +24,7 @@ defaults:
       updatedAt:
         width: 7
       repo:
+        grow: true
         width: 15
       author:
         width: 15

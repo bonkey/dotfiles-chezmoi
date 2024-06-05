@@ -409,9 +409,9 @@ alias pkx="pkill -9 Xcode"
 
 xcresolve() {
   proj=$1
-  shift
+  test -n "$proj" && shift
   scheme=$1
-  shift
+  test -n "$scheme" && shift
 
   if [[ ! -d $proj ]]; then
     echo "$proj not found"

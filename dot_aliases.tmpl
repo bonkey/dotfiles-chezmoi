@@ -55,12 +55,13 @@ xcefi() {
 
 alias -g X="| xargs"
 alias -g X0="| xargs -0"
-alias -g XG="| xargs -0 grep"
+alias -g XG="| xargs -0 grep -E"
 alias -g CDL="| colordiff | less"
 alias -g PBC="| pbcopy"
 alias -g H='| head'
 alias -g T='| tail'
-alias -g G='| grep'
+alias -g G='| grep -E'
+alias -g GI='| grep -Ei'
 alias -g L="| less"
 alias -g LL="2>&1 | less"
 # alias -g CA="2>&1 | cat -A"

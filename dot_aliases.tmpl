@@ -402,10 +402,8 @@ ff_gif() {
 
 alias bef="bue fastlane"
 
-alias xcs="sudo xcode-select"
-alias xcss="sudo xcode-select -s"
-alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
-alias xcsx="echo -n 'Selected Xcode: ' && xcsv"
+alias xcs="xcodes select"
+alias xcss="xcodes installed | grep Selected"
 
 xck() {
   _exec "pkill -9 Xcode"

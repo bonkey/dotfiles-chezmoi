@@ -440,6 +440,32 @@ xcresolve() {
   _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify"
 }
 
+xcb() {
+  proj=$1
+  test -n "$proj" && shift
+  scheme=$1
+  test -n "$scheme" && shift
+
+  if [[ ! -d $proj ]]; then
+    echo "$proj not found"
+    exit 1
+  fi
+
+  if [[ "$proj" == *.xcworkspace ]]; then
+    arg="-workspace"
+    if [[ -z "$scheme" ]]; then
+      scheme=$(basename $proj .xcworkspace)
+    fi
+  else 
+    arg="-project"
+    if [[ -z "$scheme" ]]; then
+      scheme=$(basename $proj .xcodeproj)
+    fi
+  fi
+
+  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ | xcbeautify"
+}
+
 xcflush() {
   xck
   _exec "rm -rf \"$HOME/Library/Caches/org.swift.swiftpm\""

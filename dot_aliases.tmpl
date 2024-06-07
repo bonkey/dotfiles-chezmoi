@@ -431,7 +431,7 @@ xcresolve() {
     fi
   fi
 
-  _exec "killall Xcode"
+  _exec "pkill -9 Xcode"
   _exec "find $proj -name Package.resolved -delete"
   _exec "xcrun xcodebuild clean $arg $proj -scheme $scheme | xcbeautify"
   _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify"

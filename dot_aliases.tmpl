@@ -436,8 +436,8 @@ xcresolve() {
 
   xck
   _exec "find $proj -name Package.resolved -delete"
-  _exec "xcrun xcodebuild clean $arg $proj -scheme $scheme | xcbeautify"
-  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify"
+  _exec "xcrun xcodebuild clean $arg $proj -scheme $scheme | xcbeautify -q"
+  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify -q"
 }
 
 xcb() {
@@ -463,7 +463,7 @@ xcb() {
     fi
   fi
 
-  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ | xcbeautify"
+  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ | xcbeautify -q"
 }
 
 xcflush() {

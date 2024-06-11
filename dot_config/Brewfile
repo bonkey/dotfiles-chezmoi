@@ -155,6 +155,7 @@ cask 'typora' # Configurable document editor that supports Markdown
 cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 cask 'android-file-transfer'
+cask 'nova'
 
 # Fonts for developers
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs

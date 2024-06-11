@@ -8,6 +8,8 @@ require 'English'
 # Update it for your needs
 devices_to_create = /^(iPad (Air.*5th|Pro.*12.*6th|Pro.*11.*4rd|mini.*6th)|iPhone (1[45]|8|SE.*3rd)|Apple Watch Series [89])/
 runtimes_to_use = /^(iOS (13|17\.[45]|18)|watchOS)/
+default_sim_device = 'iPhone 15 Pro'
+default_sim_runtime = '17.5'
 
 class SimulatorPopulator
   def initialize
@@ -39,26 +41,19 @@ class SimulatorPopulator
       @device_types['devicetypes'].each do |device_type|
         next unless device_names == :all || device_type['name']&.match?(device_names)
 
-        simulator_name = "#{device_type['name']} (#{runtime['name']})"
-        args = ["'#{simulator_name}'",
-                device_type['identifier'],
-                runtime['identifier']].join ' '
-
-        `xcrun simctl create #{args} 2> /dev/null`
-        puts 'Created ' + Rainbow(simulator_name).color(:green).bright if $CHILD_STATUS.success?
+        create_device(device_type: device_type['identifier'],
+                      runtime: runtime['identifier'],
+                      name: "#{device_type['name']} (#{runtime['name']})")
       end
     end
   end
 
-  def create_device(name:, device_type:, runtime:)
-    args = [
-      "'#{simulator_name}'",
-  device_type['identifier'],
-    runtime['identifier']].join ' '
-  ]
+  def create_device(device_type:, runtime:, name: nil)
+    name ||= device_type
+    args = ["'#{name}'", device_type, runtime].join ' '
 
     `xcrun simctl create #{args} 2> /dev/null`
-    puts 'Created ' + Rainbow(simulator_name).color(:green).bright if $CHILD_STATUS.success?
+    puts "Created #{Rainbow(simulator_name).color(:green).bright}" if $CHILD_STATUS.success?
   end
 end
 
@@ -76,6 +71,11 @@ if options[:help]
   exit
 end
 
-SimulatorPopulator.new.create(device_names: devices_to_create,
-                              runtimes: runtimes_to_use,
-                              options: options)
+populator = SimulatorPopulator.new
+
+populator.create(device_names: devices_to_create,
+                 runtimes: runtimes_to_use,
+                 options:)
+
+populator.create_device(device_type: default_sim_device,
+                        runtime: default_sim_runtime)

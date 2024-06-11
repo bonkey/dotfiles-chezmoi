@@ -25,4 +25,5 @@ aliases:
     rvw: repo view -w
     al: alias list
     pch: pr checks
+    prl: pr list
 version: "1"

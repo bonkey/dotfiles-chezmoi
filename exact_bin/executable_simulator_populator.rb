@@ -49,6 +49,17 @@ class SimulatorPopulator
       end
     end
   end
+
+  def create_device(name:, device_type:, runtime:)
+    args = [
+      "'#{simulator_name}'",
+  device_type['identifier'],
+    runtime['identifier']].join ' '
+  ]
+
+    `xcrun simctl create #{args} 2> /dev/null`
+    puts 'Created ' + Rainbow(simulator_name).color(:green).bright if $CHILD_STATUS.success?
+  end
 end
 
 option_parser = OptionParser.new do |opts|

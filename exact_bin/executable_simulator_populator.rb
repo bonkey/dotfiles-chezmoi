@@ -9,7 +9,7 @@ require 'English'
 devices_to_create = /^(iPad (Air.*5th|Pro.*12.*6th|Pro.*11.*4rd|mini.*6th)|iPhone (1[45]|8|SE.*3rd)|Apple Watch Series [89])/
 runtimes_to_use = /^(iOS (13|17\.[45]|18)|watchOS)/
 default_sim_device = 'iPhone 15 Pro'
-default_sim_runtime = '17.5'
+default_sim_runtime = 'iOS 17.5'
 
 class SimulatorPopulator
   def initialize
@@ -42,18 +42,25 @@ class SimulatorPopulator
         next unless device_names == :all || device_type['name']&.match?(device_names)
 
         create_device(device_type: device_type['identifier'],
-                      runtime: runtime['identifier'],
+                      runtime: runtime['name'],
                       name: "#{device_type['name']} (#{runtime['name']})")
       end
     end
   end
 
+  def find_runtime(name:)
+    @available_runtimes
+      .select { |runtime| runtime['name'] == name }
+      .first['identifier']
+  end
+
   def create_device(device_type:, runtime:, name: nil)
     name ||= device_type
-    args = ["'#{name}'", device_type, runtime].join ' '
+    runtime_id = find_runtime(name: runtime)
+    args = ["'#{name}'", "'#{device_type}'", "'#{runtime_id}'"].join ' '
 
     `xcrun simctl create #{args} 2> /dev/null`
-    puts "Created #{Rainbow(simulator_name).color(:green).bright}" if $CHILD_STATUS.success?
+    puts "Created #{Rainbow(name).color(:green).bright}" if $CHILD_STATUS.success?
   end
 end
 

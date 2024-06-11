@@ -33,8 +33,6 @@ class SimulatorPopulator
     remove_all unless options[:'no-remove-existing'] == true
 
     @available_runtimes.each do |runtime|
-      puts "Checking #{runtime['name']}"
-      next
       next unless runtimes == :all || runtime['name']&.match?(runtimes)
 
       puts Rainbow("## #{runtime['name']}").color(:blue).bright

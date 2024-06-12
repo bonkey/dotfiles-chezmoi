@@ -7,6 +7,7 @@ signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOHVbldBG6YD5sO9ukNttd7xi+jCYqe
 excludesfile = ~/.gitignore_global
 ignorecase = false
 quotepath = false
+pager = delta
 
 [color]
 diff = auto
@@ -87,17 +88,14 @@ smudge = git-lfs smudge -- %f
 process = git-lfs filter-process
 required = true
 
-[pager]
-diff = delta
-log = delta
-reflog = delta
-show = delta
-
 [interactive]
-diffFilter = delta --color-only --features=interactive
+diffFilter = delta --color-only --diff-so-fancy
 
 [delta]
 navigate = true # use n and N to move between diff sections
+line-numbers = true
+hyperlinks = true
+
 
 #[url "git@github.com:"]
 #    insteadOf = https://github.com/

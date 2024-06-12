@@ -6,6 +6,7 @@ zmodule fzf
 zmodule ellie/atuin
 
 zmodule wfxr/forgit
+zmodule so-fancy/diff-so-fancy
 
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions

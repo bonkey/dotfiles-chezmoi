@@ -18,11 +18,41 @@
                 },
                 "rules": [
                     {
-                        "description": "Change caps_lock key to command+control+option+shift. (Post f19 key when pressed alone)",
+                        "description": "Change end key to command+control+option. (Post f19 key when pressed alone)",
                         "manipulators": [
                             {
                                 "from": {
                                     "key_code": "caps_lock",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_command",
+                                        "modifiers": [
+                                            "left_control",
+                                            "left_option"
+                                        ]
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "f19"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Change home key to command+control+option+shift. (Post f19 key when pressed alone)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "home",
                                     "modifiers": {
                                         "optional": [
                                             "any"
@@ -49,7 +79,7 @@
                         ]
                     },
                     {
-                        "description": "Change caps_lock key to command+control+option+shift. (Post escape key when pressed alone)",
+                        "description": "Change caps_lock key to command+control+option+shift. (Post f19 key when pressed alone)",
                         "manipulators": [
                             {
                                 "from": {
@@ -72,7 +102,7 @@
                                 ],
                                 "to_if_alone": [
                                     {
-                                        "key_code": "escape"
+                                        "key_code": "f19"
                                     }
                                 ],
                                 "type": "basic"

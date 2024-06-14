@@ -22,7 +22,7 @@
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "caps_lock",
+                                    "key_code": "end",
                                     "modifiers": {
                                         "optional": [
                                             "any"

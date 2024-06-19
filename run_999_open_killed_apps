@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+source "$(chezmoi source-path)/exact_bin/_common.zsh"
+
+local apps app
+
+apps=(
+    'Keyboard Maestro Engine'
+    'iTerm'
+)
+
+for app in $apps; do
+    print -P "$(msg_prefix)Starting ${app}..."
+    open -a "${app}"
+done

@@ -10,6 +10,5 @@ apps=(
 )
 
 for app in $apps; do
-    print -P "$(msg_prefix)Starting ${app}..."
-    open -a "${app}"
+    _exec "open -a '${app}'"
 done

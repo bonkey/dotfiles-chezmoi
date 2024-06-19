@@ -13,10 +13,7 @@ response=$(read_key)
 echo
 [[ $response == "y" ]] && pkill iTerm
 
-echo -n "Quit Keyboard Maestro Engine? (y/n) "
-response=$(read_key)
-echo
-[[ $response == "y" ]] && pkill 'Keyboard Maestro Engine'
+pkill 'Keyboard Maestro Engine'
 
 chezmoi update
 

@@ -72,6 +72,7 @@ brew 'mas' # Mac App Store command-line interface
 brew 'mediainfo' # Unified display of technical and tag data for audio/video
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'hyperfine' # Command-line benchmarking tool
+brew 'mitmproxy'
 
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
@@ -139,7 +140,7 @@ cask '1password-cli' # Command-line interface for 1Password
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'force-paste' # 
+cask 'force-paste'
 cask 'handbrake' # Open-source video transcoder
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 cask 'karabiner-elements' # Keyboard customizer
@@ -161,22 +162,22 @@ cask 'nova' # Native code editor
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
 
-cask 'font-consolas-for-powerline' # 
-cask 'font-dejavu-sans-mono-for-powerline' # 
-cask 'font-droid-sans-mono-for-powerline' # 
-cask 'font-fira-mono-for-powerline' # 
-cask 'font-inconsolata-dz-for-powerline' # 
-cask 'font-inconsolata-for-powerline' # 
-cask 'font-inconsolata-for-powerline-bold' # 
-cask 'font-inconsolata-g-for-powerline' # 
-cask 'font-liberation-mono-for-powerline' # 
-cask 'font-menlo-for-powerline' # 
-cask 'font-meslo-for-powerline' # 
-cask 'font-monofur-for-powerline' # 
-cask 'font-noto-mono-for-powerline' # 
-cask 'font-roboto-mono-for-powerline' # 
+cask 'font-consolas-for-powerline'
+cask 'font-dejavu-sans-mono-for-powerline'
+cask 'font-droid-sans-mono-for-powerline'
+cask 'font-fira-mono-for-powerline'
+cask 'font-inconsolata-dz-for-powerline'
+cask 'font-inconsolata-for-powerline'
+cask 'font-inconsolata-for-powerline-bold'
+cask 'font-inconsolata-g-for-powerline'
+cask 'font-liberation-mono-for-powerline'
+cask 'font-menlo-for-powerline'
+cask 'font-meslo-for-powerline'
+cask 'font-monofur-for-powerline'
+cask 'font-noto-mono-for-powerline'
+cask 'font-roboto-mono-for-powerline'
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
-cask 'font-source-code-pro-for-powerline' # 
+cask 'font-source-code-pro-for-powerline'
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-3270-nerd-font' # Developer targeted fonts with a high number of glyphs

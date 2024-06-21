@@ -72,7 +72,6 @@ brew 'mas' # Mac App Store command-line interface
 brew 'mediainfo' # Unified display of technical and tag data for audio/video
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'hyperfine' # Command-line benchmarking tool
-brew 'mitmproxy'
 
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
@@ -93,6 +92,7 @@ cask 'fork' # GIT client
 cask 'gitup' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'sublime-merge' # Git client
+cask 'mitmproxy'
 
 # Tools for Xcode
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports

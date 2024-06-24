@@ -11,4 +11,4 @@
 # Documentation:
 # @raycast.author Daniel Bauke
 
-launchctl stop com.apple.ensemble
+sudo launchctl stop com.apple.ensemble

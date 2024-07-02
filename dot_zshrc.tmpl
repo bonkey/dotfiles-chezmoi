@@ -11,8 +11,6 @@ fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 #### ZIM START
 zstyle ':zim:zmodule' use 'degit'
 
-ZIM_HOME=~/.zim
-
 # Download zimfw plugin manager if missing.
 if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
   curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \

@@ -1,6 +1,6 @@
 [tools]
 ruby = "latest"
-python = "latest"
+python = "3.11"
 swiftformat = "latest"
 swiftlint = "latest"
 bun = "latest"

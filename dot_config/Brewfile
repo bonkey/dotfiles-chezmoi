@@ -64,6 +64,7 @@ brew 'noti' # Trigger notifications when a process completes
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
+brew 'doggo'
 
 # Other shell tools
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.

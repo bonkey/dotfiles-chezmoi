@@ -413,6 +413,17 @@ alias xcscl="xcsc list devices"
 alias xcscld="xcscl devices"
 alias xcsclr="xcscl runtimes"
 
+alias xcsclog="xcrun simctl spawn booted log stream --color always --debug --style compact"
+
+xcsclogg() {
+  xcsclog --predicate "$1"
+}
+
+xcsclogge() {
+  xcsclog "eventMessage contains '$1'"
+}
+
+
 xck() {
   _exec "pkill -9 Xcode"
 }
@@ -479,14 +490,6 @@ xcflush() {
   _exec "rm -rf \"$HOME/Library/Developer/Xcode/DerivedData/\""
 }
 
-alias simlog="xcrun simctl spawn booted log stream --color always --debug --style compact"
-
-simlogg() {
-  simlog --predicate "$1"
-}
-simlogge() {
-  simlogg "eventMessage contains '$1'"
-}
 
 ticket_from_branch() {
   local BRANCH TICKET

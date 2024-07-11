@@ -119,8 +119,6 @@ alias llt="ll -m -s modified -r"
 
 alias cal="gcal -s 1"
 
-alias z=zed
-
 br() {
   brew $*
 }
@@ -128,7 +126,7 @@ br() {
 brup() {
   if [[ -z "$1" ]]; then
     br update
-  else 
+  else
     br upgrade $*
   fi
 }
@@ -179,6 +177,17 @@ c() {
     code-insiders $*
   fi
 }
+
+z() {
+  if [[ -z "$1" ]]; then
+    zed .
+  else
+    zed $*
+  fi
+}
+
+alias diff=colordiff
+
 
 alias diff=colordiff
 alias diffstat="diffstat -f3 -C"
@@ -446,7 +455,7 @@ xcresolve() {
     if [[ -z "$scheme" ]]; then
       scheme=$(basename $proj .xcworkspace)
     fi
-  else 
+  else
     arg="-project"
     if [[ -z "$scheme" ]]; then
       scheme=$(basename $proj .xcodeproj)
@@ -475,7 +484,7 @@ xcb() {
     if [[ -z "$scheme" ]]; then
       scheme=$(basename $proj .xcworkspace)
     fi
-  else 
+  else
     arg="-project"
     if [[ -z "$scheme" ]]; then
       scheme=$(basename $proj .xcodeproj)

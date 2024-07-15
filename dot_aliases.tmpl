@@ -496,9 +496,10 @@ xcb() {
 
 xcflush() {
   xck
-  _exec "rm -rf \"$HOME/Library/Caches/org.swift.swiftpm\""
+
   _exec "rm -rf \"$HOME/Library/org.swift.swiftpm\""
-  _exec "rm -rf \"$HOME/Library/Developer/Xcode/DerivedData/\""
+  _exec "fd -t d remotes '$HOME/Library/Caches/org.swift.swiftpm' -x rm -rf"
+  _exec "fd -t d --full-path 'SourcePackages/repositories/.*/remotes$' '$HOME/Library/Developer/Xcode/DerivedData/'"
 }
 
 

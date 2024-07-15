@@ -501,7 +501,6 @@ xcreset() {
   _exec "fd -t d --full-path 'SourcePackages/repositories/.*/remotes$' '$HOME/Library/Developer/Xcode/DerivedData/'"
 }
 
-
 ticket_from_branch() {
   local BRANCH TICKET
   BRANCH=$(git symbolic-ref --short HEAD)
@@ -525,10 +524,6 @@ find_xcode_proj() {
   echo $xcode_proj
 }
 
-xc13r() {
-  arch -x86_64 /Applications/Xcode-13.3.1.app/Contents/MacOS/Xcode $*
-}
-
 alias xc > /dev/null && unalias xc
 xc() {
   local xcode_proj xcode
@@ -543,7 +538,7 @@ xc() {
   fi
   xcode=$(xcode-select -p)
   xcode=${xcode:s/\/Contents\/Developer/}
-  echo "Opening ${xcode_proj} with ${xcode} ($fg_bold[green]$(xcsv)$reset_color)"
+  echo "Opening ${xcode_proj} with ${xcode} (${fg_bold}[green]$(xcsv)${reset_color})"
 
   open -a "$xcode" "${xcode_proj}"
 }

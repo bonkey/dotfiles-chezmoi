@@ -498,7 +498,7 @@ xcreset() {
 
   _exec "rm -rf \"$HOME/Library/org.swift.swiftpm\""
   _exec "fd -t d remotes '$HOME/Library/Caches/org.swift.swiftpm' -x rm -rf"
-  _exec "fd -t d --full-path 'SourcePackages/repositories/.*/remotes$' '$HOME/Library/Developer/Xcode/DerivedData/'"
+  _exec "fd -t d --full-path 'SourcePackages/repositories/.*/remotes$' '$HOME/Library/Developer/Xcode/DerivedData/' -x rm -rf"
 }
 
 ticket_from_branch() {

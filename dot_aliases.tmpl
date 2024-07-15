@@ -538,7 +538,7 @@ xc() {
   fi
   xcode=$(xcode-select -p)
   xcode=${xcode:s/\/Contents\/Developer/}
-  echo "Opening ${xcode_proj} with ${xcode} (${fg_bold}[green]$(xcsv)${reset_color})"
+  echo "Opening ${xcode_proj} with ${xcode} ($fg_bold[green]$(xcsv)${reset_color})"
 
   open -a "$xcode" "${xcode_proj}"
 }

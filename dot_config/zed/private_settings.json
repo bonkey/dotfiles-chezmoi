@@ -28,7 +28,7 @@
       "Scanfile",
       "Brewfile"
     ],
-    "Shell Script": [".aliases"]
+    "Shell Script": [".aliases*", ".z*tmpl*", ".aliases*"]
   },
   "always_treat_brackets_as_autoclosed": true,
   "jupyter": {

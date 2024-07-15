@@ -434,7 +434,6 @@ xcsclogge() {
   xcsclog "eventMessage contains '$1'"
 }
 
-
 xck() {
   _exec "pkill -9 Xcode"
 }
@@ -494,7 +493,7 @@ xcb() {
   _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ | xcbeautify -q"
 }
 
-xcflush() {
+xcreset() {
   xck
 
   _exec "rm -rf \"$HOME/Library/org.swift.swiftpm\""

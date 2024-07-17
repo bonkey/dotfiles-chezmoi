@@ -8,7 +8,7 @@
 // from the command palette or from `Zed` application menu.
 {
   "ui_font_size": 15,
-  "buffer_font_size": 18,
+  "buffer_font_size": 16,
   "active_pane_magnification": 1.5,
   "indent_guides": {
     "enabled": true,
@@ -52,6 +52,8 @@
   },
   "terminal": {
     "copy_on_select": true,
+    "font_size": 13,
+    "font_family": "0xProto Nerd Font",
     "shell": {
       "with_arguments": {
         "program": "/bin/zsh",
@@ -83,7 +85,7 @@
   },
   "theme": {
     "mode": "system",
-    "light": "Ayu Light",
-    "dark": "Ayu Dark"
+    "light": "Atelier Lakeside Light",
+    "dark": "Atelier Lakeside Dark"
   }
 }

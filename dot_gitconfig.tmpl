@@ -118,6 +118,8 @@ cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$RE
 [difftool "juxta"]
 	cmd = juxta _difftool --local \"$LOCAL\" --remote \"$REMOTE\" --merged \"$MERGED\"
 	trustExitCode = true
+[difftool "dyff"]
+    cmd = "dyff_between() { dyff --color on between --omit-header \"$2\" \"$5\"; }; dyff_between"
 
 [gpg]
 format = ssh
@@ -127,6 +129,3 @@ gpgsign = true
 
 [gpg "ssh"]
 program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-
-[diff "dyff"]
-command = "dyff_between() { dyff --color on between --omit-header \"$2\" \"$5\"; }; dyff_between"

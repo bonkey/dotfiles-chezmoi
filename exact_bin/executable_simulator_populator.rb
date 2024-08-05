@@ -7,7 +7,7 @@ require 'English'
 
 # Update it for your needs
 devices_to_create = /^(iPad (Air.*5th|Pro.*12.*6th|Pro.*11.*4rd|mini.*6th)|iPhone (1[45]|8|SE.*3rd)|Apple Watch Series [89])/
-runtimes_to_use = /^(iOS (13|17\.[45]|18)|watchOS)/
+runtimes_to_use = /^(iOS (17\.5|18)|watchOS)/
 default_sim_device = 'iPhone 15 Pro'
 default_sim_runtime = 'iOS 17.5'
 

@@ -36,6 +36,7 @@ brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and 
 brew 'nushell' # Modern shell for the GitHub era
 brew 'dfc' # Display graphs and colors of file system space/usage
 brew 'dyff'
+bref 'dasel'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate

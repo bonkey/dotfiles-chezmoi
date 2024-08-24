@@ -35,8 +35,8 @@ brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
 brew 'nushell' # Modern shell for the GitHub era
 brew 'dfc' # Display graphs and colors of file system space/usage
-brew 'dyff'
-brew 'dasel'
+brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
+brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -67,7 +67,7 @@ brew 'noti' # Trigger notifications when a process completes
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
-brew 'doggo'
+brew 'doggo' # Command-line DNS Client for Humans
 
 # Other shell tools
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
@@ -96,7 +96,7 @@ cask 'fork' # GIT client
 cask 'gitup' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'sublime-merge' # Git client
-cask 'mitmproxy'
+cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 
 # Tools for Xcode
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
@@ -144,7 +144,7 @@ cask '1password-cli' # Command-line interface for 1Password
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'force-paste'
+cask 'force-paste' # 
 cask 'handbrake' # Open-source video transcoder
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 cask 'karabiner-elements' # Keyboard customizer
@@ -160,29 +160,30 @@ cask 'typora' # Configurable document editor that supports Markdown
 cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
-cask 'macwhisper'
-cask 'zed'
+cask 'macwhisper' # Speech recognition tool
+cask 'zed' # Multiplayer code editor
+cask 'gitbutler' # Git client for simultaneous branches on top of your existing workflow
 
 # Fonts for developers
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
 
-cask 'font-consolas-for-powerline'
-cask 'font-dejavu-sans-mono-for-powerline'
-cask 'font-droid-sans-mono-for-powerline'
-cask 'font-fira-mono-for-powerline'
-cask 'font-inconsolata-dz-for-powerline'
-cask 'font-inconsolata-for-powerline'
-cask 'font-inconsolata-for-powerline-bold'
-cask 'font-inconsolata-g-for-powerline'
-cask 'font-liberation-mono-for-powerline'
-cask 'font-menlo-for-powerline'
-cask 'font-meslo-for-powerline'
-cask 'font-monofur-for-powerline'
-cask 'font-noto-mono-for-powerline'
-cask 'font-roboto-mono-for-powerline'
+cask 'font-consolas-for-powerline' # 
+cask 'font-dejavu-sans-mono-for-powerline' # 
+cask 'font-droid-sans-mono-for-powerline' # 
+cask 'font-fira-mono-for-powerline' # 
+cask 'font-inconsolata-dz-for-powerline' # 
+cask 'font-inconsolata-for-powerline' # 
+cask 'font-inconsolata-for-powerline-bold' # 
+cask 'font-inconsolata-g-for-powerline' # 
+cask 'font-liberation-mono-for-powerline' # 
+cask 'font-menlo-for-powerline' # 
+cask 'font-meslo-for-powerline' # 
+cask 'font-monofur-for-powerline' # 
+cask 'font-noto-mono-for-powerline' # 
+cask 'font-roboto-mono-for-powerline' # 
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
-cask 'font-source-code-pro-for-powerline'
+cask 'font-source-code-pro-for-powerline' # 
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-3270-nerd-font' # Developer targeted fonts with a high number of glyphs

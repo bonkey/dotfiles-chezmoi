@@ -163,7 +163,6 @@ cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'macwhisper' # Speech recognition tool
 cask 'zed' # Multiplayer code editor
 cask 'gitbutler' # Git client for simultaneous branches on top of your existing workflow
-cask 'updf'
 
 # Fonts for developers
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs

@@ -35,8 +35,8 @@ brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
 brew 'nushell' # Modern shell for the GitHub era
 brew 'dfc' # Display graphs and colors of file system space/usage
-brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
-brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
+brew 'dyff'
+brew 'dasel'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -67,7 +67,7 @@ brew 'noti' # Trigger notifications when a process completes
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
-brew 'doggo' # Command-line DNS Client for Humans
+brew 'doggo'
 
 # Other shell tools
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
@@ -96,7 +96,7 @@ cask 'fork' # GIT client
 cask 'gitup' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'sublime-merge' # Git client
-cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
+cask 'mitmproxy'
 
 # Tools for Xcode
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
@@ -160,9 +160,8 @@ cask 'typora' # Configurable document editor that supports Markdown
 cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
-cask 'macwhisper' # Speech recognition tool
-cask 'zed' # Multiplayer code editor
-cask 'gitbutler' # Git client for simultaneous branches on top of your existing workflow
+cask 'macwhisper'
+cask 'zed'
 
 # Fonts for developers
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs

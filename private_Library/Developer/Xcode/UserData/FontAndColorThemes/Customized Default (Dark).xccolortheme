@@ -164,69 +164,69 @@
 	<key>DVTSourceTextSyntaxFonts</key>
 	<dict>
 		<key>xcode.syntax.attribute</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.character</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.comment</key>
-		<string>MonaspaceArgonVar-Medium - 14.0</string>
+		<string>MonaspaceArgonVar-Medium - 16.0</string>
 		<key>xcode.syntax.comment.doc</key>
-		<string>MonaspaceArgonVar-Medium - 14.0</string>
+		<string>MonaspaceArgonVar-Medium - 16.0</string>
 		<key>xcode.syntax.comment.doc.keyword</key>
-		<string>MonaspaceArgonVar-SemiBold - 14.0</string>
+		<string>MonaspaceArgonVar-SemiBold - 16.0</string>
 		<key>xcode.syntax.declaration.other</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.declaration.type</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.class</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.class.system</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.constant</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.constant.system</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.function</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.function.system</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.macro</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.macro.system</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.type</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.type.system</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.variable</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.identifier.variable.system</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.keyword</key>
 		<string>MonaspaceNeonVar-Bold - 14.0</string>
 		<key>xcode.syntax.mark</key>
-		<string>MonaspaceArgonVar-SemiBold - 14.0</string>
+		<string>MonaspaceArgonVar-SemiBold - 16.0</string>
 		<key>xcode.syntax.markup.code</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.number</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.plain</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.preprocessor</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.regex</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.regex.capturename</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.regex.charname</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.regex.number</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.regex.other</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.string</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 		<key>xcode.syntax.url</key>
-		<string>MonaspaceNeonVar-Light - 14.0</string>
+		<string>MonaspaceNeonVar-Light - 16.0</string>
 	</dict>
 </dict>
 </plist>

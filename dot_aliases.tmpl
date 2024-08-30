@@ -204,7 +204,7 @@ cat() {
   if [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
     glow -p $1
   else
-    bat --style $*
+    bat $*
   fi
 }
 

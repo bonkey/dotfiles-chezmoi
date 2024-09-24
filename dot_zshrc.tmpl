@@ -50,10 +50,7 @@ _eval_for_cmd chezmoi "chezmoi completion zsh"
 _eval_for_cmd rtx "rtx completion zsh"
 _eval_for_cmd gh "gh completion -s zsh"
 _eval_for_cmd fzf "fzf --zsh"
-
-if [[ -z "$POSH_THEME" ]]; then
-    _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
-fi
+_eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 iterm2_print_user_vars() {

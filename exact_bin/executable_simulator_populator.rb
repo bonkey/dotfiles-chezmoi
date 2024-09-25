@@ -6,7 +6,7 @@ require 'rainbow'
 require 'English'
 
 # Update it for your needs
-devices_to_create = /^(iPad (Pro.*12.*6th|mini.*6th)|iPhone (1[56]|SE.*3rd)|Apple Watch Series (9|10))/
+devices_to_create = /^(iPad (Pro.*M4|mini.*6th)|iPhone (1[56]|SE.*3rd)|Apple Watch Series (9|10))/
 runtimes_to_use = /^(iOS (17\.5|18)|watchOS 11)/
 
 default_sim_device = 'iPhone 15 Pro'

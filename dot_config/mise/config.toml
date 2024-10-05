@@ -18,7 +18,6 @@ node = "latest"
 "pipx:yt-dlp" = "latest"
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"
-"npm:mermaid-cli" = "latest"
 
 [settings]
 experimental = true

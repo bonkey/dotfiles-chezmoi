@@ -139,31 +139,6 @@ brew 'gpg' # GNU Pretty Good Privacy (PGP) package
 brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
-# Tools for productivity and automation
-cask '1password-cli' # Command-line interface for 1Password
-cask 'contexts' # Allows switching between application windows
-cask 'daisydisk' # Disk space visualizer
-cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'force-paste' #
-cask 'handbrake' # Open-source video transcoder
-cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
-cask 'karabiner-elements' # Keyboard customizer
-cask 'keyboard-maestro' # Automation software
-cask 'macvim' # Text editor
-cask 'raycast' # Control your tools with a few keystrokes
-cask 'rectangle-pro' # Window snapping tool
-cask 'rocket' # Emoji picker optimized for blind people
-cask 'setapp' # Collection of apps available by subscription
-cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
-cask 'deepl' # Trains AIs to understand and translate texts
-cask 'typora' # Configurable document editor that supports Markdown
-cask 'brave-browser@beta' # Web browser focusing on privacy
-cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
-cask 'android-file-transfer' # Transfer files from and to an Android smartphone
-cask 'macwhisper'
-cask 'zed'
-cask 'chatgpt'
-
 # Fonts for developers
 cask 'font-meslo-lg-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-reddit-sans' # Complemented by reddit sans condensed and reddit mono
@@ -264,6 +239,33 @@ cask 'quicklook-json' # QuickLook plugin for JSON files
 cask 'quicklookapk' # Quick Look plugin for Android packages
 cask 'webpquicklook' # QuickLook plugin for webp files
 cask 'syntax-highlight' # Quicklook extension for source files
+
+# Tools for productivity and automation
+cask '1password-cli' # Command-line interface for 1Password
+cask 'contexts' # Allows switching between application windows
+cask 'daisydisk' # Disk space visualizer
+cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
+cask 'force-paste' #
+cask 'handbrake' # Open-source video transcoder
+cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+cask 'karabiner-elements' # Keyboard customizer
+cask 'keyboard-maestro' # Automation software
+cask 'macvim' # Text editor
+cask 'raycast' # Control your tools with a few keystrokes
+cask 'rectangle-pro' # Window snapping tool
+cask 'rocket' # Emoji picker optimized for blind people
+cask 'setapp' # Collection of apps available by subscription
+cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
+cask 'deepl' # Trains AIs to understand and translate texts
+cask 'typora' # Configurable document editor that supports Markdown
+cask 'brave-browser@beta' # Web browser focusing on privacy
+cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
+cask 'android-file-transfer' # Transfer files from and to an Android smartphone
+cask 'macwhisper'
+cask 'zed'
+cask 'chatgpt'
+cask 'retcon'
+
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

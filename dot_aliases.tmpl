@@ -70,7 +70,7 @@ alias -g LL="2>&1 | less"
 alias -g NE="2> /dev/null"
 alias -g NUL="> /dev/null 2>&1"
 alias -g SU="| sort | uniq"
-alias -g XCB="| xcbeautify -q"
+alias -g XCB="| xcbeautify -q --disable-logging"
 
 # --- System
 
@@ -474,8 +474,8 @@ xcresolve() {
 
   xck
   _exec "find $proj -name Package.resolved -delete"
-  _exec "xcrun xcodebuild clean $arg $proj -scheme $scheme | xcbeautify -q"
-  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme | xcbeautify -q"
+  _exec "xcrun xcodebuild clean $arg $proj -scheme $scheme XCB"
+  _exec "xcrun xcodebuild -resolvePackageDependencies $arg $proj -scheme $scheme XCB"
 }
 
 xcb() {
@@ -501,7 +501,7 @@ xcb() {
     fi
   fi
 
-  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ | xcbeautify -q"
+  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ XCB"
 }
 
 xcreset() {

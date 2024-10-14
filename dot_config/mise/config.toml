@@ -18,6 +18,7 @@ node = "latest"
 "pipx:yt-dlp" = "latest"
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"
+"npm:appium" = "latest"
 
 [settings]
 experimental = true

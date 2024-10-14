@@ -265,7 +265,6 @@ cask 'macwhisper'
 cask 'zed'
 cask 'chatgpt'
 cask 'retcon'
-cask 'ente-auth'
 cask 'yubico-authenticator'
 
 

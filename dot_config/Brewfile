@@ -265,6 +265,7 @@ cask 'macwhisper'
 cask 'zed'
 cask 'chatgpt'
 cask 'retcon'
+cask 'yubico-authenticator'
 
 
 mas 'Amphetamine', id: 937_984_704

@@ -545,10 +545,10 @@ xc() {
   if [[ -f .xcode-version ]]; then
     xcode_version=$(cat .xcode-version)
     (xcrun xcodebuild -version | head -1 | grep -q ${xcode_version}) || \
-      (echo Selecting Xcode ${xcode_version}... && xcversion select $xcode_version)
+      (echo "Selecting Xcode ${xcode_version}..." && xcversion select $xcode_version)
   fi
-  xcode=$(xcode-select -p)
-  xcode=${xcode:s/\/Contents\/Developer/}
+  xcode="$(xcode-select -p)"
+  xcode="${xcode:s/\/Contents\/Developer/}"
   echo "Opening ${xcode_proj} with ${xcode} ($fg_bold[green]$(xcsv)${reset_color})"
 
   open -a "$xcode" "${xcode_proj}"
@@ -587,11 +587,11 @@ alias pos="_pod search"
 
 alias gbc=better-commits
 
-alias gt > /dev/null && unalias gt
-gt() {
-  while [[ ! -d .git && "$PWD" != "/" ]] ; do cd .. ; done
-  gittower .
-}
+# alias gt > /dev/null && unalias gt
+# gt() {
+#   while [[ ! -d .git && "$PWD" != "/" ]] ; do cd .. ; done
+#   gittower .
+# }
 
 alias gf > /dev/null && unalias gf
 gf() {
@@ -604,6 +604,7 @@ gl-pr-changelog() {
 }
 
 alias gip="gitup"
+alias rc="retcon"
 
 alias gl="git pull --autostash"
 alias gd="git diff"

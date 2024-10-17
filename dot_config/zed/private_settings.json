@@ -40,6 +40,7 @@
 
   "auto_signature_help": true,
   "always_treat_brackets_as_autoclosed": true,
+  "use_autoclose": false,
 
   "indent_guides": {
     "enabled": true,

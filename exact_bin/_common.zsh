@@ -1,7 +1,7 @@
 if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace ; fi
 
-script_dir="${0:A:h}"
-script_name="$(basename "${ZSH_SCRIPT:-$0}")"
+script_dir=${0:A:h}
+script_name=$(basename "${ZSH_SCRIPT:-$0}")
 
 set -o pipefail
 

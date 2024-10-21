@@ -47,6 +47,7 @@ after_zvm() {
 zvm_after_init_commands+=(after_zvm)
 
 _eval_for_cmd chezmoi "chezmoi completion zsh"
+_eval_for_cmd git-town "git-town completions zsh"
 _eval_for_cmd rtx "rtx completion zsh"
 _eval_for_cmd gh "gh completion -s zsh"
 _eval_for_cmd fzf "fzf --zsh"

@@ -232,7 +232,7 @@ cvz() {
 }
 
 cvzl() {
-  ced $(eval "echo $_shell_init_files")
+  $EDITOR $(eval "echo $_shell_init_files")
   source ${HOME}/.zshrc
 }
 

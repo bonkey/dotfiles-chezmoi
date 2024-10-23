@@ -733,7 +733,7 @@ gicpa() {
     msg="Changed $(git diff --cached --name-only | uniq | tr '\n' ' ')"
   fi
 
-  gic "$msg" && git pull && git push
+  gcam "$msg" && git pull && git push
 }
 
 alias gpmd="gpm develop"

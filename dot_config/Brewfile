@@ -188,7 +188,6 @@ cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufac
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'macwhisper'
 cask 'zed'
-cask 'chatgpt'
 cask 'retcon'
 cask 'yubico-authenticator'
 

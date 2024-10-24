@@ -160,7 +160,10 @@ o() {
 
 alias xdq="xattr -d com.apple.quarantine"
 alias xf="xmllint --format"
-alias rm="echo Use 'rip' instead of rm."
+rm() {
+    echo "Note: Use 'rip' instead of rm."
+    /bin/rm $@
+}
 
 alias v=vim
 alias g=gvim

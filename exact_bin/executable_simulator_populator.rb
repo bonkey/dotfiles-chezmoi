@@ -5,9 +5,23 @@ require 'json'
 require 'rainbow'
 require 'English'
 
-# Update it for your needs
-devices_to_create = /^(iPad (Pro.*M4|mini.*6th)|iPhone (1[56]|SE.*3rd)|Apple Watch Series (9|10))/
-runtimes_to_use = /^(iOS (17\.5|18)|watchOS 11)/
+# xcrun simctl list -j devicetypes | jq '.devicetypes[].name'|sort
+devices_to_create = %w[
+  "iPad Pro 11-inch (M4)"
+  "iPad Pro 13-inch (M4)"
+  "iPhone 15 Pro Max"
+  "iPhone 15 Pro"
+  "iPhone 16 Pro Max"
+  "iPhone 16 Pro"
+  "iPhone 16"
+  "iPhone SE (3rd generation)"
+]
+
+# xcrun simctl list -j runtimes | jq '.runtimes[].name'
+runtimes_to_use = %w[
+  "iOS 17.5"
+  "iOS 18.1"
+]
 
 default_sim_device = 'iPhone 15 Pro'
 default_sim_runtime = 'iOS 17.5'
@@ -36,11 +50,11 @@ class SimulatorPopulator
     remove_all unless options[:'no-remove-existing'] == true
 
     @available_runtimes.each do |runtime|
-      next unless runtimes == :all || runtime['name']&.match?(runtimes)
+      next unless runtimes == :all || runtimes.include?(runtime['name'])
 
       puts Rainbow("## #{runtime['name']}").color(:blue).bright
       @device_types['devicetypes'].each do |device_type|
-        next unless device_names == :all || device_type['name']&.match?(device_names)
+        next unless device_names == :all || device_names.include?(device_type['name'])
 
         create_device(device_type: device_type['identifier'],
                       runtime: runtime['name'],

@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+version=v0.9.0
+file="rip-macOS-Darwin-aarch64.tar.gz"
+tmp=$(mktemp)
+
+gh release download "$version" -R MilesCranmer/rip2 -p $file -O $tmp --clobber
+tar xf $tmp --directory=$HOME/.local/bin

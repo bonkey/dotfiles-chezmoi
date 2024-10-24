@@ -6,21 +6,21 @@ require 'rainbow'
 require 'English'
 
 # xcrun simctl list -j devicetypes | jq '.devicetypes[].name'|sort
-devices_to_create = %w[
-  "iPad Pro 11-inch (M4)"
-  "iPad Pro 13-inch (M4)"
-  "iPhone 15 Pro Max"
-  "iPhone 15 Pro"
-  "iPhone 16 Pro Max"
-  "iPhone 16 Pro"
-  "iPhone 16"
-  "iPhone SE (3rd generation)"
+devices_to_create = [
+  "iPad Pro 11-inch (M4)",
+  "iPad Pro 13-inch (M4)",
+  "iPhone 15 Pro Max",
+  "iPhone 15 Pro",
+  "iPhone 16 Pro Max",
+  "iPhone 16 Pro",
+  "iPhone 16",
+  "iPhone SE (3rd generation)",
 ]
 
 # xcrun simctl list -j runtimes | jq '.runtimes[].name'
-runtimes_to_use = %w[
-  "iOS 17.5"
-  "iOS 18.1"
+runtimes_to_use = [
+  "iOS 17.5",
+  "iOS 18.1",
 ]
 
 default_sim_device = 'iPhone 15 Pro'

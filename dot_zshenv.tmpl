@@ -58,8 +58,7 @@ export SENTRY_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
 export GEMINI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GEMINI_API_KEY.value -}}"
 export REPLICATE_API_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").REPLICATE_API_TOKEN.value -}}"
-
-export AI_DEVS_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").AI_DEVS_API_KEY.value -}}"
+export ANTHROPIC_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ANTHROPIC_API_TOKEN.value -}}"
 
 {{- end }}
 
@@ -69,7 +68,6 @@ export JAVA_HOME=$(/usr/libexec/java_home)
 
 export FASTLANE_HIDE_CHANGELOG=true
 
-# export GO111MODULE=ohe
 export GOPATH=${HOME}/.go
 
 export BUN_INSTALL="$HOME/.bun"

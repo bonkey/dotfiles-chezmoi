@@ -149,6 +149,7 @@ x86() {
 }
 
 alias m=make
+alias j=just
 
 o() {
   if [[ -z "$1" ]]; then
@@ -810,9 +811,8 @@ git-branches-in-jira-merged() {
   _git-branches-in-jira $(git-merged-show)
 }
 
-alias j=jira
 jic() {
-  j issue create $*
+  jira issue create $*
 }
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}

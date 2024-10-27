@@ -5,23 +5,23 @@
 	<key>DVTConsoleDebuggerInputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleDebuggerInputTextFont</key>
-	<string>FiraCodeRoman-Bold - 14.0</string>
+	<string>SFMono-Bold - 11.0</string>
 	<key>DVTConsoleDebuggerOutputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleDebuggerOutputTextFont</key>
-	<string>CommitMono-Regular - 16.0</string>
+	<string>SFMono-Regular - 11.0</string>
 	<key>DVTConsoleDebuggerPromptTextColor</key>
 	<string>0.255 0.714 0.27 1</string>
 	<key>DVTConsoleDebuggerPromptTextFont</key>
-	<string>FiraCodeRoman-Bold - 14.0</string>
+	<string>SFMono-Bold - 11.0</string>
 	<key>DVTConsoleExectuableInputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleExectuableInputTextFont</key>
-	<string>FiraCodeRoman-Bold - 14.0</string>
+	<string>SFMono-Regular - 11.0</string>
 	<key>DVTConsoleExectuableOutputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleExectuableOutputTextFont</key>
-	<string>CommitMono-Bold - 16.0</string>
+	<string>SFMono-Bold - 11.0</string>
 	<key>DVTConsoleTextBackgroundColor</key>
 	<string>0.120543 0.122844 0.141312 1</string>
 	<key>DVTConsoleTextInsertionPointColor</key>
@@ -164,69 +164,69 @@
 	<key>DVTSourceTextSyntaxFonts</key>
 	<dict>
 		<key>xcode.syntax.attribute</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.character</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.comment</key>
-		<string>MonaspaceArgonVar-Medium - 16.0</string>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
 		<key>xcode.syntax.comment.doc</key>
-		<string>MonaspaceArgonVar-Medium - 16.0</string>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
 		<key>xcode.syntax.comment.doc.keyword</key>
-		<string>MonaspaceArgonVar-SemiBold - 16.0</string>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
 		<key>xcode.syntax.declaration.other</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.declaration.type</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.class</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.class.system</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.constant</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.constant.system</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.function</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.function.system</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.macro</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.macro.system</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.type</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.type.system</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.variable</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.variable.system</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.keyword</key>
-		<string>MonaspaceNeonVar-Bold - 14.0</string>
+		<string>MonaspiceNeNFM-Medium - 16.0</string>
 		<key>xcode.syntax.mark</key>
-		<string>MonaspaceArgonVar-SemiBold - 16.0</string>
+		<string>MonaspiceArNFM-Bold - 16.0</string>
 		<key>xcode.syntax.markup.code</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.number</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.plain</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.preprocessor</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.capturename</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.charname</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.number</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.other</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.string</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.url</key>
-		<string>MonaspaceNeonVar-Light - 16.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 	</dict>
 </dict>
 </plist>

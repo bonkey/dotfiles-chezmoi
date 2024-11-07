@@ -47,6 +47,22 @@ xcefi() {
   xco dis "FormsLibraryApp/FormsLibraryApp.xcodeproj"
 }
 
+xcca() {
+    local cert_path="/Library/Application Support/Netskope/STAgent/data/nscacert.pem"
+
+    for udid in $(xcrun simctl list devices -j | jq -r '.devices[] | .[] | select(.deviceTypeIdentifier | test("iPhone|iPad")) | "\(.udid)|\(.name)"'); do
+        local device_udid="${udid%|*}"
+        local device_name="${udid#*|}"
+        xcrun simctl keychain "$device_udid" add "$cert_path"
+
+        if [[ $? -eq 0 ]]; then
+            echo "✅ Added certificate to $device_name"
+        else
+            echo "❌ Failed to add certificate to $device_name"
+        fi
+    done
+}
+
 {{- end }}
 
 

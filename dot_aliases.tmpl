@@ -48,12 +48,13 @@ xcefi() {
 }
 
 xcca() {
-    local cert_path="/Library/Application Support/Netskope/STAgent/data/nscacert.pem"
+    local cert_path udid device_udid device_name
+    cert_path="/Library/Application Support/Netskope/STAgent/data/nscacert.pem"
 
-    for udid in $(xcrun simctl list devices -j | jq -r '.devices[] | .[] | select(.deviceTypeIdentifier | test("iPhone|iPad")) | "\(.udid)|\(.name)"'); do
-        local device_udid="${udid%|*}"
-        local device_name="${udid#*|}"
-        xcrun simctl keychain "$device_udid" add "$cert_path"
+    for udid in $(xcrun simctl list devices booted -j | jq -r '.devices[] | .[] | select(.deviceTypeIdentifier | test("iPhone|iPad")) | "\(.udid)|\(.name|gsub(" ";"_"))"'); do
+        device_udid="${udid%|*}"
+        device_name=$(echo "${udid#*|}"|tr '_' ' ')
+        xcrun simctl keychain "$device_udid" add-root-cert "$cert_path"
 
         if [[ $? -eq 0 ]]; then
             echo "✅ Added certificate to $device_name"
@@ -62,7 +63,6 @@ xcca() {
         fi
     done
 }
-
 {{- end }}
 
 

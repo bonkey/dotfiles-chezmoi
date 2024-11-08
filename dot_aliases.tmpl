@@ -430,6 +430,10 @@ ff_gif() {
 
 alias bef="bue fastlane"
 
+xcodes() {
+    _exec "HOMEBREW_PREFIX/bin/xcodes --experimental-unxip $*"
+}
+
 alias xcs="xcodes select"
 xcs15() { xcs '15.4' }
 xcs16() { xcs '16.0' }

@@ -98,6 +98,7 @@ cask 'gitup' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'sublime-merge' # Git client
 cask 'mitmproxy'
+brew 'ollama' # Create, run, and share large language models (LLMs)
 
 # Tools for Xcode
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
@@ -107,8 +108,6 @@ brew 'xcinfo' # Tool to get information about and install available Xcode versio
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 cask 'minisim' # App for launching iOS and Android simulators
-
-brew 'ollama' # Create, run, and share large language models (LLMs)
 
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading
@@ -153,7 +152,6 @@ cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd F
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-monaspace-nerd-font'
 
-
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
 cask 'qlimagesize' # Display image info and preview unsupported formats in QuickLook
@@ -190,6 +188,7 @@ cask 'macwhisper'
 cask 'zed'
 cask 'retcon'
 cask 'yubico-authenticator'
+cask 'obs'
 
 
 mas 'Amphetamine', id: 937_984_704

@@ -1,5 +1,5 @@
 [tools]
-ruby = "3.3.5"
+ruby = "latest"
 python = "3.12"
 swiftformat = "latest"
 swiftlint = "latest"

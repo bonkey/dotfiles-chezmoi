@@ -1,5 +1,4 @@
 [tools]
-uv = "latest"
 ruby = "latest"
 python = "latest"
 swiftformat = "latest"
@@ -23,5 +22,3 @@ node = "latest"
 
 [settings]
 experimental = true
-vfox = false
-pipx.uvx = true

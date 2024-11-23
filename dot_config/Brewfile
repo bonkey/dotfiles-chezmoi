@@ -35,8 +35,8 @@ brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
 brew 'nushell' # Modern shell for the GitHub era
 brew 'dfc' # Display graphs and colors of file system space/usage
-brew 'dyff'
-brew 'dasel'
+brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
+brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -67,7 +67,7 @@ brew 'noti' # Trigger notifications when a process completes
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
-brew 'doggo'
+brew 'doggo' # Command-line DNS Client for Humans
 
 # Other shell tools
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
@@ -89,7 +89,7 @@ brew 'git-extras' # Small git utilities
 brew 'git-lfs' # Git extension for versioning large files
 brew 'git' # Distributed revision control system
 brew 'tokei' # Program that allows you to count code, quickly
-brew 'git-town'
+brew 'git-town' # High-level command-line interface for Git
 
 # Tools for developers
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
@@ -97,7 +97,7 @@ cask 'fork' # GIT client
 cask 'gitup' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'sublime-merge' # Git client
-cask 'mitmproxy'
+cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 brew 'ollama' # Create, run, and share large language models (LLMs)
 
 # Tools for Xcode
@@ -150,7 +150,7 @@ cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of g
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspace-nerd-font'
+cask 'font-monaspace-nerd-font' # 
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
@@ -183,15 +183,15 @@ cask 'typora' # Configurable document editor that supports Markdown
 cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
-cask 'macwhisper'
-cask 'zed'
-cask 'retcon'
-cask 'yubico-authenticator'
+cask 'macwhisper' # Speech recognition tool
+cask 'zed' # Multiplayer code editor
+cask 'retcon' # Drag-and-drop Git history editor
+cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'elgato-wave-link'
-cask 'elgato-control-center'
-cask 'obs'
+cask 'elgato-wave-link' # Software custom-built for content creation
+cask 'elgato-control-center' # Control your Elgato key lights
+cask 'obs' # Open-source software for live streaming and screen recording
 
 
 mas 'Amphetamine', id: 937_984_704

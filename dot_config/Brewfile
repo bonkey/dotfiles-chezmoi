@@ -150,7 +150,7 @@ cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of g
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspace-nerd-font' # 
+cask 'font-monaspace-nerd-font' #
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
@@ -189,7 +189,8 @@ cask 'retcon' # Drag-and-drop Git history editor
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'elgato-wave-link' # Software custom-built for content creation
+# No beta version
+# cask 'elgato-wave-link' # Software custom-built for content creation
 cask 'elgato-control-center' # Control your Elgato key lights
 cask 'obs' # Open-source software for live streaming and screen recording
 

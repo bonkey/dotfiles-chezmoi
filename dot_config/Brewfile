@@ -167,7 +167,6 @@ cask 'syntax-highlight' # Quicklook extension for source files
 cask '1password-cli' # Command-line interface for 1Password
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
-cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'force-paste' #
 cask 'handbrake' # Open-source video transcoder
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
@@ -188,6 +187,10 @@ cask 'macwhisper'
 cask 'zed'
 cask 'retcon'
 cask 'yubico-authenticator'
+
+cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
+cask 'elgato-wave-link'
+cask 'elgato-control-center'
 cask 'obs'
 
 

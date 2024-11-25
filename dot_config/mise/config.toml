@@ -23,5 +23,5 @@ node = "latest"
 
 [settings]
 experimental = true
-# vfox = false
+vfox = false
 pipx.uvx = true

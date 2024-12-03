@@ -4586,8 +4586,6 @@
 	<false/>
 	<key>FlashTabBarInFullscreen</key>
 	<true/>
-	<key>FocusFollowsMouse</key>
-	<true/>
 	<key>HTMLTabTitles</key>
 	<true/>
 	<key>HapticFeedbackForEsc</key>
@@ -7163,8 +7161,6 @@
 	<false/>
 	<key>OpenNoWindowsAtStartup</key>
 	<false/>
-	<key>OptionClickMovesCursor</key>
-	<true/>
 	<key>PMPrintingExpandedStateForPrint2</key>
 	<false/>
 	<key>PasteSpecialRegex</key>

@@ -24,3 +24,4 @@ node = "latest"
 [settings]
 experimental = true
 pipx.uvx = true
+vfox = false

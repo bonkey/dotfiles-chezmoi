@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title Restart Universal Control
+# @raycast.title Restart Stream Deck
 # @raycast.mode silent
 
 # Optional parameters:
@@ -11,4 +11,6 @@
 # Documentation:
 # @raycast.author Daniel Bauke
 
-sudo launchctl stop com.apple.ensemble
+killall "Stream Deck"
+sleep 1
+open -a "Elgato Stream Deck"

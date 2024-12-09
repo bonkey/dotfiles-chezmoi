@@ -171,6 +171,7 @@ cask 'syntax-highlight' # Quicklook extension for source files
 
 # Tools for productivity and automation
 cask '1password-cli' # Command-line interface for 1Password
+cask "akiflow"
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'contexts' # Allows switching between application windows

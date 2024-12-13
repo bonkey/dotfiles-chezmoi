@@ -20,7 +20,7 @@ devices_to_create = [
 # xcrun simctl list -j runtimes | jq '.runtimes[].name'
 runtimes_to_use = [
   "iOS 17.5",
-  "iOS 18.1",
+  "iOS 18.2",
 ]
 
 default_sim_device = 'iPhone 15 Pro'

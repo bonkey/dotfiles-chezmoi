@@ -12,5 +12,5 @@
 # @raycast.author Daniel Bauke
 
 killall "Stream Deck"
-sleep 5
+sleep 1
 open -a "Elgato Stream Deck"

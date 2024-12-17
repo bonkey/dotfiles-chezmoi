@@ -8,12 +8,21 @@
 // from the command palette or from `Zed` application menu.
 {
   "language_models": {
-    "ollama": {}
+    "ollama": {},
+    "google": {
+      "available_models": [
+        {
+          "name": "gemini-2.0-flash-exp",
+          "display_name": "Gemini 2.0 Flash",
+          "max_tokens": 1000000
+        }
+      ]
+    }
   },
   "assistant": {
     "default_model": {
-      "provider": "google",
-      "model": "gemini-1.5-flash"
+      "provider": "copilot_chat",
+      "model": "claude-3-5-sonnet"
     },
     "version": "2",
     "provider": null

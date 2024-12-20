@@ -64,6 +64,15 @@ xcca() {
         fi
     done
 }
+
+ssf() {
+    ./scripts/swiftformat.sh $*
+}
+
+ssl() {
+    ./scripts/swiftlint.sh $*
+}
+
 {{- end }}
 
 

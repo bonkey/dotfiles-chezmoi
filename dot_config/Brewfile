@@ -194,7 +194,7 @@ cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 cask 'zed' # Multiplayer code editor
-cask 'ghostty'
+cask 'ghostty@tip'
 
 cask 'obs' # Open-source software for live streaming and screen recording
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them

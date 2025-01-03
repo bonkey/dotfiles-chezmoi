@@ -194,12 +194,12 @@ cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 cask 'zed' # Multiplayer code editor
+cask 'ghostty'
 
 cask 'obs' # Open-source software for live streaming and screen recording
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'elgato-control-center' # Control your Elgato key lights
-# No beta version
-# cask 'elgato-wave-link' # Software custom-built for content creation
+cask 'focusrite-control-2'
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

@@ -94,15 +94,6 @@
                     "identifiers": {
                         "is_keyboard": true,
                         "is_pointing_device": true,
-                        "product_id": 591,
-                        "vendor_id": 1452
-                    },
-                    "ignore": false
-                },
-                {
-                    "identifiers": {
-                        "is_keyboard": true,
-                        "is_pointing_device": true,
                         "product_id": 171,
                         "vendor_id": 5426
                     },
@@ -115,22 +106,11 @@
                 },
                 {
                     "identifiers": {
+                        "is_game_pad": true,
                         "is_keyboard": true,
-                        "product_id": 170,
-                        "vendor_id": 5426
-                    },
-                    "simple_modifications": [
-                        {
-                            "from": { "key_code": "left_control" },
-                            "to": [{ "key_code": "left_command" }]
-                        }
-                    ]
-                },
-                {
-                    "identifiers": {
-                        "device_address": "d5-02-ab-c8-e5-be",
-                        "is_keyboard": true,
-                        "is_pointing_device": true
+                        "is_pointing_device": true,
+                        "product_id": 3616,
+                        "vendor_id": 13364
                     },
                     "ignore": false
                 }

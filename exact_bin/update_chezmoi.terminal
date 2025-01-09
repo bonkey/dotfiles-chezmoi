@@ -63,8 +63,6 @@
 	<integer>120</integer>
 	<key>fontAllowsDisableAntialias</key>
 	<integer>0</integer>
-	<key>name</key>
-	<string>update_chezmoi</string>
 	<key>rowCount</key>
 	<integer>30</integer>
 	<key>shellExitAction</key>

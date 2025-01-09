@@ -8,10 +8,12 @@ function read_key {
     echo $char
 }
 
-echo -n "Quit iTerm2? (y/n) "
-response=$(read_key)
-echo
-[[ $response == "y" ]] && pkill iTerm
+if [[ "$LC_TERMINAL" != "iTerm2" ]]; then
+    echo -n "Quit iTerm2? (y/n) "
+    response=$(read_key)
+    echo
+    [[ $response == "y" ]] && pkill iTerm
+fi
 
 pkill 'Keyboard Maestro Engine'
 

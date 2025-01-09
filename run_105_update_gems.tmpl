@@ -8,6 +8,4 @@ file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
 eval "$(mise hook-env)"
 
-echo "FILE: $file"
-
 exec_unless_recently_modified $file "gem update --system; yes | gem update -f ; yes | gem cleanup"

@@ -70,7 +70,7 @@ ssf() {
 }
 
 ssl() {
-    ./scripts/swiftlint.sh $*
+    "$(git rev-parse --show-toplevel)/scripts/swiftlint.sh" $*
 }
 
 {{- end }}

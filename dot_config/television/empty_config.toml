@@ -27,8 +27,7 @@ preview_command = 'git show -p --stat --pretty=fuller --color=always {0}'
 name = "zsh-history"
 source_command = "tail -r $HOME/.zsh_history | cut -d\";\" -f 2-"
 
-
 [[cable_channel]]
-name = "Brew list"
+name = "brew-ls"
 source_command = 'brew list --versions'
 preview_command = 'brew info {0}'

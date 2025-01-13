@@ -30,6 +30,7 @@ brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
 brew 'oh-my-posh' # Prompt theme engine for any shell
 brew 'sd' # Intuitive find & replace CLI
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
+brew 'television'
 
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash

@@ -21,9 +21,10 @@
   },
   "assistant": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "provider": "zed.dev",
+      "model": "claude-3-5-sonnet-latest"
     },
+    "enable_experimental_live_diffs": true,
     "version": "2",
     "provider": null
   },

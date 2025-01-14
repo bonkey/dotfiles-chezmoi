@@ -20,6 +20,7 @@ node = "latest"
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"
 "npm:appium" = "latest"
+"npm:marp-cli" = "latest"
 
 [settings]
 experimental = true

@@ -832,7 +832,7 @@ git-branches-in-jira-merged() {
 }
 
 jic() {
-  jira issue create $*
+  jira issue create -a dbauke@league.com $*
 }
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}

@@ -504,7 +504,7 @@ xcb() {
 
   if [[ ! -d $proj ]]; then
     echo "$proj not found"
-    exit 1
+    return
   fi
 
   if [[ "$proj" == *.xcworkspace ]]; then

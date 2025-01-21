@@ -672,9 +672,8 @@ gpu() {
 
 alias gpo="gpu origin"
 
-gpe() {
-  git commit -m "Retrigger checks" --allow-empty
-  gpo
+git-retrigger-checks() {
+  git commit -m "Retrigger checks" --allow-empty && git push
 }
 
 ghd() {

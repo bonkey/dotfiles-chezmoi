@@ -54,19 +54,6 @@
           "type": "path"
         },
         {
-          "type": "command",
-          "style": "plain",
-          "foreground": "#ffffff",
-          "template": "#{{ .Output }}",
-          "cache": {
-            "duration": "30m",
-            "strategy": "folder"
-          },
-          "properties": {
-            "command": "gh pr view --json number --jq .number"
-          }
-        },
-        {
           "properties": {
             "branch_max_length": 40,
             "fetch_status": true,
@@ -89,6 +76,19 @@
             "{{ if gt .Ahead 0 }}#49416D{{ end }}",
             "{{ if gt .Behind 0 }}#7A306C{{ end }}"
           ]
+        },
+        {
+          "type": "command",
+          "style": "plain",
+          "foreground": "#ffffff",
+          "template": "[#{{ .Output }}]",
+          "cache": {
+            "duration": "30m",
+            "strategy": "folder"
+          },
+          "properties": {
+            "command": "gh pr view --json number --jq .number"
+          }
         },
         {
           "properties": {

@@ -88,9 +88,7 @@
           "foreground": "p:white",
           "background": "p:green",
           "type": "exit",
-          "background_templates": [
-            "{{ if gt .Code 0 }}p:red{{ end }}"
-          ]
+          "background_templates": ["{{ if gt .Code 0 }}p:red{{ end }}"]
         }
       ]
     }
@@ -107,9 +105,7 @@
       "foreground": "p:white",
       "background": "p:orange",
       "type": "aws",
-      "tips": [
-        "aws"
-      ]
+      "tips": ["aws"]
     },
     {
       "style": "diamond",
@@ -119,9 +115,7 @@
       "foreground": "p:white",
       "background": "p:blue",
       "type": "az",
-      "tips": [
-        "az"
-      ]
+      "tips": ["az"]
     }
   ],
   "version": 3,

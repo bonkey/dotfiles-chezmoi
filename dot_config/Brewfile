@@ -92,6 +92,7 @@ cask 'kaleidoscope' # Spot and merge differences in text and image files or fold
 cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 cask 'sublime-merge' # Git client
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
+brew 'golang'
 
 # Search tools
 brew 'the_silver_searcher' # Code-search similar to ack

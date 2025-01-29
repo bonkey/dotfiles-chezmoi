@@ -81,7 +81,7 @@
           "type": "command",
           "style": "plain",
           "foreground": "#ffffff",
-          "template": " [#{{ .Output }}] ",
+          "template": " #{{ .Output }} ",
           "cache": {
             "duration": "30m",
             "strategy": "folder"

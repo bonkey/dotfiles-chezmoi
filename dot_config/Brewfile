@@ -182,6 +182,7 @@ cask 'deepl' # Trains AIs to understand and translate texts
 cask 'force-paste' #
 cask 'handbrake' # Open-source video transcoder
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+cask 'itermai'
 cask 'karabiner-elements' # Keyboard customizer
 cask 'keyboard-maestro' # Automation software
 cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice

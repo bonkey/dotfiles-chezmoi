@@ -2,7 +2,7 @@
 
 # hash: {{ include "dot_zimrc" | sha256sum }}
 
-source "$(chezmoi source-path)/exact_bin/_common.zsh"
+source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
 
 zimfw() {
     source ${HOME}/.zim/zimfw.zsh "${@}"

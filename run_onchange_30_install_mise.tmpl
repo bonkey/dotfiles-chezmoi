@@ -4,8 +4,7 @@
 {{- $mise_config:= joinPath $mise_dir "/config.toml" -}}
 
 # hash: {{ include $mise_config | sha256sum }}
-
-source "$(chezmoi source-path)/exact_bin/_common.zsh"
+source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
 
 _exec "mise -C '{{- $mise_dir -}}' --yes install"
 

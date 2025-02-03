@@ -119,15 +119,6 @@ line-numbers = true
 hyperlinks = true
 side-by-side = true
 
-# hyperlinks-file-link-format = "vscode://file/{path}:{line}"
-
-#[url "git@github.com:"]
-#    insteadOf = https://github.com/
-#[url "git@github.com:"]
-#    pushInsteadOf = "git://github.com/"
-#[url "git@github.com:"]
-#    pushInsteadOf = "https://github.com/"
-
 [mergetool "Kaleidoscope"]
 cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 trustexitcode = true
@@ -158,3 +149,8 @@ aiOpenAIKeyOption = bringYourOwn
 aiOpenAIModelName = gpt-4o-mini
 aiModelProvider = ollama
 aiOllamaModelName = llama3.2
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[url "git@github.com:"]
+    pushInsteadOf = "git://github.com/"

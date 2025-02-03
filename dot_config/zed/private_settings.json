@@ -7,56 +7,6 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "restore_on_startup": "none",
-  "enable_preview_from_file_finder": true,
-
-  "search": {
-    "whole_word": false,
-    "case_sensitive": false,
-    "include_ignored": false,
-    "regex": true
-  },
-
-  // "buffer_font_family": "Input Mono",
-  "buffer_font_family": "0xProto Nerd Font Mono",
-
-  "experimental.theme_overrides": {
-    "background.appearance": "blurred",
-    "background": "#04050e70",
-    "editor.background": "#00000070",
-    "editor.gutter.background": "#00000070",
-    "tab_bar.background": "#00000070",
-    "terminal.background": "#00000070",
-    "toolbar.background": "#00000070",
-    "tab.active_background": "#28282820",
-    "tab.inactive_background": "#00000000",
-    "status_bar.background": "#000000DF",
-    "title_bar.background": "#000000DF",
-    "panel.background": "#00000070",
-    "border.variant": "#00000000",
-    "scrollbar.track.border": "#00000000",
-    "editor.active_line.background": "#00000000",
-    "renamed.background": "#FFFFFF20",
-    "search.match_background": "#FFFFFF20",
-    "ghost_element.background": "#00000010",
-    "ghost_element.hover": "#00000099",
-    "border": "#00000000",
-    "scrollbar.track.background": "#00000000",
-    "scrollbar.thumb.background": "#00000000",
-    "scrollbar.thumb.hover.background": "#00000000",
-    "scrollbar.thumb.active.background": "#00000000",
-    "scrollbar.thumb.border": "#FFFFFF90",
-    "editor.line_highlight": "#00000000",
-    "editor.selection.background": "#00000000",
-    "editor.selection.foreground": "#00000000",
-    "editor.selection.border": "#00000000",
-    "editor.selection.inactive.foreground": "#00000000",
-    "editor.selection.inactive.border": "#00000000",
-    "editor.selection.active.background": "#00000000",
-    "editor.selection.active.foreground": "#00000000",
-    "editor.selection.active.border": "#00000000",
-    "editor.selection.inactive.background": "#00000000"
-  },
   "language_models": {
     "ollama": {},
     "google": {
@@ -88,6 +38,7 @@
   },
 
   "base_keymap": "VSCode",
+  "buffer_font_family": "0xProto Nerd Font Mono",
   "buffer_font_size": 16,
   "vim_mode": true,
   "ui_font_size": 15,

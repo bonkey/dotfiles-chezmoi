@@ -83,7 +83,7 @@
           "foreground": "#ffffff",
           "template": " #{{ .Output }} ",
           "cache": {
-            "duration": "30m",
+            "duration": "3m",
             "strategy": "folder"
           },
           "properties": {

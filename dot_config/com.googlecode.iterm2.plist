@@ -8,6 +8,12 @@
 	<integer>0</integer>
 	<key>AddNewTabAtEndOfTabs</key>
 	<false/>
+	<key>AiMaxTokens</key>
+	<integer>1048576</integer>
+	<key>AiModel</key>
+	<string>Gemini 1.5 flash</string>
+	<key>AitermURL</key>
+	<string>https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent</string>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>BracketedPasteMode</key>

@@ -2,3 +2,4 @@
 command script import /Users/dbauke-mac/Library/Application\ Support/Reveal/RevealLLDBCommands/reveallldb
 ###
 command script import "/Users/dbauke-mac/Library/Application Support/Kaleidoscope/lldb_ksdiff.py"
+command script import /opt/homebrew/opt/chisel/libexec/fbchisellldb.py

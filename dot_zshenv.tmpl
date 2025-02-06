@@ -53,6 +53,8 @@ export FIGMA_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "x
 
 export SENTRY_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").SENTRY_API_KEY.value -}}"
 
+export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GEMINI_API_KEY.value -}}"
+
 {{- end }}
 
 {{- if eq .chezmoi.hostname "danbau-personal" }}

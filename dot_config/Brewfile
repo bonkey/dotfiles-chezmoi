@@ -149,6 +149,7 @@ brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-input'
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs

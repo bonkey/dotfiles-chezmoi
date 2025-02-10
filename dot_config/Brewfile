@@ -31,7 +31,7 @@ brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
 brew 'oh-my-posh' # Prompt theme engine for any shell
 brew 'sd' # Intuitive find & replace CLI
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
-brew 'television'
+brew 'television' # General purpose fuzzy finder TUI
 
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash
@@ -84,7 +84,7 @@ brew 'git-extras' # Small git utilities
 brew 'git-lfs' # Git extension for versioning large files
 brew 'git' # Distributed revision control system
 brew 'git-town' # High-level command-line interface for Git
-brew 'graphite'
+brew 'graphite' # Allows you to manage your stacked changes and submit them for review on GitHub
 
 # Tools for developers
 brew 'tokei' # Program that allows you to count code, quickly
@@ -94,7 +94,7 @@ cask 'kaleidoscope' # Spot and merge differences in text and image files or fold
 cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 cask 'sublime-merge' # Git client
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
-brew 'golang'
+brew 'golang' # Open source programming language to build simple/reliable/efficient software
 
 # Search tools
 brew 'the_silver_searcher' # Code-search similar to ack
@@ -123,7 +123,7 @@ brew 'xcbeautify' # Little beautifier tool for xcodebuild
 brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
-brew 'chisel'
+brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 cask 'minisim' # App for launching iOS and Android simulators
 
@@ -151,7 +151,7 @@ brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-input'
+cask 'font-input' #
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -177,16 +177,15 @@ cask 'syntax-highlight' # Quicklook extension for source files
 
 # Tools for productivity and automation
 cask '1password-cli' # Command-line interface for 1Password
-cask "akiflow"
+cask "akiflow" # Time blocking and productivity platform
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'deepl' # Trains AIs to understand and translate texts
-cask 'force-paste' #
 cask 'handbrake' # Open-source video transcoder
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
-cask 'itermai'
+cask 'itermai' # Enable generative AI features in iTerm2
 cask 'karabiner-elements' # Keyboard customizer
 cask 'keyboard-maestro' # Automation software
 cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
@@ -201,13 +200,13 @@ cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 cask 'zed' # Multiplayer code editor
-cask 'ghostty@tip'
+cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
 
 cask 'obs' # Open-source software for live streaming and screen recording
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'elgato-control-center' # Control your Elgato key lights
-cask 'focusrite-control-2'
-cask 'monitorcontrol'
+cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
+cask 'monitorcontrol' # Tool to control external monitor brightness & volume
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

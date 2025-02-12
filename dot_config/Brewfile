@@ -179,17 +179,13 @@ cask 'syntax-highlight' # Quicklook extension for source files
 cask '1password-cli' # Command-line interface for 1Password
 cask "akiflow" # Time blocking and productivity platform
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
-cask 'brave-browser@beta' # Web browser focusing on privacy
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'deepl' # Trains AIs to understand and translate texts
 cask 'handbrake' # Open-source video transcoder
-cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
-cask 'itermai' # Enable generative AI features in iTerm2
 cask 'karabiner-elements' # Keyboard customizer
 cask 'keyboard-maestro' # Automation software
 cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
-cask 'macvim' # Text editor
 cask 'macwhisper' # Speech recognition tool
 cask 'openrgb' # Open source RGB lighting control that doesn't depend on manufacturer software
 cask 'raycast' # Control your tools with a few keystrokes
@@ -199,8 +195,16 @@ cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
+
+cask 'firefox'
+cask 'brave-browser@beta'
+
+cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+cask 'itermai' # Enable generative AI features in iTerm2
+cask 'macvim' # Text editor
 cask 'zed' # Multiplayer code editor
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
+cask 'cursor'
 
 cask 'obs' # Open-source software for live streaming and screen recording
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them

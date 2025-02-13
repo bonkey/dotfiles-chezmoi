@@ -64,14 +64,22 @@ class SimulatorPopulator
   end
 
   def find_runtime(name:)
-    @available_runtimes
+    runtime = @available_runtimes
       .select { |runtime| runtime['name'] == name }
-      .first['identifier']
+      .first
+
+    return if runtime.nil?
+
+    runtime['identifier']
   end
 
   def create_device(device_type:, runtime:, name: nil)
     name ||= device_type
     runtime_id = find_runtime(name: runtime)
+    if runtime_id.nil?
+      puts "Runtime #{Rainbow(runtime).color(:red).bright} not found"
+      return
+    end
     args = ["'#{name}'", "'#{device_type}'", "'#{runtime_id}'"].join ' '
 
     `xcrun simctl create #{args} 2> /dev/null`

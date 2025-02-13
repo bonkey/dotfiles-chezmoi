@@ -55,8 +55,8 @@ export SENTRY_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 
 export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GEMINI_API_KEY.value -}}"
 
-export SSL_CERT_FILE='/Library/Application Support/Netskope/STAgent/data/nscacert.pem'
-export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
+# export SSL_CERT_FILE='/Library/Application Support/Netskope/STAgent/data/nscacert.pem'
+# export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
 
 {{- end }}
 

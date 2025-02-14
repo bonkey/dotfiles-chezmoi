@@ -36,10 +36,6 @@
   "tab_bar": {
     "show": true
   },
-  "features": {
-    "copilot": true,
-    "inline_completion_provider": "zed"
-  },
 
   "base_keymap": "VSCode",
   "buffer_font_family": "0xProto Nerd Font Mono",

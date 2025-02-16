@@ -8,7 +8,7 @@ function read_key {
     echo $char
 }
 
-if [[ "$LC_TERMINAL" != "iTerm2" ]]; then
+if [[ "$__CFBundleIdentifier" != "com.googlecode.iterm2" ]]; then
     echo -n "Quit iTerm2? (y/n) "
     response=$(read_key)
     echo

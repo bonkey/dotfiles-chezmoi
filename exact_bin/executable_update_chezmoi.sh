@@ -17,4 +17,4 @@ fi
 
 pkill 'Keyboard Maestro Engine'
 
-chezmoi update && open -a 'Keyboard Maestro Engine'
+chezmoi update && (open -a 'Keyboard Maestro Engine' ; open -a iTerm)

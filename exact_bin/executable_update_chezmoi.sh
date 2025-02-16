@@ -17,6 +17,4 @@ fi
 
 pkill 'Keyboard Maestro Engine'
 
-chezmoi update
-
-exit 0
+chezmoi update && open -a 'Keyboard Maestro Engine'

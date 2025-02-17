@@ -98,7 +98,6 @@ alias -g XCB="| xcbeautify -q --disable-logging"
 
 # --- System
 
-
 flush_dns() {
   sudo killall -HUP mDNSResponder
   sudo killall mDNSResponderHelper
@@ -303,6 +302,29 @@ ping() {
 
 alias host=doggo
 alias dig=doggo
+
+# --- LLM
+
+lgl() {
+  llmm gemini-2.0-flash $*
+}
+
+lgf() {
+  llmm gemini-2.0-pro-exp-02-05 $*
+}
+
+lgt() {
+  llmm gemini-2.0-flash-thinking-exp-01-21 $*
+}
+
+lgp() {
+  llmm gemini-2.0-pro-exp-02-05 $*
+}
+
+llmm() {
+  llm -m $*
+}
+
 
 # --- Search
 

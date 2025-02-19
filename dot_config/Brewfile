@@ -212,6 +212,8 @@ cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'elgato-control-center' # Control your Elgato key lights
 cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
 cask 'monitorcontrol' # Tool to control external monitor brightness & volume
+cask 'zen-browser@twilight'
+cask 'github-copilot-for-xcode'
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

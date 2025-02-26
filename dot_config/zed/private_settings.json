@@ -7,7 +7,6 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "icon_theme": "Colored Zed Icons Theme Dark",
   "language_models": {
     "ollama": {},
     "google": {
@@ -22,8 +21,8 @@
   },
   "assistant": {
     "default_model": {
-      "provider": "anthropic",
-      "model": "claude-3-5-sonnet-latest"
+      "provider": "copilot_chat",
+      "model": "claude-3-5-sonnet"
     },
     "enable_experimental_live_diffs": true,
     "version": "2",
@@ -80,9 +79,6 @@
   "languages": {
     "Ruby": {
       "language_servers": ["ruby-lsp", "!solargraph"]
-    },
-    "Swift": {
-      "format_on_save": "on"
     }
   },
   "autosave": {
@@ -128,7 +124,7 @@
   },
   "theme": {
     "mode": "system",
-    "light": "Atelier Dune Light",
-    "dark": "Atelier Dune Dark"
+    "light": "Colorizer Pro",
+    "dark": "Colorizer Pro"
   }
 }

@@ -8,18 +8,6 @@ function read_key {
     echo $char
 }
 
-function open_applications {
-    open -a 'Keyboard Maestro Engine'
-    open -a iTerm
-}
-
-function countdown() {
-    for i in {5..1}; do
-        figlet $i
-        sleep 1
-    done
-}
-
 if [[ "$__CFBundleIdentifier" != "com.googlecode.iterm2" ]]; then
     echo -n "Quit iTerm2? (y/n) "
     response=$(read_key)
@@ -29,4 +17,4 @@ fi
 
 pkill 'Keyboard Maestro Engine'
 
-chezmoi update && open_applications && countdown
+chezmoi update && (open -a 'Keyboard Maestro Engine' ; open -a iTerm)

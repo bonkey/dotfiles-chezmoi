@@ -10,6 +10,28 @@
                 },
                 "rules": [
                     {
+                        "description": "Disable Esc in Safari and its Web Apps to prevent exiting full-screen",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com\\.apple\\.Safari$",
+                                            "^com\\.apple\\.Safari\\.WebApp\\..*"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "escape",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "vk_none" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Change end key to command+control+option. (Post f19 key when pressed alone)",
                         "manipulators": [
                             {

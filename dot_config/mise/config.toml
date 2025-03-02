@@ -24,3 +24,4 @@ node = "latest"
 experimental = true
 pipx.uvx = true
 vfox = false
+python_venv_auto_create = true

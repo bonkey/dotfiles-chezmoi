@@ -4593,7 +4593,7 @@
 	<key>FlashTabBarInFullscreen</key>
 	<true/>
 	<key>FocusFollowsMouse</key>
-	<true/>
+	<false/>
 	<key>HTMLTabTitles</key>
 	<true/>
 	<key>HapticFeedbackForEsc</key>

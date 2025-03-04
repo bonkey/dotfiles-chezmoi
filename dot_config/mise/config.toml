@@ -23,5 +23,10 @@ node = "latest"
 [settings]
 experimental = true
 pipx.uvx = true
+pipx_uvx = true
 vfox = false
-python_venv_auto_create = true
+python.uv_venv_auto = true
+
+# [env]
+# _.python.venv.path = ".venv"
+# _.python.venv.create = true

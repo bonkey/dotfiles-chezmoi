@@ -115,6 +115,7 @@ brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
 brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 brew 'libyaml' # YAML Parser
+brew 'fx'
 
 # Markdown tools
 brew 'glow' # Render markdown on the CLI

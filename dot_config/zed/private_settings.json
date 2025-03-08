@@ -14,11 +14,18 @@
     "light": "Catppuccin Latte",
     "dark": "Catppuccin Mocha"
   },
-  "ui_font_size": 14,
-  "ui_font_family": "Hack Nerd Font",
+  "ui_font_size": 15,
+  "ui_font_family": "Iosevka Nerd Font",
   "active_pane_magnification": 1.5,
   "outline_panel": {
-    "dock": "left"
+    "dock": "right",
+    "indent_guides": {
+      "enabled": true,
+      "line_width": 1,
+      "active_line_width": 2,
+      "coloring": "indent_aware"
+    },
+    "show_on_startup": true
   },
   "tabs": {
     "close_position": "right",

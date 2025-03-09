@@ -9,8 +9,10 @@ ignorecase = false
 quotepath = false
 fsmonitor = true
 untrackedcache = true
-
 pager = delta
+
+[init]
+defaultBranch = main
 
 [color]
 diff = auto
@@ -74,37 +76,53 @@ prompt = false
 
 [merge]
 tool = Kaleidoscope
-conflictstyle = diff3
+conflictstyle = zdiff3
 autoStash = true
 
 [git-town]
 sync-feature-strategy = rebase
 
-[rebase]
-autoStash = true
-
 [difftool]
 prompt = false
-
-[init]
-defaultBranch = main
-
-[diff]
+algorithm = histogram
+mnemonicPrefix = true
+renames = true
 tool = Kaleidoscope
+# colorMoved = plain
 colormoved = default
 colormovedws = "allow-indentation-change"
 
+[rebase]
+autoStash = true
+updateRefs = true
+
+
 [push]
-default = upstream
-
-[tag]
-forceSignAnnotated = false
-
-[branch]
-sort = -committerdate
+default = simple
+autoSetupRemote = true
+followTags = true
 
 [pull]
 rebase = true
+
+[fetch]
+prune = true
+pruneTags = true
+all = true
+
+[tag]
+forceSignAnnotated = false
+sort = version:refname
+
+[column]
+ui = auto
+
+[rerere]
+enabled = true
+autoupdate = true
+
+[branch]
+sort = -committerdate
 
 [filter "lfs"]
 clean = git-lfs clean -- %f
@@ -115,12 +133,36 @@ required = true
 [interactive]
 diffFilter = delta --color-only --diff-so-fancy
 
+[gpg]
+format = ssh
+
+[commit]
+gpgsign = true
+verbose = true
+
+[gpg "ssh"]
+program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[url "git@github.com:"]
+insteadOf = https://github.com/
+
+[url "git@github.com:"]
+pushInsteadOf = "git://github.com/"
+
 [delta]
 true-color = always
 navigate = true # use n and N to move between diff sections
 line-numbers = true
 hyperlinks = true
 side-by-side = true
+
+
+[gitbutler]
+aiOpenAIKeyOption = bringYourOwn
+aiOpenAIModelName = gpt-4o-mini
+aiModelProvider = ollama
+aiOllamaModelName = llama3.2
+
 
 [mergetool "Kaleidoscope"]
 cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
@@ -130,30 +172,6 @@ trustexitcode = true
 cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 
 [mergetool "juxta"]
-	cmd = juxta _mergetool --base \"${BASE:-/dev/null}\" --local \"$LOCAL\" --remote \"$REMOTE\" --merged \"${MERGED:-/dev/null}\"
-	trustExitCode = true
-[difftool "juxta"]
-	cmd = juxta _difftool --local \"$LOCAL\" --remote \"$REMOTE\" --merged \"$MERGED\"
-	trustExitCode = true
-[difftool "dyff"]
-    cmd = "dyff_between() { dyff --color on between --omit-header \"$2\" \"$5\"; }; dyff_between"
+cmd = juxta _mergetool --base \"${BASE:-/dev/null}\" --local \"$LOCAL\" --remote \"$REMOTE\" --merged \"${MERGED:-/dev/null}\"
+trustExitCode = true
 
-[gpg]
-format = ssh
-
-[commit]
-gpgsign = true
-
-[gpg "ssh"]
-program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-
-[gitbutler]
-aiOpenAIKeyOption = bringYourOwn
-aiOpenAIModelName = gpt-4o-mini
-aiModelProvider = ollama
-aiOllamaModelName = llama3.2
-
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[url "git@github.com:"]
-    pushInsteadOf = "git://github.com/"

@@ -14,8 +14,8 @@
     "light": "Catppuccin Latte",
     "dark": "Catppuccin Mocha"
   },
-  "ui_font_size": 15,
-  "ui_font_family": "Iosevka Nerd Font",
+  "ui_font_size": 16,
+  "ui_font_family": "Zed Plex Sans",
   "active_pane_magnification": 1.5,
   "outline_panel": {
     "dock": "right",

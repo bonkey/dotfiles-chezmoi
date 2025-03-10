@@ -6,7 +6,7 @@ swiftformat = "latest"
 swiftlint = "latest"
 bun = "latest"
 node = "latest"
-"pipx:llm" = "latest"
+"pipx:llm" = { version = "latest", uvx_args = "--with llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
 "pipx:clipea-cli" = "latest"
 "pipx:csvkit" = "latest"
 "pipx:git-filter-repo" = "latest"
@@ -19,6 +19,7 @@ node = "latest"
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"
 "npm:appium" = "latest"
+
 
 [settings]
 experimental = true

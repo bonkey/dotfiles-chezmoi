@@ -21,6 +21,8 @@ devices_to_create = [
 runtimes_to_use = [
   "iOS 17.5",
   "iOS 18.2",
+  "iOS 18.3",
+  "iOS 18.4",
 ]
 
 default_sim_device = 'iPhone 15 Pro'

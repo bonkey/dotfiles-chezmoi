@@ -47,7 +47,7 @@ class SimulatorPopulator
   end
 
   def create(device_names: :all, runtimes: :all, options: {})
-    remove_all unless options[:'no-remove-existing'] == true
+    remove_all if options[:'remove-existing'] == true
 
     @available_runtimes.each do |runtime|
       next unless runtimes == :all || runtimes.include?(runtime['name'])
@@ -105,7 +105,7 @@ populator = SimulatorPopulator.new
 
 populator.create(device_names: devices_to_create,
                  runtimes: runtimes_to_use,
-                 options:)
+                 options: options)
 
 populator.create_device(device_type: default_sim_device,
                         runtime: default_sim_runtime)

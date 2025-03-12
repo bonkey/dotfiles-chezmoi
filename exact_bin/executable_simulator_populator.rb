@@ -21,6 +21,8 @@ devices_to_create = [
 runtimes_to_use = [
   "iOS 17.5",
   "iOS 18.2",
+  "iOS 18.3",
+  "iOS 18.4",
 ]
 
 default_sim_device = 'iPhone 15 Pro'
@@ -72,6 +74,8 @@ class SimulatorPopulator
   end
 
   def create_default_device
+    puts "Creating default device #{Rainbow(@default_device).color(:green).bright} on #{Rainbow(@default_runtime).color(:green).bright}"
+    create_device(device_type: @default_device, runtime: @default_runtime)
   end
 
   private
@@ -100,16 +104,30 @@ class SimulatorPopulator
   end
 end
 
+options = {
+  'remove-existing' => true,
+  'create-all-variants' => true,
+  'create-default-variant' => true,
+  'verbose' => true
+}
+
 option_parser = OptionParser.new do |opts|
-  opts.on '-r', '--[no-]remove-existing', 'Remove all existing simulators'
-  opts.on '-c', '--[no-]create-all-variants', 'Create new simulators'
-  opts.on '-d', '--[no-]create-default-variant', "Create a default simulator (#{default_sim_device} on #{default_sim_runtime})"
-  opts.on '-v', '--[no-]verbose', 'Make the operation more talkative (not really, not implemented yet)'
+  opts.on '-r', '--[no-]remove-existing', 'Remove all existing simulators' do |v|
+    options['remove-existing'] = v
+  end
+  opts.on '-c', '--[no-]create-all-variants', 'Create new simulators' do |v|
+    options['create-all-variants'] = v
+  end
+  opts.on '-d', '--[no-]create-default-variant', "Create a default simulator (#{default_sim_device} on #{default_sim_runtime})" do |v|
+    options['create-default-variant'] = v
+  end
+  opts.on '-v', '--[no-]verbose', 'Make the operation more talkative (not really, not implemented yet)' do |v|
+    options['verbose'] = v
+  end
   opts.on '-h', '--help', 'This help'
 end
 
-options = {}
-option_parser.parse!(into: options)
+option_parser.parse!
 
 if options[:help]
   puts option_parser
@@ -122,8 +140,6 @@ populator = SimulatorPopulator.new(
   default_device: default_sim_device,
   default_runtime: default_sim_runtime)
 
-populator.remove_all if options[:'remove-existing']
-
-populator.create if options[:'create-all-variants']
-
-populator.create_default_device if options[:'create-default-variant']
+populator.remove_all if options['remove-existing']
+populator.create if options['create-all-variants']
+populator.create_default_device if options['create-default-variant']

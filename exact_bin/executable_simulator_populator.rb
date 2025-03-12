@@ -47,7 +47,6 @@ class SimulatorPopulator
   end
 
   def create(device_names: :all, runtimes: :all, options: {})
-    remove_all if options[:'remove-existing'] == true
     return unless options[:'create-new'] == true
 
     @available_runtimes.each do |runtime|
@@ -90,7 +89,8 @@ end
 
 option_parser = OptionParser.new do |opts|
   opts.on '-r', '--[no-]remove-existing', 'Remove all existing simulators'
-  opts.on '-c', '--[no-]create-new', 'Create new simulators'
+  opts.on '-c', '--[no-]create-all-variants', 'Create new simulators'
+  opts.on '-d', '--[no-]create-default-variant', "Create a default simulator (#{default_sim_device} on #{default_sim_runtime})"
   opts.on '-v', '--[no-]verbose', 'Make the operation more talkative (not really, not implemented yet)'
   opts.on '-h', '--help', 'This help'
 end
@@ -105,9 +105,11 @@ end
 
 populator = SimulatorPopulator.new
 
+populator.remove_all if options[:'remove-existing']
+
 populator.create(device_names: devices_to_create,
                  runtimes: runtimes_to_use,
-                 options: options)
+                 options: options) if options[:'create-all-variants']
 
 populator.create_device(device_type: default_sim_device,
-                        runtime: default_sim_runtime)
+                        runtime: default_sim_runtime) if options[:'create-default-variant']

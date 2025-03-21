@@ -110,5 +110,7 @@
     }
   ],
   "version": 3,
-  "final_space": true
+  "final_space": true,
+  "shell_integration": true,
+  "enable_cursor_positioning": true
 }

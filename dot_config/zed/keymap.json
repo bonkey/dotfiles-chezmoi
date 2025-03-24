@@ -10,7 +10,8 @@
     "context": "Editor && vim_mode == normal && vim_operator == none && !VimWaiting",
     "bindings": {
       // "cmd-shift-o": ["workspace::SendKeystrokes", "cmd-p"], /// Remapping cmd-p to more xcode like search withing project files
-      "ctrl-alt-cmd-b": ["task::Spawn", { "task_name": "Swift Build" }]
+      "ctrl-alt-b": ["task::Spawn", { "task_name": "Swift Build" }],
+      "ctrl-alt-t": ["task::Spawn", { "task_name": "Swift Test" }]
     }
   },
   {

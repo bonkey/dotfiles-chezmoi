@@ -17,6 +17,8 @@ tap 'kylef/formulae'
 tap 'samwho/spacer'
 tap 'ycd/tap'
 tap 'withgraphite/tap'
+tap 'mvp/uhubctl'
+
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -78,6 +80,7 @@ brew 'direnv' # Load/unload environment variables based on $PWD
 
 # GenAI
 brew 'ollama' # Create, run, and share large language models (LLMs)
+cask 'github-copilot-for-xcode'
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)
@@ -199,10 +202,19 @@ cask 'retcon' # Drag-and-drop Git history editor
 cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
-cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
+# Hardware
+brew 'uhubctl'
+cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
+cask 'elgato-control-center' # Control your Elgato key lights
+cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
+cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
+cask 'monitorcontrol' # Tool to control external monitor brightness & volume
+
+# Browsers
 cask 'firefox'
 cask 'brave-browser@beta'
+cask 'zen-browser@twilight'
 
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 cask 'itermai' # Enable generative AI features in iTerm2
@@ -212,12 +224,6 @@ cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acce
 cask 'cursor'
 
 cask 'obs' # Open-source software for live streaming and screen recording
-cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'elgato-control-center' # Control your Elgato key lights
-cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
-cask 'monitorcontrol' # Tool to control external monitor brightness & volume
-cask 'zen-browser@twilight'
-cask 'github-copilot-for-xcode'
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

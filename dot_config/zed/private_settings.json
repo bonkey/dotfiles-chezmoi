@@ -21,8 +21,8 @@
   },
   "assistant": {
     "default_model": {
-      "provider": "google",
-      "model": "gemini-2.0-flash-exp"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
     },
     "enable_experimental_live_diffs": true,
     "version": "2",
@@ -81,7 +81,10 @@
       "language_servers": ["ruby-lsp", "!solargraph"]
     },
     "Swift": {
-      "format_on_save": "off"
+      "format_on_save": "off",
+      "enable_language_server": true,
+      "language_servers": ["sourcekit-lsp"],
+      "formatter": "language_server"
     }
   },
   "autosave": {

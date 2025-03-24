@@ -7,14 +7,6 @@
 // from the command palette.
 [
   {
-    "context": "Editor && vim_mode == normal && vim_operator == none && !VimWaiting",
-    "bindings": {
-      // "cmd-shift-o": ["workspace::SendKeystrokes", "cmd-p"], /// Remapping cmd-p to more xcode like search withing project files
-      "ctrl-alt-b": ["task::Spawn", { "task_name": "Swift Build" }],
-      "ctrl-alt-t": ["task::Spawn", { "task_name": "Swift Test" }]
-    }
-  },
-  {
     "context": "Workspace",
     "bindings": {
       // "shift shift": "file_finder::Toggle"
@@ -24,6 +16,8 @@
     "context": "Editor",
     "bindings": {
       // "j k": ["workspace::SendKeystrokes", "escape"]
+      "cmd-alt-up": "editor::AddSelectionAbove",
+      "cmd-alt-down": "editor::AddSelectionBelow"
     }
   }
 ]

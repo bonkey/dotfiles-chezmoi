@@ -10,7 +10,7 @@
     "allow_concurrent_runs": false,
     "reveal": "always",
     "reveal_target": "dock",
-    "hide": "on_success",
+    "hide": "never",
     "shell": "system"
   },
   {
@@ -32,7 +32,7 @@
     "allow_concurrent_runs": false,
     "reveal": "always",
     "reveal_target": "dock",
-    "hide": "on_success",
+    "hide": "never",
     "shell": "system"
   },
   {

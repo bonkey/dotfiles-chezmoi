@@ -19,10 +19,13 @@
       ]
     }
   },
+  "edit_predictions": {
+    "mode": "subtle"
+  },
   "assistant": {
     "default_model": {
-      "provider": "google",
-      "model": "gemini-2.0-flash-exp"
+      "provider": "copilot_chat",
+      "model": "claude-3-7-sonnet"
     },
     "enable_experimental_live_diffs": true,
     "version": "2",

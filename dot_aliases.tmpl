@@ -1,90 +1,13 @@
 source ${HOME}/bin/_common.zsh
 
+tscr "${HOME}/.aliases.local"
+
 # --- Paths / Globals
 
 alias -g ddw='"$HOME/Downloads"'
 alias -g ddc='"$HOME/Documents"'
 alias -g dpr='"$HOME/Projects"'
 alias -g ddd='"$HOME/Library/Developer/Xcode/DerivedData/"'
-
-{{- if eq .chezmoi.hostname "danbau-personal" }}
-alias -g dnt='"$HOME/Projects/Personal/neaptide"'
-alias -g dns='"$HOME/Projects/Personal/neaptide/neapswift"'
-alias -g dnk='"$HOME/Projects/Personal/neaptide/neaptidekit"'
-{{- end }}
-
-{{- if eq .chezmoi.hostname "dbauke-mac" }}
-
-alias -g dis='"$HOME/Projects/EverlongProject/ios-sdk"'
-alias -g dis1=dis
-alias -g dis2='"$HOME/Projects/EverlongProject/ios-sdk-2nd-copy"'
-alias -g dis3='"$HOME/Projects/EverlongProject/ios-sdk-3rd-copy"'
-alias -g disl='"$HOME/Projects/LeaguePlatform/ios-sdk"'
-
-alias -g ddb='"$HOME/Projects/EverlongProject/dbauke"'
-alias -g dsp='"$HOME/Projects/EverlongProject/spm-podifier"'
-
-alias -g dco='"$HOME/Projects/EverlongProject/league-circleci-orbs"'
-alias -g dtf='"$HOME/Projects/EverlongProject/terraform"'
-alias -g dse='"$HOME/Projects/EverlongProject/services"'
-
-alias -g dlic='"$HOME/Projects/EverlongProject/league-ios-cli"'
-alias -g dlpc='"$HOME/Projects/EverlongProject/league-platform-contract-ios"'
-
-alias -g dss='"$HOME/Projects/LeaguePlatform/league-sdk-samples-ios"'
-alias -g dlcp='"$HOME/Projects/LeaguePlatform/league-ios-sdk-cocoapods"'
-
-alias -g dpch='"$HOME/Projects/EverlongProject/pchealth-ios"'
-alias -g dhm='"$HOME/Projects/LeaguePlatform/highmark-ios"'
-alias -g dmb='"$HOME/Projects/LeaguePlatform/medibank-cwb-ios/ValenciaApp"'
-alias -g dml='"$HOME/Projects/EverlongProject/manulife-ios"'
-alias -g defi='"$HOME/Projects/LeaguePlatform/engen-capability-forms-ios"'
-
-alias -g dlat='"$HOME/Projects/mfinkle/league-appium-testing"'
-
-xccom() {
-  xco dis "GenesisComponentBrowser/GenesisComponentBrowser.xcodeproj"
-}
-
-xccor() {
-  xco dis "GenesisCoreBrowserApp/GenesisCoreBrowserApp.xcodeproj"
-}
-
-xcsp() {
-  xco dis "sdk-presenter/ios-sdk-spm/ios-sdk-spm.xcodeproj"
-}
-
-xcefi() {
-  xco dis "FormsLibraryApp/FormsLibraryApp.xcodeproj"
-}
-
-xcca() {
-    local cert_path udid device_udid device_name
-    cert_path="/Library/Application Support/Netskope/STAgent/data/nscacert.pem"
-
-    for udid in $(xcrun simctl list devices booted -j | jq -r '.devices[] | .[] | select(.deviceTypeIdentifier | test("iPhone|iPad")) | "\(.udid)|\(.name|gsub(" ";"_"))"'); do
-        device_udid="${udid%|*}"
-        device_name=$(echo "${udid#*|}"|tr '_' ' ')
-        xcrun simctl keychain "$device_udid" add-root-cert "$cert_path"
-
-        if [[ $? -eq 0 ]]; then
-            echo "✅ Added certificate to $device_name"
-        else
-            echo "❌ Failed to add certificate to $device_name"
-        fi
-    done
-}
-
-ssf() {
-    "$(git rev-parse --show-toplevel)/scripts/swiftformat.sh" $*
-}
-
-ssl() {
-    "$(git rev-parse --show-toplevel)/scripts/swiftlint.sh" $*
-}
-
-{{- end }}
-
 
 alias -g X="| xargs"
 alias -g X0="| xargs -0"
@@ -577,7 +500,7 @@ find_xcode_proj() {
   if [[ -e "$1" ]]; then
     xcode_proj=$1
   else
-    projects=(*.{xcworkspace,xcodeproj}(N) Package.swift)
+    projects=(*.{xcworkspace,xcodeproj}(N) Package.swift(N))
     xcode_proj=$projects[1]
   fi
 
@@ -635,17 +558,8 @@ alias pos="_pod search"
 
 # --- git
 
-alias gbc=better-commits
-
-# alias gt > /dev/null && unalias gt
-# gt() {
-#   while [[ ! -d .git && "$PWD" != "/" ]] ; do cd .. ; done
-#   gittower .
-# }
-
 alias gf > /dev/null && unalias gf
 gf() {
-  while [[ ! -d .git && "$PWD" != "/" ]] ; do cd .. ; done
   fork .
 }
 
@@ -656,6 +570,8 @@ gl-pr-changelog() {
 alias gip="gitup"
 alias rc="retcon"
 
+alias gbc=better-commits
+
 alias gl="git pull --autostash"
 alias gd="git diff"
 alias gdn="gd --names-only"
@@ -664,7 +580,6 @@ alias gst="git status"
 alias gco="git checkout"
 alias gcd="gco develop"
 alias gcm="gco main"
-alias gcr="gco release"
 
 gdm() {
     git add .
@@ -679,26 +594,22 @@ gbf() {
 alias gl1m="git lg --merges"
 alias gl1="git lg --no-merges"
 
-alias gmd="git merge develop --no-edit"
-alias gmm="git merge --no-edit"
-alias gbvv="gb -vv"
-
 alias gcl="git clone --recurse-submodules --progress"
 
-alias gds="gd | diffstat"
+alias gds="gd --stat"
 alias gdn="gd --name-only"
-alias gdd="gd develop"
-alias gdds="gd develop | diffstat"
 
 alias gdt="git difftool"
+alias gdtd="git difftool main"
 alias gdtd="git difftool develop"
+
+alias gcam="git commit -am"
+alias gls="git ls-files"
+alias glsm="gls -m"
+alias gpo="gpu origin"
 
 git-merged-show() {
   git branch --merged develop|tr -d ' '| grep -vE '^(develop|master|main)$'
-}
-
-git-merged-remove() {
-  git branch -d $(git-merged-show)
 }
 
 unalias gpu 2> /dev/null
@@ -706,8 +617,6 @@ gpu() {
   test -z "$1" && echo "$0 <remote_name>" && return
   git push -u $1 $(git name-rev --name-only HEAD)
 }
-
-alias gpo="gpu origin"
 
 git-retrigger-checks() {
   git commit -m "Retrigger checks" --allow-empty && git push
@@ -735,14 +644,6 @@ ghprcr() {
 
 ghprdr() {
   ghprc --draft --fill $*
-}
-
-gdum() {
-  dummy=$(git rev-parse --show-toplevel)/.dummy-commit
-  date >! $dummy
-  git add $dummy
-  git commit -m 'Dummy commit' $dummy
-  git push
 }
 
 git_pull_and_back() {
@@ -782,8 +683,6 @@ gpr() {
   git_pull_and_back $src_branch "git rebase $src_branch"
 }
 
-alias gcam="git commit -am"
-
 gicpa() {
   git add -A .
 
@@ -794,21 +693,6 @@ gicpa() {
   fi
 
   gcam "$msg" && git pull && git push
-}
-
-alias gpmd="gpm develop"
-alias gls="git ls-files"
-alias glsm="gls -m"
-
-gmem() {
-  [ -z "$1" ] && dst_branch=main|| dst_branch=$1
-  branch=$(git name-rev --name-only HEAD)
-  [ "$branch" = "$dst_branch" ] && echo "Can't merge two same branches" && return
-  git checkout $dst_branch || return
-  git pull || return
-  git merge $branch --no-edit || return
-  echo now you can:
-  echo git push
 }
 
 # -- Ruby
@@ -866,30 +750,5 @@ git-branches-in-jira-all() {
 git-branches-in-jira-merged() {
   _git-branches-in-jira $(git-merged-show)
 }
-
-jic() {
-  jira issue create -a dbauke@league.com $*
-}
-
-{{- if eq .chezmoi.hostname "dbauke-mac" }}
-
-jcpr() {
-  jic -pREL $*
-}
-
-jcpf() {
-  jic -pFECORE $*
-}
-
-jcpg() {
-  jic -pGDS $*
-}
-
-jcpm() {
-  jic -pMSRY $*
-}
-
-
-{{- end }}
 
 # vim:set ft=zsh:

@@ -15,13 +15,13 @@ source "${HOME}/bin/_common.zsh"
 
 killall "Stream Deck"
 
-device_ids=($(uhubctl|grep "Elgato" | grep -o '\[.*\]' | grep -o '0fd9:[0-9a-f]\+'))
+device_ids=($(uhubctl|grep "0fd9:" | grep -o '\[.*\]' | grep -o '0fd9:[0-9a-f]\+'))
 
 if [ ${#device_ids[@]} -eq 0 ]; then
     echo "❌ No Elgato devices found"
 else
     for device_id in "${device_ids[@]}"; do
-        echo "Searching for Stream Deck at ${device_id}..."
+        echo "Searching for Elgato device at ${device_id}..."
         SD_HUB=$(uhubctl --exact --nodesc --search "$device_id" | head -2  | grep "Current status for hub" | sed -E 's/Current status for hub ([0-9.-]+).*/\1/g')
         SD_PORT=$(uhubctl --exact --nodesc --search "$device_id" | head -2 | grep -A 1 "Current status for hub" | grep "Port" | sed -E 's/.*Port ([0-9]+).*/\1/g')
 

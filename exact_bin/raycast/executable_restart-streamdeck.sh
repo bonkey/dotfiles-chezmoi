@@ -27,7 +27,8 @@ else
 
         if [ -n "$SD_HUB" ] && [ -n "$SD_PORT" ]; then
             echo "✅ Found a device on hub $SD_HUB port $SD_PORT. Restarting..."
-            _exec "uhubctl --exact --nodesc --action cycle --delay 2 --location $SD_HUB --port $SD_PORT"
+            _exec "uhubctl --exact --nodesc --action cycle --repeat 2 --wait 100 --delay 3 --location $SD_HUB --port $SD_PORT"
+            sleep 1
         else
             echo "❌ Device ${device_id} not found"
         fi

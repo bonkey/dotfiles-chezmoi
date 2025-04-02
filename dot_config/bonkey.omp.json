@@ -4,6 +4,7 @@
     "black": "#262B44",
     "blue": "#4B95E9",
     "green": "#59C9A5",
+    "darkgreen": "#06B800",
     "orange": "#F07623",
     "red": "#D81E5B",
     "white": "#E0DEF4",
@@ -42,8 +43,9 @@
         {
           "properties": {
             "home_icon": "~",
-            "mixed_threshold": 15,
-            "style": "mixed"
+            "mixed_threshold": 5,
+            "style": "powerlevel",
+            "max_width": 30
           },
           "style": "powerline",
           "leading_diamond": "\ue0b6",
@@ -65,6 +67,7 @@
           "powerline_symbol": "\ue0b0",
           "background": "p:green",
           "type": "git",
+          "min_width": 80,
           "foreground_templates": [
             "{{ if or (.Working.Changed) (.Staging.Changed) }}p:black{{ end }}",
             "{{ if and (gt .Ahead 0) (gt .Behind 0) }}p:white{{ end }}",
@@ -86,9 +89,15 @@
           "trailing_diamond": "\ue0b4",
           "template": " {{ if gt .Code 0 }}\uf00d {{ .Meaning }}{{ else }}\uf00c{{ end }} ",
           "foreground": "p:white",
-          "background": "p:green",
+          "background": "p:darkgreen",
           "type": "exit",
           "background_templates": ["{{ if gt .Code 0 }}p:red{{ end }}"]
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "max_width": 120,
+          "template": "\n ↳"
         }
       ]
     }

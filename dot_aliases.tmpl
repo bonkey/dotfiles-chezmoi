@@ -450,6 +450,11 @@ xcresolve() {
     fi
   fi
 
+  if [[ "$scheme" == "-l" ]]; then
+    _exec "xcrun xcodebuild -destination 'generic/platform=iOS' -list $arg $proj XCB"
+    retrun
+  fi
+
   xck
   _exec "find $proj -name Package.resolved -delete"
   _exec "xcrun xcodebuild -destination 'generic/platform=iOS' clean $arg $proj -scheme $scheme XCB"

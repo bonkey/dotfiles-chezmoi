@@ -451,7 +451,7 @@ xcresolve() {
   fi
 
   if [[ "$scheme" == "-l" ]]; then
-    _exec "xcrun xcodebuild -destination 'generic/platform=iOS' -list $arg $proj XCB"
+    _exec "xcrun xcodebuild -destination 'generic/platform=iOS' -list $arg $proj"
     return
   fi
 

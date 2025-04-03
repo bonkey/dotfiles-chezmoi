@@ -434,7 +434,7 @@ xcresolve() {
   test -n "$scheme" && shift
 
   if [[ ! -d $proj ]]; then
-    echo "$proj not found"
+    echo "Xcode project/workspace '$proj' not found"
     return
   fi
 
@@ -450,7 +450,8 @@ xcresolve() {
     fi
   fi
 
-  if [[ "$scheme" == "-l" ]]; then
+  if [[ "$scheme" == "-l" || "$scheme" == "-list" || "$scheme" == "--list" ]]; then
+    log_message "Listing avilable schemes..."
     _exec "xcrun xcodebuild -destination 'generic/platform=iOS' -list $arg $proj"
     return
   fi

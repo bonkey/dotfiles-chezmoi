@@ -133,6 +133,7 @@ brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 brew 'xcode-build-server'
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 cask 'minisim' # App for launching iOS and Android simulators
+brew 'swift-sh'
 
 # Tools for working with media files
 brew 'ffmpeg' # Play, record, convert, and stream audio and video

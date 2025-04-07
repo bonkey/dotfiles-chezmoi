@@ -29,20 +29,18 @@
           "interactive": true
         },
         {
-          "properties": {
-            "always_enabled": true
-          },
           "style": "diamond",
           "leading_diamond": " ",
           "trailing_diamond": "",
-          "template": "{{ if gt .Code 0 }} {{ .Meaning }}{{ else }}{{ end }}",
+          "template": "{{ if gt .Code 0 }} {{ .Meaning }}{{ end }}",
           "foreground": "p:white",
           "background": "p:darkgreen",
           "background_templates": [
             "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
           ],
-          "type": "exit"
+          "type": "status"
         },
+
         {
           "properties": {
             "style": "austin",
@@ -56,6 +54,7 @@
           "background": "#8800dd",
           "type": "executiontime"
         },
+
         {
           "properties": {
             "home_icon": "~",
@@ -123,10 +122,34 @@
           ]
         },
         {
-          "type": "text",
-          "style": "plain",
+          "properties": {
+            "always_enabled": true
+          },
+          "min_width": 120,
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": " ",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
+          ],
+          "background": "transparent",
+          "type": "status"
+        },
+        {
+          "properties": {
+            "always_enabled": true
+          },
           "max_width": 120,
-          "template": "\n  "
+          "style": "diamond",
+          "leading_diamond": "",
+          "trailing_diamond": "",
+          "template": "\n  ",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
+          ],
+          "background": "transparent",
+          "type": "status"
         }
       ]
     }

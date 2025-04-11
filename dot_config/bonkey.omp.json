@@ -129,7 +129,7 @@
           "style": "diamond",
           "leading_diamond": "",
           "trailing_diamond": "",
-          "template": " ",
+          "template": " {{ if gt .Code 0 }}{{ else }}{{ end }}",
           "foreground_templates": [
             "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
           ],
@@ -144,7 +144,7 @@
           "style": "diamond",
           "leading_diamond": "",
           "trailing_diamond": "",
-          "template": "\n  ",
+          "template": "\n  {{ if gt .Code 0 }}{{ else }}{{ end }}",
           "foreground_templates": [
             "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
           ],

@@ -96,7 +96,6 @@ colormovedws = "allow-indentation-change"
 autoStash = true
 updateRefs = true
 
-
 [push]
 default = simple
 autoSetupRemote = true
@@ -143,11 +142,8 @@ verbose = true
 [gpg "ssh"]
 program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 
-[url "git@github.com:"]
-insteadOf = https://github.com/
-
-[url "git@github.com:"]
-pushInsteadOf = "git://github.com/"
+# [url "git@github.com:"]
+# insteadOf = https://github.com/
 
 [delta]
 true-color = always
@@ -174,4 +170,3 @@ cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$RE
 [mergetool "juxta"]
 cmd = juxta _mergetool --base \"${BASE:-/dev/null}\" --local \"$LOCAL\" --remote \"$REMOTE\" --merged \"${MERGED:-/dev/null}\"
 trustExitCode = true
-

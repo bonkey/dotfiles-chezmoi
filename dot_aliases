@@ -457,7 +457,7 @@ xcresolve() {
   fi
 
   xck
-  _exec "find $proj -name Package.resolved -delete"
+  _exec "find $proj -name Package.resolved -print -delete"
   _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' clean $arg $proj -scheme $scheme"
   _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' -resolvePackageDependencies $arg $proj -scheme $scheme"
 }

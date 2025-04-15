@@ -452,14 +452,14 @@ xcresolve() {
 
   if [[ "$scheme" == "-l" || "$scheme" == "-list" || "$scheme" == "--list" ]]; then
     log_message "Listing avilable schemes..."
-    _exec "xcrun xcodebuild -destination 'generic/platform=iOS' -list $arg $proj"
+    _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' -list $arg $proj"
     return
   fi
 
   xck
   _exec "find $proj -name Package.resolved -delete"
-  _exec "xcrun xcodebuild -destination 'generic/platform=iOS' clean $arg $proj -scheme $scheme"
-  _exec "xcrun xcodebuild -destination 'generic/platform=iOS' -resolvePackageDependencies $arg $proj -scheme $scheme"
+  _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' clean $arg $proj -scheme $scheme"
+  _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' -resolvePackageDependencies $arg $proj -scheme $scheme"
 }
 
 xcb() {
@@ -485,7 +485,7 @@ xcb() {
     fi
   fi
 
-  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS' $@ XCB"
+  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS Simulator' $@ XCB"
 }
 
 xcreset() {

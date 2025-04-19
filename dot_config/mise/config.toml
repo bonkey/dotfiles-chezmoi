@@ -9,7 +9,8 @@ swiftformat = "latest"
 swiftlint = "latest"
 bun = "latest"
 node = "latest"
-"pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
+"pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
+# "pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
 "pipx:files-to-prompt" = "latest"
 "pipx:clipea-cli" = "latest"
 "pipx:csvkit" = "latest"

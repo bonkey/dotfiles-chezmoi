@@ -581,25 +581,94 @@ gl-pr-changelog() {
 alias gip="gitup"
 alias rc="retcon"
 
-alias gbc=better-commits
-
 alias gl="git pull --autostash"
 alias gd="git diff"
 alias gdn="gd --names-only"
 alias gst="git status"
 
 alias gco="git checkout"
-alias gcd="gco develop"
 alias gcm="gco main"
 
-gdm() {
-    git add .
-    git diff -w --cached $* | llm -m gemini-2.0-flash -s 'create one-liner commit message from the changes, use gitmoji'
-}
+gcai() {
+    local prompt="Create one-liner commit message from the git diff changes. Make it useful, as high level as possible"
+    local model="gemini-2.5-flash"
 
-gbf() {
-  test -z "$1" && echo "Provide feature/XXX suffix" && return
-  git checkout -b "feature/$1"
+    local add_changes=false
+    local no_push=false
+    local check_confirmation=false
+    local args=()
+    local diff_args=("-w")
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -a|--add)
+                add_changes=true
+                shift
+                ;;
+            -np|--no-push)
+                no_push=true
+                shift
+                ;;
+            -c|--check)
+                check_confirmation=true
+                shift
+                ;;
+            -m|--model)
+                model="$2"
+                shift 2
+                ;;
+            *)
+                args+=("$1")
+                shift
+                ;;
+        esac
+    done
+
+    if [[ -z "$(llm models list -m "$model" 2>/dev/null)" ]]; then
+        log_error "Model '$model' does not exist"
+        return 1
+    fi
+
+    log_message "Pulling latest changes from remote.."
+    git pull
+
+    # Add changes if requested
+    if [[ "$add_changes" = true ]]; then
+        log_message "Staging all changes.."
+        git add .
+        diff_args+=("--cached")
+    fi
+
+    if git diff --cached --quiet; then
+        log_message "No changes staged. Please stage your changes before committing."
+        return
+    fi
+
+    log_message "Generating commit message with ${model}.."
+    local commit_msg
+    commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
+
+    log_message "Generated commit message: $commit_msg"
+
+    if [[ "$check_confirmation" = true ]]; then
+        echo -n "Proceed with this commit message? [y/n]: "
+        read -k 1 response
+        echo # Add a newline after the response
+        if [[ ! "$response" =~ ^[Yy]$ ]]; then
+            log_message "Commit aborted."
+            return
+        fi
+    fi
+
+    log_message "Committing changes.."
+    git commit -m "$commit_msg" || return
+
+    if [[ "$no_push" = false ]]; then
+        log_message "Pushing commit to remote.."
+        git push
+    else
+        log_message "Skipping push"
+    fi
 }
 
 alias gl1m="git lg --merges"
@@ -612,7 +681,6 @@ alias gdn="gd --name-only"
 
 alias gdt="git difftool"
 alias gdtd="git difftool main"
-alias gdtd="git difftool develop"
 
 alias gcam="git commit -am"
 alias gls="git ls-files"
@@ -631,30 +699,6 @@ gpu() {
 
 git-retrigger-checks() {
   git commit -m "Retrigger checks" --allow-empty && git push
-}
-
-ghd() {
-  gh dash $*
-}
-
-ghprs() {
-  gh pr list --state all --search $*
-}
-
-ghprv() {
-  gh pr view $*
-}
-
-ghprco() {
-  gh pr checkout $*
-}
-
-ghprcr() {
-  gh pr create $*
-}
-
-ghprdr() {
-  ghprc --draft --fill $*
 }
 
 git_pull_and_back() {
@@ -677,11 +721,8 @@ git_pull_and_back() {
     $*"
   echo "CMD: $cmd"
   _exec $cmd
-  # eval $cmd
 
   [[ $stashed != "No local changes to save" ]] && git stash pop
-
-  type ghu 2>&1 > /dev/null && ghu
 }
 
 gpm() {

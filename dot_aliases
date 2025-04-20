@@ -632,7 +632,7 @@ gcai() {
     fi
 
     log_message "Pulling latest changes from remote.."
-    _exec "git pull"
+    _exec "git pull --autostash"
 
     if [[ "$add_changes" = true ]]; then
         log_message "Staging all changes.."

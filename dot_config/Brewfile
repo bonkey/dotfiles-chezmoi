@@ -18,6 +18,7 @@ tap 'samwho/spacer'
 tap 'ycd/tap'
 tap 'withgraphite/tap'
 tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
+tap 'JohannesKaufmann/tap'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -72,6 +73,8 @@ brew 'displayplacer' # macOS command line utility to configure multi-display res
 brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
 brew 'mas' # Mac App Store command-line interface
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
+brew 'html2markdown'
+
 
 # Tools for package management
 brew 'mise' # Multi-language runtime manager

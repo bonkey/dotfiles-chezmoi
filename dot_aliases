@@ -630,14 +630,15 @@ gcai() {
     fi
 
     log_message "Pulling latest changes from remote.."
-    git pull
+    _exec "git pull"
 
-    # Add changes if requested
     if [[ "$add_changes" = true ]]; then
         log_message "Staging all changes.."
-        git add .
+        _exec "git add ."
         diff_args+=("--cached")
     fi
+
+    _exec "git diff --stat --cached"
 
     if git diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing."
@@ -661,11 +662,11 @@ gcai() {
     fi
 
     log_message "Committing changes.."
-    git commit -m "$commit_msg" || return
+    _exec "git commit -m \"$commit_msg\""
 
     if [[ "$no_push" = false ]]; then
         log_message "Pushing commit to remote.."
-        git push
+        _exec "git push"
     else
         log_message "Skipping push"
     fi

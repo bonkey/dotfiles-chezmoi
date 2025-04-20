@@ -643,7 +643,7 @@ gcai() {
     _exec "git diff --stat --cached"
 
     if git diff --cached --quiet; then
-        log_message "No changes staged. Please stage your changes before committing."
+        log_message "No changes staged. Please stage your changes before committing"
         return
     fi
 
@@ -651,9 +651,8 @@ gcai() {
     local commit_msg
     commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
-    log_message "Generated commit message: $commit_msg"
-
     if [[ "$check_confirmation" = true ]]; then
+        log_message "Generated commit message: '$commit_msg'"
         echo -n "Proceed with this commit message? [y/n]: "
         read -k 1 response
         echo # Add a newline after the response

@@ -7,25 +7,13 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "language_models": {
-    "ollama": {},
-    "google": {
-      "available_models": [
-        {
-          "name": "gemini-2.0-flash-exp",
-          "display_name": "Gemini 2.0 Flash",
-          "max_tokens": 1000000
-        }
-      ]
-    }
-  },
   "edit_predictions": {
     "mode": "subtle"
   },
   "assistant": {
     "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-3-7-sonnet-thinking-latest"
+      "provider": "google",
+      "model": "gemini-2.5-pro-exp-03-25"
     },
     "enable_experimental_live_diffs": true,
     "version": "2",
@@ -131,6 +119,6 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Colorizer Pro"
+    "dark": "One Dark"
   }
 }

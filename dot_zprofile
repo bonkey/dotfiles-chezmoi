@@ -1,3 +1,5 @@
 source ${HOME}/bin/_common.zsh
 
 eval_managers
+
+tsrc "${HOME}/.aliases"

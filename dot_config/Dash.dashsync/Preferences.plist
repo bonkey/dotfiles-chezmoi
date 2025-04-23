@@ -33,7 +33,36 @@
 	<key>DHGoRepo</key>
 	<dict>
 		<key>installed</key>
-		<dict/>
+		<dict>
+			<key>github.com/urfave/cli/v3</key>
+			<dict>
+				<key>date</key>
+				<date>2025-04-21T10:26:34Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>github.com/urfave/cli/v3</string>
+					<key>platform</key>
+					<string>godoc</string>
+					<key>uniqueIdentifier</key>
+					<string>github.com/urfave/cli/v3</string>
+				</dict>
+			</dict>
+			<key>google.golang.org/genai</key>
+			<dict>
+				<key>date</key>
+				<date>2025-04-21T10:26:45Z</date>
+				<key>entry</key>
+				<dict>
+					<key>name</key>
+					<string>google.golang.org/genai</string>
+					<key>platform</key>
+					<string>godoc</string>
+					<key>uniqueIdentifier</key>
+					<string>google.golang.org/genai</string>
+				</dict>
+			</dict>
+		</dict>
 		<key>uninstalled</key>
 		<dict/>
 	</dict>
@@ -271,6 +300,11 @@
 			<dict>
 				<key>date</key>
 				<date>2022-06-03T09:28:55Z</date>
+			</dict>
+			<key>http://kapeli.com/feeds/Go.xml</key>
+			<dict>
+				<key>date</key>
+				<date>2025-04-21T10:24:25Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Man_Pages.xml</key>
 			<dict>

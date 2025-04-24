@@ -5,23 +5,23 @@
 	<key>DVTConsoleDebuggerInputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleDebuggerInputTextFont</key>
-	<string>MonaspiceKrNFM-Bold - 13.0</string>
+	<string>MonaspiceKrNFM-Bold - 11.0</string>
 	<key>DVTConsoleDebuggerOutputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleDebuggerOutputTextFont</key>
-	<string>MonaspiceKrNFM-Regular - 13.0</string>
+	<string>MonaspiceKrNFM-Regular - 11.0</string>
 	<key>DVTConsoleDebuggerPromptTextColor</key>
 	<string>0.317071 0.437736 1 1</string>
 	<key>DVTConsoleDebuggerPromptTextFont</key>
-	<string>MonaspiceKrNFM-Bold - 13.0</string>
+	<string>MonaspiceKrNFM-Bold - 11.0</string>
 	<key>DVTConsoleExectuableInputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleExectuableInputTextFont</key>
-	<string>MonaspiceKrNFM-Bold - 13.0</string>
+	<string>MonaspiceKrNFM-Bold - 11.0</string>
 	<key>DVTConsoleExectuableOutputTextColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleExectuableOutputTextFont</key>
-	<string>MonaspiceKrNFM-Regular - 13.0</string>
+	<string>MonaspiceKrNFM-Regular - 11.0</string>
 	<key>DVTConsoleTextBackgroundColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleTextInsertionPointColor</key>
@@ -30,8 +30,6 @@
 	<string>0.642038 0.802669 0.999195 1</string>
 	<key>DVTFontAndColorVersion</key>
 	<integer>1</integer>
-	<key>DVTFontSizeModifier</key>
-	<integer>2</integer>
 	<key>DVTLineSpacing</key>
 	<real>1.2000000476837158</real>
 	<key>DVTMarkupTextBackgroundColor</key>
@@ -39,37 +37,37 @@
 	<key>DVTMarkupTextBorderColor</key>
 	<string>0.8832 0.8832 0.8832 1</string>
 	<key>DVTMarkupTextCodeFont</key>
-	<string>SFMono-Regular - 12.0</string>
+	<string>SFMono-Regular - 10.0</string>
 	<key>DVTMarkupTextEmphasisColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTMarkupTextEmphasisFont</key>
-	<string>.SFNS-RegularItalic - 17.0</string>
+	<string>.SFNS-RegularItalic - 15.0</string>
 	<key>DVTMarkupTextInlineCodeColor</key>
 	<string>0 0 0 0.7</string>
 	<key>DVTMarkupTextLinkColor</key>
 	<string>0.055 0.055 1 1</string>
 	<key>DVTMarkupTextLinkFont</key>
-	<string>.SFNS-Regular - 17.0</string>
+	<string>.SFNS-Regular - 15.0</string>
 	<key>DVTMarkupTextNormalColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTMarkupTextNormalFont</key>
-	<string>.SFNS-Regular - 17.0</string>
+	<string>.SFNS-Regular - 15.0</string>
 	<key>DVTMarkupTextOtherHeadingColor</key>
 	<string>0 0 0 0.5</string>
 	<key>DVTMarkupTextOtherHeadingFont</key>
-	<string>.SFNS-Regular - 23.0</string>
+	<string>.SFNS-Regular - 21.8</string>
 	<key>DVTMarkupTextPrimaryHeadingColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTMarkupTextPrimaryHeadingFont</key>
-	<string>.SFNS-Regular - 38.0</string>
+	<string>.SFNS-Regular - 38.8</string>
 	<key>DVTMarkupTextSecondaryHeadingColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTMarkupTextSecondaryHeadingFont</key>
-	<string>.SFNS-Regular - 29.0</string>
+	<string>.SFNS-Regular - 28.6</string>
 	<key>DVTMarkupTextStrongColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTMarkupTextStrongFont</key>
-	<string>.SFNS-Bold - 17.0</string>
+	<string>.SFNS-Bold - 15.0</string>
 	<key>DVTScrollbarMarkerAnalyzerColor</key>
 	<string>0.403922 0.372549 1 1</string>
 	<key>DVTScrollbarMarkerBreakpointColor</key>
@@ -166,69 +164,69 @@
 	<key>DVTSourceTextSyntaxFonts</key>
 	<dict>
 		<key>xcode.syntax.attribute</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.character</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.comment</key>
-		<string>MonaspiceXeNFM-LightItalic - 18.0</string>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
 		<key>xcode.syntax.comment.doc</key>
-		<string>MonaspiceXeNFM-LightItalic - 18.0</string>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
 		<key>xcode.syntax.comment.doc.keyword</key>
-		<string>MonaspiceXeNFM-LightItalic - 18.0</string>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
 		<key>xcode.syntax.declaration.other</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.declaration.type</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.class</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.class.system</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.constant</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.constant.system</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.function</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.function.system</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.macro</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.macro.system</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.type</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.type.system</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.variable</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.variable.system</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.keyword</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.mark</key>
-		<string>MonaspiceArNFM-Bold - 18.0</string>
+		<string>MonaspiceArNFM-Bold - 16.0</string>
 		<key>xcode.syntax.markup.code</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.number</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.plain</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.preprocessor</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.capturename</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.charname</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.number</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.other</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.string</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.url</key>
-		<string>MonaspiceNeNFM-Regular - 18.0</string>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 	</dict>
 </dict>
 </plist>

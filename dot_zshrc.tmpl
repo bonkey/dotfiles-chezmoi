@@ -58,6 +58,7 @@ _eval_for_cmd just "just --completions zsh"
 _eval_for_cmd dyff "dyff completion zsh"
 _eval_for_cmd gt "gt completion"
 
+tsrc "${HOME}/.aliases"
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 iterm2_print_user_vars() {

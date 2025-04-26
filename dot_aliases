@@ -607,8 +607,8 @@ gcai() {
                 add_changes=true
                 shift
                 ;;
-            -np|--no-push)
-                no_push=true
+            -np|--no-push-pull)
+                no_push_pull=true
                 shift
                 ;;
             -c|--check)
@@ -631,13 +631,17 @@ gcai() {
         return 1
     fi
 
+    if [[ "$no_push_pull" = false ]]; then
     log_message "Pulling latest changes from remote.."
     _exec "git pull --autostash"
+    fi
 
     if [[ "$add_changes" = true ]]; then
         log_message "Staging all changes.."
         _exec "git add ."
         diff_args+=("--cached")
+    else
+        log_message "Skipping pull..."
     fi
 
     _exec "git diff --stat --cached"
@@ -665,7 +669,7 @@ gcai() {
     log_message "Committing changes.."
     _exec "git commit -m \"$commit_msg\""
 
-    if [[ "$no_push" = false ]]; then
+    if [[ "$no_push_pull" = false ]]; then
         log_message "Pushing commit to remote.."
         _exec "git push"
     else

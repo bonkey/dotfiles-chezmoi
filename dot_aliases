@@ -596,8 +596,9 @@ gcai() {
     local model="gemini-2.5-flash"
 
     local add_changes=false
-    local no_push=false
+    local no_push_pull=false
     local check_confirmation=false
+    local dry_run=false
     local args=()
     local diff_args=("-w")
 
@@ -609,6 +610,10 @@ gcai() {
                 ;;
             -np|--no-push-pull)
                 no_push_pull=true
+                shift
+                ;;
+            -d|--dry-run)
+                dry_run=true
                 shift
                 ;;
             -c|--check)
@@ -631,12 +636,12 @@ gcai() {
         return 1
     fi
 
-    if [[ "$no_push_pull" = false ]]; then
-    log_message "Pulling latest changes from remote.."
-    _exec "git pull --autostash"
+    if [[ "$no_push_pull" = false || "$dry_run" = true ]]; then
+        log_message "Pulling latest changes from remote.."
+        _exec "git pull --autostash"
     fi
 
-    if [[ "$add_changes" = true ]]; then
+    if [[ "$add_changes" = true || "$dry_run" = false ]]; then
         log_message "Staging all changes.."
         _exec "git add ."
         diff_args+=("--cached")
@@ -646,7 +651,7 @@ gcai() {
 
     _exec "git diff --stat --cached"
 
-    if git diff --cached --quiet; then
+    if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing"
         return
     fi
@@ -655,7 +660,7 @@ gcai() {
     local commit_msg
     commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
-    if [[ "$check_confirmation" = true ]]; then
+    if [[ "$check_confirmation" = true || "$dry_run" = false ]]; then
         log_message "Generated commit message: '$commit_msg'"
         echo -n "Proceed with this commit message? [y/n]: "
         read -k 1 response
@@ -666,10 +671,12 @@ gcai() {
         fi
     fi
 
-    log_message "Committing changes.."
-    _exec "git commit -m \"$commit_msg\""
+    if [[ "$dry_run" = false ]]; then
+        log_message "Committing changes.."
+        _exec "git commit -m \"$commit_msg\""
+    fi
 
-    if [[ "$no_push_pull" = false ]]; then
+    if [[ "$no_push_pull" = false || "$dry_run" = false ]]; then
         log_message "Pushing commit to remote.."
         _exec "git push"
     else

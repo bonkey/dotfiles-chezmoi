@@ -631,25 +631,31 @@ gcai() {
         esac
     done
 
+    if [[ "$dry_run" = true ]]; then
+        log_message "Dry run enabled. Only commit message will be generated"
+    fi
+
+
     if [[ -z "$(llm models list -m "$model" 2>/dev/null)" ]]; then
         log_error "Model '$model' does not exist"
         return 1
     fi
 
-    if [[ "$no_push_pull" = false || "$dry_run" = true ]]; then
+    if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
         log_message "Pulling latest changes from remote.."
         _exec "git pull --autostash"
     fi
 
-    if [[ "$add_changes" = true || "$dry_run" = false ]]; then
+    if [[ "$add_changes" = true && "$dry_run" = false ]]; then
         log_message "Staging all changes.."
         _exec "git add ."
         diff_args+=("--cached")
     else
+        diff_args+=("HEAD")
         log_message "Skipping pull..."
     fi
 
-    _exec "git diff --stat --cached"
+    _exec "git diff --stat ${diff_args[@]}"
 
     if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing"
@@ -660,7 +666,11 @@ gcai() {
     local commit_msg
     commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
-    if [[ "$check_confirmation" = true || "$dry_run" = false ]]; then
+    if [[ "$dry_run" = true ]]; then
+        log_message "Commit message would be '$commit_msg'"
+    fi
+
+    if [[ "$check_confirmation" = true && "$dry_run" = false ]]; then
         log_message "Generated commit message: '$commit_msg'"
         echo -n "Proceed with this commit message? [y/n]: "
         read -k 1 response
@@ -676,7 +686,7 @@ gcai() {
         _exec "git commit -m \"$commit_msg\""
     fi
 
-    if [[ "$no_push_pull" = false || "$dry_run" = false ]]; then
+    if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
         log_message "Pushing commit to remote.."
         _exec "git push"
     else

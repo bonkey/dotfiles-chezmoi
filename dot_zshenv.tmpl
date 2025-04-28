@@ -1,5 +1,39 @@
 source ${HOME}/bin/_common.zsh
 
+{{- if eq .chezmoi.hostname "dbauke-mac" }}
+
+export GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GH_TOKEN.value -}}"
+
+export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"
+export CIRCLECI_CLI_TOKEN=$CIRCLECI_TOKEN
+
+export JIRA_API_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_API_TOKEN.value -}}"
+export JIRA_SERVER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_SERVER.value -}}"
+export JIRA_USER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_USER.value -}}"
+
+export FIGMA_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").FIGMA_API_KEY.value -}}"
+
+export SENTRY_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").SENTRY_API_KEY.value -}}"
+
+export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GEMINI_API_KEY.value -}}"
+
+# export SSL_CERT_FILE='/Library/Application Support/Netskope/STAgent/data/nscacert.pem'
+# export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
+
+{{- end }}
+
+{{- if eq .chezmoi.hostname "danbau-personal" }}
+
+export GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
+export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
+export GEMINI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GEMINI_API_KEY.value -}}"
+export REPLICATE_API_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").REPLICATE_API_TOKEN.value -}}"
+export ANTHROPIC_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ANTHROPIC_API_KEY.value -}}"
+export DEEPSEEK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").DEEPSEEK_API_KEY.value -}}"
+export PERPLEXITY_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PERPLEXITY_API_KEY.value -}}"
+
+{{- end }}
+
 export EDITOR="zed -w"
 export CLICOLOR=1
 export LC_ALL=en_US.UTF-8
@@ -25,7 +59,8 @@ export FZF_CTRL_R_OPTS="
   --color header:italic
   --header 'Press CTRL-Y to copy command into clipboard'"
 
-export GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
+export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PALM_KEY.value -}}"
+
 export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
 export GH_TOKEN=$GITHUB_ACCESS_TOKEN
 
@@ -33,43 +68,8 @@ export HOMEBREW_AUTOREMOVE=true
 export HOMEBREW_BAT=true
 export HOMEBREW_CASK_OPTS="--no-quarantine"
 export HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=5
-export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_ACCESS_TOKEN
 export HOMEBREW_NO_ENV_HINTS=true
-
-export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PALM_KEY.value -}}"
-
-{{- if eq .chezmoi.hostname "dbauke-mac" }}
-
-# https://start.1password.com/open/i?a=OZFXTXMCQJHO5G6KV3FU55JZ3I&v=xorpczupr2kurbbiwa7ifs5t44&i=c5abdfjbih6jhqripu6yfudc4a&h=everlong.1password.com
-
-export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"
-export CIRCLECI_CLI_TOKEN=$CIRCLECI_TOKEN
-
-export JIRA_API_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_API_TOKEN.value -}}"
-export JIRA_SERVER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_SERVER.value -}}"
-export JIRA_USER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_USER.value -}}"
-
-export FIGMA_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").FIGMA_API_KEY.value -}}"
-
-export SENTRY_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").SENTRY_API_KEY.value -}}"
-
-export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GEMINI_API_KEY.value -}}"
-
-# export SSL_CERT_FILE='/Library/Application Support/Netskope/STAgent/data/nscacert.pem'
-# export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
-
-{{- end }}
-
-{{- if eq .chezmoi.hostname "danbau-personal" }}
-
-export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
-export GEMINI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GEMINI_API_KEY.value -}}"
-export REPLICATE_API_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").REPLICATE_API_TOKEN.value -}}"
-export ANTHROPIC_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ANTHROPIC_API_KEY.value -}}"
-export DEEPSEEK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").DEEPSEEK_API_KEY.value -}}"
-export PERPLEXITY_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PERPLEXITY_API_KEY.value -}}"
-
-{{- end }}
+export HOMEBREW_GITHUB_API_TOKEN=$GITHUB_ACCESS_TOKEN
 
 export ANDROID_SDK_ROOT="${HOME}/Library/Android/sdk"
 export ANDROID_HOME=$ANDROID_SDK_ROOT

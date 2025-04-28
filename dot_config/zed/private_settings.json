@@ -7,29 +7,24 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "language_models": {
-    "ollama": {},
-    "google": {
-      "available_models": [
-        {
-          "name": "gemini-2.0-flash-exp",
-          "display_name": "Gemini 2.0 Flash",
-          "max_tokens": 1000000
-        }
-      ]
-    }
-  },
   "edit_predictions": {
     "mode": "subtle"
   },
   "assistant": {
+    "enabled": true,
     "default_model": {
-      "provider": "zed.dev",
-      "model": "claude-3-7-sonnet-thinking-latest"
+      "provider": "copilot_chat",
+      "model": "claude-3.7-sonnet-thought"
     },
-    "enable_experimental_live_diffs": true,
+    "commit_message_model": {
+      "provider": "google",
+      "model": "gemini-2.5-flash"
+    },
     "version": "2",
-    "provider": "google"
+    "button": true,
+    "default_width": 700,
+    "dock": "right",
+    "enable_experimental_live_diffs": true
   },
 
   "outline_panel": {

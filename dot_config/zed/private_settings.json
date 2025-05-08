@@ -10,7 +10,7 @@
   "edit_predictions": {
     "mode": "subtle"
   },
-  "assistant": {
+  "agent": {
     "enabled": true,
     "default_model": {
       "provider": "copilot_chat",
@@ -125,7 +125,7 @@
   },
   "theme": {
     "mode": "system",
-    "light": "One Light",
+    "light": "Catppuccin Latte",
     "dark": "Catppuccin Mocha"
   }
 }

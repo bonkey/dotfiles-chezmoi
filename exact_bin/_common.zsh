@@ -126,16 +126,26 @@ _eval_for_cmd() {
 
 _eval_for_cmd_cached() {
     cmd=$1
-    cache_file=$2
-    shift 2
+    shift 1
 
     if /usr/bin/which -s $cmd; then
-        if [ -f "$cache_file" ]; then
-            source "$cache_file"
-        else
-            output=$(eval "$@")
-            echo "$output" > "$cache_file"
-            eval "$output"
+        local site_functions_dir="$HOME/.local/share/zsh/site-functions"
+        mkdir -p "$site_functions_dir"
+
+        # Add to fpath if not already there
+        if [[ ${fpath[(ie)$site_functions_dir]} -gt ${#fpath} ]]; then
+            fpath=("$site_functions_dir" $fpath)
         fi
+
+        local cache_file="$site_functions_dir/${cmd}"
+        local cache_file_zwc="${cache_file}.zwc"
+
+        if [ ! -f "$cache_file_zwc" ]; then
+            $@ >! "$cache_file"
+            zcompile "$cache_file"
+            rm -f "$cache_file"
+            # autoload -Uz "${cmd}"
+        fi
+        # No sourcing or eval when file exists, will rely on autoload
     fi
 }

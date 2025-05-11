@@ -11,10 +11,14 @@
     "mode": "subtle"
   },
   "agent": {
+    "inline_assistant_model": {
+      "provider": "anthropic",
+      "model": "claude-3-7-sonnet-latest"
+    },
     "enabled": true,
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3.7-sonnet-thought"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
     },
     "commit_message_model": {
       "provider": "google",

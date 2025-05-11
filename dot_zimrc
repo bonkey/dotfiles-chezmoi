@@ -1,16 +1,16 @@
 zmodule environment
 zmodule input
+zmodule utility
+
 zmodule git
 zmodule fzf
 
 zmodule ellie/atuin
-
 zmodule wfxr/forgit
+zmodule jeffreytse/zsh-vi-mode
+
+zmodule zsh-users/zsh-completions
+zmodule completion
 
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
-zmodule zsh-users/zsh-completions
-
-zmodule jeffreytse/zsh-vi-mode
-
-zmodule completion

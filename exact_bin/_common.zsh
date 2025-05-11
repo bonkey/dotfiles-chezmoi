@@ -112,8 +112,6 @@ eval_managers() {
     fi
 }
 
-tsrc() { for src in $* ; test -s "$src" && source "$src" }
-
 _eval_for_cmd() {
     cmd=$1
     shift
@@ -124,28 +122,22 @@ _eval_for_cmd() {
     fi
 }
 
+tsrc() {
+    for src in $* ; do
+        test -s "$src" && source "$src"
+    done
+}
+
 _eval_for_cmd_cached() {
     cmd=$1
     shift 1
 
     if /usr/bin/which -s $cmd; then
-        local site_functions_dir="$HOME/.local/share/zsh/site-functions"
-        mkdir -p "$site_functions_dir"
+        local cache_file="$HOME/.cache/${cmd}_eval"
 
-        # Add to fpath if not already there
-        if [[ ${fpath[(ie)$site_functions_dir]} -gt ${#fpath} ]]; then
-            fpath=("$site_functions_dir" $fpath)
+        if [ ! -f "$cache_file" ]; then
+            eval "$@" >! "$cache_file"
         fi
-
-        local cache_file="$site_functions_dir/${cmd}"
-        local cache_file_zwc="${cache_file}.zwc"
-
-        if [ ! -f "$cache_file_zwc" ]; then
-            $@ >! "$cache_file"
-            zcompile "$cache_file"
-            rm -f "$cache_file"
-        fi
-        autoload -Uz "${cmd}"
-        # No sourcing or eval when file exists, will rely on autoload
+        source "$cache_file"
     fi
 }

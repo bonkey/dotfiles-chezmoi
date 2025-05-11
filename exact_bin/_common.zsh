@@ -42,7 +42,7 @@ _exec() {
     print -P "$(msg_prefix)Elapsed: $(color %B%F{blue} $elapsed)"
     if [[ $ret -ne 0 ]]; then
         print -P "$(msg_prefix)Error executing: $(color "%B%K{red}%F{white}" $cmd). Check the output above and run it again"
-        if [[ "$script_name" != "_common.zsh" ]]; then 
+        if [[ "$script_name" != "_common.zsh" ]]; then
             exit $ret
         else
             return $ret
@@ -121,5 +121,21 @@ _eval_for_cmd() {
     if /usr/bin/which -s $cmd; then
         output=$(eval "$@")
         eval "$output"
+    fi
+}
+
+_eval_for_cmd_cached() {
+    cmd=$1
+    cache_file=$2
+    shift 2
+
+    if /usr/bin/which -s $cmd; then
+        if [ -f "$cache_file" ]; then
+            source "$cache_file"
+        else
+            output=$(eval "$@")
+            echo "$output" > "$cache_file"
+            eval "$output"
+        fi
     fi
 }

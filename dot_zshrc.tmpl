@@ -1,3 +1,7 @@
+if [[ $ZSH_DEBUGRC == true ]]; then
+  zmodload zsh/zprof
+fi
+
 source ${HOME}/bin/_common.zsh
 
 zstyle ':autocomplete:tab:*' fzf yes
@@ -47,18 +51,14 @@ after_zvm() {
 }
 zvm_after_init_commands+=(after_zvm)
 
-_eval_for_cmd chezmoi "chezmoi completion zsh"
-_eval_for_cmd git-town "git-town completions zsh"
-_eval_for_cmd rtx "rtx completion zsh"
-_eval_for_cmd gh "gh completion -s zsh"
 _eval_for_cmd fzf "fzf --zsh"
-_eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
-_eval_for_cmd just "just --completions zsh"
-
 _eval_for_cmd dyff "dyff completion zsh"
-_eval_for_cmd gt "gt completion"
+
+_eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
 tsrc "${HOME}/.aliases"
+
+typeset -gU cdpath fpath path
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 iterm2_print_user_vars() {
@@ -67,5 +67,9 @@ iterm2_print_user_vars() {
     } &!
 }
 {{- end }}
+
+if [[ $ZSH_DEBUGRC == true ]]; then
+  zprof
+fi
 
 # vim:set ft=zsh:

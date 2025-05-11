@@ -11,6 +11,7 @@ zstyle ':autocomplete:*history*:*' insert-unambiguous yes
 zstyle ':autocomplete:menu-search:*' insert-unambiguous yes
 
 fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+typeset -gU cdpath fpath path
 
 #### ZIM START
 zstyle ':zim:zmodule' use 'degit'
@@ -56,8 +57,6 @@ _eval_for_cmd_cached dyff ~/.cache/dyff_eval "dyff completion zsh"
 _eval_for_cmd_cached oh-my-posh ~/.cache/oh_my_posh_eval "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
 tsrc "${HOME}/.aliases"
-
-typeset -gU cdpath fpath path
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 iterm2_print_user_vars() {

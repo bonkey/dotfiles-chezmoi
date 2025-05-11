@@ -7250,6 +7250,8 @@
 	<true/>
 	<key>TimeBetweenBlinks</key>
 	<real>0.20000000298023224</real>
+	<key>TimeBetweenTips</key>
+	<real>604800</real>
 	<key>TraditionalVisualBell</key>
 	<true/>
 	<key>UseBorder</key>

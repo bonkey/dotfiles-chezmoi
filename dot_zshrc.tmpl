@@ -35,8 +35,6 @@ source ${ZIM_HOME}/init.zsh
 # For zmodule wfxr/forgit
 export PATH="$FORGIT_INSTALL_DIR/bin:$PATH"
 
-tsrc "${HOME}/.iterm2_shell_integration.zsh"
-
 # search history with arrow keys and text prefix
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
@@ -56,7 +54,9 @@ _eval_for_cmd_cached fzf "fzf --zsh"
 _eval_for_cmd_cached dyff "dyff completion zsh"
 _eval_for_cmd_cached oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
-tsrc "${HOME}/.aliases"
+tsrc "${HOME}/.iterm2_shell_integration.zsh" \
+    "${HOME}/.aliases.local" ]
+    "${HOME}/.aliases"
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 iterm2_print_user_vars() {

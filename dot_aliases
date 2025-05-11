@@ -1,7 +1,5 @@
 source ${HOME}/bin/_common.zsh
 
-tsrc "${HOME}/.aliases.local"
-
 # --- Paths / Globals
 
 alias -g ddw='"$HOME/Downloads"'

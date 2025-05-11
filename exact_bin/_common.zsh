@@ -90,8 +90,6 @@ exec_unless_recently_modified() {
 
 realpath() { for f in "$@"; do echo ${f}(:A); done }
 
-tsrc() { for src in $* ; test -s "$src" && source "$src" }
-
 eval_managers() {
     if [ -x /opt/homebrew/bin/brew ]; then # For Apple M1
         eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -113,6 +111,8 @@ eval_managers() {
         fi
     fi
 }
+
+tsrc() { for src in $* ; test -s "$src" && source "$src" }
 
 _eval_for_cmd() {
     cmd=$1
@@ -144,8 +144,8 @@ _eval_for_cmd_cached() {
             $@ >! "$cache_file"
             zcompile "$cache_file"
             rm -f "$cache_file"
-            # autoload -Uz "${cmd}"
         fi
+        autoload -Uz "${cmd}"
         # No sourcing or eval when file exists, will rely on autoload
     fi
 }

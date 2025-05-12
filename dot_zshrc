@@ -63,3 +63,7 @@ if [[ $ZSH_DEBUGRC == true ]]; then
 fi
 
 # vim:set ft=zsh:
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

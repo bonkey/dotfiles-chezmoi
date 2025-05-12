@@ -58,14 +58,6 @@ tsrc "${HOME}/.iterm2_shell_integration.zsh" \
     "${HOME}/.aliases.local" \
     "${HOME}/.aliases"
 
-{{- if eq .chezmoi.hostname "dbauke-mac" }}
-iterm2_print_user_vars() {
-    {
-      iterm2_set_user_var jira_ticket_summary "$(jira-ticket-summary)"
-    } &!
-}
-{{- end }}
-
 if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
 fi

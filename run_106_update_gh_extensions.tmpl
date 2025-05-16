@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+exec_unless_recently_modified $file "gh extension upgrade --all"

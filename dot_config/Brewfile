@@ -8,17 +8,18 @@ tap '1password/tap'
 tap 'abhimanyu003/sttr'
 tap 'context-labs/mactop', 'https://github.com/context-labs/mactop'
 tap 'dave1010/clipea'
+tap 'facebook/fb'
 tap 'homebrew/cask-fonts'
 tap 'homeport/tap'
 tap 'jakehilborn/jakehilborn'
 tap 'jandedobbeleer/oh-my-posh'
 tap 'jdxcode/tap'
-tap 'kylef/formulae'
-tap 'samwho/spacer'
-tap 'ycd/tap'
-tap 'withgraphite/tap'
-tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
 tap 'JohannesKaufmann/tap'
+tap 'kylef/formulae'
+tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
+tap 'samwho/spacer'
+tap 'withgraphite/tap'
+tap 'ycd/tap'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -137,6 +138,8 @@ brew 'xcode-build-server'
 cask 'xcodes' # Install and switch between multiple versions of Xcode
 cask 'minisim' # App for launching iOS and Android simulators
 brew 'swift-sh'
+brew 'idb-companion'
+
 
 # Tools for working with media files
 brew 'ffmpeg' # Play, record, convert, and stream audio and video

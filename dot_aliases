@@ -633,19 +633,15 @@ gcai() {
         log_message "Dry run enabled. Only commit message will be generated"
     fi
 
+
     if [[ -z "$(llm models list -m "$model" 2>/dev/null)" ]]; then
         log_error "Model '$model' does not exist"
         return 1
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
-        # Check if current branch has a remote tracking branch before pulling
-        if git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
-            log_message "Pulling latest changes from remote.."
-            _exec "git pull --autostash"
-        else
-            log_message "No remote tracking branch found, skipping pull."
-        fi
+        log_message "Pulling latest changes from remote.."
+        _exec "git pull --autostash"
     fi
 
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then

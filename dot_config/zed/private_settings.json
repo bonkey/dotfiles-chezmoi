@@ -12,10 +12,6 @@
   },
   "agent": {
     "always_allow_tool_actions": true,
-    "inline_assistant_model": {
-      "provider": "anthropic",
-      "model": "claude-3-7-sonnet-latest"
-    },
     "enabled": true,
     "default_model": {
       "provider": "copilot_chat",

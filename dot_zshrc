@@ -64,4 +64,6 @@ fi
 
 # vim:set ft=zsh:
 
-. "$HOME/.langflow/uv/env"
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

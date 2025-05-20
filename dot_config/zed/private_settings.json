@@ -77,7 +77,7 @@
   },
   "languages": {
     "Ruby": {
-      "language_servers": ["ruby-lsp", "!solargraph"]
+      "language_servers": ["solargraph", "rubocop", "!ruby-lsp"]
     },
     "Swift": {
       "format_on_save": "off"

@@ -4836,7 +4836,7 @@
 			<key>Blur</key>
 			<true/>
 			<key>Blur Radius</key>
-			<real>24.161934882614212</real>
+			<real>15</real>
 			<key>Bold Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -5323,7 +5323,7 @@
 			<key>Title Components</key>
 			<integer>3</integer>
 			<key>Transparency</key>
-			<real>0.059337325507614218</real>
+			<real>0.10000000000000001</real>
 			<key>Triggers</key>
 			<array>
 				<dict>

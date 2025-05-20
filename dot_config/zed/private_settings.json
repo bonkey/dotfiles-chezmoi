@@ -7,33 +7,19 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "context_servers": {
-    "Xcode Build MCP": {
-      "command": {
-        "path": "mise",
-        "args": [
-          "x",
-          "npm:xcodebuildmcp@1.4.0",
-          "--",
-          "xcodebuildmcp"
-        ],
-        "env": null
-      },
-      "settings": {}
-    }
-  },
   "edit_predictions": {
     "mode": "subtle"
   },
   "agent": {
+    "always_allow_tool_actions": true,
     "inline_assistant_model": {
       "provider": "anthropic",
       "model": "claude-3-7-sonnet-latest"
     },
     "enabled": true,
     "default_model": {
-      "provider": "anthropic",
-      "model": "claude-3-7-sonnet-latest"
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
     },
     "commit_message_model": {
       "provider": "google",

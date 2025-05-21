@@ -7,6 +7,16 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "context_servers": {
+    "XcodeBuildMCP": {
+      "command": {
+        "path": "mise",
+        "args": ["x", "npm:xcodebuildmcp@1.4.0", "--", "xcodebuildmcp"],
+        "env": null
+      },
+      "settings": {}
+    }
+  },
   "edit_predictions": {
     "mode": "subtle"
   },

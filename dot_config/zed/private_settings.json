@@ -36,6 +36,10 @@
     "show": true
   },
 
+  "minimap": {
+    "show": "auto"
+  },
+
   "base_keymap": "VSCode",
   "buffer_font_family": "0xProto Nerd Font Mono",
   "buffer_font_size": 16,

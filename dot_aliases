@@ -44,7 +44,7 @@ cz() {
   chezmoi $*
 }
 
-alias '??'="source \"$HOME/.local/share/mise/installs/pipx-clipea-cli/latest/bin/clipea\""
+alias '??'="llm cmd -m gemini-2.5-flash"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"

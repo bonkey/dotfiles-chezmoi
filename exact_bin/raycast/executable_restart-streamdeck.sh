@@ -29,7 +29,7 @@ for device_id in "${device_ids[@]}"; do
 
     if [ -n "$SD_HUB" ] && [ -n "$SD_PORT" ]; then
         echo "✅ Found a device on hub $SD_HUB port $SD_PORT. Adding to restart list..."
-        _exec "uhubctl --exact --nodesc --action cycle --force --location $SD_HUB --port $SD_PORT"
+        _exec "uhubctl --repeat 3 --exact --nodesc --action cycle --force --location $SD_HUB --port $SD_PORT"
     else
         echo "❌ Device ${device_id} not found"
     fi

@@ -184,7 +184,11 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 
 cvz() {
     ced $(eval "echo $_shell_init_files")
-    exit
+    echo -n "Quit shell? [y/n]: "
+    read -k 1 response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        exit
+    fi
 }
 
 cvzl() {

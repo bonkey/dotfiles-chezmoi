@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh -i
+#!/usr/bin/env zsh -l
 
 function read_key {
     local oldstty=$(stty -g)
@@ -8,19 +8,9 @@ function read_key {
     echo $char
 }
 
-function kill_applications {
-    if [[ "$__CFBundleIdentifier" != "com.googlecode.iterm2" ]]; then
-        echo -n "Quit iTerm2? (y/n) "
-        response=$(read_key)
-        echo
-        [[ $response == "y" ]] && pkill iTerm
-    fi
-
-    pkill 'Keyboard Maestro Engine'
-}
-
 function open_applications {
     open -a 'Keyboard Maestro Engine'
+    open -a iTerm
 }
 
 function countdown() {
@@ -30,4 +20,13 @@ function countdown() {
     done
 }
 
-kill_applications && chezmoi update && open_applications && countdown
+if [[ "$__CFBundleIdentifier" != "com.googlecode.iterm2" ]]; then
+    echo -n "Quit iTerm2? (y/n) "
+    response=$(read_key)
+    echo
+    [[ $response == "y" ]] && pkill iTerm
+fi
+
+pkill 'Keyboard Maestro Engine'
+
+chezmoi update && open_applications && countdown

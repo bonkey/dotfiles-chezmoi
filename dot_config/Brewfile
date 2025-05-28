@@ -76,7 +76,6 @@ brew 'mas' # Mac App Store command-line interface
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'html2markdown'
 
-
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
 brew 'direnv' # Load/unload environment variables based on $PWD
@@ -140,7 +139,6 @@ cask 'minisim' # App for launching iOS and Android simulators
 brew 'swift-sh'
 brew 'idb-companion'
 
-
 # Tools for working with media files
 brew 'ffmpeg' # Play, record, convert, and stream audio and video
 brew 'graphicsmagick' # Image processing tools collection
@@ -165,7 +163,7 @@ brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-input' #
+cask 'font-input'
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -174,7 +172,7 @@ cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number o
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspace-nerd-font' #
+cask 'font-monaspace-nerd-font'
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 
@@ -191,11 +189,10 @@ cask 'syntax-highlight' # Quicklook extension for source files
 
 # Tools for productivity and automation
 cask '1password-cli' # Command-line interface for 1Password
-cask "akiflow" # Time blocking and productivity platform
+cask 'akiflow' # Time blocking and productivity platform
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
-cask 'deepl' # Trains AIs to understand and translate texts
 cask 'handbrake' # Open-source video transcoder
 cask 'karabiner-elements' # Keyboard customizer
 cask 'keyboard-maestro' # Automation software

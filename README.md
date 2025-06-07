@@ -30,6 +30,35 @@ eval "$(/usr/local/bin/brew shellenv)"
 brew install chezmoi
 ```
 
+## Configure chezmoi
+
+```toml
+[data]
+    email = "XXXX"
+    gpgkey = "XXXX"
+
+[edit]
+    command = "zed"
+    args = ["--wait", "--new"]
+
+[git]
+    autoCommit = true
+    autoPush = true
+
+[diff]
+    exclude = ["scripts"]
+
+[[textconv]]
+    pattern = "**/*.plist"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
+
+[[textconv]]
+    pattern = "**/*.kmsync"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
+```
+
 ## Add ssh key from 1password
 
 1. Install 1password

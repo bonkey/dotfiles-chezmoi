@@ -28,8 +28,8 @@ for device_id in "${device_ids[@]}"; do
     SD_PORT=$(uhubctl --exact --nodesc --search "$device_id" | head -2 | grep -A 1 "Current status for hub" | grep "Port" | sed -E 's/.*Port ([0-9]+).*/\1/g')
 
     if [ -n "$SD_HUB" ] && [ -n "$SD_PORT" ]; then
-        echo "✅ Found a device on hub $SD_HUB port $SD_PORT. Adding to restart list..."
-        _exec "uhubctl --repeat 3 --exact --nodesc --action cycle --force --location $SD_HUB --port $SD_PORT"
+        echo "✅ Cycling power for device on hub $SD_HUB port $SD_PORT..."
+        _exec "uhubctl --repeat 3 --wait 200 --exact --nodesc --action cycle --force --location $SD_HUB --port $SD_PORT"
     else
         echo "❌ Device ${device_id} not found"
     fi

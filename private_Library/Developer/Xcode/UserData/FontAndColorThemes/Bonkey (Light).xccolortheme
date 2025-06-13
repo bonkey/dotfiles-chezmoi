@@ -143,7 +143,7 @@
 		<key>xcode.syntax.number</key>
 		<string>0.11 0 0.81 1</string>
 		<key>xcode.syntax.plain</key>
-		<string>0 0 0 0.85</string>
+		<string>0.199999 0.200005 0.200002 1</string>
 		<key>xcode.syntax.preprocessor</key>
 		<string>0.391471 0.220311 0.124457 1</string>
 		<key>xcode.syntax.regex</key>
@@ -163,72 +163,70 @@
 	</dict>
 	<key>DVTSourceTextSyntaxFonts</key>
 	<dict>
-    	<key>xcode.syntax.attribute</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.character</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.comment</key>
-    	<string>MonaspiceXeNFM-LightItalic - 16.0</string>
-    	<key>xcode.syntax.comment.doc</key>
-    	<string>MonaspiceXeNFM-LightItalic - 16.0</string>
-    	<key>xcode.syntax.comment.doc.keyword</key>
-    	<string>MonaspiceXeNFM-LightItalic - 16.0</string>
-    	<key>xcode.syntax.declaration.other</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.declaration.type</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.class</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.class.system</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.constant</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.constant.system</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.function</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.function.system</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.macro</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.macro.system</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.type</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.type.system</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.variable</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.identifier.variable.system</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.keyword</key>
-    	<string>MonaspiceNeNFM-Medium - 16.0</string>
-    	<key>xcode.syntax.mark</key>
-    	<string>MonaspiceArNFM-Bold - 16.0</string>
-    	<key>xcode.syntax.markup.code</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.number</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.plain</key>
-    	<string>MonaspiceKrNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.preprocessor</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.regex</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.regex.capturename</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.regex.charname</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.regex.number</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.regex.other</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.string</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<key>xcode.syntax.url</key>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
-    	<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.attribute</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.character</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.comment</key>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
+		<key>xcode.syntax.comment.doc</key>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
+		<key>xcode.syntax.comment.doc.keyword</key>
+		<string>MonaspiceXeNFM-LightItalic - 16.0</string>
+		<key>xcode.syntax.declaration.other</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.declaration.type</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.class</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.class.system</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.constant</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.constant.system</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.function</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.function.system</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.macro</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.macro.system</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.type</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.type.system</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.variable</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.identifier.variable.system</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.keyword</key>
+		<string>MonaspiceNeNFM-Medium - 16.0</string>
+		<key>xcode.syntax.mark</key>
+		<string>MonaspiceArNFM-Bold - 16.0</string>
+		<key>xcode.syntax.markup.code</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.number</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.plain</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.preprocessor</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.regex</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.regex.capturename</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.regex.charname</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.regex.number</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.regex.other</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.string</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.url</key>
+		<string>MonaspiceNeNFM-Regular - 16.0</string>
 	</dict>
-</dict>
 </dict>
 </plist>

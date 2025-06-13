@@ -7,22 +7,20 @@ require 'English'
 
 # xcrun simctl list -j devicetypes | jq '.devicetypes[].name'|sort
 devices_to_create = [
-  "iPad Pro 11-inch (M4)",
-  "iPad Pro 13-inch (M4)",
-  "iPhone 15 Pro Max",
-  "iPhone 15 Pro",
-  "iPhone 16 Pro Max",
-  "iPhone 16 Pro",
-  "iPhone 16",
-  "iPhone SE (3rd generation)",
+  'iPad Pro 11-inch (M4)',
+  'iPad Pro 13-inch (M4)',
+  'iPhone 16 Pro Max',
+  'iPhone 16 Pro',
+  'iPhone 16',
+  'iPhone SE (3rd generation)'
 ]
 
 # xcrun simctl list -j runtimes | jq '.runtimes[].name'
 runtimes_to_use = [
-  "iOS 17.5",
-  "iOS 18.2",
-  "iOS 18.3",
-  "iOS 18.4",
+  'iOS 17.5',
+  'iOS 18.2',
+  'iOS 18.3',
+  'iOS 18.4'
 ]
 
 default_sim_device = 'iPhone 15 Pro'
@@ -31,7 +29,8 @@ default_sim_runtime = 'iOS 17.5'
 class SimulatorPopulator
   def initialize(
     devices_to_create:, runtimes_to_use:,
-    default_device:, default_runtime:)
+    default_device:, default_runtime:
+  )
     @devices_to_create = devices_to_create
     @runtimes_to_use = runtimes_to_use
     @default_device = default_device
@@ -46,7 +45,7 @@ class SimulatorPopulator
   end
 
   def remove_all
-    puts "Removing all existing simulators..."
+    puts 'Removing all existing simulators...'
     @devices['devices'].each do |_, runtime_devices|
       runtime_devices.each do |device|
         puts 'Removing: ' +
@@ -57,7 +56,7 @@ class SimulatorPopulator
   end
 
   def create
-    puts "Creating all simulator variants..."
+    puts 'Creating all simulator variants...'
 
     @available_runtimes.each do |runtime|
       next unless @runtimes_to_use.include?(runtime['name'])
@@ -79,16 +78,16 @@ class SimulatorPopulator
   end
 
   private
+
   def find_runtime(name:)
     runtime = @available_runtimes
-      .select { |runtime| runtime['name'] == name }
-      .first
+              .select { |runtime| runtime['name'] == name }
+              .first
 
     return if runtime.nil?
 
     runtime['identifier']
   end
-
 
   def create_device(device_type:, runtime:, name: nil)
     name ||= device_type
@@ -138,7 +137,8 @@ populator = SimulatorPopulator.new(
   devices_to_create: devices_to_create,
   runtimes_to_use: runtimes_to_use,
   default_device: default_sim_device,
-  default_runtime: default_sim_runtime)
+  default_runtime: default_sim_runtime
+)
 
 populator.remove_all if options['remove-existing']
 populator.create if options['create-all-variants']

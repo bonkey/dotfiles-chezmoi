@@ -212,6 +212,9 @@ cask 'elgato-control-center' # Control your Elgato key lights
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
 
+cask 'soundsource'
+cask 'loopback'
+
 # Browsers
 cask 'firefox'
 cask 'brave-browser@beta'

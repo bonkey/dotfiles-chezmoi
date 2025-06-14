@@ -186,9 +186,7 @@ cvz() {
     ced $(eval "echo $_shell_init_files")
     echo -n "Quit shell? [y/n]: "
     read -k 1 response
-    if [[ "$response" =~ ^[Yy]$ ]]; then
-        exit
-    fi
+    exit
 }
 
 cvzl() {

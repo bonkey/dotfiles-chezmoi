@@ -188,7 +188,6 @@ cask 'syntax-highlight' # Quicklook extension for source files
 
 # Tools for productivity and automation
 cask '1password-cli' # Command-line interface for 1Password
-cask 'akiflow' # Time blocking and productivity platform
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer

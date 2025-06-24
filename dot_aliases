@@ -574,7 +574,8 @@ gl-pr-changelog() {
 
 GWab() {
     branch=$1
-    dir=${branch//\//_}
+    dir="$(echo "$branch" | sd '^[^/]*/?' '')"
+
     _exec "git worktree add '$branch' '$dir'"
 }
 

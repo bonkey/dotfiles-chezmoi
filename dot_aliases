@@ -574,6 +574,12 @@ gl-pr-changelog() {
   git log --pretty='format:* %s' $* | sd '[A-Z]{3,}-[0-9]+: ' ''
 }
 
+GWab() {
+    branch=$1
+    dir=${branch//\//_}
+    _exec "git worktree add '$branch' '$dir'"
+}
+
 alias gip="gitup"
 alias rc="retcon"
 

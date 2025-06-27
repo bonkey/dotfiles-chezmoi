@@ -28,6 +28,7 @@ node = "latest"
 "npm:appium" = "latest"
 "npm:@openai/codex" = "latest"
 "npm:@google/gemini-cli" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
 
 [settings]
 experimental = true

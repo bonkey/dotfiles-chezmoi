@@ -21,6 +21,7 @@ runtimes_to_use = [
   'iOS 18.2',
   'iOS 18.3',
   'iOS 18.4',
+  'iOS 18.5',
   'iOS 26.0'
 ]
 

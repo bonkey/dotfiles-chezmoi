@@ -601,7 +601,7 @@ gcai() {
     local check_confirmation=false
     local dry_run=false
     local args=()
-    local diff_args=("-w")
+    local diff_args=("-w" "--cached")
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -650,7 +650,6 @@ gcai() {
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then
         log_message "Staging all changes.."
         _exec "git add ."
-        diff_args+=("--cached")
     else
         diff_args+=("HEAD")
         log_message "Skipping pull..."

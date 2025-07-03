@@ -34,14 +34,14 @@ flush_dns() {
 
 notify() {
   if /usr/bin/which -s noti ; then
-    _exec noti "$*"
+    _exec noti "$@"
   else
-    _exec "$*"
+    _exec "$@"
   fi
 }
 
 cz() {
-  chezmoi $*
+    chezmoi "$@"
 }
 
 alias '??'="llm cmd -m gemini-2.5-flash"
@@ -73,14 +73,14 @@ alias cal="gcal -s 1"
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 
 br() {
-  brew $*
+    brew "$@"
 }
 
 brup() {
   if [[ -z "$1" ]]; then
     br update
   else
-    br upgrade $*
+    br upgrade "$@"
   fi
 }
 
@@ -111,7 +111,7 @@ o() {
   if [[ -z "$1" ]]; then
     open .
   else
-    open $*
+    open "$@"
   fi
 }
 
@@ -121,14 +121,14 @@ alias xf="xmllint --format"
 alias v=vim
 alias g=gvim
 gvim() {
-  vimer -t $*
+    vimer -t "$@"
 }
 
 c() {
   if [[ -z "$1" ]]; then
     code-insiders .
   else
-    code-insiders $*
+    code-insiders "$@"
   fi
 }
 
@@ -136,7 +136,7 @@ z() {
   if [[ -z "$1" ]]; then
     zed .
   else
-    zed $*
+    zed "$@"
   fi
 }
 
@@ -153,16 +153,16 @@ cat() {
   if [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
     glow -p $1
   else
-    bat $*
+    bat "$@"
   fi
 }
 
 cata() {
-  cat --style=header $*
+    cat --style=header "$@"
 }
 
 clear_ascii() {
-  cat $* | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g"
+    cat "$@" | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g"
 }
 
 dm() {
@@ -170,12 +170,12 @@ dm() {
     url=$(printf %s "manpages:$1"|jq -sRr @uri)
     open "dash://${url}"
   else
-    /usr/bin/man $*
+    /usr/bin/man "$@"
   fi
 }
 
 man() {
-  tldr $* || dm $*
+    tldr "$@" || dm "$@"
 }
 
 # --- zsh
@@ -201,20 +201,6 @@ alias hvf="hv --follow"
 
 alias curl="curlie"
 
-cj() {
-  curl -s -L $* | jq .
-}
-
-
-hj() {
-  local u f
-  u=$1
-  f=$2
-  test -z "$1" -o -z "$2" && echo "usage: $0 <url> <file>" && return
-  h "$u" | jq . > $f
-  echo "File '$f' saved."
-}
-
 alias mtr="sudo mtr"
 alias p1="ping 1.1.1.1"
 alias m1="mtr 1.1.1.1"
@@ -223,9 +209,9 @@ alias mg="mtr google.com"
 
 ping() {
   if type gping 2>&1 > /dev/null ; then
-    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 $*
+    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 "$@"
   else
-    /sbin/ping $*
+    /sbin/ping "$@"
   fi
 }
 
@@ -235,33 +221,33 @@ alias dig=doggo
 # --- LLM
 
 lgf() {
-  llmm gemini-2.5-flash $*
+    llmm gemini-2.5-flash "$@"
 }
 
 lgp() {
-  llmm gemini-2.5-pro $*
+    llmm gemini-2.5-pro "$@"
 }
 
 lgt() {
-  llmm gemini-2.0-flash-thinking-exp-01-21 $*
+    llmm gemini-2.0-flash-thinking-exp-01-21 "$@"
 }
 
 lgl() {
-  llmm gemini-2.0-flash-lite $*
+    llmm gemini-2.0-flash-lite "$@"
 }
 
 llmm() {
-  llm -m $*
+    llm -m "$@"
 }
 
 
 # --- Search
 
-f() { fd --follow $* }
-f0() { f $* --print0 }
+f() { fd --follow "$@" }
+f0() { f "$@" --print0 }
 
-ff() { f --type f $* }
-ff0() { f0 --type f $* }
+ff() { f --type f "$@" }
+ff0() { f0 --type f "$@" }
 
 alias fda="fd -HI"
 
@@ -273,15 +259,15 @@ alias agl="ag -l"
 
 
 agz() {
-  ag $* $_shell_init_files
+  ag "$@" $_shell_init_files
 }
 
 ags() {
-  ag --ignore=Carthage --ignore=Pods --ignore=\*.framework --objc --objcpp --swift $*
+  ag --ignore=Carthage --ignore=Pods --ignore=\*.framework --objc --objcpp --swift "$@"
 }
 
 agsw() {
-  ags -w $*
+  ags -w "$@"
 }
 
 agst() {
@@ -289,7 +275,7 @@ agst() {
 }
 
 agc() {
-  ag -c $* | awk -F: 'BEGIN { c = 0} { c += $2 } END { print "found:", c}'
+  ag -c "$@" | awk -F: 'BEGIN { c = 0} { c += $2 } END { print "found:", c}'
 }
 
 # --- Node / nvm
@@ -316,22 +302,22 @@ montage() {
   tile=$1
   [[ -z "$3" ]] && echo "montage <XxY> <file...> <output_file>" && return
   shift
-  gm montage +frame +shadow +label -tile $tile -geometry +1+1 $*
+  gm montage +frame +shadow +label -tile $tile -geometry +1+1 "$@"
 }
 
 ff_silent_sound() {
-  for i in $* ; do
+  for i in "$@" ; do
     dst=${i:r}-nosound.${i:e}
     echo ffmpeg -i "$i" -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -shortest -c:v copy -c:a aac $dst
   done
 }
 
 ff_m4v() {
-  ff_format m4v $*
+  ff_format m4v "$@"
 }
 
 ff_webm() {
-  ff_format webm $*
+  ff_format webm "$@"
 }
 
 ff_format() {
@@ -345,7 +331,7 @@ ff_format() {
     return 1
   fi
 
-  for i in $* ; do
+  for i in "$@" ; do
     ffmpeg -y -i "$i" "${i:r}.${format}" && rm -f "$i"
   done
 }
@@ -354,7 +340,7 @@ ff_format() {
 ff_fps() {
   local i
   fps=$1 ; shift
-  for i in $* ; do
+  for i in "$@" ; do
     dst=${i:r}-fps${fps}.${i:e}
     ffmpeg -i "$i" -r $fps -qscale 0 $dst
   done
@@ -569,7 +555,7 @@ gf() {
 }
 
 gl-pr-changelog() {
-  git log --pretty='format:* %s' $* | sd '[A-Z]{3,}-[0-9]+: ' ''
+  git log --pretty='format:* %s' "$@" | sd '[A-Z]{3,}-[0-9]+: ' ''
 }
 
 GWab() {
@@ -577,6 +563,10 @@ GWab() {
     dir="$(echo "$branch" | sd '^[^/]*/?' '')"
 
     _exec "git worktree add '$branch' '$dir'"
+}
+
+gsw() {
+    git update-index --skip-worktree "$@"
 }
 
 alias gip="gitup"
@@ -725,27 +715,59 @@ git-retrigger-checks() {
 }
 
 git_pull_and_back() {
-  local merging_branch stashed
-
-  type ghf 2>&1 > /dev/null && ghf
+  local merging_branch stashed current_branch
 
   if [[ -z "$1" ]]; then
-    echo "Please provide branch in git_pull_and_back"
-    exit 1
+    log_error "Please provide branch name for git_pull_and_back"
+    return 1
   fi
   merging_branch=$1; shift
 
-  stashed=$(git stash --include-untracked)
-  echo "STASH: $stashed"
+  # Get current branch for better error handling
+  current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+  if [[ -z "$current_branch" ]]; then
+    log_error "Not on a git branch"
+    return 1
+  fi
 
-  cmd="git checkout $merging_branch && \
-    git pull && \
-    git checkout - && \
-    $*"
-  echo "CMD: $cmd"
-  _exec $cmd
+  # Check if target branch exists
+  if ! git show-ref --verify --quiet "refs/heads/$merging_branch"; then
+    log_error "Branch '$merging_branch' does not exist"
+    return 1
+  fi
 
-  [[ $stashed != "No local changes to save" ]] && git stash pop
+  # Stash changes if any exist
+  if ! git diff-index --quiet HEAD --; then
+    stashed=$(git stash push --include-untracked -m "Temporary stash for git_pull_and_back")
+    log_message "Stashed changes: $stashed"
+  else
+    stashed=""
+  fi
+
+  # Execute the git operations with proper error handling
+  log_message "Switching to $merging_branch, pulling latest, then returning to $current_branch"
+
+  if git checkout "$merging_branch" && \
+     git pull && \
+     git checkout "$current_branch" && \
+     eval "$*"; then
+    log_message "Successfully completed git operations"
+  else
+    log_error "Git operations failed, attempting to return to original state"
+    git checkout "$current_branch" 2>/dev/null
+    [[ -n "$stashed" ]] && git stash pop 2>/dev/null
+    return 1
+  fi
+
+  # Restore stashed changes if any were stashed
+  if [[ -n "$stashed" && "$stashed" != "No local changes to save" ]]; then
+    if git stash pop; then
+      log_message "Restored stashed changes"
+    else
+      log_error "Failed to restore stashed changes"
+      return 1
+    fi
+  fi
 }
 
 gpm() {
@@ -809,13 +831,13 @@ jira-ticket-summary() {
 
 jira-extract-tickets() {
   local i
-  for i in $* ; do
+  for i in "$@" ; do
     echo "$i" | grep -E '[A-Z0-9]+[0-9]+' | sd '([A-Z0-9]+-[0-9]+)' '>>>>>$1<<<<<'|sd '.*>>>>>' '' | sd '<<<<<.*' ''
   done | sort -u
 }
 
 _git-branches-in-jira() {
-  jira ls -q "key in ($(jira-extract-tickets $* | sd '\n' ' '|xargs|tr ' ' ','))"
+    jira ls -q "key in ($(jira-extract-tickets "$@" | sd '\n' ' '|xargs|tr ' ' ','))"
 }
 
 git-branches-in-jira-all() {

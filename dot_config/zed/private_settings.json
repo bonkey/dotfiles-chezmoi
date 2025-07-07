@@ -7,13 +7,24 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "context_servers": {
+    "mcp-atlassian": {
+      "source": "custom",
+      "command": {
+        "path": "npx",
+        "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"],
+        "env": null
+      },
+      "settings": {}
+    }
+  },
   "edit_predictions": {
     "mode": "subtle"
   },
   "agent": {
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-4.1"
+      "model": "claude-sonnet-4"
     },
     "always_allow_tool_actions": true,
     "enabled": true,

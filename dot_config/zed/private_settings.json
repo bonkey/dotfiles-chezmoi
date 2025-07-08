@@ -8,15 +8,15 @@
 // from the command palette or from `Zed` application menu.
 {
   "context_servers": {
-    "mcp-atlassian": {
-      "source": "custom",
-      "command": {
-        "path": "npx",
-        "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"],
-        "env": null
-      },
-      "settings": {}
-    }
+    // "mcp-atlassian": {
+    //   "source": "custom",
+    //   "command": {
+    //     "path": "npx",
+    //     "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"],
+    //     "env": null
+    //   },
+    //   "settings": {}
+    // }
   },
   "edit_predictions": {
     "mode": "subtle"

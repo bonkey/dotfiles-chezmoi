@@ -654,22 +654,33 @@ gcai() {
 
     log_message "Generating commit message with ${model}.."
     local commit_msg
-    commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
-    if [[ "$dry_run" = true ]]; then
-        log_message "Commit message would be '$commit_msg'"
-    fi
+    while true; do
+        commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
-    if [[ "$check_confirmation" = true && "$dry_run" = false ]]; then
-        log_message "Generated commit message: '$commit_msg'"
-        echo -n "Proceed with this commit message? [y/n]: "
-        read -k 1 response
-        echo # Add a newline after the response
-        if [[ ! "$response" =~ ^[Yy]$ ]]; then
-            log_message "Commit aborted."
-            return
+        if [[ "$dry_run" = true ]]; then
+            log_message "Commit message would be '$commit_msg'"
+            break
         fi
-    fi
+
+        if [[ "$check_confirmation" = true && "$dry_run" = false ]]; then
+            log_message "Generated commit message: '$commit_msg'"
+            echo -n "Proceed with this commit message? [y/n/r]: "
+            read -k 1 response
+            echo # Add a newline after the response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                break
+            elif [[ "$response" =~ ^[Rr]$ ]]; then
+                log_message "Regenerating commit message..."
+                continue
+            else
+                log_message "Commit aborted."
+                return
+            fi
+        else
+            break
+        fi
+    done
 
     if [[ "$dry_run" = false ]]; then
         log_message "Committing changes.."

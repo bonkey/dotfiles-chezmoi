@@ -67,6 +67,7 @@ unalias l ll la 2> /dev/null
 alias l=e ll=el la=ea
 alias lt="l -s modified -r"
 alias llt="ll -m -s modified -r"
+alias llt="ll -T"
 
 alias cal="gcal -s 1"
 
@@ -562,7 +563,7 @@ GWab() {
     branch=$1
     dir="$(echo "$branch" | sd '^[^/]*/?' '')"
 
-    _exec "git worktree add '$branch' '$dir'"
+    _exec "git worktree add '$dir' '$branch'"
 }
 
 gsw() {

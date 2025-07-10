@@ -30,7 +30,7 @@
     "enabled": true,
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4"
+      "model": "gpt-4.1"
     },
     "commit_message_model": {
       "provider": "google",

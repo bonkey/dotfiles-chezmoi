@@ -562,7 +562,7 @@ GWab() {
     branch=$1
     dir="$(echo "$branch" | sd '^[^/]*/?' '')"
 
-    _exec "git worktree add '$branch' '$dir'"
+    _exec "git worktree add '$dir' '$branch'"
 }
 
 gsw() {

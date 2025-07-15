@@ -560,9 +560,32 @@ gl-pr-changelog() {
 
 GWab() {
     branch=$1
-    dir="$(echo "$branch" | sd '^[^/]*/?' '')"
+    dir_name="$(echo "$branch" | sd '^[^/]*/?' '')"
 
-    _exec "git worktree add '$dir' '$branch'"
+    root_repo_dir=$(git worktree list --porcelain | awk '/^worktree /{print $2}' | awk '
+      NR==1{common=$0; next}
+      {
+        n=split(common, a, "/")
+        m=split($0, b, "/")
+        max=(n<m?n:m)
+        out=""
+        for(i=1;i<=max;i++) {
+          if(a[i]==b[i]) {
+            out = out (i==1 ? "" : "/") a[i]
+          } else {
+            break
+          }
+        }
+        common=out
+      }
+      END{print common}
+    ')
+
+    branch_dir="$root_repo_dir/$dir_name"
+
+    _exec "echo git worktree add '$branch_dir' '$branch'"
+
+    # cd "$branch_dir"
 }
 
 gsw() {

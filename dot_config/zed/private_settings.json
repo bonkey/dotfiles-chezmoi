@@ -8,16 +8,23 @@
 // from the command palette or from `Zed` application menu.
 {
   "context_servers": {
-    // "mcp-atlassian": {
+    "duckduckgo": {
+      "source": "custom",
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "mcp/duckduckgo"]
+    },
+    "context7": {
+      "source": "custom",
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "mcp/context7"]
+    }
+    // "supermemory": {
     //   "source": "custom",
-    //   "command": {
-    //     "path": "npx",
-    //     "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"],
-    //     "env": null
-    //   },
-    //   "settings": {}
+    //   "command": "npx",
+    //   "args": ["mcp-remote", "$SUPERMEMORY_MCP_URL"]
     // }
   },
+
   "edit_predictions": {
     "mode": "subtle"
   },
@@ -29,19 +36,44 @@
     "always_allow_tool_actions": true,
     "enabled": true,
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-sonnet-4"
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-thinking-latest"
     },
     "commit_message_model": {
       "provider": "google",
       "model": "gemini-2.5-flash"
     },
-    "version": "2",
     "button": true,
     "default_width": 700,
-    "dock": "right",
-    "enable_experimental_live_diffs": true
+    "dock": "right"
   },
+
+  "search": {
+    "whole_word": false,
+    "case_sensitive": false,
+    "include_ignored": false,
+    "regex": true
+  },
+  "use_smartcase_search": true,
+
+  "soft_wrap": "bounded",
+  "preferred_line_length": 120,
+
+  "base_keymap": "VSCode",
+  "buffer_font_family": "0xProto Nerd Font Mono",
+  "buffer_font_size": 16,
+  "vim_mode": true,
+  "ui_font_size": 15,
+
+  "theme": {
+    "mode": "system",
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Mocha"
+  },
+
+  "cursor_shape": "bar",
+  "current_line_highlight": "all",
+  "hide_mouse": "on_typing_and_movement",
 
   "outline_panel": {
     "dock": "right"
@@ -55,20 +87,25 @@
     "show": "auto"
   },
 
-  "base_keymap": "VSCode",
-  "buffer_font_family": "0xProto Nerd Font Mono",
-  "buffer_font_size": 16,
-  "vim_mode": true,
-  "ui_font_size": 15,
-  "active_pane_magnification": 1.5,
-  "tabs": {
-    "close_position": "right",
-    "git_status": true
+  "title_bar": {
+    "show_branch_icon": true, // Show/hide branch icon beside branch switcher
+    "show_branch_name": true, // Show/hide branch name
+    "show_project_items": true, // Show/hide project host and name
+    "show_onboarding_banner": true, // Show/hide onboarding banners
+    "show_user_picture": true, // Show/hide user avatar
+    "show_sign_in": true // Show/hide sign-in button
   },
 
-  "auto_signature_help": true,
-  "always_treat_brackets_as_autoclosed": true,
-  "use_autoclose": false,
+  "tabs": {
+    "close_position": "right",
+    "git_status": true,
+    "file_icons": true
+  },
+
+  "toolbar": {
+    "breadcrumbs": true,
+    "code_actions": true
+  },
 
   "indent_guides": {
     "enabled": true,
@@ -78,22 +115,16 @@
     "background_coloring": "disabled"
   },
 
+  "auto_signature_help": true,
+  "always_treat_brackets_as_autoclosed": true,
+  "use_autoclose": false,
+
   "file_types": {
-    "Ruby": [
-      "Gemfile",
-      "Dangerfile",
-      "Fastfile",
-      "Pluginfile",
-      "Gymfile",
-      "Scanfile",
-      "Brewfile"
-    ],
+    "Ruby": ["Gemfile", "Dangerfile", "Fastfile", "Pluginfile", "Gymfile", "Scanfile", "Brewfile"],
     "Shell Script": [".aliases*", ".z*tmpl*", ".aliases*"],
     "Python": ["*.gyb"]
   },
-  "jupyter": {
-    "enabled": true
-  },
+
   "languages": {
     "Ruby": {
       "language_servers": ["solargraph", "rubocop", "!ruby-lsp"]
@@ -102,17 +133,20 @@
       "format_on_save": "off"
     }
   },
+
   "autosave": {
     "after_delay": {
       "milliseconds": 10000
     }
   },
+
   "git": {
     "inline_blame": {
       "enabled": true,
       "delay_ms": 500
     }
   },
+
   "terminal": {
     "copy_on_select": true,
     "font_size": 13,
@@ -139,6 +173,7 @@
       }
     }
   },
+
   "inlay_hints": {
     "enabled": true,
     "show_type_hints": true,
@@ -146,10 +181,5 @@
     "show_other_hints": true,
     "edit_debounce_ms": 700,
     "scroll_debounce_ms": 50
-  },
-  "theme": {
-    "mode": "system",
-    "light": "Catppuccin Latte",
-    "dark": "Catppuccin Mocha"
   }
 }

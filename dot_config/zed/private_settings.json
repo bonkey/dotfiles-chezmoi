@@ -29,12 +29,15 @@
     "mode": "subtle"
   },
   "agent": {
+    "always_allow_tool_actions": true,
+    "enabled": true,
+    "button": true,
+    "default_width": 700,
+    "dock": "right",
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "claude-sonnet-4"
     },
-    "always_allow_tool_actions": true,
-    "enabled": true,
     "default_model": {
       "provider": "anthropic",
       "model": "claude-sonnet-4-thinking-latest"
@@ -42,10 +45,7 @@
     "commit_message_model": {
       "provider": "google",
       "model": "gemini-2.5-flash"
-    },
-    "button": true,
-    "default_width": 700,
-    "dock": "right"
+    }
   },
 
   "search": {
@@ -67,8 +67,8 @@
 
   "theme": {
     "mode": "system",
-    "light": "Catppuccin Latte",
-    "dark": "Catppuccin Mocha"
+    "light": "Ayu Light",
+    "dark": "Ayu Mirage"
   },
 
   "cursor_shape": "bar",

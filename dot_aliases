@@ -562,7 +562,7 @@ GWab() {
     branch=$1
     dir_name="$(echo "$branch" | sd '^(?:[^/]*/)?' '')"
 
-    root_repo_dir=$(dirname "$(git worktree list | grep '(bare)'|choose 0)")
+    root_repo_dir=$(dirname "$(git worktree list | grep '[main]'|choose 0)")
 
     branch_dir="$root_repo_dir/$dir_name"
 

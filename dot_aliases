@@ -562,24 +562,7 @@ GWab() {
     branch=$1
     dir_name="$(echo "$branch" | sd '^(?:[^/]*/)?' '')"
 
-    root_repo_dir=$(git worktree list --porcelain | awk '/^worktree /{print $2}' | awk '
-      NR==1{common=$0; next}
-      {
-        n=split(common, a, "/")
-        m=split($0, b, "/")
-        max=(n<m?n:m)
-        out=""
-        for(i=1;i<=max;i++) {
-          if(a[i]==b[i]) {
-            out = out (i==1 ? "" : "/") a[i]
-          } else {
-            break
-          }
-        }
-        common=out
-      }
-      END{print common}
-    ')
+    root_repo_dir=$(dirname "$(git worktree list | grep '(bare)'|choose 0)")
 
     branch_dir="$root_repo_dir/$dir_name"
 

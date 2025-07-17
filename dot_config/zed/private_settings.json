@@ -39,8 +39,8 @@
       "model": "claude-sonnet-4"
     },
     "default_model": {
-      "provider": "anthropic",
-      "model": "claude-sonnet-4-thinking-latest"
+      "provider": "copilot_chat",
+      "model": "claude-sonnet-4"
     },
     "commit_message_model": {
       "provider": "google",
@@ -58,6 +58,7 @@
 
   "soft_wrap": "bounded",
   "preferred_line_length": 120,
+  "show_wrap_guides": true,
 
   "base_keymap": "VSCode",
   "buffer_font_family": "0xProto Nerd Font Mono",
@@ -67,8 +68,8 @@
 
   "theme": {
     "mode": "system",
-    "light": "Ayu Light",
-    "dark": "Ayu Mirage"
+    "dark": "Zedokai Darker (Filter Spectrum)",
+    "light": "Zedokai Light"
   },
 
   "cursor_shape": "bar",
@@ -122,6 +123,7 @@
   "file_types": {
     "Ruby": ["Gemfile", "Dangerfile", "Fastfile", "Pluginfile", "Gymfile", "Scanfile", "Brewfile"],
     "Shell Script": [".aliases*", ".z*tmpl*", ".aliases*"],
+    "Diff": ["*.patch"],
     "Python": ["*.gyb"]
   },
 

@@ -560,15 +560,17 @@ gl-pr-changelog() {
 
 GWab() {
     branch=$1
+    base_branch=${2:-main}
     dir_name="$(echo "$branch" | sd '^(?:[^/]*/)?' '')"
 
-    root_repo_dir=$(dirname "$(git worktree list | grep '[main]'|choose 0)")
+    root_repo_dir=$(dirname "$(git worktree list | head -1 | choose 0 | tr -d '\n')")
 
-    branch_dir="$root_repo_dir/$dir_name"
+    branch_dir="$root_repo_dir/$(echo "$dir_name" | tr -d '\n')"
 
     # Check if branch exists, create if it doesn't
     if ! git show-ref --verify --quiet "refs/heads/$branch"; then
-      _exec "git branch '$branch'"
+      log_message "Branch '$branch' does not exist. Creating new branch from '$base_branch'"
+      _exec "git branch '$branch' '$base_branch'"
     fi
 
     _exec "git worktree add '$branch_dir' '$branch'"

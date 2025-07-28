@@ -22,7 +22,6 @@ node = "latest"
 "pipx:things-cli" = "latest"
 "pipx:yt-dlp" = "latest"
 "pipx:fast-agent-mcp" = "latest"
-"pipx:vastai" = "latest"
 
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"

@@ -646,8 +646,18 @@ gcai() {
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
-        log_message "Pulling latest changes from remote.."
-        _exec "git pull --autostash"
+        local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+        if [[ -n "$current_branch" ]]; then
+            git fetch origin "$current_branch" 2>/dev/null
+            if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
+                log_message "Pulling latest changes from remote.."
+                _exec "git pull --autostash"
+            else
+                log_message "Remote branch does not exist, skipping pull"
+            fi
+        else
+            log_message "Not on a named branch, skipping pull"
+        fi
     fi
 
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then
@@ -707,7 +717,6 @@ gcai() {
         log_message "Skipping push"
     fi
 }
-
 alias gl1m="git lg --merges"
 alias gl1="git lg --no-merges"
 

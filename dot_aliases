@@ -586,7 +586,8 @@ alias gip="gitup"
 alias rc="retcon"
 
 alias gl="git pull --autostash"
-# alias gd="git diff"
+alias gd="git diff"
+alias gdfg="forgit::diff"
 alias gdn="gd --names-only"
 alias gst="git status"
 

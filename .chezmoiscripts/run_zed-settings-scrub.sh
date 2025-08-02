@@ -29,5 +29,6 @@ for key in "${(@k)secrets}"; do
 done
 
 tmp=$(mktemp -t settings)
-echo "Updating $settings"
-jq "$jq_script" "$settings" > "$tmp" && mv "$tmp" "$settings"
+echo "Updating $settings with $tmp"
+jq "$jq_script" "$settings" > "$tmp"
+cp "$tmp" "$settings"

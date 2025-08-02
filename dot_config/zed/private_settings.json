@@ -2,7 +2,7 @@
   "context_servers": {
     "api-supermemory-ai": {
       "source": "custom",
-      "enabled": false,
+      "enabled": true,
       "command": "npx",
       "args": [
         "-y",

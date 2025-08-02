@@ -35,15 +35,12 @@ from pathlib import Path
 ITEM_ID = "lk3cxlvcjdbti27r7ivrcj646y"
 SETTINGS_PATH = Path.home() / ".config" / "zed" / "settings.json"
 
+
 def run_command(cmd, capture_output=True, check=True):
     """Run a shell command and return the result."""
     try:
         result = subprocess.run(
-            cmd,
-            shell=True,
-            capture_output=capture_output,
-            text=True,
-            check=check
+            cmd, shell=True, capture_output=capture_output, text=True, check=check
         )
         return result.stdout.strip() if capture_output else None
     except subprocess.CalledProcessError as e:
@@ -52,12 +49,14 @@ def run_command(cmd, capture_output=True, check=True):
             print(f"Error: {e.stderr}")
         return None
 
+
 def check_dependencies():
     """Check if required tools are available."""
     for tool in ["op", "jq"]:
         if not shutil.which(tool):
             print(f"Error: {tool} is required but not installed")
             sys.exit(1)
+
 
 def get_1password_fields():
     """Get all fields from the 1Password item."""
@@ -66,7 +65,9 @@ def get_1password_fields():
     # Get the item JSON
     item_json = run_command(f'op item get "{ITEM_ID}" --format=json')
     if not item_json:
-        print("Error: Failed to retrieve 1Password item. Make sure you're signed in to 1Password CLI")
+        print(
+            "Error: Failed to retrieve 1Password item. Make sure you're signed in to 1Password CLI"
+        )
         sys.exit(1)
 
     try:
@@ -78,13 +79,18 @@ def get_1password_fields():
     # Extract fields with labels, references, and values
     fields = {}
     for field in item_data.get("fields", []):
-        if field.get("type") in ["STRING", "CONCEALED"] and field.get("label") and field.get("value"):
+        if (
+            field.get("type") in ["STRING", "CONCEALED"]
+            and field.get("label")
+            and field.get("value")
+        ):
             fields[field["label"]] = {
                 "reference": field.get("reference"),
-                "value": field["value"]
+                "value": field["value"],
             }
 
     return fields
+
 
 def read_settings():
     """Read the settings file."""
@@ -93,28 +99,42 @@ def read_settings():
         sys.exit(1)
 
     try:
-        with open(SETTINGS_PATH, 'r') as f:
+        with open(SETTINGS_PATH, "r") as f:
             return f.read()
     except Exception as e:
         print(f"Error reading settings file: {e}")
         sys.exit(1)
 
+
 def write_settings(content):
     """Write content to the settings file."""
     try:
-        with open(SETTINGS_PATH, 'w') as f:
+        with open(SETTINGS_PATH, "w") as f:
             f.write(content)
     except Exception as e:
         print(f"Error writing settings file: {e}")
         sys.exit(1)
 
+
 def validate_json(content):
-    """Validate that content is valid JSON."""
+    """Validate that content is valid JSON5/JSONC (with comments and trailing commas)."""
+    import re
+
+    # Remove single-line comments (// ...)
+    content = re.sub(r'//.*?(?=\n|$)', '', content)
+
+    # Remove multi-line comments (/* ... */)
+    content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+
+    # Remove trailing commas before closing brackets/braces
+    content = re.sub(r',(\s*[}\]])', r'\1', content)
+
     try:
         json.loads(content)
         return True
     except json.JSONDecodeError:
         return False
+
 
 def create_backup():
     """Create a backup of the settings file."""
@@ -124,17 +144,12 @@ def create_backup():
     print(f"Created backup: {backup_path}")
     return backup_path
 
-def cleanup_old_backups():
-    """Keep only the 3 most recent backups."""
-    backup_pattern = f"{SETTINGS_PATH.name}.backup.*"
-    backup_dir = SETTINGS_PATH.parent
-    backups = list(backup_dir.glob(backup_pattern))
+def remove_backup(backup_path):
+    """Remove a backup file."""
+    if backup_path and backup_path.exists():
+        backup_path.unlink()
+        print(f"Removed backup: {backup_path}")
 
-    if len(backups) > 3:
-        # Sort by modification time and remove oldest
-        backups.sort(key=lambda x: x.stat().st_mtime)
-        for old_backup in backups[:-3]:
-            old_backup.unlink()
 
 def check_mode(fields, verbose=False):
     """Check which secrets are present in settings."""
@@ -176,13 +191,14 @@ def check_mode(fields, verbose=False):
 
                     # Show relevant lines from settings
                     print(f"  Lines in settings mentioning '{label}':")
-                    for line in settings_content.split('\n'):
+                    for line in settings_content.split("\n"):
                         if label.lower() in line.lower():
                             print(f"    {line.strip()}")
 
     print(f"\nCheck complete: {found_count} secrets found in settings file")
     if found_count > 0:
         print("Run with 'scrub' mode to replace them with placeholders")
+
 
 def scrub_mode(fields, verbose=False):
     """Replace secrets with labeled placeholders."""
@@ -212,13 +228,14 @@ def scrub_mode(fields, verbose=False):
         sys.exit(1)
 
     write_settings(settings_content)
-    print(f"✓ Settings file JSON is valid")
 
     print(f"\nScrub complete: {processed_count} secrets replaced with placeholders")
     if processed_count > 0:
         print("Run with 'restore' mode to restore the original values")
 
-    cleanup_old_backups()
+    # Remove backup since scrub was successful
+    remove_backup(backup_path)
+
 
 def restore_mode(fields, verbose=False):
     """Replace placeholders with actual secrets."""
@@ -243,15 +260,14 @@ def restore_mode(fields, verbose=False):
         sys.exit(1)
 
     write_settings(settings_content)
-    print(f"✓ Settings file JSON is valid")
 
-    print(f"\nRestore complete: {processed_count} placeholders replaced with actual values")
+    print(
+        f"\nRestore complete: {processed_count} placeholders replaced with actual values"
+    )
 
     # Remove backup since restore was successful
-    backup_path.unlink()
-    print(f"Removed backup: {backup_path}")
+    remove_backup(backup_path)
 
-    cleanup_old_backups()
 
 def main():
     """Main function."""
@@ -287,6 +303,7 @@ def main():
         scrub_mode(fields, verbose)
     elif mode == "restore":
         restore_mode(fields, verbose)
+
 
 if __name__ == "__main__":
     main()

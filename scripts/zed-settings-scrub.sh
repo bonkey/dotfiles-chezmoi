@@ -1,15 +1,8 @@
 #!/bin/zsh
 
-set -euo pipefail
-
 settings="$HOME/.config/zed/settings.json"
-tmp="$settings.tmp"
+tmp=$(mktemp -t settings)
 mode="${1:-}"
-
-# Define command paths
-bin_prefix="${HOMEBREW_PREFIX}/bin"
-op_cmd="${bin_prefix}/op"
-jq_cmd="${bin_prefix}/jq"
 
 # Define paths and corresponding secrets
 typeset -A paths_and_secrets
@@ -21,21 +14,19 @@ paths_and_secrets=(
 # Build jq script
 jq_script="."
 
-for path in "${(@k)paths_and_secrets}"; do
-  secret_ref="${paths_and_secrets[$path]}"
-  value="$($op_cmd read "$secret_ref")"
-  escaped_value=$(printf '%s' "$value" | $jq_cmd -R '.')
+for key in "${(@k)paths_and_secrets}"; do
+  secret_ref="${paths_and_secrets[$key]}"
 
   if [[ "$mode" == "scrub" ]]; then
-    jq_script+=" | $path = null"
+    jq_script+=" | $key = null"
   elif [[ "$mode" == "restore" ]]; then
-    jq_script+=" | $path = $escaped_value"
+    value="$(op read "$secret_ref")"
+    escaped_value=$(printf '%s' "$value" | jq -R '.')
+    jq_script+=" | $key = $escaped_value"
   else
     echo "Usage: $0 scrub|restore" >&2
     exit 1
   fi
 done
 
-$jq_cmd "$jq_script" "$settings" > "$tmp"
-
-# && mv "$tmp" "$settings"
+jq "$jq_script" "$settings" > "$tmp" && mv "$tmp" "$settings"

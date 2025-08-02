@@ -16,7 +16,7 @@ Requires adding in ~/.config/chezmoi/chezmoi.toml:
     args = ["restore"]
 
 [hooks.apply.post]
-    command = ".local/share/chezmoi/scripts/zed-settings-scrub.sh"
+    command = ".local/share/chezmoi/.chezmoiscripts/run_zed-settings-scrub.py"
     args = ["restore"]
 ```
 
@@ -246,6 +246,10 @@ def restore_mode(fields, verbose=False):
     print(f"✓ Settings file JSON is valid")
 
     print(f"\nRestore complete: {processed_count} placeholders replaced with actual values")
+
+    # Remove backup since restore was successful
+    backup_path.unlink()
+    print(f"Removed backup: {backup_path}")
 
     cleanup_old_backups()
 

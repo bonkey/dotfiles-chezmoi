@@ -1,17 +1,14 @@
 {
   "context_servers": {
-    "api-supermemory-ai": {
+    "mcp-openmemory": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
-      "args": [
-        "-y",
-        "supergateway",
-        "--streamableHttp",
-        "https://api.supermemory.ai/mcp",
-        "--header",
-        "Authorization: Bearer <SUPERMEMORY_API_KEY_REDACTED>"
-      ]
+      "args": ["-y", "openmemory"],
+      "env": {
+        "OPENMEMORY_API_KEY": "<OPENMEMORY_API_KEY_REDACTED>",
+        "CLIENT_NAME": "openmemory"
+      }
     },
     "mcp-server-brave-search": {
       "source": "extension",

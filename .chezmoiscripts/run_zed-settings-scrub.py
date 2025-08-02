@@ -25,7 +25,6 @@ Requires adding in ~/.config/chezmoi/chezmoi.toml:
 import json
 import subprocess
 import sys
-import os
 import re
 import shutil
 from datetime import datetime
@@ -118,21 +117,19 @@ def write_settings(content):
 
 def validate_json(content):
     """Validate that content is valid JSON5/JSONC (with comments and trailing commas)."""
-    import re
 
     # Remove single-line comments (// ...)
-    content = re.sub(r'//.*?(?=\n|$)', '', content)
+    content = re.sub(r'(?<=\s)//.*?(?=\n|$)', '', content)
 
     # Remove multi-line comments (/* ... */)
     content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
 
     # Remove trailing commas before closing brackets/braces
     content = re.sub(r',(\s*[}\]])', r'\1', content)
-
     try:
         json.loads(content)
         return True
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
         return False
 
 

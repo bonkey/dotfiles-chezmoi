@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-settings=".local/share/chezmoi/dot_config/zed/private_settings.json"
+settings="$HOME/.config/zed/settings.json"
 mode="${1:-}"
 
 typeset -A secrets

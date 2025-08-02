@@ -13,7 +13,7 @@
         "Authorization: Bearer $SUPERMEMORY_API_KEY"
       ],
       "env": {
-        "SUPERMEMORY_API_KEY": "sm_something....."
+        "SUPERMEMORY_API_KEY": "sm_something......"
       }
     },
     "mcp-server-brave-search": {

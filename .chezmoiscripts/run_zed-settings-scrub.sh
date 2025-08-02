@@ -1,25 +1,24 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
-settings="$HOME/.config/zed/settings.json"
-tmp=$(mktemp -t settings)
+settings="$(chezmoi source-path)/dot_config/zed/private_settings.json"
 mode="${1:-}"
 
-# Define paths and corresponding secrets
-typeset -A paths_and_secrets
-paths_and_secrets=(
+typeset -A secrets
+secrets=(
   '.context_servers["api-supermemory-ai"].env.SUPERMEMORY_API_KEY' 'op://Private/lk3cxlvcjdbti27r7ivrcj646y/SUPERMEMORY_API_KEY'
   '.context_servers["mcp-server-brave-search"].settings.brave_api_key' 'op://Private/lk3cxlvcjdbti27r7ivrcj646y/BRAVE_API_KEY'
 )
 
-# Build jq script
 jq_script="."
 
-for key in "${(@k)paths_and_secrets}"; do
-  secret_ref="${paths_and_secrets[$key]}"
+for key in "${(@k)secrets}"; do
+  secret_ref="${secrets[$key]}"
 
   if [[ "$mode" == "scrub" ]]; then
+    echo "Scrubbing: $key"
     jq_script+=" | $key = null"
   elif [[ "$mode" == "restore" ]]; then
+    echo "Restoring: $key"
     value="$(op read "$secret_ref")"
     escaped_value=$(printf '%s' "$value" | jq -R '.')
     jq_script+=" | $key = $escaped_value"
@@ -29,4 +28,6 @@ for key in "${(@k)paths_and_secrets}"; do
   fi
 done
 
+tmp=$(mktemp -t settings)
+echo "Updating $settings"
 jq "$jq_script" "$settings" > "$tmp" && mv "$tmp" "$settings"

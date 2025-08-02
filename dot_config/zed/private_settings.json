@@ -8,7 +8,7 @@
     },
     "mcp-openmemory": {
       "source": "custom",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
       "args": ["-y", "openmemory"],
       "env": {

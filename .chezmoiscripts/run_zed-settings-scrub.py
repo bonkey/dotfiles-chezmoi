@@ -3,6 +3,23 @@
 """
 Enhanced Zed settings scrubber with 1Password integration
 Automatically detects secrets from 1Password and handles scrubbing/restoration
+
+Requires adding in ~/.config/chezmoi/chezmoi.toml:
+
+```
+[hooks.re-add.pre]
+    command = ".local/share/chezmoi/.chezmoiscripts/run_zed-settings-scrub.py"
+    args = ["scrub"]
+
+[hooks.re-add.post]
+    command = ".local/share/chezmoi/.chezmoiscripts/run_zed-settings-scrub.py"
+    args = ["restore"]
+
+[hooks.apply.post]
+    command = ".local/share/chezmoi/scripts/zed-settings-scrub.sh"
+    args = ["restore"]
+```
+
 """
 
 import json

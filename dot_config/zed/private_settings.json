@@ -4,12 +4,7 @@
       "source": "custom",
       "enabled": true,
       "command": "npx",
-      "args": [
-        "-y",
-        "supergateway",
-        "--sse",
-        "<SUPERMEMORY_MCP_URL_REDACTED>"
-      ]
+      "args": ["-y", "supergateway", "--sse", "<SUPERMEMORY_MCP_URL_REDACTED>"]
     },
     "mcp-openmemory": {
       "source": "custom",

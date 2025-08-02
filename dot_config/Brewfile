@@ -123,6 +123,10 @@ brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 brew 'libyaml' # YAML Parser
 brew 'fx'
 
+# Docker
+brew 'docker-compose'
+brew 'colima'
+
 # Markdown tools
 brew 'glow' # Render markdown on the CLI
 

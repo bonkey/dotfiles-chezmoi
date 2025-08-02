@@ -31,4 +31,4 @@ done
 tmp=$(mktemp -t settings)
 echo "Updating $settings with $tmp"
 jq "$jq_script" "$settings" > "$tmp"
-cp -v "$tmp" "$settings"
+cp "$tmp" "$settings"

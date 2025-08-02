@@ -13,7 +13,7 @@
         "Authorization: Bearer $SUPERMEMORY_API_KEY"
       ],
       "env": {
-        "SUPERMEMORY_API_KEY": "sm_Afd..."
+        "SUPERMEMORY_API_KEY": "sm_Afd...."
       }
     },
     "mcp-server-brave-search": {

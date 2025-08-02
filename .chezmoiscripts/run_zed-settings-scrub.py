@@ -193,8 +193,6 @@ def check_mode(fields, verbose=False):
                             print(f"    {line.strip()}")
 
     print(f"\nCheck complete: {found_count} secrets found in settings file")
-    if found_count > 0:
-        print("Run with 'scrub' mode to replace them with placeholders")
 
 
 def scrub_mode(fields, verbose=False):

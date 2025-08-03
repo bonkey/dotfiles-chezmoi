@@ -9,7 +9,31 @@ ignorecase = true
 quotepath = false
 fsmonitor = true
 untrackedcache = true
-pager = delta
+pager = delta --diff-so-fancy
+
+[diff]
+algorithm = histogram
+colorMoved = default
+mnemonicPrefix = true
+renames = true
+
+[difftool]
+prompt = false
+algorithm = histogram
+mnemonicPrefix = true
+renames = true
+tool = Kaleidoscope
+colormoved = default
+colormovedws = "allow-indentation-change"
+
+[interactive]
+diffFilter = delta --color-only --diff-so-fancy
+
+[delta]
+true-color = always
+navigate = true # use n and N to move between diff sections
+line-numbers = true
+hyperlinks = true
 
 [filter "lfs"]
 clean = git-lfs clean -- %f
@@ -37,11 +61,56 @@ format = ssh
 [gpg "ssh"]
 program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 
-[url "git@github.com:"]
-insteadOf = https://github.com/
-
 [branch]
 sort = -committerdate
+
+[commit]
+gpgsign = true
+verbose = true
+
+[mergetool]
+prompt = false
+
+[merge]
+tool = Kaleidoscope
+conflictstyle = zdiff3
+autoStash = true
+
+[rebase]
+autoStash = true
+updateRefs = true
+
+[push]
+default = simple
+autoSetupRemote = true
+followTags = true
+
+[pull]
+rebase = true
+
+[fetch]
+prune = true
+pruneTags = true
+all = true
+
+[git-town]
+sync-feature-strategy = rebase
+
+[gitbutler]
+aiOpenAIKeyOption = bringYourOwn
+aiOpenAIModelName = gpt-4o-mini
+aiModelProvider = ollama
+aiOllamaModelName = llama3.2
+
+[mergetool "Kaleidoscope"]
+cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+trustexitcode = true
+
+[difftool "Kaleidoscope"]
+cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[url "git@github.com:"]
+insteadOf = https://github.com/
 
 [alias]
 c = commit -am
@@ -74,77 +143,3 @@ repo = town repo
 set-parent = town set-parent
 ship = town ship
 sync = town sync
-
-[mergetool]
-prompt = false
-
-[merge]
-tool = Kaleidoscope
-conflictstyle = zdiff3
-autoStash = true
-
-[rebase]
-autoStash = true
-updateRefs = true
-
-[push]
-default = simple
-autoSetupRemote = true
-followTags = true
-
-[pull]
-rebase = true
-
-[fetch]
-prune = true
-pruneTags = true
-all = true
-
-[commit]
-gpgsign = true
-verbose = true
-
-[diff]
-algorithm = histogram
-colorMoved = default
-mnemonicPrefix = true
-renames = true
-
-[difftool]
-prompt = false
-algorithm = histogram
-mnemonicPrefix = true
-renames = true
-tool = Kaleidoscope
-colormoved = default
-colormovedws = "allow-indentation-change"
-
-[interactive]
-diffFilter = delta --color-only --diff-so-fancy
-
-[git-town]
-sync-feature-strategy = rebase
-
-[delta]
-true-color = always
-navigate = true # use n and N to move between diff sections
-line-numbers = true
-hyperlinks = true
-side-by-side = true
-
-[gitbutler]
-aiOpenAIKeyOption = bringYourOwn
-aiOpenAIModelName = gpt-4o-mini
-aiModelProvider = ollama
-aiOllamaModelName = llama3.2
-
-[mergetool "Kaleidoscope"]
-cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-trustexitcode = true
-
-[difftool "Kaleidoscope"]
-cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-
-[mergetool "juxta"]
-cmd = juxta _mergetool --base \"${BASE:-/dev/null}\" --local \"$LOCAL\" --remote \"$REMOTE\" --merged \"${MERGED:-/dev/null}\"
-trustExitCode = true

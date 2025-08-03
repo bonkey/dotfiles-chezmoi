@@ -1,5 +1,37 @@
 {
   "context_servers": {
+    "peekaboo": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "@steipete/peekaboo-mcp@beta"],
+      "env": {
+        "PEEKABOO_AI_PROVIDERS": "anthropic/claude-opus-4,openai/gpt-4.1,ollama/llava:latest",
+        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
+      }
+    },
+
+    "XcodeBuildMCP": {
+      "source": "custom",
+      "enabled": true,
+
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp@latest"],
+      "env": {
+        "INCREMENTAL_BUILDS_ENABLED": "true"
+      }
+    },
+
+    "conduit": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "@steipete/conduit-mcp@beta"],
+      "env": {
+        "CONDUIT_ALLOWED_PATHS": "~/Documents:~/Projects:/tmp",
+        "LOG_LEVEL": "INFO"
+      }
+    },
     "firecrawl": {
       "source": "custom",
       "enabled": true,
@@ -38,7 +70,7 @@
         "--streamableHttp",
         "https://api.supermemory.ai/mcp",
         "--header",
-        "Authorization: Bearer sm_Afd9frMqV6A4LaXwQVvqgn_PkMSIYyVLRCxaCgQvGWcsjQRQkoLwbXGeDvzUvStcyhNJPEqOtSqSQRdoJEEkHgn"
+        "Authorization: Bearer <SUPERMEMORY_API_KEY_REDACTED>"
       ]
     },
     "exa": {

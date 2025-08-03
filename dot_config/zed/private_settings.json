@@ -1,5 +1,11 @@
 {
   "context_servers": {
+    "nova": {
+      "source": "custom",
+      "enabled": true,
+      "command": "mcp-nova",
+      "args": []
+    },
     "Ref": {
       "source": "custom",
       "enabled": true,

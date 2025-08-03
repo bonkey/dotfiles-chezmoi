@@ -4,7 +4,7 @@ UV_NATIVE_TLS = "true"
 [tools]
 uv = "latest"
 ruby = "3.3"
-python = "3.10"
+python = "3.12"
 swiftformat = "latest"
 swiftlint = "latest"
 bun = "latest"

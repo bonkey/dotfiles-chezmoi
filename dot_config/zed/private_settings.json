@@ -1,12 +1,53 @@
 {
   "context_servers": {
-    "mcp-supermemory": {
+    "firecrawl": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "supergateway", "--sse", "<SUPERMEMORY_MCP_URL_REDACTED>"]
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+      }
     },
-    "mcp-openmemory": {
+    "swiftlens": {
+      "source": "custom",
+      "enabled": false,
+      "command": "uvx",
+      "args": ["swiftlens"],
+      "env": {}
+    },
+    "deepwiki": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
+    },
+    "tavily": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
+    },
+    "supermemory": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--streamableHttp",
+        "https://api.supermemory.ai/mcp",
+        "--header",
+        "Authorization: Bearer sm_Afd9frMqV6A4LaXwQVvqgn_PkMSIYyVLRCxaCgQvGWcsjQRQkoLwbXGeDvzUvStcyhNJPEqOtSqSQRdoJEEkHgn"
+      ]
+    },
+    "exa": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"]
+    },
+    "openmemory": {
       "source": "custom",
       "enabled": false,
       "command": "npx",
@@ -16,19 +57,11 @@
         "CLIENT_NAME": "openmemory"
       }
     },
-    "mcp-server-brave-search": {
-      "source": "extension",
+    "context7": {
+      "source": "custom",
       "enabled": true,
-      "settings": {
-        "brave_api_key": "<BRAVE_API_KEY_REDACTED>"
-      }
-    },
-    "mcp-server-context7": {
-      "source": "extension",
-      "enabled": true,
-      "settings": {
-        "default_minimum_tokens": "10000"
-      }
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
     }
   },
   "edit_predictions": {

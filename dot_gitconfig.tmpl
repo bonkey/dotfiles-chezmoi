@@ -11,33 +11,37 @@ fsmonitor = true
 untrackedcache = true
 pager = delta
 
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
 [init]
 defaultBranch = main
 
-[color]
-diff = auto
-status = auto
-branch = auto
-interactive = auto
-ui = true
-grep = auto
-decorate = auto
-showbranch = auto
+[tag]
+forceSignAnnotated = false
+sort = version:refname
 
-[color "diff-highlight"]
-oldNormal = red bold
-oldHighlight = red bold 52
-newNormal = green bold
-newHighlight = green bold 22
+[column]
+ui = auto
 
-[color "diff"]
-meta = 11
-frag = magenta bold
-func = 146 bold
-commit = yellow bold
-old = red bold
-new = green bold
-whitespace = red reverse
+[rerere]
+enabled = true
+autoupdate = true
+
+[gpg]
+format = ssh
+
+[gpg "ssh"]
+program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[url "git@github.com:"]
+insteadOf = https://github.com/
+
+[branch]
+sort = -committerdate
 
 [alias]
 c = commit -am
@@ -79,19 +83,6 @@ tool = Kaleidoscope
 conflictstyle = zdiff3
 autoStash = true
 
-[git-town]
-sync-feature-strategy = rebase
-
-[difftool]
-prompt = false
-algorithm = histogram
-mnemonicPrefix = true
-renames = true
-tool = Kaleidoscope
-# colorMoved = plain
-colormoved = default
-colormovedws = "allow-indentation-change"
-
 [rebase]
 autoStash = true
 updateRefs = true
@@ -109,41 +100,56 @@ prune = true
 pruneTags = true
 all = true
 
-[tag]
-forceSignAnnotated = false
-sort = version:refname
-
-[column]
-ui = auto
-
-[rerere]
-enabled = true
-autoupdate = true
-
-[branch]
-sort = -committerdate
-
-[filter "lfs"]
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
-process = git-lfs filter-process
-required = true
-
-[interactive]
-diffFilter = delta --color-only --diff-so-fancy
-
-[gpg]
-format = ssh
-
 [commit]
 gpgsign = true
 verbose = true
 
-[gpg "ssh"]
-program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[diff]
+algorithm = histogram
+colorMoved = plain
+mnemonicPrefix = true
+renames = true
 
-# [url "git@github.com:"]
-# insteadOf = https://github.com/
+[color]
+diff = auto
+status = auto
+branch = auto
+interactive = auto
+ui = true
+grep = auto
+decorate = auto
+showbranch = auto
+
+[color "diff-highlight"]
+oldNormal = red bold
+oldHighlight = red bold 52
+newNormal = green bold
+newHighlight = green bold 22
+
+[color "diff"]
+meta = 11
+frag = magenta bold
+func = 146 bold
+commit = yellow bold
+old = red bold
+new = green bold
+whitespace = red reverse
+
+
+[difftool]
+prompt = false
+algorithm = histogram
+mnemonicPrefix = true
+renames = true
+tool = Kaleidoscope
+colormoved = default
+colormovedws = "allow-indentation-change"
+
+[interactive]
+diffFilter = delta --color-only --diff-so-fancy
+
+[git-town]
+sync-feature-strategy = rebase
 
 [delta]
 true-color = always
@@ -157,7 +163,6 @@ aiOpenAIKeyOption = bringYourOwn
 aiOpenAIModelName = gpt-4o-mini
 aiModelProvider = ollama
 aiOllamaModelName = llama3.2
-
 
 [mergetool "Kaleidoscope"]
 cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot

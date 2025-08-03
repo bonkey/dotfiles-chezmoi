@@ -1,5 +1,14 @@
 {
   "context_servers": {
+    "Ref": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["ref-tools-mcp@latest"],
+      "env": {
+        "REF_API_KEY": "<REF_API_KEY_REDACTED>"
+      }
+    },
     "peekaboo": {
       "source": "custom",
       "enabled": true,
@@ -89,6 +98,7 @@
         "CLIENT_NAME": "openmemory"
       }
     },
+
     "context7": {
       "source": "custom",
       "enabled": true,

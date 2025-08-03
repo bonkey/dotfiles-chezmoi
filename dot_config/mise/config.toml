@@ -29,6 +29,7 @@ node = "latest"
 "npm:@openai/codex" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:@nova-mcp/mcp-nova" = "latest"
 
 [settings]
 experimental = true

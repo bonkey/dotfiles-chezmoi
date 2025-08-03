@@ -206,6 +206,7 @@ cask 'retcon' # Drag-and-drop Git history editor
 cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
+cask 'cap'
 
 # Hardware
 brew 'uhubctl'

@@ -408,10 +408,25 @@ xck() {
 }
 
 xcresolve() {
-  proj=$1
-  test -n "$proj" && shift
-  scheme=$1
-  test -n "$scheme" && shift
+  local proj scheme arg remove_package_resolved=false
+
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --remove-package-resolved)
+        remove_package_resolved=true
+        shift
+        ;;
+      *)
+        if [[ -z "$proj" ]]; then
+          proj="$1"
+        elif [[ -z "$scheme" ]]; then
+          scheme="$1"
+        fi
+        shift
+        ;;
+    esac
+  done
 
   if [[ ! -d $proj ]]; then
     echo "Xcode project/workspace '$proj' not found"
@@ -436,8 +451,12 @@ xcresolve() {
     return
   fi
 
-  _exec "pkill -9 Xcode || true"
-  _exec "find $proj -name Package.resolved -print -delete"
+  _exec "pkill -9 Xcode || true ; sleep 0.5"
+
+  if [[ "$remove_package_resolved" == true ]]; then
+    _exec "find $proj -name Package.resolved -print -delete"
+  fi
+
   _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' clean $arg $proj -scheme $scheme"
   _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' -resolvePackageDependencies $arg $proj -scheme $scheme"
 }

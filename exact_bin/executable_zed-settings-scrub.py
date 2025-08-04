@@ -32,6 +32,7 @@ from pathlib import Path
 
 # Configuration
 ITEM_ID = "lk3cxlvcjdbti27r7ivrcj646y"
+ACCOUNT = "bonkey.1password.com"
 SETTINGS_PATH = Path.home() / ".config" / "zed" / "settings.json"
 
 
@@ -62,7 +63,7 @@ def get_1password_fields():
     print(f"Fetching 1Password item: {ITEM_ID}")
 
     # Get the item JSON
-    item_json = run_command(f'op item get "{ITEM_ID}" --format=json')
+    item_json = run_command(f'op item get "{ITEM_ID}" --account {ACCOUNT} --format=json')
     if not item_json:
         print(
             "Error: Failed to retrieve 1Password item. Make sure you're signed in to 1Password CLI"

@@ -9,6 +9,77 @@
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       }
     },
+
+    "firecrawl": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+      }
+    },
+
+    "deepwiki": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
+    },
+
+    "tavily": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
+    },
+
+    "supermemory": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--streamableHttp",
+        "https://api.supermemory.ai/mcp",
+        "--header",
+        "Authorization: Bearer <SUPERMEMORY_API_KEY_REDACTED>"
+      ]
+    },
+
+    "exa": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"]
+    },
+
+    "openmemory": {
+      "source": "custom",
+      "enabled": false,
+      "command": "npx",
+      "args": ["-y", "openmemory"],
+      "env": {
+        "OPENMEMORY_API_KEY": "<OPENMEMORY_API_KEY_REDACTED>",
+        "CLIENT_NAME": "openmemory"
+      }
+    },
+
+    "context7": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+
+    "code-index": {
+      "source": "custom",
+      "enabled": true,
+      "command": "uvx",
+      "args": ["code-index-mcp"]
+    },
+
     "peekaboo": {
       "source": "custom",
       "enabled": true,
@@ -31,6 +102,14 @@
       }
     },
 
+    "swiftlens": {
+      "source": "custom",
+      "enabled": false,
+      "command": "uvx",
+      "args": ["swiftlens"],
+      "env": {}
+    },
+
     "conduit": {
       "source": "custom",
       "enabled": true,
@@ -40,72 +119,9 @@
         "CONDUIT_ALLOWED_PATHS": "~/Documents:~/Projects:/tmp",
         "LOG_LEVEL": "INFO"
       }
-    },
-    "firecrawl": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "firecrawl-mcp"],
-      "env": {
-        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
-      }
-    },
-    "swiftlens": {
-      "source": "custom",
-      "enabled": false,
-      "command": "uvx",
-      "args": ["swiftlens"],
-      "env": {}
-    },
-    "deepwiki": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
-    },
-    "tavily": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
-    },
-    "supermemory": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": [
-        "-y",
-        "supergateway",
-        "--streamableHttp",
-        "https://api.supermemory.ai/mcp",
-        "--header",
-        "Authorization: Bearer <SUPERMEMORY_API_KEY_REDACTED>"
-      ]
-    },
-    "exa": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"]
-    },
-    "openmemory": {
-      "source": "custom",
-      "enabled": false,
-      "command": "npx",
-      "args": ["-y", "openmemory"],
-      "env": {
-        "OPENMEMORY_API_KEY": "<OPENMEMORY_API_KEY_REDACTED>",
-        "CLIENT_NAME": "openmemory"
-      }
-    },
-
-    "context7": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
     }
   },
+
   "edit_predictions": {
     "mode": "subtle"
   },

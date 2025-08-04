@@ -8,15 +8,15 @@ Requires adding in ~/.config/chezmoi/chezmoi.toml:
 
 ```
 [hooks.re-add.pre]
-    command = ".local/share/chezmoi/.chezmoiscripts/run_zed-settings-scrub.py"
+    command = "bin/run_zed-settings-scrub.py"
     args = ["scrub"]
 
 [hooks.re-add.post]
-    command = ".local/share/chezmoi/.chezmoiscripts/run_zed-settings-scrub.py"
+    command = "bin/run_zed-settings-scrub.py"
     args = ["restore"]
 
 [hooks.apply.post]
-    command = ".local/share/chezmoi/.chezmoiscripts/run_zed-settings-scrub.py"
+    command = "bin/run_zed-settings-scrub.py"
     args = ["restore"]
 ```
 

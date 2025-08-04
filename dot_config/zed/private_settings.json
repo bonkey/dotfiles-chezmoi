@@ -73,13 +73,6 @@
       "args": ["-y", "@upstash/context7-mcp"]
     },
 
-    "code-index": {
-      "source": "custom",
-      "enabled": true,
-      "command": "uvx",
-      "args": ["code-index-mcp"]
-    },
-
     "peekaboo": {
       "source": "custom",
       "enabled": true,
@@ -94,7 +87,6 @@
     "XcodeBuildMCP": {
       "source": "custom",
       "enabled": true,
-
       "command": "npx",
       "args": ["-y", "xcodebuildmcp@latest"],
       "env": {
@@ -108,17 +100,6 @@
       "command": "uvx",
       "args": ["swiftlens"],
       "env": {}
-    },
-
-    "conduit": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "@steipete/conduit-mcp@beta"],
-      "env": {
-        "CONDUIT_ALLOWED_PATHS": "~/Documents:~/Projects:/tmp",
-        "LOG_LEVEL": "INFO"
-      }
     }
   },
 

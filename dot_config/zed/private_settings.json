@@ -9,15 +9,32 @@
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       }
     },
-
-    "firecrawl": {
+    "peekaboo": {
       "source": "custom",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
-      "args": ["-y", "firecrawl-mcp"],
+      "args": ["-y", "@steipete/peekaboo-mcp@beta"],
       "env": {
-        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+        "PEEKABOO_AI_PROVIDERS": "anthropic/claude-opus-4,openai/gpt-4.1,ollama/llava:latest",
+        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
       }
+    },
+
+    "XcodeBuildMCP": {
+      "source": "custom",
+      "enabled": false,
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp@latest"],
+      "env": {
+        "INCREMENTAL_BUILDS_ENABLED": "true"
+      }
+    },
+
+    "swiftlens": {
+      "source": "custom",
+      "enabled": false,
+      "command": "swiftlens",
+      "args": []
     },
 
     "deepwiki": {
@@ -48,6 +65,13 @@
       ]
     },
 
+    "serena": {
+      "source": "custom",
+      "enabled": true,
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
+    },
+
     "exa": {
       "source": "custom",
       "enabled": true,
@@ -68,7 +92,7 @@
 
     "context7": {
       "source": "custom",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
@@ -110,7 +134,7 @@
     "always_allow_tool_actions": true,
     "enabled": true,
     "button": true,
-    "default_width": 900,
+    "default_width": 800,
     "dock": "right",
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -140,6 +164,7 @@
   "buffer_font_size": 16,
   "vim_mode": true,
   "ui_font_size": 15,
+  "icon_theme": "Bearded Icon Theme",
   "theme": {
     "mode": "system",
     "dark": "Zedokai Darker (Filter Spectrum)",

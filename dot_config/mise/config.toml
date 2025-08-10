@@ -27,10 +27,13 @@ node = "latest"
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"
 "npm:appium" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
+
 "npm:@openai/codex" = "latest"
 "npm:@google/gemini-cli" = "latest"
-"npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:@qwen-code/qwen-code" = "latest"
 "npm:@nova-mcp/mcp-nova" = "latest"
+
 
 [settings]
 experimental = true

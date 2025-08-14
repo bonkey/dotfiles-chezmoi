@@ -28,7 +28,7 @@ command = "bin/zed-settings-scrub.py"
 args = ["scrub"]
 
 [hooks.update.post]
-command = "bin/run_zed-settings-scrub.py"
+command = "bin/zed-settings-scrub.py"
 args = ["restore"]
 ```
 

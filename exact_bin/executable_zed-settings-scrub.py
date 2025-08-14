@@ -8,20 +8,28 @@ Requires adding in ~/.config/chezmoi/chezmoi.toml:
 
 ```
 [hooks.re-add.pre]
-    command = "bin/run_zed-settings-scrub.py"
-    args = ["scrub"]
+command = "bin/zed-settings-scrub.py"
+args = ["scrub"]
 
 [hooks.re-add.post]
-    command = "bin/run_zed-settings-scrub.py"
-    args = ["restore"]
+command = "bin/zed-settings-scrub.py"
+args = ["restore"]
+
+[hooks.apply.pre]
+command = "bin/zed-settings-scrub.py"
+args = ["scrub"]
 
 [hooks.apply.post]
-    command = "bin/run_zed-settings-scrub.py"
-    args = ["restore"]
+command = "bin/zed-settings-scrub.py"
+args = ["restore"]
+
+[hooks.update.pre]
+command = "bin/zed-settings-scrub.py"
+args = ["scrub"]
 
 [hooks.update.post]
-    command = "bin/run_zed-settings-scrub.py"
-    args = ["restore"]
+command = "bin/run_zed-settings-scrub.py"
+args = ["restore"]
 ```
 
 """

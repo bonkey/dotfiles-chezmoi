@@ -18,6 +18,10 @@ Requires adding in ~/.config/chezmoi/chezmoi.toml:
 [hooks.apply.post]
     command = "bin/run_zed-settings-scrub.py"
     args = ["restore"]
+
+[hooks.update.post]
+    command = "bin/run_zed-settings-scrub.py"
+    args = ["restore"]
 ```
 
 """

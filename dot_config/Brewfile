@@ -207,6 +207,7 @@ cask 'rocket' # Emoji picker optimized for blind people
 cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
 cask 'cap'
+cask 'superkey'
 
 # Hardware
 brew 'uhubctl'

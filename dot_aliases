@@ -433,6 +433,8 @@ xcresolve() {
     return
   fi
 
+  a
+
   if [[ "$proj" == *.xcworkspace ]]; then
     arg="-workspace"
     if [[ -z "$scheme" ]]; then
@@ -452,6 +454,9 @@ xcresolve() {
   fi
 
   _exec "pkill -9 Xcode || true ; sleep 0.5"
+
+log_message "Removing workspace state files..."
+_exec "fd workspace-state.json ~/Library/Developer/Xcode/DerivedData -X rm -v"
 
   if [[ "$remove_package_resolved" == true ]]; then
     _exec "find $proj -name Package.resolved -print -delete"

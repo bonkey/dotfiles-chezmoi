@@ -1,4 +1,7 @@
 {
+  // ================================
+  // CONTEXT SERVERS
+  // ================================
   "context_servers": {
     "Ref": {
       "source": "custom",
@@ -9,7 +12,6 @@
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       }
     },
-
     "firecrawl": {
       "source": "custom",
       "enabled": true,
@@ -19,21 +21,18 @@
         "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       }
     },
-
     "deepwiki": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
     },
-
     "tavily": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
     },
-
     "supermemory": {
       "source": "custom",
       "enabled": true,
@@ -47,14 +46,12 @@
         "Authorization: Bearer <SUPERMEMORY_API_KEY_REDACTED>"
       ]
     },
-
     "exa": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"]
     },
-
     "openmemory": {
       "source": "custom",
       "enabled": false,
@@ -65,14 +62,12 @@
         "CLIENT_NAME": "openmemory"
       }
     },
-
     "context7": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
-
     "peekaboo": {
       "source": "custom",
       "enabled": true,
@@ -83,7 +78,6 @@
         "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
       }
     },
-
     "XcodeBuildMCP": {
       "source": "custom",
       "enabled": true,
@@ -93,7 +87,6 @@
         "INCREMENTAL_BUILDS_ENABLED": "true"
       }
     },
-
     "swiftlens": {
       "source": "custom",
       "enabled": false,
@@ -103,9 +96,9 @@
     }
   },
 
-  "edit_predictions": {
-    "mode": "subtle"
-  },
+  // ================================
+  // AI AGENT CONFIGURATION
+  // ================================
   "agent": {
     "always_allow_tool_actions": true,
     "enabled": true,
@@ -125,6 +118,28 @@
       "model": "gemini-2.5-flash"
     }
   },
+
+  // ================================
+  // EDITING & PREDICTIONS
+  // ================================
+  "edit_predictions": {
+    "mode": "subtle"
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 10000
+    }
+  },
+  "format_on_save": "prettier",
+  "ensure_final_newline_on_save": true,
+  "remove_trailing_whitespace_on_save": true,
+  "auto_signature_help": true,
+  "always_treat_brackets_as_autoclosed": true,
+  "use_autoclose": false,
+
+  // ================================
+  // SEARCH CONFIGURATION
+  // ================================
   "search": {
     "whole_word": false,
     "case_sensitive": false,
@@ -132,22 +147,38 @@
     "regex": true
   },
   "use_smartcase_search": true,
-  "soft_wrap": "editor_width",
-  "preferred_line_length": 120,
-  "show_wrap_guides": true,
-  "base_keymap": "VSCode",
-  "buffer_font_family": "0xProto Nerd Font Mono",
-  "buffer_font_size": 16,
-  "vim_mode": true,
-  "ui_font_size": 15,
+
+  // ================================
+  // APPEARANCE & THEME
+  // ================================
   "theme": {
     "mode": "system",
     "dark": "Zedokai Darker (Filter Spectrum)",
     "light": "Zedokai Light"
   },
+  "base_keymap": "VSCode",
+  "vim_mode": true,
+
+  // ================================
+  // FONTS & TYPOGRAPHY
+  // ================================
+  "buffer_font_family": "0xProto Nerd Font Mono",
+  "buffer_font_size": 16,
+  "ui_font_size": 15,
+
+  // ================================
+  // LAYOUT & DISPLAY
+  // ================================
+  "soft_wrap": "editor_width",
+  "preferred_line_length": 120,
+  "show_wrap_guides": true,
   "cursor_shape": "bar",
   "current_line_highlight": "all",
   "hide_mouse": "on_typing_and_movement",
+
+  // ================================
+  // PANELS & UI ELEMENTS
+  // ================================
   "outline_panel": {
     "dock": "right"
   },
@@ -181,12 +212,18 @@
     "coloring": "indent_aware",
     "background_coloring": "disabled"
   },
-  "auto_signature_help": true,
-  "always_treat_brackets_as_autoclosed": true,
-  "use_autoclose": false,
-  "format_on_save": "prettier",
-  "ensure_final_newline_on_save": true,
-  "remove_trailing_whitespace_on_save": true,
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true,
+    "edit_debounce_ms": 700,
+    "scroll_debounce_ms": 50
+  },
+
+  // ================================
+  // FILE TYPES & LANGUAGE SUPPORT
+  // ================================
   "file_types": {
     "Ruby": ["Gemfile", "Dangerfile", "Fastfile", "Pluginfile", "Gymfile", "Scanfile", "Brewfile"],
     "Shell Script": [".aliases*", ".z*tmpl*", ".aliases*"],
@@ -201,31 +238,10 @@
       "format_on_save": "off"
     }
   },
-  "autosave": {
-    "after_delay": {
-      "milliseconds": 10000
-    }
-  },
-  "git": {
-    "inline_blame": {
-      "enabled": true,
-      "delay_ms": 500
-    }
-  },
-  "terminal": {
-    "copy_on_select": true,
-    "font_size": 13,
-    "font_family": "0xProto Nerd Font",
-    "shell": {
-      "with_arguments": {
-        "program": "/bin/zsh",
-        "args": ["-l"]
-      }
-    },
-    "env": {
-      "EDITOR": "zed --wait"
-    }
-  },
+
+  // ================================
+  // LANGUAGE SERVER PROTOCOL (LSP)
+  // ================================
   "lsp": {
     "solargraph": {
       "settings": {
@@ -237,12 +253,33 @@
       }
     }
   },
-  "inlay_hints": {
-    "enabled": true,
-    "show_type_hints": true,
-    "show_parameter_hints": true,
-    "show_other_hints": true,
-    "edit_debounce_ms": 700,
-    "scroll_debounce_ms": 50
+
+  // ================================
+  // VERSION CONTROL (GIT)
+  // ================================
+  "git": {
+    "inline_blame": {
+      "enabled": true,
+      "delay_ms": 500
+    }
+  },
+
+  // ================================
+  // TERMINAL CONFIGURATION
+  // ================================
+  "terminal": {
+    "copy_on_select": true,
+    "font_size": 13,
+    "font_family": "0xProto Nerd Font",
+    "default_height": 150,
+    "shell": {
+      "with_arguments": {
+        "program": "/bin/zsh",
+        "args": ["-l"]
+      }
+    },
+    "env": {
+      "EDITOR": "zed --wait"
+    }
   }
 }

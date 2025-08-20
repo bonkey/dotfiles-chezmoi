@@ -64,13 +64,13 @@
     },
     "context7": {
       "source": "custom",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
     "peekaboo": {
       "source": "custom",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
       "args": ["-y", "@steipete/peekaboo-mcp@beta"],
       "env": {
@@ -80,7 +80,7 @@
     },
     "XcodeBuildMCP": {
       "source": "custom",
-      "enabled": true,
+      "enabled": false,
       "command": "npx",
       "args": ["-y", "xcodebuildmcp@latest"],
       "env": {
@@ -156,8 +156,17 @@
     "dark": "Zedokai Darker (Filter Spectrum)",
     "light": "Zedokai Light"
   },
+
+  // ================================
+  // KEYMAP
+  // ================================
   "base_keymap": "VSCode",
   "vim_mode": true,
+  "vim": {
+    "use_system_clipboard": "never",
+    "toggle_relative_line_numbers": true,
+    "use_smartcase_find": true
+  },
 
   // ================================
   // FONTS & TYPOGRAPHY
@@ -233,6 +242,9 @@
   "languages": {
     "Ruby": {
       "language_servers": ["solargraph", "rubocop", "!ruby-lsp"]
+    },
+    "Python": {
+      "language_servers": ["!pylsp", "pyright"]
     },
     "Swift": {
       "format_on_save": "off"

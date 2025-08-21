@@ -433,8 +433,6 @@ xcresolve() {
     return
   fi
 
-  a
-
   if [[ "$proj" == *.xcworkspace ]]; then
     arg="-workspace"
     if [[ -z "$scheme" ]]; then

@@ -920,6 +920,12 @@ jira-extract-tickets() {
   done | sort -u
 }
 
+iterm2_print_user_vars() {
+    {
+      iterm2_set_user_var jira_ticket_summary "$(jira-ticket-summary)"
+    } &!
+}
+
 _git-branches-in-jira() {
     jira ls -q "key in ($(jira-extract-tickets "$@" | sd '\n' ' '|xargs|tr ' ' ','))"
 }

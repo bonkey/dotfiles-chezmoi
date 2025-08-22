@@ -603,11 +603,11 @@ GWab() {
 GWL() {
     git worktree list | while IFS= read -r line; do
         # Extract the path (first column)
-        path=$(echo "$line" | awk '{print $1}')
+        local worktree_path=$(echo "$line" | awk '{print $1}')
         # Get basename of the path
-        base=$(basename "$path")
+        local base=$(basename "$worktree_path")
         # Extract everything after the first column
-        rest=$(echo "$line" | sed "s|^$path[[:space:]]*||")
+        local rest=$(echo "$line" | sed "s|^$worktree_path[[:space:]]*||")
 
         # Colorize the output
         printf "%s%-50s%s %s\n" "$fg[cyan]" "$base" "$reset_color" "$rest"

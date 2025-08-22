@@ -601,17 +601,18 @@ GWab() {
 }
 
 GWL() {
-    git worktree list | while IFS= read -r line; do
-        # Extract the path (first column)
-        local worktree_path=$(echo "$line" | awk '{print $1}')
-        # Get basename of the path
-        local base=$(basename "$worktree_path")
-        # Extract everything after the first column
-        local rest=$(echo "$line" | sed "s|^$worktree_path[[:space:]]*||")
+  git worktree list | while IFS= read -r line; do
+    # Extract the directory path (first column)
+    directory=$(echo "$line" | awk '{print $1}')
+    # Get the rest of the line after the first column
+    rest=$(echo "$line" | awk '{$1=""; print substr($0,2)}')
+    # Get basename of the directory
+    dir_basename=$(basename "$directory")
+    # Print with proper spacing to maintain column alignment
+    printf "\033[1;34m %-50s\033[0m \033[32m%s\033[0m\n" "$dir_basename" "$rest"
+  done
 
-        # Colorize the output
-        printf "%s%-50s%s %s\n" "$fg[cyan]" "$base" "$reset_color" "$rest"
-    done
+  printf "\033[0m"
 }
 
 gsw() {

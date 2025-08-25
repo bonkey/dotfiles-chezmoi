@@ -6,11 +6,11 @@ require 'rainbow'
 require 'English'
 
 # Device arrays
-MINIMAL_DEVICES = [
+ESSENTIAL_DEVICES = [
   'iPhone 16 Pro'
 ].freeze
 
-STANDARD_DEVICES = [
+FULL_RANGE_DEVICES = [
   'iPad Pro 11-inch (M4)',
   'iPad Pro 13-inch (M4)',
   'iPhone 16 Pro Max',
@@ -21,10 +21,22 @@ STANDARD_DEVICES = [
 
 # Runtime to devices mapping
 RUNTIME_DEVICE_MAPPING = {
-  'iOS 26.0' => MINIMAL_DEVICES,
-  'iOS 18.6' => STANDARD_DEVICES,
-  'iOS 18.5' => MINIMAL_DEVICES,
-  'iOS 17.5' => ['iPhone 15 Pro']
+  'iOS 26.0' => {
+    devices: ESSENTIAL_DEVICES,
+    aliases: nil
+  },
+  'iOS 18.6' => {
+    devices: FULL_RANGE_DEVICES,
+    aliases: nil
+  },
+  'iOS 18.4' => {
+    devices: ['iPhone 16 Pro'],
+    aliases: ['iPhone 16 Pro']
+  },
+  'iOS 17.5' => {
+    devices: ['iPhone 15 Pro'],
+    aliases: ['iPhone 15 Pro']
+  }
 }.freeze
 
 
@@ -71,12 +83,19 @@ class SimulatorPopulator
     end
   end
 
+  def delete_unavailable
+    puts 'Deleting unavailable simulators...'
+    run_command("xcrun simctl delete unavailable") do |output|
+      puts Rainbow("Deleted unavailable simulators").color(:green).bright if $CHILD_STATUS.success?
+    end
+  end
+
   def create
     puts 'Creating simulators based on runtime-device mapping...'
 
     target_runtimes = @runtimes_filter || @runtime_device_mapping.keys
 
-    @runtime_device_mapping.each do |runtime_name, devices_for_runtime|
+    @runtime_device_mapping.each do |runtime_name, config|
       next unless runtime_matches_filter?(runtime_name, target_runtimes)
 
       # Check if this runtime is available
@@ -88,7 +107,10 @@ class SimulatorPopulator
 
       puts Rainbow("## #{runtime_name}").color(:blue).bright
 
-      devices_for_runtime.each do |device_name|
+      devices = config.is_a?(Array) ? config : config[:devices]
+      aliases = config.is_a?(Hash) ? config[:aliases] : nil
+
+      devices.each_with_index do |device_name, index|
         # Find the device type
         device_type = @device_types['devicetypes'].find { |dt| dt['name'] == device_name }
         unless device_type
@@ -96,28 +118,47 @@ class SimulatorPopulator
           next
         end
 
+        # Determine simulator name
+        simulator_name = get_simulator_name(device_name, runtime_name, aliases, index)
+
         create_device(
           device_type: device_type['identifier'],
           runtime: runtime_name,
-          name: "#{device_name} (#{runtime_name})"
+          name: simulator_name
         )
       end
     end
   end
 
-
-
   def list_mapping
     puts Rainbow('Runtime to Device Mapping:').color(:cyan).bright
-    @runtime_device_mapping.each do |runtime, devices|
+    @runtime_device_mapping.each do |runtime, config|
       puts Rainbow("  #{runtime}:").color(:blue)
-      devices.each do |device|
-        puts "    - #{device}"
+      devices = config.is_a?(Array) ? config : config[:devices]
+      aliases = config.is_a?(Hash) ? config[:aliases] : nil
+
+      devices.each_with_index do |device, index|
+        simulator_name = get_simulator_name(device, runtime, aliases, index)
+        if simulator_name != device
+          puts "    - #{device} → #{simulator_name}"
+        else
+          puts "    - #{device}"
+        end
       end
     end
   end
 
   private
+
+  def get_simulator_name(device_name, runtime_name, aliases, index)
+    # Use alias if provided
+    if aliases && aliases[index]
+      return aliases[index]
+    end
+
+    # Default: device name with runtime
+    "#{device_name} (#{runtime_name})"
+  end
 
   def find_runtime(name:)
     runtime = @available_runtimes
@@ -138,7 +179,7 @@ class SimulatorPopulator
     end
     args = ["'#{name}'", "'#{device_type}'", "'#{runtime_id}'"].join ' '
 
-    run_command("xcrun simctl create #{args} 2> /dev/null") do |output|
+    run_command("xcrun simctl create #{args} 2> /dev/null") do |_output|
       puts "Created #{Rainbow(name).color(:green).bright}" if $CHILD_STATUS.success?
     end
   end
@@ -199,7 +240,8 @@ options = {
   create_all_variants: true,
   list_mapping: false,
   verbose: false,
-  runtimes: nil
+  runtimes: nil,
+  delete_unavailable: true
 }
 
 option_parser = OptionParser.new do |opts|
@@ -210,6 +252,9 @@ option_parser = OptionParser.new do |opts|
   end
   opts.on '-c', '--[no-]create-all-variants', 'Create new simulators based on runtime-device mapping' do |v|
     options[:create_all_variants] = v
+  end
+  opts.on '-u', '--[no-]delete-unavailable', 'Delete unavailable simulators' do |v|
+    options[:delete_unavailable] = v
   end
 
   opts.on '-l', '--list-mapping', 'List the runtime to device mapping and exit' do |v|
@@ -240,5 +285,6 @@ if options[:list_mapping]
   exit
 end
 
+populator.delete_unavailable if options[:delete_unavailable]
 populator.remove_simulators if options[:remove_existing]
 populator.create if options[:create_all_variants]

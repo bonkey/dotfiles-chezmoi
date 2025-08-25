@@ -28,7 +28,6 @@ RUNTIME_DEVICE_MAPPING = {
 }.freeze
 
 
-
 class SimulatorPopulator
   def initialize(runtime_device_mapping:, verbose: false, runtimes_filter: nil)
     @runtime_device_mapping = runtime_device_mapping

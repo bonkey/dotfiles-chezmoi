@@ -924,13 +924,20 @@ jira-ticket-in-branch() {
 
 jira-ticket-summary() {
   local ticket summary
+
+  # Check if Jira setup is complete
+  if [[ -z "${JIRA_SERVER}" || -z "${JIRA_USER}" || -z "${JIRA_API_TOKEN}" ]]; then
+    echo "No Jira setup"
+    return
+  fi
+
   ticket=$(jira-ticket-in-branch)
   if [[ -n "${ticket}" ]]; then
     # --verify='' to skip SSL errors with Netskope
     summary=$(http --verify='' GET "${JIRA_SERVER}/rest/api/3/issue/${ticket}" --auth "${JIRA_USER}:${JIRA_API_TOKEN}" | jq -r '.fields.summary')
     echo "${ticket}: ${summary}"
   else
-    echo "No jira ticket found."
+    echo "No Jira ticket found."
   fi
 }
 

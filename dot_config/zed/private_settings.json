@@ -12,6 +12,12 @@
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       }
     },
+    "serana": {
+      "source": "custom",
+      "enabled": true,
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
+    },
     "firecrawl": {
       "source": "custom",
       "enabled": true,

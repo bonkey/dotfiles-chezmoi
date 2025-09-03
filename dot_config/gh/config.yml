@@ -8,22 +8,23 @@ prompt: enabled
 pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
-    co: pr checkout
-    pv: pr view
-    pvw: pr view -w
-    pc: pr create
-    pcw: pr create -w
-    pcd: pr create --draft --fill
-    ps: pr list --state all --search
-    pl: pr list
-    plm: pr list --author "@me"
-    psq: pr squash
-    psqa: pr squash --auto
-    psqad: pr squash --auto --delete-branch
-    d: dash
-    rv: repo view
-    rvw: repo view -w
-    al: alias list
-    pch: pr checks
-    prl: pr list
+  co: pr checkout
+  pv: pr view
+  pvw: pr view -w
+  pc: pr create
+  pcw: pr create -w
+  pcd: pr create --draft --fill
+  ps: pr list --state all --search
+  pl: pr list
+  plm: pr list --author "@me"
+  pch: pr checks
+
+  psq: pr squash
+  psqa: pr squash --auto
+  psqad: pr squash --auto --delete-branch
+
+  d: dash
+  rv: repo view
+  rvw: repo view -w
+  al: alias list
 version: "1"

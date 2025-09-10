@@ -110,8 +110,8 @@
       "model": "claude-sonnet-4"
     },
     "default_model": {
-      "provider": "google",
-      "model": "gemini-2.5-pro"
+      "provider": "copilot_chat",
+      "model": "claude-sonnet-4"
     },
     "commit_message_model": {
       "provider": "google",

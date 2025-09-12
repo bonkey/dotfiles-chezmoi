@@ -19,6 +19,17 @@
     "tags": []
   },
   {
+    "label": "Gemini CLI",
+    "command": "Gemini",
+    "env": {},
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "dock",
+    "hide": "never",
+    "shell": "system"
+  },
+  {
     "label": "Swift Build",
     "command": "swift build",
     "env": {},

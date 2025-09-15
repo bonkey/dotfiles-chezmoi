@@ -1,5 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 3,
+  "final_space": true,
+  "shell_integration": true,
+  "enable_cursor_positioning": true,
+  "console_title_template": "{{ .Shell }} in {{ .Folder }}",
+  "iterm_features": ["current_dir"],
   "palette": {
     "black": "#262B44",
     "blue": "#4B95E9",
@@ -15,8 +21,6 @@
     "foreground": "#ffffff",
     "template": "  󱞩 "
   },
-  "console_title_template": "{{ .Shell }} in {{ .Folder }}",
-  "iterm_features": ["prompt_mark", "current_dir"],
   "blocks": [
     {
       "type": "prompt",
@@ -141,9 +145,5 @@
         }
       ]
     }
-  ],
-  "version": 3,
-  "final_space": true,
-  "shell_integration": true,
-  "enable_cursor_positioning": true
+  ]
 }

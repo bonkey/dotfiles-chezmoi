@@ -407,6 +407,10 @@ xck() {
   _exec "pkill -9 Xcode"
 }
 
+xcbk() {
+  _exec "pkill -9 xcodebuild"
+}
+
 xcresolve() {
   local proj scheme arg remove_package_resolved=false
 

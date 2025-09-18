@@ -695,12 +695,12 @@ gcai() {
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
-        local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+        local current_branch=$(git --no-pager symbolic-ref --short HEAD 2>/dev/null)
         if [[ -n "$current_branch" ]]; then
-            git fetch origin "$current_branch" 2>/dev/null
-            if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
+            git --no-pager fetch origin "$current_branch" 2>/dev/null
+            if git --no-pager show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
                 log_message "Pulling latest changes from remote.."
-                _exec "git pull --autostash"
+                _exec "git --no-pager pull --autostash"
             else
                 log_message "Remote branch does not exist, skipping pull"
             fi
@@ -711,15 +711,15 @@ gcai() {
 
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then
         log_message "Staging all changes.."
-        _exec "git add ."
+        _exec "git --no-pager add ."
     else
         diff_args+=("HEAD")
         log_message "Skipping pull..."
     fi
 
-    _exec "git diff --stat ${diff_args[@]}"
+    _exec "git --no-pager diff --stat ${diff_args[@]}"
 
-    if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
+    if [[ "$dry_run" = false ]] && git --no-pager diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing"
         return
     fi
@@ -728,7 +728,7 @@ gcai() {
     local commit_msg
 
     while true; do
-        commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
+        commit_msg=$(git --no-pager diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
         if [[ "$dry_run" = true ]]; then
             log_message "Commit message would be '$commit_msg'"
@@ -756,12 +756,12 @@ gcai() {
 
     if [[ "$dry_run" = false ]]; then
         log_message "Committing changes.."
-        _exec "git commit -m \"$commit_msg\""
+        _exec "git --no-pager commit -m \"$commit_msg\""
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
         log_message "Pushing commit to remote.."
-        _exec "git push"
+        _exec "git --no-pager push"
     else
         log_message "Skipping push"
     fi

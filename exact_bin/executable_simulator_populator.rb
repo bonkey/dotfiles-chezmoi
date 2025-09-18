@@ -29,13 +29,9 @@ RUNTIME_DEVICE_MAPPING = {
     devices: FULL_RANGE_DEVICES,
     aliases: nil
   },
-  'iOS 18.5' => {
+  'iOS 18.4' => {
     devices: ['iPhone 16 Pro'],
     aliases: ['iPhone 16 Pro']
-  },
-  'iOS 18.0' => {
-    devices: ['iPhone 16 Pro'],
-    aliases: nil
   },
   'iOS 17.5' => {
     devices: ['iPhone 15 Pro'],

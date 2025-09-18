@@ -103,7 +103,7 @@
     "always_allow_tool_actions": true,
     "enabled": true,
     "button": true,
-    "default_width": 600,
+    "default_width": 900,
     "dock": "right",
     "inline_assistant_model": {
       "provider": "copilot_chat",

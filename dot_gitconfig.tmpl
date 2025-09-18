@@ -106,8 +106,9 @@ trustexitcode = true
 [difftool "Kaleidoscope"]
 cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 
-[url "git@github.com:"]
-insteadOf = https://github.com/
+; Xcode doesn't like it
+; [url "git@github.com:"]
+; insteadOf = https://github.com/
 
 [alias]
 c = commit -am

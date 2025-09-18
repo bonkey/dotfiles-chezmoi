@@ -210,9 +210,9 @@
 		<key>xcode.syntax.number</key>
 		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.plain</key>
-		<string>MonaspiceKrNFM-Regular - 16.0</string>
-		<key>xcode.syntax.preprocessor</key>
 		<string>MonaspiceNeNFM-Regular - 16.0</string>
+		<key>xcode.syntax.preprocessor</key>
+		<string>MonaspiceArNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex</key>
 		<string>MonaspiceNeNFM-Regular - 16.0</string>
 		<key>xcode.syntax.regex.capturename</key>

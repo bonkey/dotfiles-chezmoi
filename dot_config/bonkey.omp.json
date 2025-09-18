@@ -1,11 +1,5 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
-  "version": 3,
-  "final_space": true,
-  "shell_integration": true,
-  "enable_cursor_positioning": true,
-  "console_title_template": "{{ .Shell }} in {{ .Folder }}",
-  "iterm_features": ["current_dir"],
   "palette": {
     "black": "#262B44",
     "blue": "#4B95E9",
@@ -21,11 +15,19 @@
     "foreground": "#ffffff",
     "template": "  󱞩 "
   },
+  "console_title_template": "{{ .Shell }} in {{ .Folder }}",
   "blocks": [
     {
       "type": "prompt",
       "alignment": "left",
       "segments": [
+        {
+          "style": "plain",
+          "template": "{{ .PromptMark }}",
+          "foreground": "#80ffea",
+          "type": "iterm",
+          "interactive": true
+        },
         {
           "style": "diamond",
           "leading_diamond": " ",
@@ -33,7 +35,9 @@
           "template": "{{ if gt .Code 0 }} {{ .Meaning }}{{ end }}",
           "foreground": "p:white",
           "background": "p:darkgreen",
-          "background_templates": ["{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"],
+          "background_templates": [
+            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
+          ],
           "type": "status"
         },
 
@@ -126,7 +130,9 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": " {{ if gt .Code 0 }}{{ else }}{{ end }}",
-          "foreground_templates": ["{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"],
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
+          ],
           "background": "transparent",
           "type": "status"
         },
@@ -139,11 +145,17 @@
           "leading_diamond": "",
           "trailing_diamond": "",
           "template": "\n  {{ if gt .Code 0 }}{{ else }}{{ end }}",
-          "foreground_templates": ["{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"],
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
+          ],
           "background": "transparent",
           "type": "status"
         }
       ]
     }
-  ]
+  ],
+  "version": 3,
+  "final_space": true,
+  "shell_integration": true,
+  "enable_cursor_positioning": true
 }

@@ -17,7 +17,16 @@
     "bindings": {
       // "j k": ["workspace::SendKeystrokes", "escape"]
       "cmd-alt-up": "editor::AddSelectionAbove",
-      "cmd-alt-down": "editor::AddSelectionBelow"
+      "cmd-alt-down": "editor::AddSelectionBelow",
+      "cmd-[": "pane::ActivatePreviousItem",
+      "cmd-]": "pane::ActivateNextItem"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "cmd-[": "pane::ActivatePreviousItem",
+      "cmd-]": "pane::ActivateNextItem"
     }
   }
 ]

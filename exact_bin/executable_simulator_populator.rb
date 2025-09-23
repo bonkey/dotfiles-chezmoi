@@ -13,6 +13,8 @@ ESSENTIAL_DEVICES = [
 FULL_RANGE_DEVICES = [
   'iPad Pro 11-inch (M4)',
   'iPad Pro 13-inch (M4)',
+  'iPhone 17 Pro Max',
+  'iPhone 17 Pro',
   'iPhone 16 Pro Max',
   'iPhone 16 Pro',
   'iPhone 16',
@@ -43,22 +45,21 @@ RUNTIME_DEVICE_MAPPING = {
   }
 }.freeze
 
-
 class SimulatorPopulator
   def initialize(runtime_device_mapping:, verbose: false, runtimes_filter: nil)
     @runtime_device_mapping = runtime_device_mapping
     @verbose = verbose
     @runtimes_filter = runtimes_filter
 
-    run_command("xcrun simctl list -j devicetypes") do |output|
+    run_command('xcrun simctl list -j devicetypes') do |output|
       @device_types = JSON.parse(output)
     end
 
-    run_command("xcrun simctl list -j runtimes") do |output|
+    run_command('xcrun simctl list -j runtimes') do |output|
       @runtimes = JSON.parse(output)
     end
 
-    run_command("xcrun simctl list -j devices") do |output|
+    run_command('xcrun simctl list -j devices') do |output|
       @devices = JSON.parse(output)
     end
 
@@ -89,8 +90,8 @@ class SimulatorPopulator
 
   def delete_unavailable
     puts 'Deleting unavailable simulators...'
-    run_command("xcrun simctl delete unavailable") do |output|
-      puts Rainbow("Deleted unavailable simulators").color(:green).bright if $CHILD_STATUS.success?
+    run_command('xcrun simctl delete unavailable') do |_output|
+      puts Rainbow('Deleted unavailable simulators').color(:green).bright if $CHILD_STATUS.success?
     end
   end
 
@@ -143,10 +144,10 @@ class SimulatorPopulator
 
       devices.each_with_index do |device, index|
         simulator_name = get_simulator_name(device, runtime, aliases, index)
-        if simulator_name != device
-          puts "    - #{device} → #{simulator_name}"
-        else
+        if simulator_name == device
           puts "    - #{device}"
+        else
+          puts "    - #{device} → #{simulator_name}"
         end
       end
     end
@@ -156,9 +157,7 @@ class SimulatorPopulator
 
   def get_simulator_name(device_name, runtime_name, aliases, index)
     # Use alias if provided
-    if aliases && aliases[index]
-      return aliases[index]
-    end
+    return aliases[index] if aliases && aliases[index]
 
     # Default: device name with runtime
     "#{device_name} (#{runtime_name})"
@@ -226,16 +225,14 @@ class SimulatorPopulator
       normalized_requested = requested_runtime.start_with?('iOS ') ? requested_runtime : "iOS #{requested_runtime}"
       version_only = requested_runtime.gsub('iOS ', '')
 
-      unless valid_runtimes.include?(normalized_requested) || valid_versions.include?(version_only)
-        invalid_runtimes << requested_runtime
-      end
+      invalid_runtimes << requested_runtime unless valid_runtimes.include?(normalized_requested) || valid_versions.include?(version_only)
     end
 
-    if invalid_runtimes.any?
-      puts Rainbow("Error: Invalid runtime identifier(s): #{invalid_runtimes.join(', ')}").color(:red).bright
-      puts Rainbow("Available runtime identifiers: #{valid_runtimes.join(', ')}").color(:cyan).bright
-      exit 1
-    end
+    return unless invalid_runtimes.any?
+
+    puts Rainbow("Error: Invalid runtime identifier(s): #{invalid_runtimes.join(', ')}").color(:red).bright
+    puts Rainbow("Available runtime identifiers: #{valid_runtimes.join(', ')}").color(:cyan).bright
+    exit 1
   end
 end
 

@@ -219,8 +219,6 @@ cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4
 cask 'soundsource'
 cask 'loopback'
 
-brew 'libusb', '--head'
-
 # Browsers
 cask 'firefox'
 cask 'brave-browser@beta'

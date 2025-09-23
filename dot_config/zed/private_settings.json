@@ -95,7 +95,6 @@
       "env": {}
     }
   },
-
   // ================================
   // AI AGENT CONFIGURATION
   // ================================
@@ -107,7 +106,7 @@
     "dock": "right",
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5"
+      "model": "claude-sonnet-4"
     },
     "default_model": {
       "provider": "copilot_chat",
@@ -118,7 +117,6 @@
       "model": "gemini-2.5-flash"
     }
   },
-
   // ================================
   // EDITING & PREDICTIONS
   // ================================
@@ -130,13 +128,13 @@
       "milliseconds": 10000
     }
   },
-  "format_on_save": "prettier",
+  "format_on_save": "on",
+  "formatter": "auto",
   "ensure_final_newline_on_save": true,
   "remove_trailing_whitespace_on_save": true,
   "auto_signature_help": true,
   "always_treat_brackets_as_autoclosed": true,
   "use_autoclose": false,
-
   // ================================
   // SEARCH CONFIGURATION
   // ================================
@@ -147,7 +145,6 @@
     "regex": true
   },
   "use_smartcase_search": true,
-
   // ================================
   // APPEARANCE & THEME
   // ================================
@@ -156,7 +153,6 @@
     "dark": "Zedokai Darker (Filter Spectrum)",
     "light": "Zedokai Light"
   },
-
   // ================================
   // KEYMAP
   // ================================
@@ -167,14 +163,12 @@
     "toggle_relative_line_numbers": true,
     "use_smartcase_find": true
   },
-
   // ================================
   // FONTS & TYPOGRAPHY
   // ================================
   "buffer_font_family": "0xProto Nerd Font Mono",
   "buffer_font_size": 16,
   "ui_font_size": 15,
-
   // ================================
   // LAYOUT & DISPLAY
   // ================================
@@ -184,7 +178,6 @@
   "cursor_shape": "bar",
   "current_line_highlight": "all",
   "hide_mouse": "on_typing_and_movement",
-
   // ================================
   // PANELS & UI ELEMENTS
   // ================================
@@ -229,7 +222,6 @@
     "edit_debounce_ms": 700,
     "scroll_debounce_ms": 50
   },
-
   // ================================
   // FILE TYPES & LANGUAGE SUPPORT
   // ================================
@@ -250,7 +242,6 @@
       "format_on_save": "off"
     }
   },
-
   // ================================
   // LANGUAGE SERVER PROTOCOL (LSP)
   // ================================
@@ -265,7 +256,6 @@
       }
     }
   },
-
   // ================================
   // VERSION CONTROL (GIT)
   // ================================
@@ -275,7 +265,6 @@
       "delay_ms": 500
     }
   },
-
   // ================================
   // TERMINAL CONFIGURATION
   // ================================

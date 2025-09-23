@@ -529,9 +529,23 @@ find_xcode_proj() {
 
 alias xc > /dev/null && unalias xc
 xc() {
-  local xcode_proj xcode
+  local xcode_proj xcode resolve=false proj_arg
 
-  xcode_proj=$(find_xcode_proj "$1")
+  # Parse arguments for -r/--resolve flag and optional project argument
+  for arg in "$@"; do
+    case "$arg" in
+      -r|--resolve)
+        resolve=true
+        ;;
+      *)
+        if [[ -z "$proj_arg" ]]; then
+          proj_arg="$arg"
+        fi
+        ;;
+    esac
+  done
+
+  xcode_proj=$(find_xcode_proj "$proj_arg")
   [ $? -ne 0 ] && echo "$xcode_proj" && return
 
   if [[ -f .xcode-version ]]; then
@@ -543,20 +557,25 @@ xc() {
   xcode="${xcode:s/\/Contents\/Developer/}"
   echo "Opening ${xcode_proj} with ${xcode} ($fg_bold[green]$(xcsv)${reset_color})"
 
+  if [[ "$resolve" == true ]]; then
+    xcresolve "$xcode_proj"
+  fi
+
   open -a "$xcode" "${xcode_proj}"
 }
 
 xco() {
   dir=$1
   project=$2
+  shift 2
 
   if [[ ! -e $project ]]; then
-    cd $dir
+    cd "$dir"
   fi
 
   log_message "Dir: $(pwd)"
 
-  xc $project
+  xc "$project" "$@"
 }
 
 _pod() {

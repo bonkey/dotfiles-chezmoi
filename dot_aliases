@@ -543,6 +543,10 @@ xc() {
   open -a "$xcode" "${xcode_proj}"
 }
 
+xcr() {
+    xcresolve $1
+    xc $1
+
 xco() {
   dir=$1
   project=$2

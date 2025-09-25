@@ -679,6 +679,9 @@ gcai() {
     local args=()
     local diff_args=("-w" "--cached")
 
+    # Set environment variable to disable git pager for all git commands
+    export GIT_PAGER=cat
+
     while [[ $# -gt 0 ]]; do
         case "$1" in
             -a|--add)
@@ -719,12 +722,12 @@ gcai() {
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
-        local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+        local current_branch=$(GIT_PAGER=cat git symbolic-ref --short HEAD 2>/dev/null)
         if [[ -n "$current_branch" ]]; then
-            git fetch origin "$current_branch" 2>/dev/null
-            if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
+            GIT_PAGER=cat git fetch origin "$current_branch" 2>/dev/null
+            if GIT_PAGER=cat git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
                 log_message "Pulling latest changes from remote.."
-                _exec "git pull --autostash"
+                _exec "GIT_PAGER=cat git pull --autostash"
             else
                 log_message "Remote branch does not exist, skipping pull"
             fi
@@ -735,15 +738,15 @@ gcai() {
 
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then
         log_message "Staging all changes.."
-        _exec "git add ."
+        _exec "GIT_PAGER=cat git add ."
     else
         diff_args+=("HEAD")
         log_message "Skipping pull..."
     fi
 
-    _exec "git diff --stat ${diff_args[@]}"
+    _exec "GIT_PAGER=cat git diff --stat ${diff_args[@]}"
 
-    if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
+    if [[ "$dry_run" = false ]] && GIT_PAGER=cat git diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing"
         return
     fi
@@ -752,7 +755,7 @@ gcai() {
     local commit_msg
 
     while true; do
-        commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
+        commit_msg=$(GIT_PAGER=cat git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
         if [[ "$dry_run" = true ]]; then
             log_message "Commit message would be '$commit_msg'"
@@ -780,12 +783,12 @@ gcai() {
 
     if [[ "$dry_run" = false ]]; then
         log_message "Committing changes.."
-        _exec "git commit -m \"$commit_msg\""
+        _exec "GIT_PAGER=cat git commit -m \"$commit_msg\""
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
         log_message "Pushing commit to remote.."
-        _exec "git push"
+        _exec "GIT_PAGER=cat git push"
     else
         log_message "Skipping push"
     fi

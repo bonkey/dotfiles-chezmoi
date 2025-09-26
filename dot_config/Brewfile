@@ -40,7 +40,6 @@ brew 'sleepwatcher'
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
-brew 'gcal' # Program for calculating and printing calendars
 brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
 brew 'noti' # Trigger notifications when a process completes
 brew 'nushell' # Modern shell for the GitHub era

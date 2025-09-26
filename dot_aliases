@@ -616,12 +616,27 @@ GWab() {
 
     branch_dir="$root_repo_dir/$(echo "$dir_name" | tr -d '\n')"
 
-    # Check if branch exists, create if it doesn't
-    if ! git show-ref --verify --quiet "refs/heads/$branch"; then
-      log_message "Branch '$branch' does not exist. Creating new branch from '$base_branch'"
-      _exec "git branch '$branch' '$base_branch'"
+    # Determine local and remote branch existence without relying on git show-ref
+    local local_exists=0 remote_exists=0
+
+    # Check if local branch exists
+    if git rev-parse --verify --quiet "$branch" >/dev/null 2>&1; then
+      local_exists=1
     fi
 
+    # Check if remote branch exists
+    if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+      remote_exists=1
+    fi
+
+    if (( ! local_exists && ! remote_exists )); then
+      log_message "Branch '$branch' does not exist locally or remotely. Creating new branch from '$base_branch'"
+      _exec "git branch '$branch' '$base_branch'"
+    elif (( ! local_exists && remote_exists )); then
+      log_message "Branch '$branch' exists remotely but not locally. Creating local branch tracking remote"
+      # Create local branch from remote without checking it out (so worktree add works next)
+      _exec "git fetch origin '$branch':'refs/heads/$branch' --no-tags"
+    fi
     _exec "git worktree add '$branch_dir' '$branch'"
 
     _exec "cd '$branch_dir'"
@@ -680,7 +695,8 @@ gcai() {
     local diff_args=("-w" "--cached")
 
     # Set environment variable to disable git pager for all git commands
-    export GIT_PAGER=cat
+    local GIT_PAGER=cat
+    export GIT_PAGER
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -722,12 +738,12 @@ gcai() {
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
-        local current_branch=$(GIT_PAGER=cat git symbolic-ref --short HEAD 2>/dev/null)
+        local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
         if [[ -n "$current_branch" ]]; then
-            GIT_PAGER=cat git fetch origin "$current_branch" 2>/dev/null
-            if GIT_PAGER=cat git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
+            git fetch origin "$current_branch" 2>/dev/null
+            if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
                 log_message "Pulling latest changes from remote.."
-                _exec "GIT_PAGER=cat git pull --autostash"
+                _exec "git pull --autostash"
             else
                 log_message "Remote branch does not exist, skipping pull"
             fi
@@ -738,15 +754,15 @@ gcai() {
 
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then
         log_message "Staging all changes.."
-        _exec "GIT_PAGER=cat git add ."
+        _exec "git add ."
     else
         diff_args+=("HEAD")
         log_message "Skipping pull..."
     fi
 
-    _exec "GIT_PAGER=cat git diff --stat ${diff_args[@]}"
+    _exec "git diff --stat ${diff_args[@]}"
 
-    if [[ "$dry_run" = false ]] && GIT_PAGER=cat git diff --cached --quiet; then
+    if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing"
         return
     fi
@@ -755,7 +771,7 @@ gcai() {
     local commit_msg
 
     while true; do
-        commit_msg=$(GIT_PAGER=cat git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
+        commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
         if [[ "$dry_run" = true ]]; then
             log_message "Commit message would be '$commit_msg'"
@@ -783,12 +799,12 @@ gcai() {
 
     if [[ "$dry_run" = false ]]; then
         log_message "Committing changes.."
-        _exec "GIT_PAGER=cat git commit -m \"$commit_msg\""
+        _exec "git commit -m \"$commit_msg\""
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
         log_message "Pushing commit to remote.."
-        _exec "GIT_PAGER=cat git push"
+        _exec "git push"
     else
         log_message "Skipping push"
     fi

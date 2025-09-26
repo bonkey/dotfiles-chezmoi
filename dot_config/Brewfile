@@ -82,6 +82,8 @@ brew 'direnv' # Load/unload environment variables based on $PWD
 # GenAI
 brew 'ollama' # Create, run, and share large language models (LLMs)
 cask 'github-copilot-for-xcode'
+brew 'block-goose-cli'
+cask 'Goose'
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)

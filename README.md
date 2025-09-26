@@ -49,14 +49,33 @@ brew install chezmoi
     exclude = ["scripts"]
 
 [[textconv]]
-    pattern = "**/*.plist"
-    command = "/bin/zsh"
-    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
-
-[[textconv]]
     pattern = "**/*.kmsync"
     command = "/bin/zsh"
     args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
+
+    [hooks.re-add.pre]
+    command = "bin/zed-settings-scrub.py"
+    args = ["scrub"]
+
+    [hooks.re-add.post]
+    command = "bin/zed-settings-scrub.py"
+    args = ["restore"]
+
+    [hooks.apply.pre]
+    command = "bin/zed-settings-scrub.py"
+    args = ["scrub"]
+
+    [hooks.apply.post]
+    command = "bin/zed-settings-scrub.py"
+    args = ["restore"]
+
+    [hooks.update.pre]
+    command = "bin/zed-settings-scrub.py"
+    args = ["scrub"]
+
+    [hooks.update.post]
+    command = "bin/zed-settings-scrub.py"
+    args = ["restore"]
 ```
 
 ## Add ssh key from 1password

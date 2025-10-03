@@ -1,35 +1,35 @@
 - model_id: glm-4.5
   model_name: glm-4.5
-  api_base: "https://api.z.ai/api/paas/v4"
+  api_base: "https://api.z.ai/api/coding/paas/v4"
   api_key_name: zhipu
   can_stream: true
 
 - model_id: glm-4.5-air
   model_name: glm-4.5-air
-  api_base: "https://api.z.ai/api/paas/v4"
+  api_base: "https://api.z.ai/api/coding/paas/v4"
   api_key_name: zhipu
   can_stream: true
 
 - model_id: glm-4.5-x
   model_name: glm-4.5-x
-  api_base: "https://api.z.ai/api/paas/v4"
+  api_base: "https://api.z.ai/api/coding/paas/v4"
   api_key_name: zhipu
   can_stream: true
 
 - model_id: glm-4.5-airx
   model_name: glm-4.5-airx
-  api_base: "https://api.z.ai/api/paas/v4"
+  api_base: "https://api.z.ai/api/coding/paas/v4"
   api_key_name: zhipu
   can_stream: true
 
 - model_id: glm-4.5-flash
   model_name: glm-4.5-flash
-  api_base: "https://api.z.ai/api/paas/v4"
+  api_base: "https://api.z.ai/api/coding/paas/v4"
   api_key_name: zhipu
   can_stream: true
 
 - model_id: glm-4.6
   model_name: glm-4.6
-  api_base: "https://api.z.ai/api/paas/v4"
+  api_base: "https://api.z.ai/api/coding/paas/v4"
   api_key_name: zhipu
   can_stream: true

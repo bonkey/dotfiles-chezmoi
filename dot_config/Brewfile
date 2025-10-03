@@ -195,7 +195,7 @@ cask '1password-cli' # Command-line interface for 1Password
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
-cask 'handbrake' # Open-source video transcoder
+cask 'handbrake-app' # Open-source video transcoder
 cask 'karabiner-elements' # Keyboard customizer
 cask 'keyboard-maestro' # Automation software
 cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
@@ -223,11 +223,11 @@ cask 'loopback'
 # Browsers
 cask 'firefox'
 cask 'brave-browser@beta'
-cask 'zen-browser@twilight'
+cask 'zen@twilight'
 
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 cask 'itermai' # Enable generative AI features in iTerm2
-cask 'macvim' # Text editor
+cask 'macvim-app' # Text editor
 cask 'zed' # Multiplayer code editor
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'cursor'

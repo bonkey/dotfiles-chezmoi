@@ -43,7 +43,7 @@ cz() {
     chezmoi "$@"
 }
 
-alias '??'="llm cmd -m gemini-2.5-flash"
+alias '??'="llm cmd -m gemini-flash-latest"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"
@@ -220,11 +220,11 @@ alias dig=doggo
 # --- LLM
 
 lgf() {
-    llmm gemini-2.5-flash "$@"
+    llmm gemini-flash-latest "$@"
 }
 
 lgp() {
-    llmm gemini-2.5-pro "$@"
+    llmm gemini-pro-latest "$@"
 }
 
 lgt() {
@@ -247,9 +247,6 @@ f0() { f "$@" --print0 }
 
 ff() { f --type f "$@" }
 ff0() { f0 --type f "$@" }
-
-alias fda="fd -HI"
-
 alias ag='ag --color-path "3;32" --color-line-number "0;36" --color-match "1;31;40"'
 alias agw="ag -w"
 alias aga="ag -u"

@@ -82,7 +82,7 @@ brew 'direnv' # Load/unload environment variables based on $PWD
 brew 'ollama' # Create, run, and share large language models (LLMs)
 cask 'github-copilot-for-xcode'
 brew 'block-goose-cli'
-cask 'Goose'
+cask 'block-goose'
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)
@@ -97,7 +97,7 @@ brew 'graphite' # Allows you to manage your stacked changes and submit them for 
 # Tools for developers
 brew 'tokei' # Program that allows you to count code, quickly
 cask 'fork' # GIT client
-cask 'gitup' # Git interface focused on visual interaction
+cask 'gitup-app' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 cask 'sublime-merge' # Git client
@@ -138,7 +138,7 @@ brew 'xcinfo' # Tool to get information about and install available Xcode versio
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 brew 'xcode-build-server'
-cask 'xcodes' # Install and switch between multiple versions of Xcode
+cask 'xcodes-app' # Install and switch between multiple versions of Xcode
 brew 'swift-sh'
 brew 'idb-companion'
 
@@ -175,7 +175,7 @@ cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number o
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspace-nerd-font'
+cask 'font-monaspice-nerd-font'
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 

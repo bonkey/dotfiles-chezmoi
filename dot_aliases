@@ -682,7 +682,7 @@ gcai() {
     local prompt="Create one-liner commit message from the git diff changes. \
     Make it useful, as high level as possible. \
     Never use backticks since they can be passed to a shell accidentally"
-    local model="gemini-2.5-flash"
+    local model="gemini-flash-"
 
     local add_changes=false
     local no_push_pull=false

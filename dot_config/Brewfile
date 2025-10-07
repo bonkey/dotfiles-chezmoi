@@ -46,7 +46,6 @@ brew 'nushell' # Modern shell for the GitHub era
 brew 'p7zip' # 7-Zip (high compression file archiver) implementation
 brew 'pstree' # Show ps output as a tree
 brew 'spacer' # Small command-line utility for adding spacers to command output
-brew 'tldr' # Simplified and community-driven man pages
 brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'figlet'
 

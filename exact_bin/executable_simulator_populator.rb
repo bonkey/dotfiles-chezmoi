@@ -6,6 +6,12 @@ require 'rainbow'
 require 'English'
 
 # Device arrays
+MODERN_DEVICES = [
+  'iPhone 17 Pro Max',
+  'iPhone 17 Pro',
+  'iPhone 16 Pro'
+].freeze
+
 ESSENTIAL_DEVICES = [
   'iPhone 16 Pro'
 ].freeze
@@ -13,6 +19,8 @@ ESSENTIAL_DEVICES = [
 FULL_RANGE_DEVICES = [
   'iPad Pro 11-inch (M4)',
   'iPad Pro 13-inch (M4)',
+  'iPhone 17 Pro Max',
+  'iPhone 17 Pro',
   'iPhone 16 Pro Max',
   'iPhone 16 Pro',
   'iPhone 16',
@@ -22,16 +30,20 @@ FULL_RANGE_DEVICES = [
 # Runtime to devices mapping
 RUNTIME_DEVICE_MAPPING = {
   'iOS 26.0' => {
-    devices: ESSENTIAL_DEVICES,
+    devices: MODERN_DEVICES,
     aliases: nil
   },
   'iOS 18.6' => {
     devices: FULL_RANGE_DEVICES,
     aliases: nil
   },
-  'iOS 18.4' => {
+  'iOS 18.5' => {
     devices: ['iPhone 16 Pro'],
     aliases: ['iPhone 16 Pro']
+  },
+  'iOS 18.0' => {
+    devices: ['iPhone 16 Pro'],
+    aliases: nil
   },
   'iOS 17.5' => {
     devices: ['iPhone 15 Pro'],
@@ -39,22 +51,21 @@ RUNTIME_DEVICE_MAPPING = {
   }
 }.freeze
 
-
 class SimulatorPopulator
   def initialize(runtime_device_mapping:, verbose: false, runtimes_filter: nil)
     @runtime_device_mapping = runtime_device_mapping
     @verbose = verbose
     @runtimes_filter = runtimes_filter
 
-    run_command("xcrun simctl list -j devicetypes") do |output|
+    run_command('xcrun simctl list -j devicetypes') do |output|
       @device_types = JSON.parse(output)
     end
 
-    run_command("xcrun simctl list -j runtimes") do |output|
+    run_command('xcrun simctl list -j runtimes') do |output|
       @runtimes = JSON.parse(output)
     end
 
-    run_command("xcrun simctl list -j devices") do |output|
+    run_command('xcrun simctl list -j devices') do |output|
       @devices = JSON.parse(output)
     end
 
@@ -85,8 +96,8 @@ class SimulatorPopulator
 
   def delete_unavailable
     puts 'Deleting unavailable simulators...'
-    run_command("xcrun simctl delete unavailable") do |output|
-      puts Rainbow("Deleted unavailable simulators").color(:green).bright if $CHILD_STATUS.success?
+    run_command('xcrun simctl delete unavailable') do |_output|
+      puts Rainbow('Deleted unavailable simulators').color(:green).bright if $CHILD_STATUS.success?
     end
   end
 
@@ -111,11 +122,27 @@ class SimulatorPopulator
       aliases = config.is_a?(Hash) ? config[:aliases] : nil
 
       devices.each_with_index do |device_name, index|
+        puts "  Processing device: #{device_name}" if @verbose
         # Find the device type
         device_type = @device_types['devicetypes'].find { |dt| dt['name'] == device_name }
         unless device_type
-          puts Rainbow("Device type #{device_name} not found, skipping...").color(:yellow)
-          next
+          puts Rainbow("ERROR: Device type '#{device_name}' not found!").color(:red).bright
+          puts "  Available device types containing '#{device_name.split.first}':"
+
+          # Show similar device types as suggestions
+          similar_devices = @device_types['devicetypes']
+                            .select { |dt| dt['name'].downcase.include?(device_name.downcase.split.first.downcase) }
+                            .map { |dt| dt['name'] }
+                            .sort
+                            .first(5)
+
+          if similar_devices.any?
+            similar_devices.each { |d| puts "    - #{d}" }
+          else
+            puts '    (none found - run --list-devices to see all)'
+          end
+
+          exit 1
         end
 
         # Determine simulator name
@@ -139,12 +166,88 @@ class SimulatorPopulator
 
       devices.each_with_index do |device, index|
         simulator_name = get_simulator_name(device, runtime, aliases, index)
-        if simulator_name != device
-          puts "    - #{device} → #{simulator_name}"
-        else
+        if simulator_name == device
           puts "    - #{device}"
+        else
+          puts "    - #{device} → #{simulator_name}"
         end
       end
+    end
+  end
+
+  def list_runtimes
+    puts Rainbow('Available Runtimes:').color(:cyan).bright
+    @available_runtimes.sort_by { |r| r['name'] }.each do |r|
+      puts "  - #{r['name']} (#{r['identifier']})"
+    end
+  end
+
+  def list_devices
+    devices = @device_types['devicetypes']
+    # Group devices by broad category
+    groups = Hash.new { |h, k| h[k] = [] }
+    devices.each do |d|
+      name = d['name']
+      category =
+        case name
+        when /iPad Pro/i then 'iPad Pro'
+        when /iPad Air/i then 'iPad Air'
+        when /iPad mini/i then 'iPad Mini'
+        when /iPad/i then 'iPad'
+        when /Watch.*SE/i then 'Apple Watch SE'
+        when /Watch.*Ultra/i then 'Apple Watch Ultra'
+        when /Watch/i then 'Apple Watch'
+        when /Apple TV|tvOS/i then 'Apple TV'
+        when /iPhone/i then 'iPhone'
+        when /Vision/i then 'Vision'
+        when /Mac/i then 'Mac'
+        else 'Other'
+        end
+      groups[category] << name
+    end
+
+    order = ['iPhone', 'iPad', 'iPad Air', 'iPad Mini', 'iPad Pro', 'Apple Watch', 'Apple Watch SE', 'Apple Watch Ultra', 'Apple TV',
+             'Vision', 'Mac', 'Other']
+    order.each do |cat|
+      next unless groups.key?(cat)
+
+      puts Rainbow(cat).color(:cyan).bright
+      smart_sort_reverse(groups[cat].uniq).each do |device|
+        puts "  • #{device}"
+      end
+      puts
+    end
+  end
+
+  def smart_sort_reverse(device_names)
+    device_names.sort do |a, b|
+      # Extract model numbers for comparison
+      a_num = extract_model_number(a)
+      b_num = extract_model_number(b)
+
+      if a_num && b_num
+        # Both have numbers, compare numerically (reverse order)
+        comparison = b_num <=> a_num
+        next comparison unless comparison == 0
+      elsif a_num && !b_num
+        # Only a has number, it comes first (newer)
+        next -1
+      elsif !a_num && b_num
+        # Only b has number, it comes first (newer)
+        next 1
+      end
+
+      # Fall back to reverse string comparison
+      b <=> a
+    end
+  end
+
+  def extract_model_number(device_name)
+    # Extract primary model number (iPhone 17, iPad Pro 13-inch, etc.)
+    if match = device_name.match(/(?:iPhone|iPad|Watch Series|Apple TV 4K|Vision Pro)\s+(\d+)/)
+      match[1].to_i
+    elsif match = device_name.match(/(\d+)(?:st|nd|rd|th)\s+generation/)
+      match[1].to_i
     end
   end
 
@@ -152,9 +255,7 @@ class SimulatorPopulator
 
   def get_simulator_name(device_name, runtime_name, aliases, index)
     # Use alias if provided
-    if aliases && aliases[index]
-      return aliases[index]
-    end
+    return aliases[index] if aliases && aliases[index]
 
     # Default: device name with runtime
     "#{device_name} (#{runtime_name})"
@@ -164,7 +265,6 @@ class SimulatorPopulator
     runtime = @available_runtimes
               .select { |runtime| runtime['name'] == name }
               .first
-
     return if runtime.nil?
 
     runtime['identifier']
@@ -179,8 +279,13 @@ class SimulatorPopulator
     end
     args = ["'#{name}'", "'#{device_type}'", "'#{runtime_id}'"].join ' '
 
-    run_command("xcrun simctl create #{args} 2> /dev/null") do |_output|
-      puts "Created #{Rainbow(name).color(:green).bright}" if $CHILD_STATUS.success?
+    puts Rainbow("$ xcrun simctl create #{args}").color(:magenta) if @verbose
+    stderr_output = `xcrun simctl create #{args} 2>&1 >/dev/null`
+    if $CHILD_STATUS.success?
+      puts "Created #{Rainbow(name).color(:green).bright}"
+    else
+      error_msg = stderr_output.strip.lines.last&.strip || 'Unknown error'
+      puts Rainbow("FAILED to create #{name}: #{error_msg}").color(:red).bright
     end
   end
 
@@ -222,16 +327,14 @@ class SimulatorPopulator
       normalized_requested = requested_runtime.start_with?('iOS ') ? requested_runtime : "iOS #{requested_runtime}"
       version_only = requested_runtime.gsub('iOS ', '')
 
-      unless valid_runtimes.include?(normalized_requested) || valid_versions.include?(version_only)
-        invalid_runtimes << requested_runtime
-      end
+      invalid_runtimes << requested_runtime unless valid_runtimes.include?(normalized_requested) || valid_versions.include?(version_only)
     end
 
-    if invalid_runtimes.any?
-      puts Rainbow("Error: Invalid runtime identifier(s): #{invalid_runtimes.join(', ')}").color(:red).bright
-      puts Rainbow("Available runtime identifiers: #{valid_runtimes.join(', ')}").color(:cyan).bright
-      exit 1
-    end
+    return unless invalid_runtimes.any?
+
+    puts Rainbow("Error: Invalid runtime identifier(s): #{invalid_runtimes.join(', ')}").color(:red).bright
+    puts Rainbow("Available runtime identifiers: #{valid_runtimes.join(', ')}").color(:cyan).bright
+    exit 1
   end
 end
 
@@ -239,6 +342,8 @@ options = {
   remove_existing: true,
   create_all_variants: true,
   list_mapping: false,
+  list_runtimes: false,
+  list_devices: false,
   verbose: false,
   runtimes: nil,
   delete_unavailable: true
@@ -257,8 +362,14 @@ option_parser = OptionParser.new do |opts|
     options[:delete_unavailable] = v
   end
 
-  opts.on '-l', '--list-mapping', 'List the runtime to device mapping and exit' do |v|
+  opts.on '--list-mapping', 'List the runtime to device mapping and exit' do |v|
     options[:list_mapping] = v
+  end
+  opts.on '--list-runtimes', 'List all available runtimes (from simctl) and exit' do |v|
+    options[:list_runtimes] = v
+  end
+  opts.on '--list-devices', 'List all available device types (from simctl) and exit' do |v|
+    options[:list_devices] = v
   end
   opts.on '--runtimes RUNTIMES', 'Comma-separated list of iOS versions to target (e.g., "26.0,18.5" or "iOS 26.0,iOS 18.5")' do |v|
     options[:runtimes] = v.split(',').map(&:strip)
@@ -279,6 +390,16 @@ populator = SimulatorPopulator.new(
   verbose: options[:verbose],
   runtimes_filter: options[:runtimes]
 )
+
+if options[:list_runtimes]
+  populator.list_runtimes
+  exit unless options[:list_devices]
+end
+
+if options[:list_devices]
+  populator.list_devices
+  exit unless options[:list_runtimes]
+end
 
 if options[:list_mapping]
   populator.list_mapping

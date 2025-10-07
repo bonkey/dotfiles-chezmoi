@@ -180,12 +180,10 @@ cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of gl
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
-cask 'qlimagesize' # Display image info and preview unsupported formats in QuickLook
 cask 'qlprettypatch' # QuickLook plugin to view patch files
 cask 'qlvideo' # Thumbnails, static previews, cover art and metadata for video files
 cask 'quicklook-csv' # QuickLook plugin for CSV files
 cask 'quicklook-json' # QuickLook plugin for JSON files
-cask 'quicklookapk' # Quick Look plugin for Android packages
 cask 'webpquicklook' # QuickLook plugin for webp files
 cask 'syntax-highlight' # Quicklook extension for source files
 

@@ -2,9 +2,6 @@ if [[ $ZSH_DEBUGRC == true ]]; then
   zmodload zsh/zprof
 fi
 
-# only for interactive shells
-export GIT_PAGER=delta
-
 source ${HOME}/bin/_common.zsh
 
 zstyle ':autocomplete:tab:*' fzf yes

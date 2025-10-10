@@ -3,6 +3,11 @@
   // CONTEXT SERVERS
   // ================================
   "context_servers": {
+    "mcp-server-puppeteer": {
+      "source": "extension",
+      "enabled": false,
+      "settings": {}
+    },
     "Ref": {
       "source": "custom",
       "enabled": true,
@@ -27,24 +32,17 @@
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
     },
+    "sosumi": {
+      "source": "custom",
+      "enabled": true,
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://sosumi.ai/mcp"]
+    },
     "tavily": {
       "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
-    },
-    "supermemory": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": [
-        "-y",
-        "supergateway",
-        "--streamableHttp",
-        "https://api.supermemory.ai/mcp",
-        "--header",
-        "Authorization: Bearer <SUPERMEMORY_API_KEY_REDACTED>"
-      ]
     },
     "exa": {
       "source": "custom",
@@ -95,6 +93,7 @@
       "env": {}
     }
   },
+
   // ================================
   // AI AGENT CONFIGURATION
   // ================================
@@ -102,21 +101,58 @@
     "always_allow_tool_actions": true,
     "enabled": true,
     "button": true,
-    "default_width": 600,
+    "default_width": 500,
     "dock": "right",
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5"
+      "model": "claude-sonnet-4"
     },
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-sonnet-4"
+      "provider": "z.ai Coding",
+      "model": "glm-4.6"
     },
     "commit_message_model": {
       "provider": "google",
       "model": "gemini-2.5-flash"
     }
   },
+
+  "language_models": {
+    "openai_compatible": {
+      "z.ai Coding": {
+        "api_url": "https://api.z.ai/api/coding/paas/v4",
+        "available_models": [
+          {
+            "name": "glm-4.5-air",
+            "display_name": "z.ai: GLM-4.5 Air",
+            "max_tokens": 128000,
+            "max_output_tokens": 96000,
+            "max_completion_tokens": 128000,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": true
+            }
+          },
+          {
+            "name": "glm-4.6",
+            "display_name": "z.ai: GLM-4.6",
+            "max_tokens": 200000,
+            "max_output_tokens": 128000,
+            "max_completion_tokens": 128000,
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": true
+            }
+          }
+        ]
+      }
+    }
+  },
+
   // ================================
   // EDITING & PREDICTIONS
   // ================================
@@ -135,6 +171,7 @@
   "auto_signature_help": true,
   "always_treat_brackets_as_autoclosed": true,
   "use_autoclose": false,
+
   // ================================
   // SEARCH CONFIGURATION
   // ================================
@@ -145,6 +182,7 @@
     "regex": true
   },
   "use_smartcase_search": true,
+
   // ================================
   // APPEARANCE & THEME
   // ================================
@@ -153,6 +191,7 @@
     "dark": "Zedokai Darker (Filter Spectrum)",
     "light": "Zedokai Light"
   },
+
   // ================================
   // KEYMAP
   // ================================
@@ -163,12 +202,14 @@
     "toggle_relative_line_numbers": true,
     "use_smartcase_find": true
   },
+
   // ================================
   // FONTS & TYPOGRAPHY
   // ================================
   "buffer_font_family": "0xProto Nerd Font Mono",
   "buffer_font_size": 16,
   "ui_font_size": 15,
+
   // ================================
   // LAYOUT & DISPLAY
   // ================================
@@ -178,6 +219,7 @@
   "cursor_shape": "bar",
   "current_line_highlight": "all",
   "hide_mouse": "on_typing_and_movement",
+
   // ================================
   // PANELS & UI ELEMENTS
   // ================================
@@ -222,6 +264,7 @@
     "edit_debounce_ms": 700,
     "scroll_debounce_ms": 50
   },
+
   // ================================
   // FILE TYPES & LANGUAGE SUPPORT
   // ================================
@@ -242,6 +285,7 @@
       "format_on_save": "off"
     }
   },
+
   // ================================
   // LANGUAGE SERVER PROTOCOL (LSP)
   // ================================
@@ -256,6 +300,7 @@
       }
     }
   },
+
   // ================================
   // VERSION CONTROL (GIT)
   // ================================
@@ -265,11 +310,13 @@
       "delay_ms": 500
     }
   },
+
   // ================================
   // TERMINAL CONFIGURATION
   // ================================
   "terminal": {
     "copy_on_select": true,
+    "keep_selection_on_copy": false,
     "font_size": 13,
     "font_family": "0xProto Nerd Font",
     "default_height": 150,

@@ -595,6 +595,16 @@ alias pos="_pod search"
 
 # --- git
 
+git() {
+  if [ -t 1 ]; then
+    # Session is interactive, use delta
+    command git -c interactive.diffFilter="delta --color-only" "$@"
+  else
+    # Session is not interactive, run git as normal
+    command git "$@"
+  fi
+}
+
 alias gf > /dev/null && unalias gf
 gf() {
   fork .

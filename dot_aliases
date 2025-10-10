@@ -132,6 +132,7 @@ c() {
 }
 
 z() {
+  unset GIT_PAGER
   if [[ -z "$1" ]]; then
     zed .
   else

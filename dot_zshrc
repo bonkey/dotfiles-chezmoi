@@ -2,6 +2,8 @@ if [[ $ZSH_DEBUGRC == true ]]; then
   zmodload zsh/zprof
 fi
 
+unset GIT_PAGER
+
 source ${HOME}/bin/_common.zsh
 
 zstyle ':autocomplete:tab:*' fzf yes
@@ -71,4 +73,3 @@ eval "$(atuin init zsh)"
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/dbauke-mac/.lmstudio/bin"
 # End of LM Studio CLI section
-

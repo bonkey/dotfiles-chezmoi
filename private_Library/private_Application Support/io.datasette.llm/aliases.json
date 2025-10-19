@@ -1,5 +1,13 @@
 {
     "llama3": "replicate-meta-meta-llama-3-70b-instruct",
     "gemini-2.5-pro": "gemini/gemini-2.5-pro-preview-05-06",
-    "gemini-2.5-flash": "gemini/gemini-2.5-flash-preview-05-20"
+    "gemini-2.5-flash": "gemini/gemini-2.5-flash-preview-05-20",
+    "gpt-mini-latest": "gpt-4.1-mini",
+    "gpt-nano-latest": "gpt-4.1-nano",
+    "gpt-turbo-instruct-latest": "gpt-3.5-turbo-instruct",
+    "gemini-pro-latest": "gemini/gemini-2.5-pro",
+    "gemini-flash-latest": "gemini/gemini-2.5-flash",
+    "gemini-flash-thinking-latest": "gemini/gemini-2.0-flash-thinking-exp-01-21",
+    "gemini-pro-exp-latest": "gemini/gemini-2.5-pro-exp-03-25",
+    "gemini-flash-lite-latest": "gemini/gemini-2.5-flash-lite"
 }

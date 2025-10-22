@@ -95,9 +95,13 @@ alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"
 alias psg="ps aux | grep -i"
 # alias top="glances --process-short-name"
-alias dfh="dfc -blw"
 alias duh="du -csh"
 alias du="du -h"
+
+dfh() {
+    fs=${1:/}
+    duf -output 'filesystem, size, used, avail, usage, mountpoint' "${fs}"
+}
 
 x86() {
   arch -x86_64 "$@"

@@ -247,6 +247,9 @@ f0() { f "$@" --print0 }
 
 ff() { f --type f "$@" }
 ff0() { f0 --type f "$@" }
+
+fda() { fd --no-ignore --hidden "$@" }
+
 alias ag='ag --color-path "3;32" --color-line-number "0;36" --color-match "1;31;40"'
 alias agw="ag -w"
 alias aga="ag -u"

@@ -19,6 +19,7 @@ tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
 tap 'samwho/spacer'
 tap 'withgraphite/tap'
 tap 'ycd/tap'
+tap 'basicmachines-co/basic-memory'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -82,6 +83,7 @@ brew 'ollama' # Create, run, and share large language models (LLMs)
 cask 'github-copilot-for-xcode'
 brew 'block-goose-cli'
 cask 'block-goose'
+brew 'basic-memory'
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)

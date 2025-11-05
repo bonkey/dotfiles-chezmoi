@@ -2,6 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AIFeatureFunctionCalling</key>
+	<false/>
+	<key>AIFeatureHostedCodeInterpeter</key>
+	<false/>
+	<key>AIFeatureHostedFileSearch</key>
+	<false/>
+	<key>AIFeatureHostedWebSearch</key>
+	<false/>
+	<key>AIFeatureStreamingResponses</key>
+	<false/>
+	<key>AITermAPI</key>
+	<integer>1</integer>
 	<key>AboutToPasteTabsWithCancel</key>
 	<true/>
 	<key>AboutToPasteTabsWithCancel_selection</key>
@@ -12,6 +24,8 @@
 	<integer>1048576</integer>
 	<key>AiModel</key>
 	<string>Gemini 1.5 flash</string>
+	<key>AiResponseMaxTokens</key>
+	<integer>8192</integer>
 	<key>AitermURL</key>
 	<string>https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent</string>
 	<key>AlternateMouseScroll</key>
@@ -4570,6 +4584,8 @@
 	<real>11</real>
 	<key>Default Bookmark Guid</key>
 	<string>3B825298-6BBB-4FF8-8030-95A43DEF752F</string>
+	<key>Default Browser Profile Guid</key>
+	<string>3D17851E-ED8D-47DA-8D56-9B54AB60B40F</string>
 	<key>DeleteProfile_SilenceUntil</key>
 	<real>565967913.06176603</real>
 	<key>DeleteProfile_selection</key>

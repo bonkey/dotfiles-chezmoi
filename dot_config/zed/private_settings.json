@@ -3,11 +3,6 @@
   // CONTEXT SERVERS
   // ================================
   "context_servers": {
-    "mcp-server-puppeteer": {
-      "source": "extension",
-      "enabled": false,
-      "settings": {}
-    },
     "Ref": {
       "source": "custom",
       "enabled": true,
@@ -15,15 +10,6 @@
       "args": ["ref-tools-mcp@latest"],
       "env": {
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
-      }
-    },
-    "firecrawl": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "firecrawl-mcp"],
-      "env": {
-        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       }
     },
     "deepwiki": {
@@ -44,12 +30,6 @@
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
     },
-    "exa": {
-      "source": "custom",
-      "enabled": true,
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"]
-    },
     "openmemory": {
       "source": "custom",
       "enabled": false,
@@ -59,12 +39,6 @@
         "OPENMEMORY_API_KEY": "<OPENMEMORY_API_KEY_REDACTED>",
         "CLIENT_NAME": "openmemory"
       }
-    },
-    "context7": {
-      "source": "custom",
-      "enabled": false,
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
     },
     "peekaboo": {
       "source": "custom",
@@ -84,13 +58,6 @@
       "env": {
         "INCREMENTAL_BUILDS_ENABLED": "true"
       }
-    },
-    "swiftlens": {
-      "source": "custom",
-      "enabled": false,
-      "command": "uvx",
-      "args": ["swiftlens"],
-      "env": {}
     }
   },
 
@@ -103,13 +70,9 @@
     "button": true,
     "default_width": 500,
     "dock": "right",
-    "inline_assistant_model": {
-      "provider": "z.ai Coding",
-      "model": "glm-4.6"
-    },
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5"
+      "model": "claude-sonnet-4.5"
     },
     "commit_message_model": {
       "provider": "google",

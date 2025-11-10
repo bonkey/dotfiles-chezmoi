@@ -54,6 +54,8 @@ _eval_for_cmd_cached fzf "fzf --zsh"
 _eval_for_cmd_cached dyff "dyff completion zsh"
 _eval_for_cmd_cached oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
+_eval_for_cmd_cached codex "codex completion zsh"
+
 tsrc "${HOME}/.iterm2_shell_integration.zsh" \
     "${HOME}/.aliases.local" \
     "${HOME}/.aliases"

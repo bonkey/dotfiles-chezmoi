@@ -74,6 +74,8 @@ brew 'mas' # Mac App Store command-line interface
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'html2markdown'
 
+brew 'libusb', '--head'
+
 # Tools for package management
 brew 'mise' # Multi-language runtime manager
 brew 'direnv' # Load/unload environment variables based on $PWD

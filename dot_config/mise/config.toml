@@ -29,11 +29,12 @@ node = "latest"
 "npm:appium" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 
+"npm:@sentry/cli" = "latest"
+
 "npm:@openai/codex" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@qwen-code/qwen-code" = "latest"
 "npm:@nova-mcp/mcp-nova" = "latest"
-
 
 [settings]
 experimental = true

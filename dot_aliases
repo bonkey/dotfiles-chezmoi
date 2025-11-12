@@ -386,8 +386,8 @@ alias bef="bue fastlane"
 alias xcs="xcodes select"
 xcs15() { xcs '15.4' }
 xcs16() { xcs '16.4' }
-xcs26() { xcs '26.0.1' }
 xcs261() { xcs '26.1' }
+xcs261() { xcs '26.2 Beta' }
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 alias xcss="xcodes installed | grep Selected"

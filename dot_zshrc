@@ -64,12 +64,10 @@ if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
 fi
 
-# vim:set ft=zsh:
+export SS
 
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/dbauke-mac/.lmstudio/bin"
-# End of LM Studio CLI section
+# vim:set ft=zsh:

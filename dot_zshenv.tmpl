@@ -17,9 +17,6 @@ export SENTRY_AUTH_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" 
 
 export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GEMINI_API_KEY.value -}}"
 
-# export SSL_CERT_FILE='/Library/Application Support/Netskope/STAgent/data/nscacert.pem'
-# export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
-
 {{- end }}
 
 {{- if eq .chezmoi.hostname "danbau-personal" }}
@@ -95,6 +92,15 @@ export ATUIN_NOBIND="true"
 export ZIM_HOME="$HOME/.zim"
 
 export PATH="$HOME/.mint/bin:$HOME/bin/jetbrains:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$HOME/bin:$HOME/.local/bin:$HOME/bin/raycast:$HOME/bin/xcede:$GOPATH/bin:$BUN_INSTALL/bin:$HOMEBREW_PREFIX/opt/llvm/bin:$HOME/.cache/lm-studio/bin:$PATH"
+
+all_certificates_pem=~/.all_certificates.pem
+
+if [[ ! -f $all_certificates_pem ]]; then
+  security find-certificate -a -p /System/Library/Keychains/SystemRootCertificates.keychain /Library/Keychains/System.keychain > $all_certificates_pem
+fi
+
+export SSL_CERT_FILE=$all_certificates_pem
+export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
 
 eval_managers
 

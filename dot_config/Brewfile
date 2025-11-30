@@ -72,7 +72,6 @@ brew 'displayplacer' # macOS command line utility to configure multi-display res
 brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
 brew 'mas' # Mac App Store command-line interface
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
-brew 'html2markdown'
 
 brew 'libusb', '--head'
 
@@ -133,6 +132,8 @@ brew 'colima'
 
 # Markdown tools
 brew 'glow' # Render markdown on the CLI
+brew 'html2markdown'
+brew 'treemd'
 
 # Tools for Xcode
 brew 'xcbeautify' # Little beautifier tool for xcodebuild

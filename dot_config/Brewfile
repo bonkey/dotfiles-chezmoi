@@ -229,10 +229,12 @@ cask 'zen@twilight'
 
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 cask 'itermai' # Enable generative AI features in iTerm2
-cask 'macvim-app' # Text editor
-cask 'zed' # Multiplayer code editor
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'cursor'
+
+cask 'macvim-app' # Text editor
+cask 'zed' # Multiplayer code editor
+brew 'notepadexe'
 
 cask 'obs' # Open-source software for live streaming and screen recording
 

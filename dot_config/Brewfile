@@ -233,7 +233,7 @@ cask 'cursor'
 
 cask 'macvim-app' # Text editor
 cask 'zed' # Multiplayer code editor
-brew 'notepadexe'
+cask 'notepadexe'
 
 cask 'obs' # Open-source software for live streaming and screen recording
 

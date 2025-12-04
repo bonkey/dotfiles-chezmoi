@@ -3,17 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>AIFeatureFunctionCalling</key>
-	<false/>
+	<true/>
 	<key>AIFeatureHostedCodeInterpeter</key>
-	<false/>
+	<true/>
 	<key>AIFeatureHostedFileSearch</key>
-	<false/>
+	<true/>
 	<key>AIFeatureHostedWebSearch</key>
-	<false/>
+	<true/>
 	<key>AIFeatureStreamingResponses</key>
-	<false/>
+	<true/>
 	<key>AITermAPI</key>
-	<integer>1</integer>
+	<integer>2</integer>
+	<key>AIVectorStore</key>
+	<integer>0</integer>
 	<key>AboutToPasteTabsWithCancel</key>
 	<true/>
 	<key>AboutToPasteTabsWithCancel_selection</key>
@@ -21,13 +23,13 @@
 	<key>AddNewTabAtEndOfTabs</key>
 	<false/>
 	<key>AiMaxTokens</key>
-	<integer>1048576</integer>
+	<integer>400000</integer>
 	<key>AiModel</key>
-	<string>Gemini 1.5 flash</string>
+	<string>gpt-5.1</string>
 	<key>AiResponseMaxTokens</key>
-	<integer>8192</integer>
+	<integer>128000</integer>
 	<key>AitermURL</key>
-	<string>https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent</string>
+	<string>https://api.openai.com/v1/responses</string>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>BracketedPasteMode</key>

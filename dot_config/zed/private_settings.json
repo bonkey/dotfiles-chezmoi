@@ -4,7 +4,6 @@
   // ================================
   "context_servers": {
     "Ref": {
-      "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["ref-tools-mcp@latest"],
@@ -13,31 +12,26 @@
       }
     },
     "deepwiki": {
-      "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
     },
     "sosumi": {
-      "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://sosumi.ai/mcp"]
     },
     "tavily": {
-      "source": "custom",
       "enabled": true,
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
     },
     "basic-memory-cloud": {
-      "source": "custom",
       "enabled": true,
       "command": "uvx",
       "args": ["basic-memory", "mcp"]
     },
     "peekaboo": {
-      "source": "custom",
       "enabled": false,
       "command": "npx",
       "args": ["-y", "@steipete/peekaboo-mcp@beta"],
@@ -47,7 +41,6 @@
       }
     },
     "XcodeBuildMCP": {
-      "source": "custom",
       "enabled": false,
       "command": "npx",
       "args": ["-y", "xcodebuildmcp@latest"],
@@ -61,6 +54,10 @@
   // AI AGENT CONFIGURATION
   // ================================
   "agent": {
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5-codex"
+    },
     "always_allow_tool_actions": true,
     "enabled": true,
     "button": true,
@@ -173,6 +170,7 @@
     "dark": "Zedokai Darker (Filter Spectrum)",
     "light": "Zedokai Light"
   },
+  "colorize_brackets": true,
 
   // ================================
   // KEYMAP

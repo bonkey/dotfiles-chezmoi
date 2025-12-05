@@ -686,6 +686,8 @@ alias gco="git checkout"
 alias gcm="gco main"
 
 gcai() {
+    local GIT_PAGER=""
+    export GIT_PAGER
     local prompt="Create one-liner commit message from the git diff changes. \
     Make it useful, as high level as possible. \
     Never use backticks since they can be passed to a shell accidentally"
@@ -809,6 +811,7 @@ gcai() {
         log_message "Skipping push"
     fi
 }
+
 alias gl1m="git lg --merges"
 alias gl1="git lg --no-merges"
 

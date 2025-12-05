@@ -56,7 +56,7 @@
   "agent": {
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5-codex"
+      "model": "claude-sonnet-4.5"
     },
     "always_allow_tool_actions": true,
     "enabled": true,

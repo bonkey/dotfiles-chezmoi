@@ -52,7 +52,7 @@ zvm_after_init_commands+=(after_zvm)
 
 _eval_for_cmd_cached fzf "fzf --zsh"
 _eval_for_cmd_cached dyff "dyff completion zsh"
-_eval_for_cmd_cached oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
+_eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
 _eval_for_cmd_cached codex "codex completion zsh"
 

@@ -71,6 +71,10 @@ alias cal="gcal -s 1"
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 
+md() {
+    open -a Marked "$@"
+}
+
 br() {
     brew "$@"
 }

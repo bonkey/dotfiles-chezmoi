@@ -44,6 +44,7 @@ cz() {
 }
 
 alias '??'="llm cmd -m gemini-flash-latest"
+alias gy="gemini --yolo"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"

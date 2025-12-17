@@ -25,7 +25,7 @@ RARE_DEVICES = [
 ALL_DEVICES = LATEST_DEVICES + ESSENTIAL_DEVICES + RARE_DEVICES
 
 RUNTIME_DEVICE_MAPPING = {
-  'iOS 26.1' => {
+  'iOS 26.2' => {
     devices: LATEST_DEVICES,
     aliases: nil
   },

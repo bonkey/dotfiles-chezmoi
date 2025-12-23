@@ -2,20 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AIFeatureFunctionCalling</key>
-	<true/>
-	<key>AIFeatureHostedCodeInterpeter</key>
-	<true/>
-	<key>AIFeatureHostedFileSearch</key>
-	<true/>
-	<key>AIFeatureHostedWebSearch</key>
-	<true/>
-	<key>AIFeatureStreamingResponses</key>
-	<true/>
-	<key>AITermAPI</key>
-	<integer>2</integer>
-	<key>AIVectorStore</key>
-	<integer>0</integer>
 	<key>AboutToPasteTabsWithCancel</key>
 	<true/>
 	<key>AboutToPasteTabsWithCancel_selection</key>
@@ -23,13 +9,11 @@
 	<key>AddNewTabAtEndOfTabs</key>
 	<false/>
 	<key>AiMaxTokens</key>
-	<integer>400000</integer>
+	<integer>1048576</integer>
 	<key>AiModel</key>
-	<string>gpt-5.1</string>
-	<key>AiResponseMaxTokens</key>
-	<integer>128000</integer>
+	<string>Gemini 1.5 flash</string>
 	<key>AitermURL</key>
-	<string>https://api.openai.com/v1/responses</string>
+	<string>https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent</string>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>BracketedPasteMode</key>
@@ -4586,8 +4570,6 @@
 	<real>11</real>
 	<key>Default Bookmark Guid</key>
 	<string>3B825298-6BBB-4FF8-8030-95A43DEF752F</string>
-	<key>Default Browser Profile Guid</key>
-	<string>3D17851E-ED8D-47DA-8D56-9B54AB60B40F</string>
 	<key>DeleteProfile_SilenceUntil</key>
 	<real>565967913.06176603</real>
 	<key>DeleteProfile_selection</key>

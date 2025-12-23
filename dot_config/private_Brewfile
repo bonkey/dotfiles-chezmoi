@@ -35,8 +35,8 @@ brew 'oh-my-posh' # Prompt theme engine for any shell
 brew 'sd' # Intuitive find & replace CLI
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'television' # General purpose fuzzy finder TUI
-brew 'coreutils'
-brew 'sleepwatcher'
+brew 'coreutils' # GNU File, Shell, and Text utilities
+brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
 
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash
@@ -48,7 +48,7 @@ brew 'p7zip' # 7-Zip (high compression file archiver) implementation
 brew 'pstree' # Show ps output as a tree
 brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'tree' # Display directories as trees (with optional color/HTML output)
-brew 'figlet'
+brew 'figlet' # Banner-like program prints strings as ASCII art
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -81,11 +81,11 @@ brew 'direnv' # Load/unload environment variables based on $PWD
 
 # GenAI
 brew 'ollama' # Create, run, and share large language models (LLMs)
-cask 'github-copilot-for-xcode'
-brew 'block-goose-cli'
-cask 'block-goose'
-brew 'basic-memory'
-brew 'mistral-vibe'
+cask 'github-copilot-for-xcode' # Xcode extension for GitHub Copilot
+brew 'block-goose-cli' # Open source, extensible AI agent that goes beyond code suggestions
+cask 'block-goose' # Open source, extensible AI agent that goes beyond code suggestions
+brew 'basic-memory' # AI-powered knowledge management system with MCP server integration
+brew 'mistral-vibe' # Minimal CLI coding agent
 
 # Tools for version control
 brew 'ctags' # Reimplementation of ctags(1)
@@ -125,16 +125,16 @@ brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
 brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 brew 'libyaml' # YAML Parser
-brew 'fx'
+brew 'fx' # Terminal JSON viewer
 
 # Docker
-brew 'docker-compose'
-brew 'colima'
+brew 'docker-compose' # Isolated development environments using Docker
+brew 'colima' # Container runtimes on MacOS (and Linux) with minimal setup
 
 # Markdown tools
 brew 'glow' # Render markdown on the CLI
-brew 'html2markdown'
-brew 'treemd'
+brew 'html2markdown' # Convert HTML to Markdown
+brew 'treemd' # TUI and CLI dual pane markdown viewer
 
 # Tools for Xcode
 brew 'xcbeautify' # Little beautifier tool for xcodebuild
@@ -142,10 +142,10 @@ brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
 brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
-brew 'xcode-build-server'
+brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 cask 'xcodes-app' # Install and switch between multiple versions of Xcode
-brew 'swift-sh'
-brew 'idb-companion'
+brew 'swift-sh' # Scripting with easy zero-conf dependency imports
+brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
 
 # Tools for working with media files
 brew 'ffmpeg' # Play, record, convert, and stream audio and video
@@ -171,7 +171,7 @@ brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-input'
+cask 'font-input' # 
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -180,7 +180,7 @@ cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number o
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspice-nerd-font'
+cask 'font-monaspice-nerd-font' # 
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 
@@ -207,21 +207,21 @@ cask 'rectangle-pro' # Window snapping tool
 cask 'retcon' # Drag-and-drop Git history editor
 cask 'setapp' # Collection of apps available by subscription
 cask 'typora' # Configurable document editor that supports Markdown
-cask 'cap'
-cask 'superkey'
+cask 'cap' # Screen recording software
+cask 'superkey' # Search and click text anywhere on screen
 
 # Hardware
-brew 'uhubctl'
+brew 'uhubctl' # USB hub per-port power control
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'elgato-control-center' # Control your Elgato key lights
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
 
-cask 'soundsource'
-cask 'loopback'
+cask 'soundsource' # Sound and audio controller
+cask 'loopback' # Cable-free audio router
 
 # Browsers
-cask 'firefox'
+cask 'firefox' # Web browser
 
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 cask 'itermai' # Enable generative AI features in iTerm2
@@ -229,7 +229,7 @@ cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acce
 
 cask 'macvim-app' # Text editor
 cask 'zed' # Multiplayer code editor
-cask 'notepadexe'
+cask 'notepadexe' # Lightweight code editor
 
 cask 'obs' # Open-source software for live streaming and screen recording
 

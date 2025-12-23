@@ -8,28 +8,28 @@
       "command": "npx",
       "args": ["ref-tools-mcp@latest"],
       "env": {
-        "REF_API_KEY": "<REF_API_KEY_REDACTED>"
-      }
+        "REF_API_KEY": "<REF_API_KEY_REDACTED>",
+      },
     },
     "deepwiki": {
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"]
+      "args": ["-y", "mcp-remote", "https://mcp.deepwiki.com/mcp"],
     },
     "sosumi": {
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://sosumi.ai/mcp"]
+      "args": ["-y", "mcp-remote", "https://sosumi.ai/mcp"],
     },
     "tavily": {
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"]
+      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"],
     },
     "basic-memory-cloud": {
       "enabled": true,
       "command": "uvx",
-      "args": ["basic-memory", "mcp"]
+      "args": ["basic-memory", "mcp"],
     },
     "peekaboo": {
       "enabled": false,
@@ -37,17 +37,17 @@
       "args": ["-y", "@steipete/peekaboo-mcp@beta"],
       "env": {
         "PEEKABOO_AI_PROVIDERS": "anthropic/claude-opus-4,openai/gpt-4.1,ollama/llava:latest",
-        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
-      }
+        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>",
+      },
     },
     "XcodeBuildMCP": {
       "enabled": false,
       "command": "npx",
       "args": ["-y", "xcodebuildmcp@latest"],
       "env": {
-        "INCREMENTAL_BUILDS_ENABLED": "true"
-      }
-    }
+        "INCREMENTAL_BUILDS_ENABLED": "true",
+      },
+    },
   },
 
   // ================================
@@ -56,7 +56,7 @@
   "agent": {
     "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5"
+      "model": "claude-sonnet-4.5",
     },
     "always_allow_tool_actions": true,
     "enabled": true,
@@ -65,19 +65,19 @@
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5"
+      "model": "claude-sonnet-4.5",
     },
     "commit_message_model": {
       "provider": "google",
-      "model": "gemini-2.5-flash"
-    }
+      "model": "gemini-2.5-flash",
+    },
   },
   "completions": {
     "words": "fallback",
     "words_min_length": 3,
     "lsp": true,
     "lsp_fetch_timeout_ms": 0,
-    "lsp_insert_mode": "replace_suffix"
+    "lsp_insert_mode": "replace_suffix",
   },
 
   // ================================
@@ -98,25 +98,12 @@
               "tools": true,
               "images": false,
               "parallel_tool_calls": true,
-              "prompt_cache_key": true
-            }
+              "prompt_cache_key": true,
+            },
           },
           {
-            "name": "glm-4.5-airx",
-            "display_name": "GLM-4.5 AirX",
-            "max_tokens": 128000,
-            "max_output_tokens": 96000,
-            "max_completion_tokens": 128000,
-            "capabilities": {
-              "tools": true,
-              "images": false,
-              "parallel_tool_calls": true,
-              "prompt_cache_key": true
-            }
-          },
-          {
-            "name": "glm-4.6",
-            "display_name": "GLM-4.6",
+            "name": "glm-4.7",
+            "display_name": "GLM-4.7",
             "max_tokens": 200000,
             "max_output_tokens": 128000,
             "max_completion_tokens": 128000,
@@ -124,24 +111,24 @@
               "tools": true,
               "images": false,
               "parallel_tool_calls": true,
-              "prompt_cache_key": true
-            }
-          }
-        ]
-      }
-    }
+              "prompt_cache_key": true,
+            },
+          },
+        ],
+      },
+    },
   },
 
   // ================================
   // EDITING & PREDICTIONS
   // ================================
   "edit_predictions": {
-    "mode": "subtle"
+    "mode": "subtle",
   },
   "autosave": {
     "after_delay": {
-      "milliseconds": 10000
-    }
+      "milliseconds": 10000,
+    },
   },
   "format_on_save": "on",
   "formatter": "auto",
@@ -158,7 +145,7 @@
     "whole_word": false,
     "case_sensitive": false,
     "include_ignored": false,
-    "regex": true
+    "regex": true,
   },
   "use_smartcase_search": true,
 
@@ -168,7 +155,7 @@
   "theme": {
     "mode": "system",
     "dark": "Zedokai Darker (Filter Spectrum)",
-    "light": "Zedokai Light"
+    "light": "Zedokai Light",
   },
   "colorize_brackets": true,
 
@@ -180,7 +167,7 @@
   "vim": {
     "use_system_clipboard": "never",
     "toggle_relative_line_numbers": true,
-    "use_smartcase_find": true
+    "use_smartcase_find": true,
   },
 
   // ================================
@@ -204,13 +191,13 @@
   // PANELS & UI ELEMENTS
   // ================================
   "outline_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "tab_bar": {
-    "show": true
+    "show": true,
   },
   "minimap": {
-    "show": "auto"
+    "show": "auto",
   },
   "title_bar": {
     "show_branch_icon": true,
@@ -218,23 +205,23 @@
     "show_project_items": true,
     "show_onboarding_banner": true,
     "show_user_picture": true,
-    "show_sign_in": true
+    "show_sign_in": true,
   },
   "tabs": {
     "close_position": "right",
     "git_status": true,
-    "file_icons": true
+    "file_icons": true,
   },
   "toolbar": {
     "breadcrumbs": true,
-    "code_actions": true
+    "code_actions": true,
   },
   "indent_guides": {
     "enabled": true,
     "line_width": 1,
     "active_line_width": 2,
     "coloring": "indent_aware",
-    "background_coloring": "disabled"
+    "background_coloring": "disabled",
   },
   "inlay_hints": {
     "enabled": true,
@@ -242,7 +229,7 @@
     "show_parameter_hints": true,
     "show_other_hints": true,
     "edit_debounce_ms": 700,
-    "scroll_debounce_ms": 50
+    "scroll_debounce_ms": 50,
   },
 
   // ================================
@@ -252,18 +239,18 @@
     "Ruby": ["Gemfile", "Dangerfile", "Fastfile", "Pluginfile", "Gymfile", "Scanfile", "Brewfile"],
     "Shell Script": [".aliases*", ".z*tmpl*", ".aliases*"],
     "Diff": ["*.patch"],
-    "Python": ["*.gyb"]
+    "Python": ["*.gyb"],
   },
   "languages": {
     "Ruby": {
-      "language_servers": ["solargraph", "rubocop", "!ruby-lsp"]
+      "language_servers": ["solargraph", "rubocop", "!ruby-lsp"],
     },
     "Python": {
-      "language_servers": ["!pylsp", "pyright"]
+      "language_servers": ["!pylsp", "pyright"],
     },
     "Swift": {
-      "format_on_save": "off"
-    }
+      "format_on_save": "off",
+    },
   },
 
   // ================================
@@ -272,13 +259,13 @@
   "lsp": {
     "solargraph": {
       "settings": {
-        "use_bundler": false
+        "use_bundler": false,
       },
       "initialization_options": {
         "diagnostics": true,
-        "formatting": true
-      }
-    }
+        "formatting": true,
+      },
+    },
   },
 
   // ================================
@@ -287,8 +274,8 @@
   "git": {
     "inline_blame": {
       "enabled": true,
-      "delay_ms": 500
-    }
+      "delay_ms": 500,
+    },
   },
 
   // ================================
@@ -303,11 +290,11 @@
     "shell": {
       "with_arguments": {
         "program": "/bin/zsh",
-        "args": ["-l"]
-      }
+        "args": ["-l"],
+      },
     },
     "env": {
-      "EDITOR": "zed --wait"
-    }
-  }
+      "EDITOR": "zed --wait",
+    },
+  },
 }

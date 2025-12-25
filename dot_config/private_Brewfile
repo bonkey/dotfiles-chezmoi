@@ -58,6 +58,8 @@ brew 'gnu-sed' # GNU implementation of the famous stream editor
 brew 'gnu-tar' # GNU version of the tar archiving utility
 brew 'grep' # GNU grep, egrep and fgrep
 
+brew 'ghostscript'
+
 # Tools for networking
 brew 'aria2' # Download with resuming and segmented downloading
 brew 'curlie' # curl alternative with syntax highlighting and more
@@ -171,7 +173,7 @@ brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-input' # 
+cask 'font-input' #
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -180,7 +182,7 @@ cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number o
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspice-nerd-font' # 
+cask 'font-monaspice-nerd-font' #
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 

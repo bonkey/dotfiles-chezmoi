@@ -677,10 +677,6 @@ GWL() {
   done
 }
 
-gsw() {
-    git update-index --skip-worktree "$@"
-}
-
 alias gip="gitup"
 alias rc="retcon"
 

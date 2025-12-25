@@ -45,6 +45,7 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 
 after_zvm() {
   bindkey '^r' _atuin_search_widget
+  bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
   bindkey '^[[1;5D' backward-word # ctrl+left-arrow
   bindkey '^[[1;5C' forward-word # ctrl+right-arrow
 }

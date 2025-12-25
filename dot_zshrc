@@ -64,6 +64,10 @@ if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
 fi
 
+export ZSH_AI_CMD_PROVIDER='gemini'
+export ZSH_AI_CMD_KEY='^z'
+export ZSH_AI_CMD_HIGHLIGHT='fg=8'
+
 export SS
 
 . "$HOME/.atuin/bin/env"

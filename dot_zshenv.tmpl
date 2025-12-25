@@ -97,6 +97,8 @@ fi
 export SSL_CERT_FILE=$all_certificates_pem
 export NODE_EXTRA_CA_CERTS=$SSL_CERT_FILE
 
+export ZSH_AI_CMD_PROVIDER='gemini'
+
 eval_managers
 
 # vim:set ft=zsh:

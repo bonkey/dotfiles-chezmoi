@@ -240,7 +240,6 @@ mas 'DevCleaner for Xcode', id: 1_388_020_431
 mas 'Drafts', id: 1_435_957_248
 mas 'Pixelmator Pro', id: 1_289_583_905
 mas 'Things 3', id: 904_280_696
-mas 'Messenger', id: 1_480_068_668
 mas 'Dropover', id: 1_355_679_052
-# mas 'RocketSim', id: 1_504_940_162
+mas 'RocketSim', id: 1_504_940_162
 mas 'Windows App', id: 1_295_203_466

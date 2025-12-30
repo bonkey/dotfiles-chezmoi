@@ -15,4 +15,4 @@ zmodule completion
 zmodule zsh-users/zsh-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
 
-zmodule bonkey/zsh-ai-cmd
+zmodule kylesnowschwartz/zsh-ai-cmd

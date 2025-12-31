@@ -53,13 +53,14 @@ zvm_after_init_commands+=(after_zvm)
 
 _eval_for_cmd_cached fzf "fzf --zsh"
 _eval_for_cmd_cached dyff "dyff completion zsh"
+_eval_for_cmd_cached codex "codex completion zsh"
+_eval_for_cmd_cached intelli-shell "intelli-shell init zsh"
+
 _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
-_eval_for_cmd_cached codex "codex completion zsh"
-
 tsrc "${HOME}/.iterm2_shell_integration.zsh" \
-    "${HOME}/.aliases.local" \
-    "${HOME}/.aliases"
+    "${HOME}/.aliases" \
+    "${HOME}/.aliases.local"
 
 if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
@@ -68,18 +69,9 @@ fi
 export ZSH_AI_CMD_PROVIDER='gemini'
 export ZSH_AI_CMD_KEY='^z'
 export ZSH_AI_CMD_HIGHLIGHT='fg=8'
+bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
 
-_zsh_ai_cmd_suggest_fix() {
-    set clobber
-    _zsh_ai_cmd_suggest "$@"
-}
-
-bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest_fix
-
-export SS
-
-. "$HOME/.atuin/bin/env"
-
+tsrc "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
 # vim:set ft=zsh:

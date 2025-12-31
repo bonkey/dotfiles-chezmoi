@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-{{- $brewfile:= joinPath .chezmoi.sourceDir "/dot_config/Brewfile" -}}
+{{- $brewfile:= joinPath .chezmoi.sourceDir "/dot_config/private_Brewfile" -}}
 
 # hash: {{ include $brewfile | sha256sum }}
 source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"

@@ -10,9 +10,6 @@ swiftlint = "latest"
 bun = "latest"
 node = "latest"
 
-"pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
-# "pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
-"pipx:files-to-prompt" = "latest"
 "pipx:csvkit" = "latest"
 "pipx:git-filter-repo" = "latest"
 "pipx:google-cloud-aiplatform" = "latest"
@@ -21,8 +18,6 @@ node = "latest"
 "pipx:jc" = "latest"
 "pipx:things-cli" = "latest"
 "pipx:yt-dlp" = "latest"
-"pipx:fast-agent-mcp" = "latest"
-# "pipx:swiftlens" = "latest"
 
 "npm:fx" = "latest"
 "npm:fast-cli" = "latest"
@@ -31,10 +26,19 @@ node = "latest"
 
 "npm:@sentry/cli" = "latest"
 
+"pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
+# "pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp" }
+"pipx:files-to-prompt" = "latest"
+"pipx:fast-agent-mcp" = "latest"
+"pipx:swiftlens" = "latest"
+"npm:@sourcegraph/amp" = "latest"
+"pipx:chunkhound" = "latest"
 "npm:@openai/codex" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@qwen-code/qwen-code" = "latest"
 "npm:@nova-mcp/mcp-nova" = "latest"
+
+"github:davidfowl/tally" = "latest"
 
 [settings]
 experimental = true

@@ -35,6 +35,10 @@ source ${ZIM_HOME}/init.zsh
 # For zmodule wfxr/forgit
 export PATH="$FORGIT_INSTALL_DIR/bin:$PATH"
 
+export ZSH_AI_CMD_PROVIDER='gemini'
+export ZSH_AI_CMD_KEY='^z'
+export ZSH_AI_CMD_HIGHLIGHT='fg=8'
+
 # search history with arrow keys and text prefix
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
@@ -48,13 +52,15 @@ after_zvm() {
   bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
   bindkey '^[[1;5D' backward-word # ctrl+left-arrow
   bindkey '^[[1;5C' forward-word # ctrl+right-arrow
+
+  bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
+  _eval_for_cmd_cached intelli-shell "intelli-shell init zsh"
 }
 zvm_after_init_commands+=(after_zvm)
 
 _eval_for_cmd_cached fzf "fzf --zsh"
 _eval_for_cmd_cached dyff "dyff completion zsh"
 _eval_for_cmd_cached codex "codex completion zsh"
-_eval_for_cmd_cached intelli-shell "intelli-shell init zsh"
 
 _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
@@ -65,11 +71,6 @@ tsrc "${HOME}/.iterm2_shell_integration.zsh" \
 if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
 fi
-
-export ZSH_AI_CMD_PROVIDER='gemini'
-export ZSH_AI_CMD_KEY='^z'
-export ZSH_AI_CMD_HIGHLIGHT='fg=8'
-bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
 
 tsrc "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"

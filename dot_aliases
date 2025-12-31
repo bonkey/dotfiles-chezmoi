@@ -43,8 +43,8 @@ cz() {
     chezmoi "$@"
 }
 
-cdf() {
-    cd "$(fd \"$@\" | fzf -1)"
+fdc() {
+    cd "$(fd -t d $@ | fzf -1)"
 }
 
 alias '??'="llm cmd -m gemini-flash-latest"

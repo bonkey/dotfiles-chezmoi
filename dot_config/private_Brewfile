@@ -52,6 +52,14 @@ brew 'figlet' # Banner-like program prints strings as ASCII art
 brew 'intelli-shell'
 brew 'zoxide'
 
+brew 'yazi'
+brew 'ripgrep'
+brew 'sevenzip'
+brew 'poppler'
+brew 'resvg'
+brew 'imagemagick'
+brew 'font-symbols-only-nerd-font'
+
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
 brew 'gawk' # GNU awk utility

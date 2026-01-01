@@ -107,6 +107,22 @@ alias psg="ps aux | grep -i"
 alias duh="du -csh"
 alias du="du -h"
 
+zz() {
+    __zoxide_z "$@"
+}
+
+zx() {
+    __zoxide_zi "$@"
+}
+
+y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
 dfh() {
     fs=${1:/}
     duf -output 'filesystem, size, used, avail, usage, mountpoint' "${fs}"

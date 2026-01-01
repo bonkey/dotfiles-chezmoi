@@ -50,6 +50,7 @@ brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'figlet' # Banner-like program prints strings as ASCII art
 brew 'intelli-shell'
+brew 'zoxide'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate

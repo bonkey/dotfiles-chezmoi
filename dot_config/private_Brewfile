@@ -58,7 +58,7 @@ brew 'sevenzip'
 brew 'poppler'
 brew 'resvg'
 brew 'imagemagick'
-brew 'font-symbols-only-nerd-font'
+cask 'font-symbols-only-nerd-font'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate

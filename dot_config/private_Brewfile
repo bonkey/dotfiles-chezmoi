@@ -51,6 +51,7 @@ brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'figlet' # Banner-like program prints strings as ASCII art
 brew 'intelli-shell'
 brew 'zoxide'
+brew 'skim'
 
 brew 'yazi'
 brew 'ripgrep'

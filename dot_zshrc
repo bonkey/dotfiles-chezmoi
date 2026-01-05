@@ -53,7 +53,7 @@ after_zvm() {
   bindkey '^[[1;5D' backward-word # ctrl+left-arrow
   bindkey '^[[1;5C' forward-word # ctrl+right-arrow
 
-  bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
+  export INTELLI_VARIABLE_HOTKEY="^V"
   _eval_for_cmd_cached intelli-shell "intelli-shell init zsh"
 }
 zvm_after_init_commands+=(after_zvm)

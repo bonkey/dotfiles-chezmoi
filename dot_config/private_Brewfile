@@ -19,7 +19,6 @@ tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
 tap 'samwho/spacer'
 tap 'withgraphite/tap'
 tap 'ycd/tap'
-tap 'basicmachines-co/basic-memory'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -97,7 +96,6 @@ brew 'ollama' # Create, run, and share large language models (LLMs)
 cask 'github-copilot-for-xcode' # Xcode extension for GitHub Copilot
 brew 'block-goose-cli' # Open source, extensible AI agent that goes beyond code suggestions
 cask 'block-goose' # Open source, extensible AI agent that goes beyond code suggestions
-brew 'basic-memory' # AI-powered knowledge management system with MCP server integration
 brew 'mistral-vibe' # Minimal CLI coding agent
 
 # Tools for version control

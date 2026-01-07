@@ -697,6 +697,41 @@ GWL() {
   done
 }
 
+# Navigate to a git worktree with fzf selection (sorted by last modification)
+GWC() {
+    local selected_branch
+
+    # Get list of worktrees with branch names and paths, sorted by modification time
+    selected_branch=$(git worktree list | tail -n +2 | while IFS= read -r line; do
+        local directory=$(echo "$line" | awk '{print $1}')
+        local branch_info=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}' | sd '^\[|\]$' '')
+        local mtime=$(stat -f "%m" "$directory" 2>/dev/null || stat -c "%Y" "$directory" 2>/dev/null)
+        echo "$mtime\t$branch_info\t$directory"
+    done | sort -rn | cut -f2- | fzf --height=40% --reverse --prompt="Select worktree: " --delimiter='\t' --with-nth=1 --preview='echo {} | cut -f2 | xargs -I {} sh -c "cd {} && git status"')
+
+    if [[ -n "$selected_branch" ]]; then
+        local target_dir=$(echo "$selected_branch" | cut -f2)
+        cd "$target_dir"
+    fi
+}
+
+# Autocomplete function for GWC using zsh completion
+_gwc_completion() {
+    local -a worktrees
+
+    # Get worktrees (skip first line which is bare repo)
+    while IFS= read -r line; do
+        local directory=$(echo "$line" | awk '{print $1}')
+        local branch_info=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}')
+        local dir_basename=$(basename "$directory")
+        worktrees+=("$dir_basename:$branch_info")
+    done < <(git worktree list 2>/dev/null | tail -n +2)
+
+    _describe 'worktree' worktrees
+}
+
+compdef _gwc_completion GWC
+
 alias gip="gitup"
 alias rc="retcon"
 

@@ -2,6 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AIFeatureFunctionCalling</key>
+	<true/>
+	<key>AIFeatureHostedCodeInterpeter</key>
+	<true/>
+	<key>AIFeatureHostedFileSearch</key>
+	<true/>
+	<key>AIFeatureHostedWebSearch</key>
+	<true/>
+	<key>AIFeatureStreamingResponses</key>
+	<true/>
+	<key>AITermAPI</key>
+	<integer>2</integer>
+	<key>AIVectorStore</key>
+	<integer>0</integer>
 	<key>AboutToPasteTabsWithCancel</key>
 	<true/>
 	<key>AboutToPasteTabsWithCancel_selection</key>
@@ -9,11 +23,13 @@
 	<key>AddNewTabAtEndOfTabs</key>
 	<false/>
 	<key>AiMaxTokens</key>
-	<integer>1048576</integer>
+	<integer>400000</integer>
 	<key>AiModel</key>
-	<string>Gemini 1.5 flash</string>
+	<string>gpt-5.1</string>
+	<key>AiResponseMaxTokens</key>
+	<integer>128000</integer>
 	<key>AitermURL</key>
-	<string>https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent</string>
+	<string>https://api.openai.com/v1/responses</string>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>BracketedPasteMode</key>
@@ -4570,6 +4586,8 @@
 	<real>11</real>
 	<key>Default Bookmark Guid</key>
 	<string>3B825298-6BBB-4FF8-8030-95A43DEF752F</string>
+	<key>Default Browser Profile Guid</key>
+	<string>3D17851E-ED8D-47DA-8D56-9B54AB60B40F</string>
 	<key>DeleteProfile_SilenceUntil</key>
 	<real>565967913.06176603</real>
 	<key>DeleteProfile_selection</key>
@@ -4942,7 +4960,7 @@
 				<real>1</real>
 			</dict>
 			<key>Blend</key>
-			<real>0.50524021423969068</real>
+			<real>0.49524021423969067</real>
 			<key>Blink Allowed</key>
 			<true/>
 			<key>Blinking Cursor</key>
@@ -4950,7 +4968,7 @@
 			<key>Blur</key>
 			<true/>
 			<key>Blur Radius</key>
-			<real>15</real>
+			<real>25</real>
 			<key>Bold Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -5439,7 +5457,7 @@
 			<key>Title Components</key>
 			<integer>3</integer>
 			<key>Transparency</key>
-			<real>0.10000000000000001</real>
+			<real>0.14999999999999999</real>
 			<key>Triggers</key>
 			<array>
 				<dict>

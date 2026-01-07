@@ -843,12 +843,12 @@ gcai() {
         commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
 
         if [[ "$dry_run" = true ]]; then
-            log_message "Commit message would be '$commit_msg'"
+            echo "Commit message would be: \033[42m\033[97m $commit_msg \033[0m"
             break
         fi
 
         if [[ "$check_confirmation" = true && "$dry_run" = false ]]; then
-            log_message "Generated commit message: '$commit_msg'"
+            echo "Generated commit message: \033[42m\033[97m $commit_msg \033[0m"
             echo -n "Proceed with this commit message? [y/n/r]: "
             read -k 1 response
             echo # Add a newline after the response

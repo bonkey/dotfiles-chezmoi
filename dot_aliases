@@ -949,7 +949,7 @@ git_pull_and_back() {
   # Execute the git operations with proper error handling
   if [[ -n "$is_in_worktree" ]]; then
     log_message "Fetching and updating latest changes for $merging_branch from remote"
-    if git fetch origin "$merging_branch:refs/heads/$merging_branch" --no-tags; then
+    if git fetch origin "$merging_branch" --no-tags; then
       log_message "Successfully updated local branch $merging_branch"
       # Now run the additional commands in the current directory
       if eval "$*"; then

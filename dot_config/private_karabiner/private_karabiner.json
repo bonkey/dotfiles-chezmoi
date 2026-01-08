@@ -23,7 +23,7 @@
                                 "to": [
                                     {
                                         "key_code": "grave_accent_and_tilde",
-                                        "modifiers": []
+                                        "modifiers": ["right_shift"]
                                     }
                                 ],
                                 "type": "basic"
@@ -39,7 +39,7 @@
                                 "to": [
                                     {
                                         "key_code": "grave_accent_and_tilde",
-                                        "modifiers": []
+                                        "modifiers": ["left_shift"]
                                     }
                                 ],
                                 "type": "basic"

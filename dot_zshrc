@@ -49,12 +49,13 @@ bindkey "^[[B" down-line-or-beginning-search # Down
 
 after_zvm() {
   bindkey '^r' _atuin_search_widget
-  bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
   bindkey '^[[1;5D' backward-word # ctrl+left-arrow
   bindkey '^[[1;5C' forward-word # ctrl+right-arrow
 
-  export INTELLI_VARIABLE_HOTKEY="^V"
-  _eval_for_cmd_cached intelli-shell "intelli-shell init zsh"
+  bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
+
+  # export INTELLI_VARIABLE_HOTKEY="^V"
+  # _eval_for_cmd_cached intelli-shell "intelli-shell init zsh"
 }
 zvm_after_init_commands+=(after_zvm)
 

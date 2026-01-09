@@ -177,31 +177,36 @@ def check_mode(fields, verbose):
         log(f"Checking: {file_path}", verbose)
         log("=" * 60, verbose)
 
-        found_count = 0
+        found_labels = []
         for label, field_data in fields.items():
             placeholder = f"<{label}_REDACTED>"
             secret_value = field_data["value"]
 
             if placeholder in content:
                 log(f"✓ Found placeholder: {label} (already redacted)", verbose)
-                found_count += 1
+                found_labels.append(label)
             elif secret_value in content:
                 log(f"✓ Found secret value: {label} (needs redaction)", verbose)
-                found_count += 1
+                found_labels.append(label)
             elif verbose:
                 log(f"Secret not found: {label}", verbose)
 
-        summary.append((file_path.name, found_count))
-        total_found += found_count
-        log(f"Found {found_count} secrets in {file_path.name}", verbose)
+        summary.append((file_path, found_labels))
+        total_found += len(found_labels)
+        log(f"Found {len(found_labels)} secrets in {file_path.name}", verbose)
 
     log("\n" + "=" * 60, verbose)
     log(f"Check complete: {total_found} secrets found across all files", verbose)
 
     if not verbose:
-        for name, count in sorted(summary, key=lambda item: item[0]):
-            if count > 0:
-                print(f"{name} {count}")
+        for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
+            if labels:
+                display_path = file_path
+                try:
+                    display_path = file_path.relative_to(Path.home())
+                except ValueError:
+                    pass
+                print(f"{display_path}: {', '.join(labels)}")
 
 
 def scrub_mode(fields, verbose):
@@ -217,7 +222,7 @@ def scrub_mode(fields, verbose):
         log("=" * 60, verbose)
 
         backup_path = create_backup(file_path, verbose)
-        processed_count = 0
+        processed_labels = []
 
         for label, field_data in fields.items():
             secret_value = field_data["value"]
@@ -226,11 +231,11 @@ def scrub_mode(fields, verbose):
             if secret_value in content:
                 log(f"Scrubbing: {label}", verbose)
                 content = content.replace(secret_value, placeholder)
-                processed_count += 1
+                processed_labels.append(label)
             elif verbose:
                 log(f"Value not found for {label}", verbose)
 
-        if processed_count > 0:
+        if processed_labels:
             is_json = file_path.suffix == ".json"
             if is_json and not validate_json(content):
                 print(f"⚠ Warning: File would have invalid JSON. Restoring backup...")
@@ -239,8 +244,8 @@ def scrub_mode(fields, verbose):
                 continue
 
             write_file(file_path, content)
-            summary.append((file_path.name, processed_count))
-            log(f"Scrubbed {processed_count} secrets from {file_path.name}", verbose)
+            summary.append((file_path, processed_labels))
+            log(f"Scrubbed {len(processed_labels)} secrets from {file_path.name}", verbose)
             remove_backup(backup_path, verbose)
         else:
             log(f"No secrets found in {file_path.name}", verbose)
@@ -250,14 +255,19 @@ def scrub_mode(fields, verbose):
         log("\n" + "=" * 60, verbose)
         if summary:
             log("Scrub summary:", verbose)
-            for name, count in sorted(summary, key=lambda item: item[0]):
-                log(f"{name} {count}", verbose)
+            for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
+                log(f"{file_path.name} {len(labels)}", verbose)
         else:
             log("No secrets were scrubbed.", verbose)
         log("=" * 60, verbose)
     else:
-        for name, count in sorted(summary, key=lambda item: item[0]):
-            print(f"{name} {count}")
+        for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
+            display_path = file_path
+            try:
+                display_path = file_path.relative_to(Path.home())
+            except ValueError:
+                pass
+            print(f"{display_path}: {', '.join(labels)}")
 
 
 def restore_mode(fields, verbose):
@@ -273,7 +283,7 @@ def restore_mode(fields, verbose):
         log("=" * 60, verbose)
 
         backup_path = create_backup(file_path, verbose)
-        processed_count = 0
+        processed_labels = []
 
         for label, field_data in fields.items():
             placeholder = f"<{label}_REDACTED>"
@@ -281,9 +291,9 @@ def restore_mode(fields, verbose):
                 secret_value = field_data["value"]
                 log(f"Restoring: {label}", verbose)
                 content = content.replace(placeholder, secret_value)
-                processed_count += 1
+                processed_labels.append(label)
 
-        if processed_count > 0:
+        if processed_labels:
             is_json = file_path.suffix == ".json"
             if is_json and not validate_json(content):
                 print(f"⚠ Warning: File would have invalid JSON. Restoring backup...")
@@ -292,8 +302,8 @@ def restore_mode(fields, verbose):
                 continue
 
             write_file(file_path, content)
-            summary.append((file_path.name, processed_count))
-            log(f"Restored {processed_count} placeholders in {file_path.name}", verbose)
+            summary.append((file_path, processed_labels))
+            log(f"Restored {len(processed_labels)} placeholders in {file_path.name}", verbose)
             remove_backup(backup_path, verbose)
         else:
             log(f"No placeholders found in {file_path.name}", verbose)
@@ -303,14 +313,19 @@ def restore_mode(fields, verbose):
         log("\n" + "=" * 60, verbose)
         if summary:
             log("Restore summary:", verbose)
-            for name, count in sorted(summary, key=lambda item: item[0]):
-                log(f"{name} {count}", verbose)
+            for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
+                log(f"{file_path.name} {len(labels)}", verbose)
         else:
             log("No placeholders were restored.", verbose)
         log("=" * 60, verbose)
     else:
-        for name, count in sorted(summary, key=lambda item: item[0]):
-            print(f"{name} {count}")
+        for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
+            display_path = file_path
+            try:
+                display_path = file_path.relative_to(Path.home())
+            except ValueError:
+                pass
+            print(f"{display_path}: {', '.join(labels)}")
 
 
 def parse_args():

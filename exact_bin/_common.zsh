@@ -30,17 +30,41 @@ log_error() {
 }
 
 _exec() {
-    local cmd exec_start exec_finish
+    local cmd exec_start exec_finish silent output
+    silent=0
+
+    if [[ "$1" == "--silent" ]]; then
+        silent=1
+        shift
+    fi
+
     cmd=$*
-    print -P "$(msg_prefix)Executing: $(color %B%K{blue}%F{white} ${cmd})"
+
+    if [[ $silent -eq 0 ]]; then
+        print -P "$(msg_prefix)Executing: $(color %B%K{blue}%F{white} ${cmd})"
+    fi
+
     exec_start=$(timestamp)
-    eval "${cmd}"
-    ret=$?
+
+    if [[ $silent -eq 1 ]]; then
+        output=$(eval "${cmd}" 2>&1)
+        ret=$?
+    else
+        eval "${cmd}"
+        ret=$?
+    fi
+
     exec_finish=$(timestamp)
     elapsed="$(round 3 $(((exec_finish - exec_start) / 1000.0))) s."
 
-    print -P "$(msg_prefix)Elapsed: $(color %B%F{blue} $elapsed)"
+    if [[ $silent -eq 0 ]]; then
+        print -P "$(msg_prefix)Elapsed: $(color %B%F{blue} $elapsed)"
+    fi
+
     if [[ $ret -ne 0 ]]; then
+        if [[ $silent -eq 1 ]]; then
+            echo "$output"
+        fi
         print -P "$(msg_prefix)Error executing: $(color "%B%K{red}%F{white}" $cmd). Check the output above and run it again"
         if [[ "$script_name" != "_common.zsh" ]]; then
             exit $ret

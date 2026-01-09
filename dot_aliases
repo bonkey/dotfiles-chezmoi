@@ -9,7 +9,6 @@ alias -g ddd='"$HOME/Library/Developer/Xcode/DerivedData/"'
 alias -g X="| xargs"
 alias -g X0="| xargs -0"
 alias -g XG="| xargs -0 grep -E"
-alias -g CDL="| colordiff | less"
 alias -g PBC="| pbcopy"
 alias -g H='| head'
 alias -g T='| tail'
@@ -812,7 +811,7 @@ gcai() {
             git fetch origin "$current_branch" 2>/dev/null
             if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
                 log_message "Pulling latest changes from remote.."
-                _exec "git pull --autostash"
+                _exec --silent "git pull --autostash"
             else
                 log_message "Remote branch does not exist, skipping pull"
             fi
@@ -823,13 +822,13 @@ gcai() {
 
     if [[ "$add_changes" = true && "$dry_run" = false ]]; then
         log_message "Staging all changes.."
-        _exec "git add ."
+        _exec --silent "git add ."
     else
         diff_args+=("HEAD")
         log_message "Skipping pull..."
     fi
 
-    _exec "git diff --stat ${diff_args[@]}"
+    _exec --silent "git diff --stat ${diff_args[@]}"
 
     if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
         log_message "No changes staged. Please stage your changes before committing"
@@ -868,12 +867,12 @@ gcai() {
 
     if [[ "$dry_run" = false ]]; then
         log_message "Committing changes.."
-        _exec "git commit -m \"$commit_msg\""
+        _exec --silent "git commit -m \"$commit_msg\""
     fi
 
     if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
         log_message "Pushing commit to remote.."
-        _exec "git push"
+        _exec --silent "git push"
     else
         log_message "Skipping push"
     fi

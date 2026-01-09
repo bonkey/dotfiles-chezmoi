@@ -267,7 +267,7 @@ def scrub_mode(fields, verbose):
                 display_path = file_path.relative_to(Path.home())
             except ValueError:
                 pass
-            print(f"scrub {display_path}: {', '.join(labels)}")
+            print(f"Scrubbing {display_path}: {', '.join(labels)}")
 
 
 def restore_mode(fields, verbose):
@@ -325,7 +325,7 @@ def restore_mode(fields, verbose):
                 display_path = file_path.relative_to(Path.home())
             except ValueError:
                 pass
-            print(f"restore {display_path}: {', '.join(labels)}")
+            print(f"Restored {display_path}: {', '.join(labels)}")
 
 
 def parse_args():

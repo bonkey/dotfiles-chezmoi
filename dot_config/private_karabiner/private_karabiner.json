@@ -11,6 +11,7 @@
                 "rules": [
                     {
                         "description": "Replace Shift-ESC to ~",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {

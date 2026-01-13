@@ -4,16 +4,12 @@
   // ================================
   "context_servers": {
     "some-remote-server": {
-      "settings": {},
-        
       "enabled": true,
-      "url": "https://cloud.basicmemory.com/mcp"
+      "url": "https://cloud.basicmemory.com/mcp",
     },
     "Atlassian": {
-      "settings": {},
-        
       "enabled": true,
-      "url": "https://mcp.atlassian.com/v1/sse"
+      "url": "https://mcp.atlassian.com/v1/sse",
     },
     "Ref": {
       "enabled": true,
@@ -36,11 +32,15 @@
     "tavily": {
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"],
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
+      ],
     },
     "basic-memory-cloud": {
       "settings": {},
-        
+
       "url": "https://cloud.basicmemory.com/mcp",
       "enabled": true,
     },
@@ -78,7 +78,7 @@
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5-codex",
+      "model": "claude-sonnet-4.5",
     },
     "commit_message_model": {
       "provider": "google",

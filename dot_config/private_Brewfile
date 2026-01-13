@@ -19,6 +19,7 @@ tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
 tap 'samwho/spacer'
 tap 'withgraphite/tap'
 tap 'ycd/tap'
+tap 'atlassian/homebrew-acli'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
@@ -59,6 +60,8 @@ brew 'poppler'
 brew 'resvg'
 brew 'imagemagick'
 cask 'font-symbols-only-nerd-font'
+
+brew 'acli'
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -182,7 +185,7 @@ brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-input' #
+cask 'font-input'
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -191,7 +194,7 @@ cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number o
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspice-nerd-font' #
+cask 'font-monaspice-nerd-font'
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 

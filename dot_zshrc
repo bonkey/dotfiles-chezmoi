@@ -78,3 +78,6 @@ tsrc "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
 # vim:set ft=zsh:
+
+# Added by Antigravity
+export PATH="/Users/dbauke-mac/.antigravity/antigravity/bin:$PATH"

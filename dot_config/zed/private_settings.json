@@ -4,10 +4,14 @@
   // ================================
   "context_servers": {
     "some-remote-server": {
+      "settings": {},
+
       "enabled": true,
       "url": "https://cloud.basicmemory.com/mcp",
     },
     "Atlassian": {
+      "settings": {},
+
       "enabled": true,
       "url": "https://mcp.atlassian.com/v1/sse",
     },
@@ -262,6 +266,9 @@
       "language_servers": ["!pylsp", "pyright"],
     },
     "Swift": {
+      "format_on_save": "off",
+    },
+    "Just": {
       "format_on_save": "off",
     },
   },

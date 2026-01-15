@@ -34,6 +34,8 @@
 	<integer>65536</integer>
 	<key>AitermURL</key>
 	<string>https://generativelanguage.googleapis.com/v1beta/models/{{MODEL}}</string>
+	<key>AllowClipboardAccess</key>
+	<true/>
 	<key>AlternateMouseScroll</key>
 	<true/>
 	<key>BracketedPasteMode</key>

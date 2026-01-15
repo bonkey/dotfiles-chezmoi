@@ -50,8 +50,8 @@ ACCOUNT = "bonkey.1password.com"
 FILES_TO_SCRUB = [
     Path.home() / ".config" / "zed" / "settings.json",
     Path.home() / ".codex" / "config.toml",
+    Path.home() / ".config" / "opencode" / "opencode.json",
 ]
-
 
 def log(message, verbose):
     if verbose:

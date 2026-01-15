@@ -1,3 +1,9 @@
 {
+  "tui": {},
+  "permission": {
+    "edit": "allow",
+    "bash": "allow",
+    "webfetch": "allow"
+  },
   "$schema": "https://opencode.ai/config.json"
 }

@@ -36,7 +36,7 @@ node = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@qwen-code/qwen-code" = "latest"
 "npm:@nova-mcp/mcp-nova" = "latest"
-"@mariozechner/pi-coding-agent" = "latest"
+"npm:@mariozechner/pi-coding-agent" = "latest"
 "npm:opencode-ai" = "latest"
 
 "github:davidfowl/tally" = "latest"

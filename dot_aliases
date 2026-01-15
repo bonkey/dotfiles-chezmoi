@@ -48,6 +48,7 @@ fdc() {
 
 alias '??'="llm cmd -m gemini-flash-latest"
 alias gy="gemini --yolo"
+alias oc="opencode"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"

@@ -1,9 +1,67 @@
 {
-  "tui": {},
-  "permission": {
-    "edit": "allow",
-    "bash": "allow",
-    "webfetch": "allow"
+  "tui": {
+    "scroll_acceleration": {
+      "enabled": true
+    }
+  },
+  "plugin": [
+    "opencode-gemini-auth@latest",
+    "opencode-openai-codex-auth@latest",
+    "opencode-google-antigravity-auth",
+    "@franlol/opencode-md-table-formatter@0.0.3",
+    "@mohak34/opencode-notifier@latest"
+    // "octto",
+    // "micode"
+  ],
+
+  "disabled_providers": ["deepseek", "anthropic", "openrouter", "perplexity"],
+
+  "agent": {
+    "code-reviewer": {
+      "description": "Reviews code for best practices and potential issues",
+      "mode": "subagent",
+      "prompt": "You are a code reviewer. Focus on security, performance, and maintainability.",
+      "tools": {
+        "write": false,
+        "edit": false
+      }
+    }
+  },
+  "mcp": {
+    "Ref": {
+      "type": "local",
+      "command": ["npx", "ref-tools-mcp@latest"],
+      "environment": {
+        "REF_API_KEY": "<REF_API_KEY_REDACTED>"
+      }
+    },
+    "deepwiki": {
+      "type": "remote",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "basic-memory-cloud": {
+      "type": "remote",
+      "url": "https://cloud.basicmemory.com/mcp"
+    },
+    "exa": {
+      "type": "remote",
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
+    },
+    "sosumi": {
+      "type": "remote",
+      "url": "https://sosumi.ai/mcp"
+    },
+    "firecrawl": {
+      "type": "local",
+      "command": ["npx", "-y", "firecrawl-mcp"],
+      "environment": {
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+      }
+    },
+    "tavily": {
+      "type": "remote",
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
+    }
   },
   "$schema": "https://opencode.ai/config.json"
 }

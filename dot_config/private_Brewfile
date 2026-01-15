@@ -37,6 +37,7 @@ brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'television' # General purpose fuzzy finder TUI
 brew 'coreutils' # GNU File, Shell, and Text utilities
 brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
+brew 'ast-grep'
 
 # Shell power-ups
 brew 'atuin' # Improved shell history for zsh and bash

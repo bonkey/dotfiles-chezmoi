@@ -666,7 +666,7 @@ GWab() {
       # Fetch and pull base branch to ensure it's up to date
       if git rev-parse --verify --quiet "$base_branch" >/dev/null 2>&1; then
         log_message "Updating base branch '$base_branch'"
-        _exec "git fetch origin '$base_branch':'refs/heads/$base_branch' --no-tags"
+        _exec "git fetch origin '$base_branch' --no-tags"
       else
         log_message "Fetching base branch '$base_branch' from remote"
         _exec "git fetch origin '$base_branch':'refs/heads/$base_branch' --no-tags"
@@ -680,6 +680,11 @@ GWab() {
     _exec "git worktree add '$branch_dir' '$branch'"
 
     _exec "cd '$branch_dir'"
+
+    # Trust mise.toml if it exists in the worktree
+    if [[ -f "$branch_dir/mise.toml" ]]; then
+      _exec "mise trust"
+    fi
 }
 
 GWL() {

@@ -41,6 +41,7 @@ node = "latest"
 "npm:openskills" = "latest"
 "npm:opencode-openai-codex-auth" = "latest"
 "npm:btca" = "latest" # opencode/micode
+"npm:opencode-swarm-plugin" = "latest"
 
 "github:davidfowl/tally" = "latest"
 

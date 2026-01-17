@@ -3,7 +3,7 @@
   // CONTEXT SERVERS
   // ================================
   "context_servers": {
-    "some-remote-server": {
+    "basic-memory-cloud": {
       "settings": {},
 
       "enabled": true,
@@ -41,12 +41,6 @@
         "mcp-remote",
         "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
       ],
-    },
-    "basic-memory-cloud": {
-      "settings": {},
-
-      "url": "https://cloud.basicmemory.com/mcp",
-      "enabled": true,
     },
     "peekaboo": {
       "enabled": false,

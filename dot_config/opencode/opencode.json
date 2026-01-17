@@ -23,7 +23,8 @@
     }
   },
   "mcp": {
-    "Ref": {
+    "ref": {
+      "enabled": false,
       "type": "local",
       "command": ["npx", "ref-tools-mcp@latest"],
       "environment": {
@@ -31,6 +32,7 @@
       }
     },
     "deepwiki": {
+      "enabled": false,
       "type": "remote",
       "url": "https://mcp.deepwiki.com/mcp"
     },
@@ -46,7 +48,18 @@
       "type": "remote",
       "url": "https://sosumi.ai/mcp"
     },
+    "mobile-mcp": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
+    },
+    "simctl-mcp": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "simctl-mcp"]
+    },
     "firecrawl": {
+      "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
@@ -54,23 +67,46 @@
       }
     },
     "tavily": {
+      "enabled": false,
       "type": "remote",
       "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
     },
     "vibium": {
+      "enabled": false,
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "vibium"
-      ]
+      "command": ["npx", "-y", "vibium"]
     },
     "shellwright": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "@dwmkerr/shellwright"]
+    },
+    "xcodebuild-mcp": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "xcodebuildmcp@latest"],
+      "environment": {
+        "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
+        "INCREMENTAL_BUILDS_ENABLED": "true"
+      }
+    },
+    "peekaboo": {
+      "enabled": false,
+      "type": "local",
+      "command": ["peekaboo", "mcp"],
+      "environment": {
+        "PEEKABOO_AI_PROVIDERS": "openai/gpt-4.1",
+        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
+      }
+    },
+    "serena": {
       "type": "local",
       "command": [
-        "npx",
-        "-y",
-        "@dwmkerr/shellwright"
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
       ]
     }
   },

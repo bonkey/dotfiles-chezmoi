@@ -57,17 +57,20 @@
       "type": "remote",
       "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
     },
-    "atlassian": {
-      "type": "remote",
-      "url": "https://mcp.atlassian.com/v1/mcp",
-      "oauth": {}
-    },
     "vibium": {
       "type": "local",
       "command": [
         "npx",
         "-y",
         "vibium"
+      ]
+    },
+    "shellwright": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@dwmkerr/shellwright"
       ]
     }
   },

@@ -10,4 +10,3 @@ local-storage.json
 .zcompdump
 xcodebuild*.log
 .nova
-.opencode

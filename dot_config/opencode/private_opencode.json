@@ -33,19 +33,23 @@
       ],
       "environment": {
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
-      }
+      },
+      "enabled": true
     },
     "tavily": {
       "type": "remote",
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
+      "enabled": true
     },
     "basic-memory-cloud": {
       "type": "remote",
-      "url": "https://cloud.basicmemory.com/mcp"
+      "url": "https://cloud.basicmemory.com/mcp",
+      "enabled": true
     },
     "sosumi": {
       "type": "remote",
-      "url": "https://sosumi.ai/mcp"
+      "url": "https://sosumi.ai/mcp",
+      "enabled": true
     },
     "serena": {
       "type": "local",
@@ -55,7 +59,8 @@
         "git+https://github.com/oraios/serena",
         "serena",
         "start-mcp-server"
-      ]
+      ],
+      "enabled": false
     },
     "mobile-mcp": {
       "enabled": false,

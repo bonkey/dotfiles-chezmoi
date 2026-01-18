@@ -1,0 +1,8 @@
+{
+  "mcp": {
+    "mobile-mcp": {
+      "enabled": false,
+      "type": "local"
+    }
+  }
+}

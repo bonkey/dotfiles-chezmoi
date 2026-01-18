@@ -20,15 +20,16 @@ export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 
 {{- if eq .chezmoi.hostname "danbau-personal" }}
 
-export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
-export GEMINI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GEMINI_API_KEY.value -}}"
-export REPLICATE_API_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").REPLICATE_API_TOKEN.value -}}"
 export ANTHROPIC_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ANTHROPIC_API_KEY.value -}}"
 export DEEPSEEK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").DEEPSEEK_API_KEY.value -}}"
-export PERPLEXITY_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PERPLEXITY_API_KEY.value -}}"
-export OPENROUTER_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENROUTER_API_KEY.value -}}"
-export VAST_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").VAST_API_KEY.value -}}"
+export GEMINI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GEMINI_API_KEY.value -}}"
 export GROQ_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GROQ_API_KEY.value -}}"
+export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENAI_API_KEY.value -}}"
+export OPENCODE_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENCODE_API_KEY.value -}}"
+export OPENROUTER_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENROUTER_API_KEY.value -}}"
+export PERPLEXITY_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PERPLEXITY_API_KEY.value -}}"
+export REPLICATE_API_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").REPLICATE_API_TOKEN.value -}}"
+export VAST_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").VAST_API_KEY.value -}}"
 export ZAI_CODING_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ZAI_CODING_API_KEY.value -}}"
 export ZHIPU_API_KEY=$ZAI_CODING_API_KEY
 

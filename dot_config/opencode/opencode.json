@@ -11,17 +11,13 @@
 
   "disabled_providers": ["deepseek", "anthropic", "openrouter", "perplexity"],
 
-  "agent": {
-    "code-reviewer": {
-      "description": "Reviews code for best practices and potential issues",
-      "mode": "subagent",
-      "prompt": "You are a code reviewer. Focus on security, performance, and maintainability.",
-      "tools": {
-        "write": false,
-        "edit": false
-      }
+  "formatter": {
+    "swiftformat": {
+      "command": ["swiftformat", "$FILE"],
+      "extensions": [".swift"]
     }
   },
+
   "mcp": {
     "ref": {
       "enabled": false,
@@ -101,13 +97,7 @@
     },
     "serena": {
       "type": "local",
-      "command": [
-        "uvx",
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server"
-      ]
+      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
     }
   },
   "$schema": "https://opencode.ai/config.json"

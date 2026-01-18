@@ -54,6 +54,7 @@ brew 'figlet' # Banner-like program prints strings as ASCII art
 brew 'intelli-shell'
 brew 'zoxide'
 brew 'sk'
+brew 'tmux'
 
 brew 'yazi'
 brew 'ripgrep'

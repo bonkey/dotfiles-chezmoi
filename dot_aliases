@@ -48,7 +48,6 @@ fdc() {
 
 alias '??'="llm cmd -m gemini-flash-latest"
 alias gy="gemini --yolo"
-alias oc="opencode"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"
@@ -75,6 +74,10 @@ alias llt="ll -m -s modified -r"
 alias cal="gcal -s 1"
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
+
+oc() {
+    HOME/.config/opencode/scripts/oc-mcp "$@"
+}
 
 md() {
     open -a Marked "$@"

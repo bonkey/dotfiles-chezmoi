@@ -1,5 +1,4 @@
 {
-  // test comment
   "tui": {},
   "plugin": [
     "opencode-antigravity-auth@latest",

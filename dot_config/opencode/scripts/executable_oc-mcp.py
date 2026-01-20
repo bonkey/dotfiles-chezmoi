@@ -3,7 +3,6 @@
 import json
 import sys
 import os
-import re
 import argparse
 import subprocess
 import curses
@@ -17,6 +16,7 @@ PRESETS = {
     "ios-dev": ["mobile-mcp", "simctl-mcp", "xcodebuild-mcp", "peekaboo"],
     "ios-doc": ['sosumi'],
     "ios-strings": ['xcstrings-crud'],
+    "atlassian": ["atlassian"],
     "semantic-code-retrival": ['serena'],
     "web-dev": ["vibium"],
     "cli-dev": ["shellwright"],
@@ -27,17 +27,15 @@ def load_config():
         return {}
     with open(CONFIG_FILE, 'r') as f:
         content = f.read()
-    # Strips JSONC comments
-    clean_content = re.sub(r'^\s*//.*', '', content, flags=re.MULTILINE)
     try:
-        return json.loads(clean_content)
-    except json.JSONDecodeError as e:
+        return json.loads(content)
+    except Exception as e:
         print(f"Error parsing {CONFIG_FILE}: {e}")
         sys.exit(1)
 
 def save_config(config):
     with open(CONFIG_FILE, 'w') as f:
-        json.dump(config, f, indent=2)
+        f.write(json.dumps(config, indent=2))
 
 def list_mcps():
     print("Presets:")
@@ -102,7 +100,7 @@ def main():
     parser.add_argument("-l", "--list", action="store_true", help="List status")
     parser.add_argument("-ns", "--no-start", action="store_true", help="Skip opencode start")
 
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
     if args.list:
         list_mcps()
@@ -138,7 +136,7 @@ def main():
 
     if not args.no_start:
         # Start opencode with -s as requested
-        subprocess.run(["opencode"])
+        subprocess.run(["opencode"] + unknown)
 
 if __name__ == "__main__":
     main()

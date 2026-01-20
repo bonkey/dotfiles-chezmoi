@@ -10,4 +10,5 @@ _exec "mise -C '{{- $mise_dir -}}' --yes install"
 
 eval "$(mise hook-env)"
 
+_exec "pip install --upgrade pip"
 _exec "pip install --user pipx"

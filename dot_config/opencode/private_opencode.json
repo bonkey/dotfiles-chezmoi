@@ -1,4 +1,5 @@
 {
+  // test comment
   "tui": {},
   "plugin": [
     "opencode-antigravity-auth@latest",
@@ -48,12 +49,12 @@
       "type": "local",
       "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
     },
-    "simctl-mcp": {
+    "mobile": {
       "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "simctl-mcp"]
     },
-    "xcodebuild-mcp": {
+    "simctl": {
       "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "xcodebuildmcp@latest"],
@@ -77,12 +78,12 @@
       }
     },
     "vibium": {
-      "enabled": false,
+      "enabled": true,
       "type": "local",
       "command": ["npx", "-y", "vibium"]
     },
     "shellwright": {
-      "enabled": false,
+      "enabled": true,
       "type": "local",
       "command": ["npx", "-y", "@dwmkerr/shellwright"]
     },

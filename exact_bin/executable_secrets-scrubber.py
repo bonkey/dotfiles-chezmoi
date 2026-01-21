@@ -56,8 +56,9 @@ ITEM_ID = "lk3cxlvcjdbti27r7ivrcj646y"
 ACCOUNT = "bonkey.1password.com"
 
 FILES_TO_SCRUB = [
-    Path.home() / ".config" / "zed" / "settings.json",
     Path.home() / ".codex" / "config.toml",
+    Path.home() / ".config" / "zed" / "settings.json",
+    Path.home() / ".config" / "chunkhound" / "config.json",
     Path.home() / ".config" / "opencode" / "opencode.json",
 ]
 

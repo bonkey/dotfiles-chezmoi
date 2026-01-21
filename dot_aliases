@@ -228,6 +228,7 @@ ceb() {
 
 cea() {
     ced $HOME/.aliases
+    exit
 }
 
 ceo() {

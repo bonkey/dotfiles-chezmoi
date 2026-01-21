@@ -60,7 +60,7 @@
         "serena",
         "start-mcp-server"
       ],
-      "enabled": false
+      "enabled": true
     },
     "mobile-mcp": {
       "enabled": false,

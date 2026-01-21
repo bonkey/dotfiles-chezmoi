@@ -218,16 +218,9 @@ cvz() {
     exit
 }
 
-cem() {
-    ced ${HOME}/.config/mise/config.toml
-}
-
-ceb() {
-    ced ${HOME}/.config/Brewfile
-}
-
-ceo() {
-    ced ${HOME}/.config/opencode/
+cvzl() {
+  $EDITOR $(eval "echo $_shell_init_files")
+  source ${HOME}/.zshrc
 }
 
 # --- Network

@@ -220,6 +220,7 @@ cvz() {
 
 cem() {
     ced $HOME/.config/mise/config.toml
+    mise up
 }
 
 ceb() {

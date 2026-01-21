@@ -32,16 +32,20 @@ node = "latest"
 "pipx:fast-agent-mcp" = "latest"
 "pipx:chunkhound" = "latest"
 "npm:@sourcegraph/amp" = "latest"
+
 "npm:@openai/codex" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@qwen-code/qwen-code" = "latest"
 "npm:@nova-mcp/mcp-nova" = "latest"
+
 "npm:@mariozechner/pi-coding-agent" = "latest"
+
 "npm:opencode-ai" = "latest"
 "npm:openskills" = "latest"
 "npm:opencode-openai-codex-auth" = "latest"
 "npm:btca" = "latest" # opencode/micode
-"npm:opencode-swarm-plugin" = "latest"
+
+"ubi:Ryu0118/xcstrings-crud" = "latest"
 
 "github:davidfowl/tally" = "latest"
 

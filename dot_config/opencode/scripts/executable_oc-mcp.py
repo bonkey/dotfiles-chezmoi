@@ -15,8 +15,9 @@ PRESETS = {
     "memory": ['basic-memory-cloud'],
     "research": ["exa", "deepwiki", "firecrawl"],
     "ios-dev": ["mobile-mcp", "simctl-mcp", "xcodebuild-mcp", "peekaboo"],
-    "semantic-code-retrival": ['serena'],
     "ios-doc": ['sosumi'],
+    "ios-strings": ['xcstrings-crud'],
+    "semantic-code-retrival": ['serena'],
     "web-dev": ["vibium"],
     "cli-dev": ["shellwright"],
 }

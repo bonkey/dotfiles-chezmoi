@@ -5,20 +5,32 @@
     "opencode-openai-codex-auth@latest",
     "@franlol/opencode-md-table-formatter@latest",
     "@mohak34/opencode-notifier@latest",
-    "@tarquinen/opencode-dcp@latest",
-    "@plannotator/opencode@latest"
+    "@tarquinen/opencode-dcp@latest"
   ],
-  "disabled_providers": ["deepseek", "anthropic", "openrouter", "perplexity"],
+  "disabled_providers": [
+    "deepseek",
+    "anthropic",
+    "openrouter",
+    "perplexity"
+  ],
   "formatter": {
     "swiftformat": {
-      "command": ["swiftformat", "$FILE"],
-      "extensions": [".swift"]
+      "command": [
+        "swiftformat",
+        "$FILE"
+      ],
+      "extensions": [
+        ".swift"
+      ]
     }
   },
   "mcp": {
     "ref": {
       "type": "local",
-      "command": ["npx", "ref-tools-mcp@latest"],
+      "command": [
+        "npx",
+        "ref-tools-mcp@latest"
+      ],
       "environment": {
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       },
@@ -26,8 +38,11 @@
     },
     "chunkhound": {
       "type": "local",
-      "command": ["chunkhound", "mcp"],
-      "enabled": true
+      "command": [
+        "chunkhound",
+        "mcp"
+      ],
+      "enabled": false
     },
     "tavily": {
       "type": "remote",
@@ -46,23 +61,41 @@
     },
     "serena": {
       "type": "local",
-      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"],
-      "enabled": true
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ],
+      "enabled": false
     },
     "mobile-mcp": {
       "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
+      "command": [
+        "npx",
+        "-y",
+        "@mobilenext/mobile-mcp@latest"
+      ]
     },
     "mobile": {
       "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "simctl-mcp"]
+      "command": [
+        "npx",
+        "-y",
+        "simctl-mcp"
+      ]
     },
     "simctl": {
       "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "xcodebuildmcp@latest"],
+      "command": [
+        "npx",
+        "-y",
+        "xcodebuildmcp@latest"
+      ],
       "environment": {
         "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
         "INCREMENTAL_BUILDS_ENABLED": "true"
@@ -70,32 +103,50 @@
     },
     "xcstrings-crud": {
       "type": "local",
-      "command": ["xcstrings-crud", "mcp"],
+      "command": [
+        "xcstrings-crud",
+        "mcp"
+      ],
       "enabled": false
     },
     "peekaboo": {
       "enabled": false,
       "type": "local",
-      "command": ["peekaboo", "mcp"],
+      "command": [
+        "peekaboo",
+        "mcp"
+      ],
       "environment": {
         "PEEKABOO_AI_PROVIDERS": "openai/gpt-4.1",
         "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
       }
     },
     "vibium": {
-      "enabled": true,
+      "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "vibium"]
+      "command": [
+        "npx",
+        "-y",
+        "vibium"
+      ]
     },
     "shellwright": {
-      "enabled": true,
+      "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "@dwmkerr/shellwright"]
+      "command": [
+        "npx",
+        "-y",
+        "@dwmkerr/shellwright"
+      ]
     },
     "firecrawl": {
       "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "firecrawl-mcp"],
+      "command": [
+        "npx",
+        "-y",
+        "firecrawl-mcp"
+      ],
       "environment": {
         "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       }

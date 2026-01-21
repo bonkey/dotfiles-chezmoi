@@ -8,6 +8,14 @@ for multiple configuration files
 Requires adding in ~/.config/chezmoi/chezmoi.toml:
 
 ```
+[hooks.edit.pre]
+command = "bin/secrets-scrubber.py"
+args = ["scrub"]
+
+[hooks.edit.post]
+command = "bin/secrets-scrubber.py"
+args = ["restore"]
+
 [hooks.re-add.pre]
 command = "bin/secrets-scrubber.py"
 args = ["scrub"]

@@ -45,7 +45,7 @@ node = "latest"
 "npm:opencode-openai-codex-auth" = "latest"
 "npm:btca" = "latest" # opencode/micode
 
-"githin:Ryu0118/xcstrings-crud" = "latest"
+"github:Ryu0118/xcstrings-crud" = "latest"
 
 "github:davidfowl/tally" = "latest"
 

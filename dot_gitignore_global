@@ -11,3 +11,4 @@ local-storage.json
 xcodebuild*.log
 .nova
 .opencode/plans
+.chunkhound

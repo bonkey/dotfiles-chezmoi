@@ -62,7 +62,7 @@
         "INCREMENTAL_BUILDS_ENABLED": "true"
       }
     },
-    "ref": {
+    "xcstrings-crud": {
       "type": "local",
       "command": ["xcstrings-crud", "mcp"],
       "enabled": false

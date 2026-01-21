@@ -233,7 +233,7 @@ cea() {
 }
 
 ceo() {
-    ced $HOME/.config/opencode
+    ced $HOME/.config/opencode/opencode.json
 }
 
 # --- Network

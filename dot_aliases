@@ -236,6 +236,11 @@ ceo() {
     ced $HOME/.config/opencode/opencode.json
 }
 
+ceom() {
+    ced $HOME/.config/opencode/scripts/oc-mcp.py
+}
+
+
 # --- Network
 
 alias h="http"

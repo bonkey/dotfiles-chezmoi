@@ -5,11 +5,9 @@
     }
   },
   "plugin": [
-    "opencode-antigravity-auth@latest",
     "opencode-openai-codex-auth@latest",
     "@franlol/opencode-md-table-formatter@latest",
-    "@mohak34/opencode-notifier@latest",
-    "@plannotator/opencode@latest"
+    "@mohak34/opencode-notifier@latest"
   ],
   "disabled_providers": ["deepseek", "anthropic", "openrouter", "perplexity"],
   "formatter": {

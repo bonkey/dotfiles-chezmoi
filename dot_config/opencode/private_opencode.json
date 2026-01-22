@@ -1,5 +1,9 @@
 {
-  "tui": {},
+  "tui": {
+    "scroll_acceleration": {
+      "enabled": true
+    }
+  },
   "plugin": [
     "opencode-antigravity-auth@latest",
     "opencode-openai-codex-auth@latest",

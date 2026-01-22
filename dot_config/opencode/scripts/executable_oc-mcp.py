@@ -13,7 +13,7 @@ PRESETS = {
     "search": ['ref', "tavily"],
     "memory": ['basic-memory-cloud'],
     "research": ["exa", "deepwiki", "firecrawl"],
-    "code-research": ["chunkhound"],
+    "local-code-research": ["chunkhound"],
     "ios-dev": ["mobile-mcp", "simctl-mcp", "xcodebuild-mcp", "peekaboo"],
     "ios-doc": ['sosumi'],
     "ios-strings": ['xcstrings-crud'],

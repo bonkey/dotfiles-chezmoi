@@ -43,6 +43,11 @@
       "url": "https://cloud.basicmemory.com/mcp",
       "enabled": true
     },
+    "atlassian": {
+      "type": "remote",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "enabled": true
+    },
     "sosumi": {
       "type": "remote",
       "url": "https://sosumi.ai/mcp",
@@ -58,12 +63,12 @@
       "type": "local",
       "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
     },
-    "mobile": {
+    "simctl": {
       "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "simctl-mcp"]
     },
-    "simctl": {
+    "xcodebuild": {
       "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "xcodebuildmcp@latest"],
@@ -97,7 +102,7 @@
       "command": ["npx", "-y", "@dwmkerr/shellwright"]
     },
     "firecrawl": {
-      "enabled": false,
+      "enabled": true,
       "type": "local",
       "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
@@ -105,12 +110,12 @@
       }
     },
     "deepwiki": {
-      "enabled": false,
+      "enabled": true,
       "type": "remote",
       "url": "https://mcp.deepwiki.com/mcp"
     },
     "exa": {
-      "enabled": false,
+      "enabled": true,
       "type": "remote",
       "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
     }

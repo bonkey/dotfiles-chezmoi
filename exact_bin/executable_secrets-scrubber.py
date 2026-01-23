@@ -16,6 +16,14 @@ args = ["scrub"]
 command = "bin/secrets-scrubber.py"
 args = ["restore"]
 
+[hooks.add.pre]
+command = "bin/secrets-scrubber.py"
+args = ["scrub"]
+
+[hooks.add.post]
+command = "bin/secrets-scrubber.py"
+args = ["restore"]
+
 [hooks.re-add.pre]
 command = "bin/secrets-scrubber.py"
 args = ["scrub"]
@@ -60,6 +68,8 @@ FILES_TO_SCRUB = [
     Path.home() / ".config" / "zed" / "settings.json",
     Path.home() / ".config" / "chunkhound" / "config.json",
     Path.home() / ".config" / "opencode" / "opencode.json",
+    Path.home() / ".config" / "crush" / "crush.json",
+    Path.home() / ".config" / "cli-mcp" / "config.json",
 ]
 
 def log(message, verbose):

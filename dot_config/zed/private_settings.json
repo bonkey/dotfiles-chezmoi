@@ -65,7 +65,7 @@
   // AI AGENT CONFIGURATION
   // ================================
   "agent": {
-    "default_profile": "write",
+    "default_profile": "ask",
     "favorite_models": [
       {
         "provider": "google",
@@ -89,10 +89,6 @@
       },
       {
         "provider": "copilot_chat",
-        "model": "gpt-5.2-codex"
-      },
-      {
-        "provider": "copilot_chat",
         "model": "claude-opus-4.5"
       },
       {
@@ -102,6 +98,10 @@
       {
         "provider": "copilot_chat",
         "model": "claude-haiku-4.5"
+      },
+      {
+        "provider": "openai",
+        "model": "gpt-5.2-codex"
       }
     ],
     "inline_assistant_model": {
@@ -114,7 +114,7 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "provider": "copilot_chat",
+      "provider": "openai",
       "model": "gpt-5.2-codex",
     },
     "commit_message_model": {

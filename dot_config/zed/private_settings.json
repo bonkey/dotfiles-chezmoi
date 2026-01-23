@@ -65,7 +65,7 @@
   // AI AGENT CONFIGURATION
   // ================================
   "agent": {
-    "default_profile": "ask",
+    "default_profile": "write",
     "favorite_models": [
       {
         "provider": "google",
@@ -78,26 +78,6 @@
       {
         "provider": "z.ai Coding",
         "model": "glm-4.7"
-      },
-      {
-        "provider": "anthropic",
-        "model": "claude-sonnet-4-5-thinking-latest"
-      },
-      {
-        "provider": "anthropic",
-        "model": "claude-sonnet-4-5-latest"
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-opus-4.5"
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-sonnet-4.5"
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-haiku-4.5"
       },
       {
         "provider": "openai",
@@ -114,8 +94,8 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "provider": "openai",
-      "model": "gpt-5.2-codex",
+      "provider": "google",
+      "model": "gemini-3-flash-preview",
     },
     "commit_message_model": {
       "provider": "google",

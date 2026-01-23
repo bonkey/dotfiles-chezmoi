@@ -219,13 +219,15 @@ def check_mode(fields, verbose):
 
     if not verbose:
         for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
+            display_path = file_path
+            try:
+                display_path = file_path.relative_to(Path.home())
+            except ValueError:
+                pass
             if labels:
-                display_path = file_path
-                try:
-                    display_path = file_path.relative_to(Path.home())
-                except ValueError:
-                    pass
                 print(f"{display_path}: {', '.join(labels)}")
+            else:
+                print(f"{display_path}: nothing found")
 
 
 def scrub_mode(fields, verbose):
@@ -269,13 +271,15 @@ def scrub_mode(fields, verbose):
         else:
             log(f"No secrets found in {file_path.name}", verbose)
             remove_backup(backup_path, verbose)
+            summary.append((file_path, []))
 
     if verbose:
         log("\n" + "=" * 60, verbose)
-        if summary:
+        if any(labels for _, labels in summary):
             log("Scrub summary:", verbose)
             for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
-                log(f"{file_path.name} {len(labels)}", verbose)
+                if labels:
+                    log(f"{file_path.name} {len(labels)}", verbose)
         else:
             log("No secrets were scrubbed.", verbose)
         log("=" * 60, verbose)
@@ -286,7 +290,10 @@ def scrub_mode(fields, verbose):
                 display_path = file_path.relative_to(Path.home())
             except ValueError:
                 pass
-            print(f"Scrubbing {display_path}: {', '.join(labels)}")
+            if labels:
+                print(f"Scrubbing {display_path}: {', '.join(labels)}")
+            else:
+                print(f"Scrubbing {display_path}: nothing to scrub")
 
 
 def restore_mode(fields, verbose):
@@ -327,13 +334,15 @@ def restore_mode(fields, verbose):
         else:
             log(f"No placeholders found in {file_path.name}", verbose)
             remove_backup(backup_path, verbose)
+            summary.append((file_path, []))
 
     if verbose:
         log("\n" + "=" * 60, verbose)
-        if summary:
+        if any(labels for _, labels in summary):
             log("Restore summary:", verbose)
             for file_path, labels in sorted(summary, key=lambda item: str(item[0])):
-                log(f"{file_path.name} {len(labels)}", verbose)
+                if labels:
+                    log(f"{file_path.name} {len(labels)}", verbose)
         else:
             log("No placeholders were restored.", verbose)
         log("=" * 60, verbose)
@@ -344,7 +353,10 @@ def restore_mode(fields, verbose):
                 display_path = file_path.relative_to(Path.home())
             except ValueError:
                 pass
-            print(f"Restored {display_path}: {', '.join(labels)}")
+            if labels:
+                print(f"Restored {display_path}: {', '.join(labels)}")
+            else:
+                print(f"Restored {display_path}: nothing to restore")
 
 
 def parse_args():

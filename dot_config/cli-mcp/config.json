@@ -8,6 +8,7 @@
     "ios-doc": ["sosumi"],
     "ios-strings": ["xcstrings-crud"],
     "atlassian": ["atlassian"],
+    "linear": ["linear"],
     "semantic-code-retrival": ["serena"],
     "web-dev": ["vibium"],
     "cli-dev": ["shellwright"]
@@ -18,51 +19,45 @@
       "command": ["npx", "ref-tools-mcp@latest"],
       "environment": {
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
-      },
-      "enabled": true
+      }
+    },
+    "linear": {
+      "type": "remote",
+      "url": "https://mcp.linear.app/mcp"
     },
     "chunkhound": {
       "type": "local",
-      "command": ["chunkhound", "mcp"],
-      "enabled": false
+      "command": ["chunkhound", "mcp"]
     },
     "tavily": {
       "type": "remote",
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
-      "enabled": true
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
     },
     "basic-memory-cloud": {
       "type": "remote",
-      "url": "https://cloud.basicmemory.com/mcp",
-      "enabled": true
+      "url": "https://cloud.basicmemory.com/mcp"
     },
     "atlassian": {
       "type": "remote",
-      "url": "https://mcp.atlassian.com/v1/mcp",
-      "enabled": true
+      "url": "https://mcp.atlassian.com/v1/mcp"
     },
     "sosumi": {
       "type": "remote",
-      "url": "https://sosumi.ai/mcp",
-      "enabled": true
+      "url": "https://sosumi.ai/mcp"
     },
     "serena": {
       "type": "local",
-      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"],
-      "enabled": false
+      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
     },
     "mobile-mcp": {
-      "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
     },
     "simctl": {
-      "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "simctl-mcp"]
     },
     "xcodebuild": {
-      "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "xcodebuildmcp@latest"],
       "environment": {
@@ -72,11 +67,9 @@
     },
     "xcstrings-crud": {
       "type": "local",
-      "command": ["xcstrings-crud", "mcp"],
-      "enabled": false
+      "command": ["xcstrings-crud", "mcp"]
     },
     "peekaboo": {
-      "enabled": false,
       "type": "local",
       "command": ["peekaboo", "mcp"],
       "environment": {
@@ -85,17 +78,14 @@
       }
     },
     "vibium": {
-      "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "vibium"]
     },
     "shellwright": {
-      "enabled": false,
       "type": "local",
       "command": ["npx", "-y", "@dwmkerr/shellwright"]
     },
     "firecrawl": {
-      "enabled": true,
       "type": "local",
       "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
@@ -103,12 +93,10 @@
       }
     },
     "deepwiki": {
-      "enabled": true,
       "type": "remote",
       "url": "https://mcp.deepwiki.com/mcp"
     },
     "exa": {
-      "enabled": true,
       "type": "remote",
       "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
     }

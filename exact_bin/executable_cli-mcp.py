@@ -300,33 +300,27 @@ def apply_template(template, mcp_name, mcp_def):
 
 def main():
     parser = argparse.ArgumentParser(description="MCP Manager")
-    parser.add_argument("tool", nargs="?", help="Tool name (required unless --list)")
-    parser.add_argument("-e", "--enable", nargs="+", metavar="PRESET", help="Enable presets")
-    parser.add_argument("-d", "--disable", nargs="+", metavar="PRESET", help="Disable presets")
-    parser.add_argument("-i", "--interactive", action="store_true", help="Interactive selection")
-    parser.add_argument("-l", "--list", action="store_true", help="List status from cli config")
-    parser.add_argument("-ns", "--no-start", action="store_true", help="Skip tool start")
-    parser.add_argument("-s", "--show", action="store_true", help="Show MCP config for tool")
-    parser.add_argument("--current", action="store_true", help="Show current MCP config for tool")
-    parser.add_argument("-c", "--copy", action="store_true", help="Copy MCP config for tool to clipboard")
+    parser.add_argument("tool", nargs="?", help="Tool name (required unless --mcp-list)")
+    parser.add_argument("-e", "--mcp-enable", nargs="+", metavar="PRESET", help="Enable presets")
+    parser.add_argument("-d", "--mcp-disable", nargs="+", metavar="PRESET", help="Disable presets")
+    parser.add_argument("-i", "--mcp-interactive", action="store_true", help="Interactive selection")
+    parser.add_argument("-l", "--mcp-list", action="store_true", help="List status from cli config")
+    parser.add_argument("-n", "--mcp-no-start", action="store_true", help="Skip tool start")
+    parser.add_argument("-s", "--mcp-show", action="store_true", help="Show MCP config for tool")
+    parser.add_argument("-C", "--mcp-current", action="store_true", help="Show current MCP config for tool")
+    parser.add_argument("-c", "--mcp-copy", action="store_true", help="Copy MCP config for tool to clipboard")
 
-    args, _ = parser.parse_known_args()
+    args, unknown = parser.parse_known_args()
 
     cli_config = load_cli_config()
 
-    if args.list:
+    if args.mcp_list:
         list_config(cli_config, args.tool)
         return
 
     if not args.tool:
-        print("Tool is required unless using --list.")
+        print("Tool is required unless using --mcp-list.")
         sys.exit(1)
-
-    argv = sys.argv[1:]
-    passthrough = []
-    if args.tool in argv:
-        tool_index = argv.index(args.tool)
-        passthrough = argv[tool_index + 1:]
 
     tool_cfg = get_tool_cfg(cli_config, args.tool)
     presets = get_dict(cli_config, "presets", "presets")
@@ -340,10 +334,10 @@ def main():
         print("MCP path does not point to an object.")
         sys.exit(1)
 
-    to_enable = args.enable or []
-    to_disable = args.disable or []
+    to_enable = args.mcp_enable or []
+    to_disable = args.mcp_disable or []
 
-    if args.interactive:
+    if args.mcp_interactive:
         en, dis = curses.wrapper(interactive_menu, presets, mcp_node)
         if en is None:
             return
@@ -407,31 +401,31 @@ def main():
             else:
                 print(f"Warning: Preset '{name}' not found.")
 
-    if args.current:
+    if args.mcp_current:
         fragment = build_fragment(mcp_path, mcp_node)
         output = format_output(tool_cfg, fragment)
-        if args.show or not args.copy:
+        if args.mcp_show or not args.mcp_copy:
             print(output)
-        if args.copy:
+        if args.mcp_copy:
             copy_to_clipboard(output)
         return
 
-    if args.show or args.copy:
+    if args.mcp_show or args.mcp_copy:
         rendered = render_mcps()
         apply_state_to_rendered(rendered, to_enable, True)
         apply_state_to_rendered(rendered, to_disable, False)
         fragment = build_fragment(mcp_path, rendered)
         output = format_output(tool_cfg, fragment)
-        if args.show:
+        if args.mcp_show:
             print(output)
-        if args.copy:
+        if args.mcp_copy:
             copy_to_clipboard(output)
         return
 
     if updated:
         save_tool_config(tool_cfg, config)
 
-    if args.no_start:
+    if args.mcp_no_start:
         return
 
     command = tool_cfg.get("command")
@@ -441,7 +435,7 @@ def main():
         print("Tool command must be a non-empty list or string.")
         sys.exit(1)
 
-    subprocess.run(command + passthrough)
+    subprocess.run(command + unknown)
 
 if __name__ == "__main__":
     main()

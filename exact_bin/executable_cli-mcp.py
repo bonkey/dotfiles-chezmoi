@@ -319,6 +319,17 @@ def main():
         return
 
     if not args.tool:
+        tools = get_dict(cli_config, "tools", "tools")
+        def reclaim_tool(values):
+            if not values:
+                return None
+            candidate = values[-1]
+            if candidate in tools:
+                values.pop()
+                return candidate
+            return None
+        args.tool = reclaim_tool(args.mcp_enable) or reclaim_tool(args.mcp_disable)
+    if not args.tool:
         print("Tool is required unless using --mcp-list.")
         sys.exit(1)
 

@@ -1,0 +1,196 @@
+{
+  "presets": {
+    "search": ["ref", "tavily"],
+    "memory": ["basic-memory-cloud"],
+    "research": ["exa", "deepwiki", "firecrawl"],
+    "local-code-research": ["chunkhound"],
+    "ios-dev": ["mobile-mcp", "simctl", "xcodebuild", "peekaboo"],
+    "ios-doc": ["sosumi"],
+    "ios-strings": ["xcstrings-crud"],
+    "atlassian": ["atlassian"],
+    "semantic-code-retrival": ["serena"],
+    "web-dev": ["vibium"],
+    "cli-dev": ["shellwright"]
+  },
+  "mcps": {
+    "ref": {
+      "type": "local",
+      "command": ["npx", "ref-tools-mcp@latest"],
+      "environment": {
+        "REF_API_KEY": "<REF_API_KEY_REDACTED>"
+      },
+      "enabled": true
+    },
+    "chunkhound": {
+      "type": "local",
+      "command": ["chunkhound", "mcp"],
+      "enabled": false
+    },
+    "tavily": {
+      "type": "remote",
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
+      "enabled": true
+    },
+    "basic-memory-cloud": {
+      "type": "remote",
+      "url": "https://cloud.basicmemory.com/mcp",
+      "enabled": true
+    },
+    "atlassian": {
+      "type": "remote",
+      "url": "https://mcp.atlassian.com/v1/mcp",
+      "enabled": true
+    },
+    "sosumi": {
+      "type": "remote",
+      "url": "https://sosumi.ai/mcp",
+      "enabled": true
+    },
+    "serena": {
+      "type": "local",
+      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"],
+      "enabled": false
+    },
+    "mobile-mcp": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
+    },
+    "simctl": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "simctl-mcp"]
+    },
+    "xcodebuild": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "xcodebuildmcp@latest"],
+      "environment": {
+        "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
+        "INCREMENTAL_BUILDS_ENABLED": "true"
+      }
+    },
+    "xcstrings-crud": {
+      "type": "local",
+      "command": ["xcstrings-crud", "mcp"],
+      "enabled": false
+    },
+    "peekaboo": {
+      "enabled": false,
+      "type": "local",
+      "command": ["peekaboo", "mcp"],
+      "environment": {
+        "PEEKABOO_AI_PROVIDERS": "openai/gpt-4.1",
+        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
+      }
+    },
+    "vibium": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "vibium"]
+    },
+    "shellwright": {
+      "enabled": false,
+      "type": "local",
+      "command": ["npx", "-y", "@dwmkerr/shellwright"]
+    },
+    "firecrawl": {
+      "enabled": true,
+      "type": "local",
+      "command": ["npx", "-y", "firecrawl-mcp"],
+      "environment": {
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+      }
+    },
+    "deepwiki": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "exa": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
+    }
+  },
+  "tools": {
+    "opencode": {
+      "format": "json",
+      "path": "~/.config/opencode/opencode.json",
+      "config_node": "mcp",
+      "command": ["opencode"],
+      "template": {
+        "type": "$type",
+        "command": "$command",
+        "url": "$url",
+        "environment": "$environment",
+        "enabled": "$enabled"
+      }
+    },
+    "codex": {
+      "format": "toml",
+      "path": "~/.codex/config.toml",
+      "config_node": "mcp_servers",
+      "command": ["codex"],
+      "template": {
+        "command": "$command[0]",
+        "args": "$command[1:]",
+        "env": "$environment",
+        "url": "$url",
+        "enabled": "$enabled"
+      }
+    },
+    "gemini": {
+      "format": "json",
+      "path": "",
+      "config_node": "mcp",
+      "command": ["gemini"],
+      "template": {
+        "command": "$command",
+        "args": "$command[1:]",
+        "env": "$environment",
+        "url": "$url",
+        "enabled": "$enabled"
+      }
+    },
+    "crush": {
+      "format": "json",
+      "path": "",
+      "config_node": "mcp",
+      "command": ["crush"],
+      "template": {
+        "command": "$command",
+        "args": "$command[1:]",
+        "env": "$environment",
+        "url": "$url",
+        "enabled": "$enabled"
+      }
+    },
+    "copilot": {
+      "format": "json",
+      "path": "",
+      "config_node": "mcp",
+      "command": ["copilot"],
+      "template": {
+        "command": "$command",
+        "args": "$command[1:]",
+        "env": "$environment",
+        "url": "$url",
+        "enabled": "$enabled"
+      }
+    },
+    "zen": {
+      "format": "json",
+      "path": "",
+      "config_node": "mcp",
+      "command": ["zen"],
+      "template": {
+        "command": "$command",
+        "args": "$command[1:]",
+        "env": "$environment",
+        "url": "$url",
+        "enabled": "$enabled"
+      }
+    }
+  }
+}

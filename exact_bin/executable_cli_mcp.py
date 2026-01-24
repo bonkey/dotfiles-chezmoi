@@ -235,7 +235,7 @@ def interactive_menu(stdscr, presets, mcp_states, state_field, state_means_enabl
     while True:
         stdscr.clear()
         stdscr.addstr(0, 0, "MCP Manager", curses.A_BOLD)
-        stdscr.addstr(1, 0, "Space: toggle | Enter: apply & start | q: quit")
+        stdscr.addstr(1, 0, "Space: toggle | *: toggle all | Enter: apply & start | q: quit")
         for i, name in enumerate(preset_names):
             box = "[x]" if selected[i] else "[ ]"
             mcp_list = ", ".join(presets[name])
@@ -252,6 +252,9 @@ def interactive_menu(stdscr, presets, mcp_states, state_field, state_means_enabl
             current_row = (current_row + 1) % len(preset_names)
         elif key == ord(' '):
             selected[current_row] = not selected[current_row]
+        elif key == ord('*'):
+            select_all = any(not value for value in selected)
+            selected = [select_all] * len(selected)
         elif key in (10, 13):
             en = [preset_names[i] for i, val in enumerate(selected) if val]
             dis = [preset_names[i] for i, val in enumerate(selected) if not val]

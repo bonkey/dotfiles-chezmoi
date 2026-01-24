@@ -6,7 +6,8 @@ import os
 import argparse
 import subprocess
 import curses
-import copy
+
+from cli_mcp_tools import get_tools, get_transformer
 
 try:
     import tomllib
@@ -43,16 +44,15 @@ def get_dict(config, key, label):
         sys.exit(1)
     return value
 
-def get_tool_cfg(cli_config, tool_name):
-    tools = get_dict(cli_config, "tools", "tools")
-    tool_cfg = tools.get(tool_name)
+def get_tool_cfg(tool_name):
+    tool_cfg = get_tools().get(tool_name)
     if not isinstance(tool_cfg, dict):
         print(f"Unknown tool: {tool_name}")
         sys.exit(1)
     if not tool_cfg.get("format"):
         print(f"Tool '{tool_name}' is missing 'format'.")
         sys.exit(1)
-    if not tool_cfg.get("path"):
+    if "path" not in tool_cfg:
         print(f"Tool '{tool_name}' is missing 'path'.")
         sys.exit(1)
     if not tool_cfg.get("command"):
@@ -62,16 +62,6 @@ def get_tool_cfg(cli_config, tool_name):
         print(f"Tool '{tool_name}' is missing 'config_node'.")
         sys.exit(1)
     return tool_cfg
-
-def get_tool_template(tool_cfg, tool_name):
-    template = tool_cfg.get("template")
-    if template is None:
-        print(f"Tool '{tool_name}' is missing 'template'.")
-        sys.exit(1)
-    if not isinstance(template, dict):
-        print(f"Tool '{tool_name}' template must be an object.")
-        sys.exit(1)
-    return template
 
 def load_tool_config(tool_cfg):
     config_path = expand_path(tool_cfg.get("path", ""))
@@ -166,19 +156,16 @@ def copy_to_clipboard(text):
 def list_config(cli_config, tool_name):
     presets = get_dict(cli_config, "presets", "presets")
     mcps = get_dict(cli_config, "mcps", "mcps")
-    tools = get_dict(cli_config, "tools", "tools")
+    tools = get_tools()
 
     if tool_name is None:
         print("Tools:")
         for name, tool_cfg in tools.items():
-            if isinstance(tool_cfg, dict):
-                path_value = tool_cfg.get("path")
-                format_value = tool_cfg.get("format")
-                node_value = tool_cfg.get("config_node")
-                if path_value:
-                    print(f"  - {name}: {path_value} (format={format_value}, node={node_value})")
-                else:
-                    print(f"  - {name}: (unconfigured)")
+            path_value = tool_cfg.get("path")
+            format_value = tool_cfg.get("format")
+            node_value = tool_cfg.get("config_node")
+            if path_value:
+                print(f"  - {name}: {path_value} (format={format_value}, node={node_value})")
             else:
                 print(f"  - {name}: (unconfigured)")
         print("\nPresets:")
@@ -215,12 +202,31 @@ def list_config(cli_config, tool_name):
             enabled = data.get("enabled", True)
         print(f"  - {name} (enabled: {str(enabled).lower()})")
 
-def interactive_menu(stdscr, presets, mcp_states):
+def read_state(entry, state_field, state_means_enabled):
+    if state_field is None:
+        return entry is not None
+    if not isinstance(entry, dict):
+        return True
+    if state_field not in entry:
+        return True
+    current = bool(entry.get(state_field))
+    return current if state_means_enabled else not current
+
+def write_state(entry, enabled, state_field, state_means_enabled):
+    if state_field is None:
+        return
+    value = enabled if state_means_enabled else not enabled
+    entry[state_field] = value
+    other_field = "disabled" if state_field == "enabled" else "enabled"
+    if other_field in entry:
+        del entry[other_field]
+
+def interactive_menu(stdscr, presets, mcp_states, state_field, state_means_enabled):
     curses.curs_set(0)
     preset_names = list(presets.keys())
     selected = [
         any(
-            isinstance(mcp_states.get(mcp), dict) and mcp_states.get(mcp, {}).get("enabled", False)
+            read_state(mcp_states.get(mcp), state_field, state_means_enabled)
             for mcp in presets[name]
         )
         for name in preset_names
@@ -253,51 +259,6 @@ def interactive_menu(stdscr, presets, mcp_states):
         elif key == ord('q'):
             return None, None
 
-def parse_slice(slice_text):
-    if ":" in slice_text:
-        start_text, end_text = slice_text.split(":", 1)
-        start = int(start_text) if start_text else None
-        end = int(end_text) if end_text else None
-        return slice(start, end)
-    return int(slice_text)
-
-def resolve_placeholder(token, mcp_name, mcp_def):
-    if token == "name":
-        return mcp_name
-    if "[" in token and token.endswith("]"):
-        base, bracket = token[:-1].split("[", 1)
-        value = mcp_def.get(base)
-        if value is None:
-            return None
-        if not isinstance(value, list):
-            return None
-        index = parse_slice(bracket)
-        return value[index]
-    return mcp_def.get(token)
-
-def apply_template(template, mcp_name, mcp_def):
-    if isinstance(template, dict):
-        result = {}
-        for key, value in template.items():
-            rendered = apply_template(value, mcp_name, mcp_def)
-            if rendered is None:
-                continue
-            result[key] = rendered
-        return result
-    if isinstance(template, list):
-        items = []
-        for value in template:
-            rendered = apply_template(value, mcp_name, mcp_def)
-            if rendered is None:
-                continue
-            items.append(rendered)
-        return items
-    if isinstance(template, str):
-        if template.startswith("$"):
-            return resolve_placeholder(template[1:], mcp_name, mcp_def)
-        return template
-    return copy.deepcopy(template)
-
 def main():
     parser = argparse.ArgumentParser(description="MCP Manager")
     parser.add_argument("tool", nargs="?", help="Tool name (required unless --mcp-list)")
@@ -319,12 +280,11 @@ def main():
         return
 
     if not args.tool:
-        tools = get_dict(cli_config, "tools", "tools")
         def reclaim_tool(values):
             if not values:
                 return None
             candidate = values[-1]
-            if candidate in tools:
+            if candidate in get_tools():
                 values.pop()
                 return candidate
             return None
@@ -333,10 +293,12 @@ def main():
         print("Tool is required unless using --mcp-list.")
         sys.exit(1)
 
-    tool_cfg = get_tool_cfg(cli_config, args.tool)
+    tool_cfg = get_tool_cfg(args.tool)
+    transformer = get_transformer(args.tool)
     presets = get_dict(cli_config, "presets", "presets")
     mcps = get_dict(cli_config, "mcps", "mcps")
-    template = get_tool_template(tool_cfg, args.tool)
+    state_field = transformer.state_field
+    state_means_enabled = transformer.state_means_enabled
 
     config = load_tool_config(tool_cfg)
     mcp_path = tool_cfg.get("config_node", "")
@@ -349,35 +311,40 @@ def main():
     to_disable = args.mcp_disable or []
 
     if args.mcp_interactive:
-        en, dis = curses.wrapper(interactive_menu, presets, mcp_node)
+        en, dis = curses.wrapper(
+            interactive_menu, presets, mcp_node, state_field, state_means_enabled
+        )
         if en is None:
             return
         to_enable, to_disable = en, dis
 
     updated = set()
 
-    def ensure_mcp_entry(mcp_name):
+    def ensure_mcp_entry(mcp_name, enabled=None):
         definition = mcps.get(mcp_name)
         if not isinstance(definition, dict):
             print(f"Missing MCP definition for '{mcp_name}' in {CLI_CONFIG_FILE}.")
             sys.exit(1)
-        rendered = apply_template(template, mcp_name, definition)
+        rendered = transformer.transform_entry(mcp_name, definition, enabled)
         if not isinstance(rendered, dict):
-            print(f"Template must render to an object for '{mcp_name}'.")
+            print(f"Transformer must return an object for '{mcp_name}'.")
             sys.exit(1)
         return rendered
 
     def enable_mcp(mcp_name):
-        if mcp_name in mcp_node and isinstance(mcp_node[mcp_name], dict):
-            mcp_node[mcp_name]["enabled"] = True
-        else:
-            mcp_node[mcp_name] = ensure_mcp_entry(mcp_name)
-            mcp_node[mcp_name]["enabled"] = True
+        mcp_node[mcp_name] = ensure_mcp_entry(
+            mcp_name, True if state_field is not None else None
+        )
+        write_state(mcp_node[mcp_name], True, state_field, state_means_enabled)
         updated.add(mcp_name)
 
     def disable_mcp(mcp_name):
         if mcp_name in mcp_node and isinstance(mcp_node[mcp_name], dict):
-            mcp_node[mcp_name]["enabled"] = False
+            if state_field is None:
+                del mcp_node[mcp_name]
+            else:
+                mcp_node[mcp_name] = ensure_mcp_entry(mcp_name, False)
+                write_state(mcp_node[mcp_name], False, state_field, state_means_enabled)
             updated.add(mcp_name)
 
     def apply_state(names, state):
@@ -397,25 +364,37 @@ def main():
     def render_mcps():
         rendered = {}
         for name in mcps.keys():
-            rendered[name] = ensure_mcp_entry(name)
+            enabled = read_state(mcp_node.get(name), state_field, state_means_enabled)
+            if state_field is None and not enabled:
+                continue
+            rendered[name] = ensure_mcp_entry(name, enabled)
         return rendered
 
     def apply_state_to_rendered(rendered, names, state):
         for name in names:
             if name in presets:
                 for mcp in presets[name]:
+                    if state_field is None:
+                        if state:
+                            rendered[mcp] = ensure_mcp_entry(mcp)
+                        else:
+                            rendered.pop(mcp, None)
+                        continue
                     entry = rendered.get(mcp)
                     if entry is None:
                         entry = ensure_mcp_entry(mcp)
                         rendered[mcp] = entry
-                    entry["enabled"] = state
+                    write_state(entry, state, state_field, state_means_enabled)
             else:
                 print(f"Warning: Preset '{name}' not found.")
+
+    if updated:
+        save_tool_config(tool_cfg, config)
 
     if args.mcp_current:
         fragment = build_fragment(mcp_path, mcp_node)
         output = format_output(tool_cfg, fragment)
-        if args.mcp_show or not args.mcp_copy:
+        if args.mcp_show or (not args.mcp_copy and not args.mcp_no_start):
             print(output)
         if args.mcp_copy:
             copy_to_clipboard(output)
@@ -432,9 +411,6 @@ def main():
         if args.mcp_copy:
             copy_to_clipboard(output)
         return
-
-    if updated:
-        save_tool_config(tool_cfg, config)
 
     if args.mcp_no_start:
         return

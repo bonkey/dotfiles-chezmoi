@@ -75,8 +75,12 @@ alias cal="gcal -s 1"
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 
-oc() {
-    $HOME/bin/cli-mcp.py opencode "$@"
+cm() {
+    cli_mcp.py "$@"
+}
+
+cmi() {
+    cm --mcp-interactive "$@"
 }
 
 md() {

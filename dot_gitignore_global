@@ -12,3 +12,4 @@ xcodebuild*.log
 .nova
 .opencode/plans
 .chunkhound
+__pycache__

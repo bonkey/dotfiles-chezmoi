@@ -20,13 +20,13 @@
 				<key>GroupedAlternate</key>
 				<string>NO</string>
 				<key>Keyboard Shortcut</key>
-				<string>^~@z</string>
+				<string>~@z</string>
 				<key>Navigation</key>
 				<string>NO</string>
 				<key>Parent Title</key>
 				<string>Behaviors</string>
 				<key>Title</key>
-				<string>New Behavior</string>
+				<string>Zen Mode</string>
 			</dict>
 			<dict>
 				<key>Action</key>

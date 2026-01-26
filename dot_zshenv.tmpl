@@ -4,6 +4,8 @@ export _GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj6
 
 {{- if eq .chezmoi.hostname "dbauke-mac" }}
 
+export HOMEBREW_CASK_OPTS="--appdir=${HOME}/Applications"
+
 export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"
 export CIRCLECI_CLI_TOKEN=$CIRCLECI_TOKEN
 
@@ -67,7 +69,7 @@ export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulf
 
 export HOMEBREW_AUTOREMOVE=true
 export HOMEBREW_BAT=true
-export HOMEBREW_CASK_OPTS="--no-quarantine"
+export HOMEBREW_CASK_OPTS="$(HOMEBREW_CASK_OPTS) --no-quarantine"
 export HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=5
 export HOMEBREW_NO_ENV_HINTS=true
 export HOMEBREW_GITHUB_API_TOKEN=$_GITHUB_ACCESS_TOKEN

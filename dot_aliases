@@ -715,8 +715,9 @@ GWL() {
     local directory=$(echo "$line" | awk '{print $1}')
     # Extract branch info (everything after second column)
     local branch_info=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}')
-    # Get basename of the directory
-    local dir_basename=$(basename "$directory")
+    # Get relative path of the directory to the current directory
+    local dir_display=$(python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' "$directory" "$current_dir" 2>/dev/null)
+    [[ -z "$dir_display" ]] && dir_display=$(basename "$directory")
     local dir_icon=""
     local gh_icon=""
 
@@ -727,7 +728,7 @@ GWL() {
     fi
 
     # Print with proper spacing and colors: green branch first, then colored directory
-    printf $'\033[32m%s %-80s\033[0m%s %s%s\033[0m\n' "$gh_icon" "$branch_info" "$dir_icon" "$dir_color" "$dir_basename"
+    printf $'\033[32m%s %-80s\033[0m%s %s%s\033[0m\n' "$gh_icon" "$branch_info" "$dir_icon" "$dir_color" "$dir_display"
   done
 }
 

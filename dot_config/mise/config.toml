@@ -26,7 +26,7 @@ node = "latest"
 
 "npm:@sentry/cli" = "latest"
 
-"@mobilenext/mobilecli@latest" = "latest"
+"@mobilenext/mobilecli" = "latest"
 
 "pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
 # "pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp" }

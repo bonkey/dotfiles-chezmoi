@@ -3,6 +3,9 @@
   // CONTEXT SERVERS
   // ================================
   "agent_servers": {
+    "claude": {
+      "default_mode": "bypassPermissions"
+    },
     "codex": {
       "default_mode": "full-access",
       "favorite_models": [

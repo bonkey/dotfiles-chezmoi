@@ -1,55 +1,21 @@
 {
   "presets": {
-    "search": [
-      "ref",
-      "tavily"
-    ],
-    "memory": [
-      "basic-memory-cloud"
-    ],
-    "research": [
-      "exa",
-      "deepwiki",
-      "firecrawl"
-    ],
-    "local-code-research": [
-      "chunkhound"
-    ],
-    "ios-dev": [
-      "mobile-mcp",
-      "simctl",
-      "xcodebuild",
-      "peekaboo"
-    ],
-    "ios-doc": [
-      "sosumi"
-    ],
-    "ios-strings": [
-      "xcstrings-crud"
-    ],
-    "atlassian": [
-      "atlassian"
-    ],
-    "linear": [
-      "linear"
-    ],
-    "semantic-code-retrival": [
-      "serena"
-    ],
-    "web-dev": [
-      "vibium"
-    ],
-    "cli-dev": [
-      "shellwright"
-    ]
+    "search": ["ref", "tavily"],
+    "memory": ["basic-memory-cloud"],
+    "research": ["exa", "deepwiki", "firecrawl"],
+    "local-code-research": ["chunkhound"],
+    "ios-dev": ["mobile-mcp", "simctl", "xcodebuild", "peekaboo"],
+    "ios-doc": ["sosumi"],
+    "ios-strings": ["xcstrings-crud"],
+    "linear": ["linear"],
+    "semantic-code-retrival": ["serena"],
+    "web-dev": ["vibium"],
+    "cli-dev": ["shellwright"]
   },
   "mcps": {
     "ref": {
       "type": "local",
-      "command": [
-        "npx",
-        "ref-tools-mcp@latest"
-      ],
+      "command": ["npx", "ref-tools-mcp@latest"],
       "environment": {
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       }
@@ -60,10 +26,7 @@
     },
     "chunkhound": {
       "type": "local",
-      "command": [
-        "chunkhound",
-        "mcp"
-      ]
+      "command": ["chunkhound", "mcp"]
     },
     "tavily": {
       "type": "remote",
@@ -73,47 +36,25 @@
       "type": "remote",
       "url": "https://cloud.basicmemory.com/mcp"
     },
-    "atlassian": {
-      "type": "remote",
-      "url": "https://mcp.atlassian.com/v1/mcp"
-    },
     "sosumi": {
       "type": "remote",
       "url": "https://sosumi.ai/mcp"
     },
     "serena": {
       "type": "local",
-      "command": [
-        "uvx",
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server"
-      ]
+      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
     },
     "mobile-mcp": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@mobilenext/mobile-mcp@latest"
-      ]
+      "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
     },
     "simctl": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "simctl-mcp"
-      ]
+      "command": ["npx", "-y", "simctl-mcp"]
     },
     "xcodebuild": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "xcodebuildmcp@latest"
-      ],
+      "command": ["npx", "-y", "xcodebuildmcp@latest"],
       "environment": {
         "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
         "INCREMENTAL_BUILDS_ENABLED": "true"
@@ -121,17 +62,11 @@
     },
     "xcstrings-crud": {
       "type": "local",
-      "command": [
-        "xcstrings-crud",
-        "mcp"
-      ]
+      "command": ["xcstrings-crud", "mcp"]
     },
     "peekaboo": {
       "type": "local",
-      "command": [
-        "peekaboo",
-        "mcp"
-      ],
+      "command": ["peekaboo", "mcp"],
       "environment": {
         "PEEKABOO_AI_PROVIDERS": "openai/gpt-4.1",
         "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
@@ -139,27 +74,15 @@
     },
     "vibium": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "vibium"
-      ]
+      "command": ["npx", "-y", "vibium"]
     },
     "shellwright": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@dwmkerr/shellwright"
-      ]
+      "command": ["npx", "-y", "@dwmkerr/shellwright"]
     },
     "firecrawl": {
       "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "firecrawl-mcp"
-      ],
+      "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
         "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       }

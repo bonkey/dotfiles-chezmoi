@@ -148,6 +148,22 @@ def _crush_remote_type(mcp_def):
 
 
 TOOLS = {
+    "claude": {
+        "format": "json",
+        "path": "~/.claude.json",
+        "config_node": "mcpServers",
+        "command": ["claude"],
+        "transformer": make_transformer(
+            command_key="command",
+            args_key="args",
+            env_key="env",
+            type_key="type",
+            local_type="stdio",
+            remote_type="http",
+            command_mode="first",
+            state_field=None,
+        ),
+    },
     "opencode": {
         "format": "json",
         "path": "~/.config/opencode/opencode.json",

@@ -175,7 +175,13 @@ z() {
   fi
 }
 
-alias diff=colordiff
+ccd() {
+    claude --dangerously-skip-permissions "$@"
+}
+
+cod() {
+    codex --dangerously-bypass-approvals-and-sandbox "$@"
+}
 
 
 alias diff=colordiff

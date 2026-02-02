@@ -64,6 +64,7 @@ _eval_for_cmd_cached dyff "dyff completion zsh"
 _eval_for_cmd_cached codex "codex completion zsh"
 _eval_for_cmd_cached zoxide "zoxide init zsh --no-cmd"
 _eval_for_cmd_cached opencode "opencode completion"
+_eval_for_cmd_cached wt "wt config shell init zsh"
 
 _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 

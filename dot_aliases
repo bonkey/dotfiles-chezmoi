@@ -715,6 +715,10 @@ GWab() {
 }
 
 GWL() {
+    wt list "$@"
+}
+
+_GWL() {
   local current_dir=$(pwd)
   git worktree list | while IFS= read -r line; do
     # Extract the directory path (first column)

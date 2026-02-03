@@ -661,6 +661,8 @@ alias pos="_pod search"
 
 # --- git
 
+alias wsc='wt switch --create --execute=claude'
+
 alias gf > /dev/null && unalias gf
 gf() {
   fork .

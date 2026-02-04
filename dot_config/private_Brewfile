@@ -31,6 +31,8 @@ brew 'mistral-vibe' # Minimal CLI coding agent
 cask 'antigravity'
 brew 'peekaboo'
 cask 'conductor'
+cask 'codex-app'
+cask 'wispr-flow'
 
 # Tools for working with text files
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration

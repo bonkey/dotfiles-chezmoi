@@ -5466,8 +5466,6 @@
 			<integer>3</integer>
 			<key>Transparency</key>
 			<real>0.14999999999999999</real>
-			<key>Treat Option as Alt</key>
-			<true/>
 			<key>Triggers</key>
 			<array>
 				<dict>

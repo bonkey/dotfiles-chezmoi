@@ -106,8 +106,8 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "provider": "google",
-      "model": "gemini-3-flash-preview",
+      "provider": "copilot_chat",
+      "model": "claude-sonnet-4.5",
     },
     "commit_message_model": {
       "provider": "google",

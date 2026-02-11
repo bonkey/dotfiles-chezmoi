@@ -48,6 +48,8 @@ node = "latest"
 "github:Ryu0118/xcstrings-crud" = "latest"
 
 "github:davidfowl/tally" = "latest"
+pipx = "latest"
+"pipx:pocmo/confl" = "latest"
 
 [settings]
 experimental = true

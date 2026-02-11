@@ -97,8 +97,8 @@
       },
     ],
     "inline_assistant_model": {
-      "provider": "google",
-      "model": "gemini-3-flash-preview",
+      "provider": "copilot_chat",
+      "model": "gpt-5.1-codex-mini",
     },
     "always_allow_tool_actions": true,
     "enabled": true,
@@ -107,7 +107,7 @@
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5",
+      "model": "gpt-5.2-codex",
     },
     "commit_message_model": {
       "provider": "google",

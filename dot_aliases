@@ -664,10 +664,10 @@ alias pos="_pod search"
 
 # --- git
 
+alias wl='wt list'
 alias ws='wt switch'
 alias wsc='ws --create'
 alias wscc='wsc --execute="claude --dangerously-skip-permissions"'
-
 
 alias gf > /dev/null && unalias gf
 gf() {
@@ -721,69 +721,6 @@ GWab() {
     _exec "cd '$branch_dir'"
     _exec "mise trust"
 }
-
-GWL() {
-    wt list "$@"
-}
-
-_GWL() {
-  local current_dir=$(pwd)
-  git worktree list | while IFS= read -r line; do
-    # Extract the directory path (first column)
-    local directory=$(echo "$line" | awk '{print $1}')
-    # Extract branch info (everything after second column)
-    local branch_info=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}')
-    # Get relative path of the directory to the current directory
-    local dir_display=$(python3 -c 'import os,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' "$directory" "$current_dir" 2>/dev/null)
-    [[ -z "$dir_display" ]] && dir_display=$(basename "$directory")
-    local dir_icon=""
-    local gh_icon=""
-
-    # Check if this directory is the current directory
-    local dir_color=$'\033[0m'  # default color
-    if [[ "$directory" = "$current_dir" ]]; then
-      dir_color=$'\033[33m'  # yellow
-    fi
-
-    # Print with proper spacing and colors: green branch first, then colored directory
-    printf $'\033[32m%s %-80s\033[0m%s %s%s\033[0m\n' "$gh_icon" "$branch_info" "$dir_icon" "$dir_color" "$dir_display"
-  done
-}
-
-# Navigate to a git worktree with fzf selection (sorted by last modification)
-GWC() {
-    local selected_branch
-
-    # Get list of worktrees with branch names and paths, sorted by modification time
-    selected_branch=$(git worktree list | tail -n +2 | while IFS= read -r line; do
-        local directory=$(echo "$line" | awk '{print $1}')
-        local branch_info=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}' | sd '^\[|\]$' '')
-        local mtime=$(stat -f "%m" "$directory" 2>/dev/null || stat -c "%Y" "$directory" 2>/dev/null)
-        echo "$mtime\t$branch_info\t$directory"
-    done | sort -rn | cut -f2- | fzf --height=40% --reverse --prompt="Select worktree: " --delimiter='\t' --with-nth=1 --preview='echo {} | cut -f2 | xargs -I {} sh -c "cd {} && git status"')
-
-    if [[ -n "$selected_branch" ]]; then
-        local target_dir=$(echo "$selected_branch" | cut -f2)
-        cd "$target_dir"
-    fi
-}
-
-# Autocomplete function for GWC using zsh completion
-_gwc_completion() {
-    local -a worktrees
-
-    # Get worktrees (skip first line which is bare repo)
-    while IFS= read -r line; do
-        local directory=$(echo "$line" | awk '{print $1}')
-        local branch_info=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s", $i, (i==NF?"":" ")}')
-        local dir_basename=$(basename "$directory")
-        worktrees+=("$dir_basename:$branch_info")
-    done < <(git worktree list 2>/dev/null | tail -n +2)
-
-    _describe 'worktree' worktrees
-}
-
-compdef _gwc_completion GWC
 
 alias gip="gitup"
 alias rc="retcon"

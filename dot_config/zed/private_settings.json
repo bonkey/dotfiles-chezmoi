@@ -2,21 +2,20 @@
   // ================================
   // CONTEXT SERVERS
   // ================================
+  "buffer_line_height": {
+    "custom": 1.4,
+  },
+  "ui_font_family": "MonaspiceAr Nerd Font",
   "agent_servers": {
     "claude": {
-      "default_mode": "bypassPermissions"
+      "default_mode": "bypassPermissions",
     },
     "codex": {
       "default_mode": "full-access",
-      "favorite_models": [
-        "gpt-5.2-codex/xhigh",
-        "gpt-5.2-codex/high",
-        "gpt-5.2-codex/medium",
-        "gpt-5.2-codex/low"
-      ],
+      "favorite_models": ["gpt-5.2-codex/xhigh", "gpt-5.2-codex/high", "gpt-5.2-codex/medium", "gpt-5.2-codex/low"],
       "default_config_options": {},
-      "favorite_config_option_values": {}
-    }
+      "favorite_config_option_values": {},
+    },
   },
   "context_servers": {
     "basic-memory-cloud": {
@@ -24,12 +23,6 @@
 
       "enabled": true,
       "url": "https://cloud.basicmemory.com/mcp",
-    },
-    "Atlassian": {
-      "settings": {},
-
-      "enabled": true,
-      "url": "https://mcp.atlassian.com/v1/sse",
     },
     "Ref": {
       "enabled": true,
@@ -52,11 +45,7 @@
     "tavily": {
       "enabled": true,
       "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
-      ],
+      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"],
     },
     "peekaboo": {
       "enabled": false,
@@ -107,7 +96,7 @@
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5",
+      "model": "gpt-5.2-codex",
     },
     "commit_message_model": {
       "provider": "google",
@@ -176,7 +165,7 @@
   // ================================
   // FONTS & TYPOGRAPHY
   // ================================
-  "buffer_font_family": "0xProto Nerd Font Mono",
+  "buffer_font_family": "Google Sans Code NF",
   "buffer_font_size": 16,
   "ui_font_size": 15,
 

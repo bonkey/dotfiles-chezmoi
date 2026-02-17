@@ -29,9 +29,7 @@
           "background": "p:darkgreen",
           "type": "status",
           "style": "diamond",
-          "background_templates": [
-            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
-          ]
+          "background_templates": ["{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"]
         },
         {
           "options": {
@@ -114,34 +112,28 @@
           "options": {
             "always_enabled": true
           },
-          "template": " {{ if gt .Code 0 }}\uf071{{ else }}\uf138{{ end }}",
+          "template": " {{ if gt .Code 0 }}\uf071{{ else }}\uf138{{ end }} ",
           "background": "transparent",
           "type": "status",
           "style": "diamond",
-          "foreground_templates": [
-            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
-          ],
+          "foreground_templates": ["{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"],
           "min_width": 120
         },
         {
           "options": {
             "always_enabled": true
           },
-          "template": "\n  {{ if gt .Code 0 }}\uf071{{ else }}\uf138{{ end }}",
+          "template": "\n  {{ if gt .Code 0 }}\uf071{{ else }}\uf138{{ end }} ",
           "background": "transparent",
           "type": "status",
           "style": "diamond",
-          "foreground_templates": [
-            "{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"
-          ],
+          "foreground_templates": ["{{ if gt .Code 0 }}p:red{{ else }}p:darkgreen{{ end }}"],
           "max_width": 120
         }
       ]
     }
   ],
-  "iterm_features": [
-    "current_dir"
-  ],
+  "iterm_features": ["current_dir"],
   "version": 4,
   "shell_integration": true,
   "final_space": true,

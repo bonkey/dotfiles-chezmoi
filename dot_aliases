@@ -668,8 +668,8 @@ alias Wl='wt list'
 alias Wr='wt remove'
 alias Wm='wt merge'
 alias Ws='wt switch'
-alias Wsc='ws --create'
-alias Wscc='wsc --execute="claude --dangerously-skip-permissions"'
+alias Wsc='Ws --create'
+alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
 
 alias gf > /dev/null && unalias gf
 gf() {

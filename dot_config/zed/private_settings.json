@@ -107,7 +107,7 @@
     "dock": "right",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5.2-codex",
+      "model": "claude-sonnet-4.5",
     },
     "commit_message_model": {
       "provider": "google",

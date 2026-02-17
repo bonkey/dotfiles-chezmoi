@@ -109,10 +109,13 @@ alias brunc="br uninstall --cask"
 
 alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"
-alias psg="ps aux | grep -i"
 # alias top="glances --process-short-name"
 alias duh="du -csh"
 alias du="du -h"
+
+psg() {
+    ps aux | grep -i "$@" | grep -vE -- "grep.*-i $@"
+}
 
 zz() {
     __zoxide_z "$@"
@@ -1062,7 +1065,7 @@ buc() {
 }
 
 alias bue="buc exec"
-alias buu="bu update"
+alias buu="bu update --all"
 alias buo="bu outdated"
 alias bui="bu install"
 

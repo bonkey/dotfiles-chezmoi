@@ -664,10 +664,12 @@ alias pos="_pod search"
 
 # --- git
 
-alias wl='wt list'
-alias ws='wt switch'
-alias wsc='ws --create'
-alias wscc='wsc --execute="claude --dangerously-skip-permissions"'
+alias Wl='wt list'
+alias Wr='wt remove'
+alias Wm='wt merge'
+alias Ws='wt switch'
+alias Wsc='ws --create'
+alias Wscc='wsc --execute="claude --dangerously-skip-permissions"'
 
 alias gf > /dev/null && unalias gf
 gf() {

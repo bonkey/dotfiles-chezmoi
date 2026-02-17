@@ -9,7 +9,7 @@
     "ios-strings": ["xcstrings-crud"],
     "linear": ["linear"],
     "semantic-code-retrival": ["serena"],
-    "web-dev": ["shadcn", "vibium"],
+    "web-dev": ["vibium"],
     "cli-dev": ["shellwright"]
   },
   "mcps": {
@@ -27,10 +27,6 @@
     "chunkhound": {
       "type": "local",
       "command": ["chunkhound", "mcp"]
-    },
-    "shadcn": {
-      "type": "local",
-      "command": ["npx", "shadcn@latest", "mcp"]
     },
     "tavily": {
       "type": "remote",
@@ -78,7 +74,7 @@
     },
     "vibium": {
       "type": "local",
-      "command": ["npx", "-y", "vibium", "mcp"]
+      "command": ["npx", "-y", "vibium"]
     },
     "shellwright": {
       "type": "local",

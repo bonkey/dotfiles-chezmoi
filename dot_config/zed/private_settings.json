@@ -25,6 +25,12 @@
       "enabled": true,
       "url": "https://cloud.basicmemory.com/mcp",
     },
+    "Atlassian": {
+      "settings": {},
+
+      "enabled": true,
+      "url": "https://mcp.atlassian.com/v1/sse",
+    },
     "Ref": {
       "enabled": true,
       "command": "npx",
@@ -170,7 +176,7 @@
   // ================================
   // FONTS & TYPOGRAPHY
   // ================================
-  "buffer_font_family": "Google Sans Code NF",
+  "buffer_font_family": "0xProto Nerd Font Mono",
   "buffer_font_size": 16,
   "ui_font_size": 15,
 

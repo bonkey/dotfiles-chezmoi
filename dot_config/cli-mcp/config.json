@@ -1,16 +1,18 @@
 {
   "presets": {
-    "search": ["ref", "tavily"],
-    "memory": ["basic-memory-cloud"],
-    "research": ["exa", "deepwiki", "firecrawl"],
-    "local-code-research": ["chunkhound"],
-    "ios-dev": ["mobile-mcp", "simctl", "xcodebuild", "peekaboo"],
-    "ios-doc": ["sosumi"],
-    "ios-strings": ["xcstrings-crud"],
+    "code-research": ["chunkhound"],
+
     "linear": ["linear"],
-    "semantic-code-retrival": ["serena"],
+
+    "cli-dev": ["shellwright"],
     "web-dev": ["shadcn", "vibium"],
-    "cli-dev": ["shellwright"]
+    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud"],
+
+    "memory": ["basic-memory-cloud"],
+    "ui-automation": ["peekaboo"],
+
+    "docs": ["ref", "tavily", "deepwiki"],
+    "research": ["exa", "tavily", "firecrawl"]
   },
   "mcps": {
     "ref": {
@@ -23,6 +25,10 @@
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp"
+    },
+    "swiftlens": {
+      "type": "local",
+      "command": ["uvx", "swiftlens"]
     },
     "chunkhound": {
       "type": "local",
@@ -44,10 +50,6 @@
       "type": "remote",
       "url": "https://sosumi.ai/mcp"
     },
-    "serena": {
-      "type": "local",
-      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
-    },
     "mobile-mcp": {
       "type": "local",
       "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
@@ -58,11 +60,7 @@
     },
     "xcodebuild": {
       "type": "local",
-      "command": ["npx", "-y", "xcodebuildmcp@latest"],
-      "environment": {
-        "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
-        "INCREMENTAL_BUILDS_ENABLED": "true"
-      }
+      "command": ["npx", "-y", "xcodebuildmcp@latest"]
     },
     "xcstrings-crud": {
       "type": "local",

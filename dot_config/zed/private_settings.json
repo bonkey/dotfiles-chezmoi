@@ -5,7 +5,7 @@
   "buffer_line_height": {
     "custom": 1.4,
   },
-  "ui_font_family": "MonaspiceAr Nerd Font",
+  "ui_font_family": "Google Sans Code NF",
   "agent_servers": {
     "claude": {
       "default_mode": "bypassPermissions",
@@ -45,7 +45,11 @@
     "tavily": {
       "enabled": true,
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"],
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
+      ],
     },
     "peekaboo": {
       "enabled": false,
@@ -89,13 +93,12 @@
       "provider": "copilot_chat",
       "model": "gpt-5.1-codex-mini",
     },
-    "always_allow_tool_actions": true,
     "enabled": true,
     "button": true,
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "provider": "copilot_chat",
+      "provider": "openai",
       "model": "gpt-5.2-codex",
     },
     "commit_message_model": {
@@ -167,7 +170,7 @@
   // ================================
   "buffer_font_family": "Google Sans Code NF",
   "buffer_font_size": 16,
-  "ui_font_size": 15,
+  "ui_font_size": 16.0,
 
   // ================================
   // LAYOUT & DISPLAY

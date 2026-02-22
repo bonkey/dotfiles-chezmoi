@@ -50,6 +50,7 @@ node = "latest"
 "github:davidfowl/tally" = "latest"
 pipx = "latest"
 "pipx:pocmo/confl" = "latest"
+"npm:ccusage" = "latest"
 
 [settings]
 experimental = true

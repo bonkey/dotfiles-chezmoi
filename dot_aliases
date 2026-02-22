@@ -864,6 +864,7 @@ gcai() {
 
 alias gl1m="git lg --merges"
 alias gl1="git lg --no-merges"
+alias gl10="gl1 -10"
 
 alias gcl="git clone --recurse-submodules --progress"
 

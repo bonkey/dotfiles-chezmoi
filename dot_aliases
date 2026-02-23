@@ -886,7 +886,7 @@ git-merged-show() {
 unalias gpu 2> /dev/null
 gpu() {
   test -z "$1" && echo "$0 <remote_name>" && return
-  git push -u $1 $(git name-rev --name-only HEAD)
+  git push -u $1 $(git branch --show-current)
 }
 
 git-retrigger-checks() {

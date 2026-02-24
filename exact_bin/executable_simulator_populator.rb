@@ -30,7 +30,11 @@ RUNTIME_DEVICE_MAPPING = {
     aliases: nil
   },
   'iOS 18.6' => {
-    devices: ['iPhone 16 Pro'] + ALL_DEVICES,
+    devices: ALL_DEVICES,
+    aliases: nil
+  },
+  'iOS 18.5' => {
+    devices: ['iPhone 16 Pro'],
     aliases: ['iPhone 16 Pro']
   },
   'iOS 17.5' => {

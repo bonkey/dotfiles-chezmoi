@@ -64,3 +64,6 @@ trusted_config_paths = [
     '~/.superset/worktrees/',
     '~/.codex/worktrees/',
 ]
+
+[settings.ruby]
+compile = false

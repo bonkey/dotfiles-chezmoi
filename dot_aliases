@@ -666,6 +666,7 @@ alias pos="_pod search"
 
 alias Wl='wt list'
 alias Wr='wt remove'
+alias Wrf='Wr --force'
 alias Wm='wt merge'
 alias Ws='wt switch'
 alias Wsc='Ws --create'

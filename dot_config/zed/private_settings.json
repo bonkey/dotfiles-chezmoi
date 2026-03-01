@@ -5,8 +5,11 @@
   "buffer_line_height": {
     "custom": 1.4,
   },
-  "ui_font_family": "Google Sans Code NF",
+  "ui_font_family": "iA Writer Quattro V",
   "agent_servers": {
+    "kimi": {
+      "type": "registry"
+    },
     "claude": {
       "default_mode": "bypassPermissions",
     },
@@ -79,38 +82,15 @@
       {
         "provider": "google",
         "model": "gemini-3-flash-preview",
-        "enable_thinking": false
       },
       {
         "provider": "google",
         "model": "gemini-3-pro-preview",
-        "enable_thinking": false
       },
       {
         "provider": "openai",
         "model": "gpt-5.2-codex",
-        "enable_thinking": false
       },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-opus-4.6",
-        "enable_thinking": false
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-sonnet-4.6",
-        "enable_thinking": false
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.2-codex",
-        "enable_thinking": false
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.1-codex-mini",
-        "enable_thinking": false
-      }
     ],
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -121,8 +101,8 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-sonnet-4.6",
+      "provider": "openai",
+      "model": "gpt-5.2-codex",
     },
     "commit_message_model": {
       "provider": "google",
@@ -191,7 +171,7 @@
   // ================================
   // FONTS & TYPOGRAPHY
   // ================================
-  "buffer_font_family": "Google Sans Code NF",
+  "buffer_font_family": "iA Writer Mono V",
   "buffer_font_size": 16,
   "ui_font_size": 16.0,
 

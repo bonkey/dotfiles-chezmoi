@@ -11,6 +11,11 @@
       "type": "registry"
     },
     "claude": {
+      "favorite_config_option_values": {
+        "mode": [
+          "bypassPermissions"
+        ]
+      },
       "default_mode": "bypassPermissions",
     },
     "codex": {

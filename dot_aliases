@@ -662,7 +662,7 @@ alias poun="_pod update --no-repo-update"
 alias poo="_pod outdated"
 alias pos="_pod search"
 
-# --- git
+# --- git worktree / worktrunk
 
 alias Wl='wt list'
 alias Wr='wt remove'
@@ -671,6 +671,18 @@ alias Wm='wt merge'
 alias Ws='wt switch'
 alias Wsc='Ws --create'
 alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
+
+Wc() {
+    wt list --format json | jq -r '.[] | select(
+      .is_main == false and
+      .is_current == false and
+      .working_tree.staged == false and
+      .working_tree.modified == false and
+      .working_tree.untracked == false
+    ) | .branch' | xargs wt remove "$@"
+}
+
+# --- git
 
 alias gf > /dev/null && unalias gf
 gf() {

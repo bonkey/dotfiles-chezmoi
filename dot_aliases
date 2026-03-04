@@ -672,6 +672,10 @@ alias Ws='wt switch'
 alias Wsc='Ws --create'
 alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
 
+Wsm() {
+    wt switch $(git rev-parse --abbrev-ref origin/HEAD | sed 's/^origin\///')
+}
+
 Wc() {
     wt list --format json | jq -r '.[] | select(
       .is_main == false and

@@ -204,6 +204,10 @@ cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high numb
 cask 'font-monaspice-nerd-font'
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-ia-writer-mono'
+cask 'font-ia-writer-duo'
+cask 'font-ia-writer-quattro'
+
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles

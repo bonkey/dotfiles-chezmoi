@@ -13,3 +13,4 @@ xcodebuild*.log
 .opencode/plans
 .chunkhound
 __pycache__
+.claude/settings.local.json

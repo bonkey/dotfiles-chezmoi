@@ -178,12 +178,21 @@ z() {
   fi
 }
 
+cc() {
+    claude --permission-mode dontAsk "$@"
+}
+
+
 ccd() {
     claude --dangerously-skip-permissions "$@"
 }
 
 cod() {
     codex --dangerously-bypass-approvals-and-sandbox "$@"
+}
+
+gy() {
+    gemini --yolo "$@"
 }
 
 

@@ -1,6 +1,6 @@
 set macligatures
 "set guifont=CommitMono:h16
-set guifont=iAWriter-MonoV:h16
+set guifont=iAWriterMonoV-Regular:h16
 
 set lsp=2
 set columns=140

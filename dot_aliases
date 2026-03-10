@@ -178,21 +178,12 @@ z() {
   fi
 }
 
-cc() {
-    claude --permission-mode dontAsk "$@"
-}
-
-
 ccd() {
     claude --dangerously-skip-permissions "$@"
 }
 
 cod() {
     codex --dangerously-bypass-approvals-and-sandbox "$@"
-}
-
-gy() {
-    gemini --yolo "$@"
 }
 
 
@@ -687,12 +678,18 @@ Wsm() {
 
 Wc() {
     wt list --format json | jq -r '.[] | select(
-      .is_main == false and
-      .is_current == false and
-      .main.ahead == 0 and
-      .working_tree.staged == false and
-      .working_tree.modified == false and
-      .working_tree.untracked == false
+      .is_main == false
+      and .worktree.detached == false
+      and .is_current == false
+      and (
+        .main_state == "integrated"
+        or (
+            .remote == null
+            and .working_tree.staged == false
+            and .working_tree.modified == false
+            and .working_tree.untracked == false
+        )
+      )
     ) | .branch' | xargs wt remove "$@"
 }
 

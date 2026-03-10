@@ -47,7 +47,6 @@ fdc() {
 }
 
 alias '??'="llm cmd -m gemini-flash-latest"
-alias gy="gemini --yolo"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"
@@ -178,6 +177,10 @@ z() {
   fi
 }
 
+cc() {
+    claude --permission-mode dontAsk "$@"
+}
+
 ccd() {
     claude --dangerously-skip-permissions "$@"
 }
@@ -186,6 +189,9 @@ cod() {
     codex --dangerously-bypass-approvals-and-sandbox "$@"
 }
 
+gy() {
+    gemini --yolo "$@"
+}
 
 alias diff=colordiff
 alias diffstat="diffstat -f3 -C"

@@ -47,6 +47,7 @@ fdc() {
 }
 
 alias '??'="llm cmd -m gemini-flash-latest"
+alias gy="gemini --yolo"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"
@@ -177,10 +178,6 @@ z() {
   fi
 }
 
-cc() {
-    claude --permission-mode dontAsk "$@"
-}
-
 ccd() {
     claude --dangerously-skip-permissions "$@"
 }
@@ -189,9 +186,14 @@ cod() {
     codex --dangerously-bypass-approvals-and-sandbox "$@"
 }
 
-gy() {
-    gemini --yolo "$@"
+Sk() {
+    npx -y skills "$@" --global --yes
 }
+
+alias Ska="Sk add"
+alias Ski=Ska
+alias Skr="Sk remove"
+alias Skl="Sk list"
 
 alias diff=colordiff
 alias diffstat="diffstat -f3 -C"
@@ -678,24 +680,13 @@ alias Ws='wt switch'
 alias Wsc='Ws --create'
 alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
 
-Wsm() {
-    wt switch $(git rev-parse --abbrev-ref origin/HEAD | sed 's/^origin\///')
-}
-
 Wc() {
     wt list --format json | jq -r '.[] | select(
-      .is_main == false
-      and .worktree.detached == false
-      and .is_current == false
-      and (
-        .main_state == "integrated"
-        or (
-            .remote == null
-            and .working_tree.staged == false
-            and .working_tree.modified == false
-            and .working_tree.untracked == false
-        )
-      )
+      .is_main == false and
+      .is_current == false and
+      .working_tree.staged == false and
+      .working_tree.modified == false and
+      .working_tree.untracked == false
     ) | .branch' | xargs wt remove "$@"
 }
 

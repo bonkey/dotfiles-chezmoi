@@ -25,13 +25,13 @@ RARE_DEVICES = [
 ALL_DEVICES = LATEST_DEVICES + ESSENTIAL_DEVICES + RARE_DEVICES
 
 RUNTIME_DEVICE_MAPPING = {
-  'iOS 26.4' => {
+  'iOS 26.2' => {
     devices: LATEST_DEVICES,
     aliases: nil
   },
   'iOS 18.6' => {
-    devices: ['iPhone 16 Pro'] + ALL_DEVICES,
-    aliases: ['iPhone 16 Pro']
+    devices: ALL_DEVICES,
+    aliases: nil
   },
   'iOS 17.5' => {
     devices: ESSENTIAL_DEVICES,
@@ -93,7 +93,6 @@ class SimulatorPopulator
     puts 'Creating simulators based on runtime-device mapping...'
 
     target_runtimes = @runtimes_filter || @runtime_device_mapping.keys
-    puts Rainbow("Available runtimes: #{@available_runtimes.map { |r| r['name'] }.join(', ')}").color(:yellow)
 
     @runtime_device_mapping.each do |runtime_name, config|
       next unless runtime_matches_filter?(runtime_name, target_runtimes)

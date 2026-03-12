@@ -82,13 +82,37 @@
   // AI AGENT CONFIGURATION
   // ================================
   "agent": {
-    "default_model": {
+    "default_profile": "write",
+    "favorite_models": [
+      {
+        "provider": "google",
+        "model": "gemini-3-flash-preview",
+      },
+      {
+        "provider": "google",
+        "model": "gemini-3-pro-preview",
+      },
+      {
+        "provider": "openai",
+        "model": "gpt-5.2-codex",
+      },
+    ],
+    "inline_assistant_model": {
       "provider": "copilot_chat",
-      "model": "claude-opus-4.6",
-      "enable_thinking": false
+      "model": "gpt-5.1-codex-mini",
     },
-    "favorite_models": [],
-    "model_parameters": []
+    "enabled": true,
+    "button": true,
+    "default_width": 500,
+    "dock": "right",
+    "default_model": {
+      "provider": "openai",
+      "model": "gpt-5.2-codex",
+    },
+    "commit_message_model": {
+      "provider": "google",
+      "model": "gemini-2.5-flash",
+    },
   },
   "completions": {
     "words": "fallback",

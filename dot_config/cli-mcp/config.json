@@ -8,7 +8,6 @@
     "web-dev": ["shadcn", "vibium"],
     "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud"],
 
-    "memory": ["basic-memory-cloud"],
     "ui-automation": ["peekaboo"],
 
     "docs": ["ref", "tavily", "deepwiki"],
@@ -41,10 +40,6 @@
     "tavily": {
       "type": "remote",
       "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
-    },
-    "basic-memory-cloud": {
-      "type": "remote",
-      "url": "https://cloud.basicmemory.com/mcp"
     },
     "sosumi": {
       "type": "remote",

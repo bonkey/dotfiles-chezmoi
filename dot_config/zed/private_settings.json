@@ -87,15 +87,23 @@
       {
         "provider": "google",
         "model": "gemini-3-flash-preview",
+        "enable_thinking": false
       },
       {
         "provider": "google",
         "model": "gemini-3-pro-preview",
+        "enable_thinking": false
       },
       {
         "provider": "openai",
-        "model": "gpt-5.2-codex",
+        "model": "gpt-5.4",
+        "enable_thinking": false
       },
+      {
+        "provider": "openai",
+        "model": "gpt-5.3-codex",
+        "enable_thinking": false
+      }
     ],
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -106,8 +114,9 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
+      "enable_thinking": false,
       "provider": "openai",
-      "model": "gpt-5.2-codex",
+      "model": "gpt-5.4",
     },
     "commit_message_model": {
       "provider": "google",

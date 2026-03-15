@@ -12,7 +12,8 @@ zmodule jeffreytse/zsh-vi-mode
 zmodule zsh-users/zsh-completions
 zmodule completion
 
-zmodule zsh-users/zsh-syntax-highlighting
+# zmodule zsh-users/zsh-syntax-highlighting
+zmodule zdharma-continuum/fast-syntax-highlighting
 zmodule zsh-users/zsh-autosuggestions
 
 zmodule kylesnowschwartz/zsh-ai-cmd

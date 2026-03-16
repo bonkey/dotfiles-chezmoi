@@ -146,3 +146,8 @@ repo = town repo
 set-parent = town set-parent
 ship = town ship
 sync = town sync
+
+up = pull --rebase --autostash
+
+dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+contributors = shortlog --summary --numbered

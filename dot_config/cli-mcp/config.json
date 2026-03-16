@@ -1,6 +1,7 @@
 {
   "presets": {
     "code-research": ["chunkhound"],
+    "shared-memory": ["basic-memory-cloud"],
 
     "linear": ["linear"],
 
@@ -87,6 +88,10 @@
     "deepwiki": {
       "type": "remote",
       "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "basic-memory-cloud": {
+      "type": "remote",
+      "url": "https://cloud.basicmemory.com/mcp"
     },
     "exa": {
       "type": "remote",

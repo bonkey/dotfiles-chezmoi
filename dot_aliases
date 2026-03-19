@@ -751,7 +751,7 @@ alias gl="git pull --autostash"
 alias gd="git diff"
 alias gdfg="forgit::diff"
 alias gdn="gd --names-only"
-alias gst="git status"
+alias gst="git status -s"
 
 alias gco="git checkout"
 alias gcm="gco main"

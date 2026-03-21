@@ -251,6 +251,7 @@ cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acce
 cask 'macvim-app' # Text editor
 cask 'zed' # Multiplayer code editor
 cask 'notepadexe' # Lightweight code editor
+cask 'spokenly'
 
 cask 'obs' # Open-source software for live streaming and screen recording
 

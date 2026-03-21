@@ -453,10 +453,10 @@ ff_gif() {
 alias bef="bue fastlane"
 
 alias xcs="xcodes select"
-alias xci="xcodes install --experimental-unxip"
-alias xcil="xci --latest"
-alias xcilp="xci --latest-prerelease"
-alias xcu="xcodes uninstall"
+xcs15() { xcs '15.4' }
+xcs16() { xcs '16.4' }
+xcs26() { xcs '26.1' }
+xcs26b() { xcs '26.2 Beta' }
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 alias xcss="xcodes installed | grep Selected"
@@ -751,7 +751,7 @@ alias gl="git pull --autostash"
 alias gd="git diff"
 alias gdfg="forgit::diff"
 alias gdn="gd --names-only"
-alias gst="git status -s"
+alias gst="git status"
 
 alias gco="git checkout"
 alias gcm="gco main"

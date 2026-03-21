@@ -6,6 +6,7 @@
 
 tap '1password/tap'
 tap 'abhimanyu003/sttr'
+tap 'atlassian/homebrew-acli'
 tap 'context-labs/mactop', 'https://github.com/context-labs/mactop'
 tap 'dave1010/clipea'
 tap 'facebook/fb'
@@ -17,65 +18,65 @@ tap 'JohannesKaufmann/tap'
 tap 'kylef/formulae'
 tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
 tap 'samwho/spacer'
+tap 'steipete/tap'
 tap 'withgraphite/tap'
 tap 'ycd/tap'
-tap 'atlassian/homebrew-acli'
-tap 'steipete/tap'
 
-# GenAI
+# AI and coding agents
 brew 'ollama' # Create, run, and share large language models (LLMs)
-cask 'github-copilot-for-xcode' # Xcode extension for GitHub Copilot
 brew 'block-goose-cli' # Open source, extensible AI agent that goes beyond code suggestions
 cask 'block-goose' # Open source, extensible AI agent that goes beyond code suggestions
 brew 'mistral-vibe' # Minimal CLI coding agent
-cask 'antigravity'
-brew 'peekaboo'
-cask 'conductor'
-cask 'codex-app'
+cask 'antigravity' # AI Coding Agent IDE
+brew 'peekaboo' # Lightning-fast macOS screenshots & AI vision analysis
+cask 'conductor' # Claude code parallelisation
+cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
+cask 'github-copilot-for-xcode' # Xcode extension for GitHub Copilot
+cask 'itermai' # Enable generative AI features in iTerm2
 
-# Tools for working with text files
+# Shell and terminal
+brew 'atuin' # Improved shell history for zsh and bash
+brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
+brew 'figlet' # Banner-like program prints strings as ASCII art
+brew 'intelli-shell' # Like IntelliSense, but for shells
+brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
+brew 'noti' # Trigger notifications when a process completes
+brew 'nushell' # Modern shell for the GitHub era
+brew 'oh-my-posh' # Prompt theme engine for any shell
+brew 'pstree' # Show ps output as a tree
+brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
+brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
+brew 'spacer' # Small command-line utility for adding spacers to command output
+brew 'tmux' # Terminal multiplexer
+brew 'tree' # Display directories as trees (with optional color/HTML output)
+brew 'zoxide' # Shell extension to navigate your filesystem faster
+cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
+cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+
+# File, text, and search tools
+brew 'ast-grep' # Code searching, linting, rewriting
 brew 'bat' # Clone of cat(1) with syntax highlighting and Git integration
 brew 'choose-rust' # Human-friendly and fast alternative to cut and (sometimes) awk
+brew 'coreutils' # GNU File, Shell, and Text utilities
 brew 'dfc' # Display graphs and colors of file system space/usage
 brew 'eza' # Modern replacement for 'ls'
 brew 'fd' # Simple, fast and user-friendly alternative to find
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'fzf' # Command-line fuzzy finder written in Go
+brew 'glow' # Render markdown on the CLI
+brew 'html2markdown' # Convert HTML to Markdown
 brew 'liblockfile' # Library providing functions to lock standard mailboxes
 brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
-brew 'oh-my-posh' # Prompt theme engine for any shell
+brew 'rga' # Wrapper around ripgrep that adds multiple rich file types
+brew 'ripgrep' # Search tool like grep and The Silver Searcher
 brew 'sd' # Intuitive find & replace CLI
+brew 'sk' # Fuzzy Finder in rust!
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'television' # General purpose fuzzy finder TUI
-brew 'coreutils' # GNU File, Shell, and Text utilities
-brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
-brew 'ast-grep'
-
-# Shell power-ups
-brew 'atuin' # Improved shell history for zsh and bash
-brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
-brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
-brew 'noti' # Trigger notifications when a process completes
-brew 'nushell' # Modern shell for the GitHub era
-brew 'p7zip' # 7-Zip (high compression file archiver) implementation
-brew 'pstree' # Show ps output as a tree
-brew 'spacer' # Small command-line utility for adding spacers to command output
-brew 'tree' # Display directories as trees (with optional color/HTML output)
-brew 'figlet' # Banner-like program prints strings as ASCII art
-brew 'intelli-shell'
-brew 'zoxide'
-brew 'sk'
-brew 'tmux'
-
-brew 'yazi'
-brew 'ripgrep'
-brew 'sevenzip'
-brew 'poppler'
-brew 'resvg'
-brew 'imagemagick'
-cask 'font-symbols-only-nerd-font'
-
-brew 'acli'
+brew 'the_silver_searcher' # Code-search similar to ack
+brew 'treemd' # TUI and CLI dual pane markdown viewer
+brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
+brew 'yazi' # Blazing fast terminal file manager written in Rust, based on async I/O
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate
@@ -85,94 +86,79 @@ brew 'gnu-sed' # GNU implementation of the famous stream editor
 brew 'gnu-tar' # GNU version of the tar archiving utility
 brew 'grep' # GNU grep, egrep and fgrep
 
-brew 'ghostscript'
-
-# Tools for networking
+# Networking and web
 brew 'aria2' # Download with resuming and segmented downloading
 brew 'curlie' # curl alternative with syntax highlighting and more
 brew 'doggo' # Command-line DNS Client for Humans
 brew 'dstp' # Run common networking tests against your site
+brew 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 brew 'mtr' # 'traceroute' and 'ping' in a single tool
 brew 'nmap' # Port scanning utility for large networks
 brew 'wget' # Internet file retriever
+cask 'firefox' # Web browser
 
-# Other shell tools
-brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
-brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
-brew 'mas' # Mac App Store command-line interface
-brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
-
-brew 'libusb', args: ['--head']
-
-# Tools for package management
-brew 'mise' # Multi-language runtime manager
-brew 'direnv' # Load/unload environment variables based on $PWD
-
-# Tools for version control
-brew 'ctags' # Reimplementation of ctags(1)
-brew 'gh' # GitHub command-line tool
-brew 'git-delta' # Syntax-highlighting pager for git and diff output
-brew 'git-extras' # Small git utilities
-brew 'git-lfs' # Git extension for versioning large files
-brew 'git' # Distributed revision control system
-brew 'git-town' # High-level command-line interface for Git
-brew 'graphite' # Allows you to manage your stacked changes and submit them for review on GitHub
-
-# Tools for developers
-brew 'tokei' # Program that allows you to count code, quickly
-cask 'fork' # GIT client
-cask 'gitup-app' # Git interface focused on visual interaction
-cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
-cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
-cask 'sublime-merge' # Git client
-cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
-brew 'golang' # Open source programming language to build simple/reliable/efficient software
-
-# Search tools
-brew 'the_silver_searcher' # Code-search similar to ack
-brew 'rga' # Wrapper around ripgrep that adds multiple rich file types
-brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
-
-# Diff tools
-brew 'colordiff' # Color-highlighted diff(1) output
-brew 'diff-so-fancy' # Good-lookin' diffs with diff-highlight and more
-
-# YAML/JSON tools
+# Archives, documents, and data formats
+brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
+brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
 brew 'fastgron' # High-performance JSON to GRON converter
+brew 'fx' # Terminal JSON viewer
+brew 'ghostscript' # Interpreter for PostScript and PDF
+brew 'graphicsmagick' # Image processing tools collection
+brew 'imagemagick' # Tools and libraries to manipulate images in select formats
 brew 'jless' # Command-line pager for JSON data
 brew 'jo' # JSON output from a shell
 brew 'jq' # Lightweight and flexible command-line JSON processor
-brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
-brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
-brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 brew 'libyaml' # YAML Parser
-brew 'fx' # Terminal JSON viewer
+brew 'p7zip' # 7-Zip (high compression file archiver) implementation
+brew 'poppler' # PDF rendering library (based on the xpdf-3.0 code base)
+brew 'resvg' # SVG rendering tool and library
+brew 'sevenzip' # 7-Zip is a file archiver with a high compression ratio
+brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 
-# Docker
-brew 'docker-compose' # Isolated development environments using Docker
+# Version control and code review
+brew 'acli' # Software to interact with Atlassian Cloud from the terminal
+brew 'colordiff' # Color-highlighted diff(1) output
+brew 'ctags' # Reimplementation of ctags(1)
+brew 'diff-so-fancy' # Good-lookin' diffs with diff-highlight and more
+brew 'gh' # GitHub command-line tool
+brew 'git' # Distributed revision control system
+brew 'git-delta' # Syntax-highlighting pager for git and diff output
+brew 'git-extras' # Small git utilities
+brew 'git-lfs' # Git extension for versioning large files
+brew 'git-town' # High-level command-line interface for Git
+brew 'graphite' # Allows you to manage your stacked changes and submit them for review on GitHub
+cask 'fork' # GIT client
+cask 'gitup-app' # Git interface focused on visual interaction
+cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
+cask 'retcon' # Drag-and-drop Git history editor
+cask 'sublime-merge' # Git client
+
+# Developer tools and runtimes
+brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 brew 'colima' # Container runtimes on MacOS (and Linux) with minimal setup
-
-# Markdown tools
-brew 'glow' # Render markdown on the CLI
-brew 'html2markdown' # Convert HTML to Markdown
-brew 'treemd' # TUI and CLI dual pane markdown viewer
-
-# Tools for Xcode
+brew 'direnv' # Load/unload environment variables based on $PWD
+brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
+brew 'docker-compose' # Isolated development environments using Docker
+brew 'ffmpeg' # Play, record, convert, and stream audio and video
+brew 'golang' # Open source programming language to build simple/reliable/efficient software
+brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
+brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
+brew 'libusb', args: ['--head'] # USB library
+brew 'mas' # Mac App Store command-line interface
+brew 'mise' # Multi-language runtime manager
+brew 'openssl' # Cryptography and SSL/TLS Toolkit
+brew 'swift-sh' # Scripting with easy zero-conf dependency imports
+brew 'temurin' # JDK from the Eclipse Foundation (Adoptium)
+brew 'tokei' # Program that allows you to count code, quickly
+brew 'uhubctl' # USB hub per-port power control
 brew 'xcbeautify' # Little beautifier tool for xcodebuild
+brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 brew 'xcenv' # Xcode version manager
 brew 'xcinfo' # Tool to get information about and install available Xcode versions
 brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
-brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
-brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 cask 'xcodes-app' # Install and switch between multiple versions of Xcode
-brew 'swift-sh' # Scripting with easy zero-conf dependency imports
-brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
 
-# Tools for working with media files
-brew 'ffmpeg' # Play, record, convert, and stream audio and video
-brew 'graphicsmagick' # Image processing tools collection
-
-# Tools for shell and command-line completion
+# Completions
 brew 'brew-cask-completion' # Fish completion for brew-cask
 brew 'bundler-completion' # Bash completion for Bundler
 brew 'gem-completion' # Bash completion for gem
@@ -185,24 +171,27 @@ brew 'ruby-completion' # Bash completion for Ruby
 brew 'yarn-completion' # Bash completion for Yarn
 brew 'zsh-completion' # Additional completion definitions for zsh
 
-# Tools for cryptography
-brew 'openssl' # Cryptography and SSL/TLS Toolkit
+# Security and credentials
 brew 'gpg' # GNU Pretty Good Privacy (PGP) package
 brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
+cask '1password-cli' # Command-line interface for 1Password
+cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
+# Fonts
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-input'
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fira-code-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-input' # Input font family
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspice-nerd-font'
+cask 'font-monaspice-nerd-font' # Monaspice Nerd Font families (Monaspace)
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
+cask 'font-symbols-only-nerd-font' # Symbols-only Nerd Font glyph set
 cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of glyphs
 
 # QuickLook plugins
@@ -211,12 +200,12 @@ cask 'qlprettypatch' # QuickLook plugin to view patch files
 cask 'qlvideo' # Thumbnails, static previews, cover art and metadata for video files
 cask 'quicklook-csv' # QuickLook plugin for CSV files
 cask 'quicklook-json' # QuickLook plugin for JSON files
-cask 'webpquicklook' # QuickLook plugin for webp files
 cask 'syntax-highlight' # Quicklook extension for source files
+cask 'webpquicklook' # QuickLook plugin for webp files
 
-# Tools for productivity and automation
-cask '1password-cli' # Command-line interface for 1Password
+# Productivity and desktop apps
 cask 'android-file-transfer' # Transfer files from and to an Android smartphone
+cask 'cap' # Screen recording software
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'handbrake-app' # Open-source video transcoder
@@ -225,41 +214,29 @@ cask 'keyboard-maestro' # Automation software
 cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
 cask 'raycast' # Control your tools with a few keystrokes
 cask 'rectangle-pro' # Window snapping tool
-cask 'retcon' # Drag-and-drop Git history editor
 cask 'setapp' # Collection of apps available by subscription
-cask 'typora' # Configurable document editor that supports Markdown
-cask 'cap' # Screen recording software
 cask 'superkey' # Search and click text anywhere on screen
+cask 'typora' # Configurable document editor that supports Markdown
 
-# Hardware
-brew 'uhubctl' # USB hub per-port power control
-cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
-cask 'elgato-control-center' # Control your Elgato key lights
-cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
-cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
-
-cask 'soundsource' # Sound and audio controller
-cask 'loopback' # Cable-free audio router
-
-# Browsers
-cask 'firefox' # Web browser
-
-cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
-cask 'itermai' # Enable generative AI features in iTerm2
-cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
-
+# Editors and writing
 cask 'macvim-app' # Text editor
-cask 'zed' # Multiplayer code editor
 cask 'notepadexe' # Lightweight code editor
-cask 'spokenly'
+cask 'spokenly' # Dictation and transcription app with AI-powered editing
+cask 'zed' # Multiplayer code editor
 
+# Audio, video, and streaming
+cask 'elgato-control-center' # Control your Elgato key lights
+cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
+cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
+cask 'loopback' # Cable-free audio router
 cask 'obs' # Open-source software for live streaming and screen recording
+cask 'soundsource' # Sound and audio controller
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431
 mas 'Drafts', id: 1_435_957_248
-mas 'Pixelmator Pro', id: 1_289_583_905
-mas 'Things 3', id: 904_280_696
 mas 'Dropover', id: 1_355_679_052
+mas 'Pixelmator Pro', id: 1_289_583_905
 mas 'RocketSim', id: 1_504_940_162
+mas 'Things 3', id: 904_280_696
 mas 'Windows App', id: 1_295_203_466

@@ -145,6 +145,8 @@ brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
 brew 'libusb', args: ['--head'] # USB library
 brew 'mas' # Mac App Store command-line interface
 brew 'mise' # Multi-language runtime manager
+brew 'mitmproxy'
+brew 'temurin'
 brew 'openssl' # Cryptography and SSL/TLS Toolkit
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
 brew 'tokei' # Program that allows you to count code, quickly

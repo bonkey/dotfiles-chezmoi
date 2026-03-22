@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+set +o pipefail
+
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+exec_unless_recently_modified $file "atuin update"

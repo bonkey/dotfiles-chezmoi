@@ -91,7 +91,6 @@ brew 'aria2' # Download with resuming and segmented downloading
 brew 'curlie' # curl alternative with syntax highlighting and more
 brew 'doggo' # Command-line DNS Client for Humans
 brew 'dstp' # Run common networking tests against your site
-brew 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 brew 'mtr' # 'traceroute' and 'ping' in a single tool
 brew 'nmap' # Port scanning utility for large networks
 brew 'wget' # Internet file retriever
@@ -148,7 +147,6 @@ brew 'mas' # Mac App Store command-line interface
 brew 'mise' # Multi-language runtime manager
 brew 'openssl' # Cryptography and SSL/TLS Toolkit
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
-brew 'temurin' # JDK from the Eclipse Foundation (Adoptium)
 brew 'tokei' # Program that allows you to count code, quickly
 brew 'uhubctl' # USB hub per-port power control
 brew 'xcbeautify' # Little beautifier tool for xcodebuild

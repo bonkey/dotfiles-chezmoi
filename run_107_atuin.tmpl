@@ -4,4 +4,8 @@ set +o pipefail
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
-exec_unless_recently_modified $file "atuin update"
+if command -v atuin &> /dev/null; then
+  exec_unless_recently_modified $file "atuin update"
+else
+  curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+fi

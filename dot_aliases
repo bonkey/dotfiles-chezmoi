@@ -453,9 +453,9 @@ ff_gif() {
 alias bef="bue fastlane"
 
 alias Xcos="xcodes select"
-alias Xcoip="xcodes install --experimental-unxip"
+alias Xcoi="xcodes install --experimental-unxip"
+alias Xcoil="Xcoi --latest"
 alias Xcoip="Xcoi --latest-prerelease"
-alias Xcoil="Xcoi --latest-prerelease"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 

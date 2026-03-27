@@ -459,13 +459,13 @@ alias Xcoip="Xcoi --latest-prerelease"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 
-alias xcsc="xcrun simctl"
-alias xcscl="xcsc list devices"
-alias xcscld="xcscl devices"
-alias xcsclr="xcscl runtimes"
-alias xcscb="xcsc list|grep boot -i"
+alias Xrs="xcrun simctl"
+alias Xrsl="Xrs list"
+alias Xrsld="Xrsl devices"
+alias Xrsldb="Xrsld | grep boot -i"
+alias Xrslr="Xrsl runtimes"
 
-alias xcsclog="xcrun simctl spawn booted log stream --color always --debug --style compact"
+alias Xrslog="Xrs spawn booted log stream --color always --debug --style compact"
 
 xcsclogg() {
   xcsclog --predicate "$1"

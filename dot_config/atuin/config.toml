@@ -25,7 +25,11 @@ sync_frequency = "15m"
 
 ## which search mode to use
 ## possible values: prefix, fulltext, fuzzy
-search_mode = "fuzzy"
+search_mode = "daemon-fuzzy"
 
 [ai]
 enabled = true
+
+[daemon]
+enabled = true
+autostart = true

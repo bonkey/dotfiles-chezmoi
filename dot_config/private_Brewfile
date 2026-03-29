@@ -35,6 +35,7 @@ cask 'github-copilot-for-xcode' # Xcode extension for GitHub Copilot
 cask 'itermai' # Enable generative AI features in iTerm2
 
 # Shell and terminal
+brew 'atuin' # Improved shell history for zsh and bash
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
 brew 'figlet' # Banner-like program prints strings as ASCII art
 brew 'intelli-shell' # Like IntelliSense, but for shells

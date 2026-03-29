@@ -80,3 +80,5 @@ tsrc "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh)"
 
 # vim:set ft=zsh:
+
+. "$HOME/.atuin/bin/env"

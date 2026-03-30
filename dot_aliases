@@ -452,8 +452,10 @@ ff_gif() {
 
 alias bef="bue fastlane"
 
-alias Xcos="xcodes select"
-alias Xcoi="xcodes install --experimental-unxip --data-source apple --empty-trash --update"
+alias Xco="xcodes"
+alias Xcos="Xco select"
+alias Xcol="Xco list"
+alias Xcoi="Xco install --experimental-unxip --data-source apple --empty-trash --update"
 alias Xcoil="Xcoi --latest"
 alias Xcoip="Xcoi --latest-prerelease"
 

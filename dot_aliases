@@ -690,6 +690,7 @@ Wc() {
     wt list --format json | jq -r '.[] | select(
       .is_main == false and
       .is_current == false and
+      .worktree.state != "locked" and
       .working_tree.staged == false and
       .working_tree.modified == false and
       .working_tree.untracked == false

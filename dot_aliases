@@ -458,9 +458,13 @@ alias Xcol="Xco list"
 alias Xcou="Xco uninstall"
 alias Xcou!="Xcou --empty-trash"
 
-alias Xcoi="Xco install --experimental-unxip --data-source apple --empty-trash --update"
+alias Xcoi="Xco install --experimental-unxip --empty-trash --update"
 alias Xcoil="Xcoi --latest"
 alias Xcoip="Xcoi --latest-prerelease"
+
+alias Xcoia="Xcoi --data-source apple"
+alias Xcoial="Xcoia --latest"
+alias Xcoiap="Xcoia --latest-prerelease"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 

@@ -454,9 +454,12 @@ alias bef="bue fastlane"
 
 alias Xco="xcodes"
 alias Xcos="Xco select"
-alias Xcol="Xco list"
+
 alias Xcou="Xco uninstall"
 alias Xcou!="Xcou --empty-trash"
+
+alias Xcol="Xco list"
+alias Xcola="Xco list --data-source apple"
 
 alias Xcoi="Xco install --experimental-unxip --empty-trash --update"
 alias Xcoil="Xcoi --latest"

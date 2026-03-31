@@ -682,10 +682,14 @@ alias pos="_pod search"
 # --- git worktree / worktrunk
 
 alias Wl='wt list'
+
 alias Wr='wt remove'
 alias Wrf='Wr --force'
+
 alias Wm='wt merge'
+
 alias Ws='wt switch'
+alias Wsm='Ws main'
 alias Wsc='Ws --create'
 alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
 

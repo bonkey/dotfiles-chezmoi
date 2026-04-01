@@ -50,6 +50,9 @@ node = "latest"
 "github:Ryu0118/xcstrings-crud" = "latest"
 
 "github:davidfowl/tally" = "latest"
+
+"go:github.com/mikecsmith/ihj/cmd/ihj" = "latest"
+
 pipx = "latest"
 "pipx:pocmo/confl" = "latest"
 "npm:ccusage" = "latest"

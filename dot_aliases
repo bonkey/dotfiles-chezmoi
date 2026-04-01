@@ -693,7 +693,7 @@ alias Wsm='Ws main'
 alias Wsc='Ws --create'
 alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
 
-Wc() {
+Wcb() {
     wt list --format json | jq -r '.[] | select(
       .is_main == false and
       .is_current == false and
@@ -701,7 +701,11 @@ Wc() {
       .working_tree.staged == false and
       .working_tree.modified == false and
       .working_tree.untracked == false
-    ) | .branch' | xargs wt remove "$@"
+    ) | .branch'
+}
+
+Wcbr() {
+    Wcb | xargs wt remove "$@"
 }
 
 # --- git

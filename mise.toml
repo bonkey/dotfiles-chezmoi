@@ -1,0 +1,2 @@
+[tools]
+"go:github.com/antonmedv/fx" = "latest"

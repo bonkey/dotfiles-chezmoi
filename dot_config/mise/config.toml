@@ -2,60 +2,81 @@
 UV_NATIVE_TLS = "true"
 
 [tools]
-uv = "latest"
-ruby = "3.3"
+# Runtime languages
 python = "3.12"
+ruby = "3.3"
+node = "latest"
+bun = "latest"
+
+# Tool/package managers
+uv = "latest"
+pipx = "latest"
+
+# Swift development
 swiftformat = "latest"
 swiftlint = "latest"
-bun = "latest"
-node = "latest"
+"github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
 
-"pipx:csvkit" = "latest"
-"pipx:git-filter-repo" = "latest"
-"pipx:google-cloud-aiplatform" = "latest"
-"pipx:httpie" = "latest"
-"pipx:black" = "latest"
-"pipx:jc" = "latest"
-"pipx:things-cli" = "latest"
-"pipx:yt-dlp" = "latest"
+# Python CLI tools
+"pipx:black" = "latest"                   # Python code formatter
+"pipx:csvkit" = "latest"                  # CSV/TSV/querying utilities
+"pipx:httpie" = "latest"                  # Human-friendly HTTP client
+"pipx:jc" = "latest"                      # Convert command output to JSON
+"pipx:pocmo/confl" = "latest"             # Config/environment helper
 
-"npm:fx" = "latest"
-"npm:fast-cli" = "latest"
-"npm:appium" = "latest"
-"npm:@mermaid-js/mermaid-cli" = "latest"
+# Git / repository tools
+"pipx:git-filter-repo" = "latest"         # Git history rewriting
 
-"npm:@sentry/cli" = "latest"
+# Web / media / network utilities
+"pipx:yt-dlp" = "latest"                  # Video/audio downloader
+"npm:fast-cli" = "latest"                 # Network speed test CLI
 
-"npm:@mobilenext/mobilecli" = "latest"
+# JSON / terminal data tools
+"npm:fx" = "latest"                       # JSON processor / viewer
 
+# Productivity / personal workflow
+"pipx:things-cli" = "latest"              # CLI for Things task manager
+
+# Mobile development / automation
+"npm:appium" = "latest"                   # Mobile UI automation framework
+"npm:@mobilenext/mobilecli" = "latest"    # Mobile development tooling
+
+# Diagramming / visualization
+"npm:@mermaid-js/mermaid-cli" = "latest"  # Render Mermaid diagrams from CLI
+
+# Observability / delivery tooling
+"npm:@sentry/cli" = "latest"              # Sentry release/debug/upload CLI
+
+# Google / workspace tooling
+"npm:@googleworkspace/cli" = "latest"     # Google Workspace CLI
+"pipx:google-cloud-aiplatform" = "latest" # Google Vertex AI / AI Platform tooling
+
+# LLM foundations / prompt tooling
 "pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
 # "pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp" }
-"pipx:files-to-prompt" = "latest"
-"pipx:chunkhound" = "latest"
+"pipx:files-to-prompt" = "latest"         # Turn files into prompt context
+"pipx:chunkhound" = "latest"              # Chunking / prompt-context helper
 
-"npm:@openai/codex" = "latest"
-"npm:@google/gemini-cli" = "latest"
-"npm:@qwen-code/qwen-code" = "latest"
-"npm:@kilocode/cli" = "latest"
-"pipx:kimi-cli" = "latest"
-"npm:@mariozechner/pi-coding-agent" = "latest"
+# AI model CLIs
+"npm:@openai/codex" = "latest"            # OpenAI Codex CLI
+"npm:@google/gemini-cli" = "latest"       # Google Gemini CLI
+"pipx:kimi-cli" = "latest"                # Kimi CLI
 
-"npm:@nova-mcp/mcp-nova" = "latest"
+# AI coding agents / coding assistants
+"npm:@qwen-code/qwen-code" = "latest"     # Qwen coding assistant CLI
+"npm:@kilocode/cli" = "latest"            # AI coding assistant CLI
+"npm:@mariozechner/pi-coding-agent" = "latest" # Coding agent CLI
+"npm:opencode-ai" = "latest"              # OpenCode AI CLI
+"npm:opencode-openai-codex-auth" = "latest" # Auth helper for Codex/OpenCode
+"npm:btca" = "latest"                     # opencode / micode related
+"npm:ccusage" = "latest"                  # AI token/cost/usage tracking
 
-"npm:opencode-ai" = "latest"
-"npm:openskills" = "latest"
-"npm:opencode-openai-codex-auth" = "latest"
-"npm:btca" = "latest" # opencode/micode
+# AI editor / protocol integration
+"npm:@nova-mcp/mcp-nova" = "latest"       # MCP integration for Nova/editor workflows
 
-"github:Ryu0118/xcstrings-crud" = "latest"
-
-"github:davidfowl/tally" = "latest"
-
-"go:github.com/mikecsmith/ihj/cmd/ihj" = "latest"
-
-pipx = "latest"
-"pipx:pocmo/confl" = "latest"
-"npm:ccusage" = "latest"
+# Misc developer tools
+"github:davidfowl/tally" = "latest"        # Developer utility / counting helper
+"npm:openskills" = "latest"               # Skills taxonomy / related utility
 
 [settings]
 experimental = true

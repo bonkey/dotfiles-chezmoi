@@ -52,6 +52,7 @@ brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'zoxide' # Shell extension to navigate your filesystem faster
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+brew 'mole'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting
@@ -70,13 +71,11 @@ brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
 brew 'rga' # Wrapper around ripgrep that adds multiple rich file types
 brew 'ripgrep' # Search tool like grep and The Silver Searcher
 brew 'sd' # Intuitive find & replace CLI
-brew 'sk' # Fuzzy Finder in rust!
 brew 'sttr' # A cross-platform, cli app to perform various string operations.
 brew 'television' # General purpose fuzzy finder TUI
 brew 'the_silver_searcher' # Code-search similar to ack
 brew 'treemd' # TUI and CLI dual pane markdown viewer
 brew 'ugrep' # Ultra fast grep with query UI, fuzzy search, archive search, and more
-brew 'yazi' # Blazing fast terminal file manager written in Rust, based on async I/O
 
 # GNU tools
 brew 'findutils' # Collection of GNU find, xargs, and locate

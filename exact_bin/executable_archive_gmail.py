@@ -9,6 +9,7 @@ Usage:
     python3 archive_gmail.py run --rule "Office Club"  # one rule only
     python3 archive_gmail.py run --since 2026-03-01    # override start date
     python3 archive_gmail.py run --folder ~/my/archive # custom working folder
+    python3 archive_gmail.py run --force               # ignore stored state
     python3 archive_gmail.py list-rules                # show all rules
 """
 
@@ -17,6 +18,7 @@ import base64
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import termios
@@ -564,6 +566,53 @@ def save_state(state: dict, state_file: Path):
 # ---------------------------------------------------------------------------
 
 
+DOWNLOADS_DIR = Path.home() / "Downloads"
+
+
+def _read_single_key() -> str:
+    """Read a single keypress without requiring Enter."""
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1).lower()
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+    return ch
+
+
+def _scan_downloads_recent(extensions: tuple = (".pdf",),
+                           max_age_minutes: int = 90) -> list[dict]:
+    """Scan ~/Downloads for recently created files.
+
+    Returns files matching the extension created within the last max_age_minutes,
+    sorted newest-first.
+    """
+    if not DOWNLOADS_DIR.exists():
+        return []
+
+    cutoff = datetime.now() - timedelta(minutes=max_age_minutes)
+    candidates = []
+    for f in DOWNLOADS_DIR.iterdir():
+        if not f.is_file():
+            continue
+        if not any(f.name.lower().endswith(ext) for ext in extensions):
+            continue
+        stat = f.stat()
+        created = datetime.fromtimestamp(
+            getattr(stat, "st_birthtime", stat.st_mtime)
+        )
+        if created >= cutoff:
+            candidates.append({
+                "path": f,
+                "created": created,
+                "size": stat.st_size,
+            })
+
+    candidates.sort(key=lambda c: c["created"], reverse=True)
+    return candidates
+
+
 def _ensure_dest_dir(rule: dict, dest_dir: Path) -> bool:
     """Ensure destination directory exists. Returns True if OK."""
     if dest_dir.exists():
@@ -714,7 +763,8 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
 
 def process_rule(rule: dict, since: str, execute: bool, state: dict,
                  archive_label_id: str | None, base_dir: Path,
-                 manual_pending: list | None = None) -> int:
+                 manual_pending: list | None = None,
+                 force: bool = False) -> int:
     """Process a single rule. Returns number of attachments handled."""
     print(f"\n{'='*60}")
     print(f"Rule: {rule['name']}")
@@ -735,8 +785,8 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
     for msg in messages:
         msg_id = msg["id"]
 
-        # Skip already processed
-        if msg_id in state["processed_ids"]:
+        # Skip already processed (unless --force)
+        if not force and msg_id in state["processed_ids"]:
             continue
 
         # Double-check rule match (triage query is broad, verify subject)
@@ -760,6 +810,7 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
             manual_pending.append({
                 "rule_name": rule["name"],
                 "portal_url": rule.get("portal_url", ""),
+                "destination": rule["destination"],
                 "subject": subject,
                 "date": msg["date"],
                 "msg_id": msg_id,
@@ -854,7 +905,7 @@ def cmd_run(args):
     manual_pending = []
     for rule in rules:
         total += process_rule(rule, since, True, state, archive_label_id,
-                              base_dir, manual_pending)
+                              base_dir, manual_pending, force=args.force)
 
     # Save state
     save_state(state, state_file)
@@ -878,32 +929,61 @@ def cmd_run(args):
 
         for portal_name, items in portals.items():
             url = items[0]["portal_url"]
+            dest_dir = base_dir / items[0]["destination"]
             print(f"\n  {portal_name} ({len(items)} new)")
             print(f"  Login: {url}")
+            print(f"  Dest:  {dest_dir}")
             for item in items:
                 print(f"    - {item['date']}: {item['subject'][:60]}")
 
-            sys.stdout.write(f"\n  Fetched manually from {portal_name}? [y/N] ")
+            # Ask user to download from portal first
+            sys.stdout.write(f"\n  Download from {portal_name} now, press any key when done (s to skip): ")
             sys.stdout.flush()
-            fd = sys.stdin.fileno()
-            old = termios.tcgetattr(fd)
-            try:
-                tty.setraw(fd)
-                ch = sys.stdin.read(1).lower()
-            finally:
-                termios.tcsetattr(fd, termios.TCSADRAIN, old)
-            print(ch)  # echo the keypress
-            if ch == "y":
-                for item in items:
-                    msg_id = item["msg_id"]
-                    if archive_label_id:
-                        gws_modify_message(msg_id, [archive_label_id], ["INBOX", "UNREAD"])
-                    if msg_id not in state["processed_ids"]:
-                        state["processed_ids"].append(msg_id)
-                print(f"    Marked {len(items)} email(s) as Stored")
-                save_state(state, state_file)
-            else:
+            ch = _read_single_key()
+            print(ch)
+
+            if ch == "s":
                 print(f"    Skipped — will prompt again next run")
+                continue
+
+            # Scan ~/Downloads for recently created PDFs
+            candidates = _scan_downloads_recent()
+
+            if candidates:
+                print(f"\n  Found {len(candidates)} recent PDF(s) in ~/Downloads:")
+                moved_any = False
+                for i, c in enumerate(candidates):
+                    created_str = c["created"].strftime("%H:%M:%S")
+                    size_kb = c["size"] / 1024
+                    print(f"    [{i+1}] {c['path'].name}  ({created_str}, {size_kb:,.0f} KB)")
+
+                    sys.stdout.write(f"        Move to \"{dest_dir}\"? [Y/n] ")
+                    sys.stdout.flush()
+                    ch = _read_single_key()
+                    print(ch)
+
+                    if ch != "n":
+                        if not dest_dir.exists():
+                            dest_dir.mkdir(parents=True, exist_ok=True)
+                            print(f"        Created folder: {dest_dir}")
+                        dest_path = dest_dir / c["path"].name
+                        shutil.move(str(c["path"]), str(dest_path))
+                        print(f"        MOVED → {dest_path}")
+                        moved_any = True
+
+                if moved_any:
+                    for item in items:
+                        msg_id = item["msg_id"]
+                        if archive_label_id:
+                            gws_modify_message(msg_id, [archive_label_id], ["INBOX", "UNREAD"])
+                        if msg_id not in state["processed_ids"]:
+                            state["processed_ids"].append(msg_id)
+                    print(f"    Marked {len(items)} email(s) as Stored")
+                    save_state(state, state_file)
+                else:
+                    print(f"    No files moved — will prompt again next run")
+            else:
+                print(f"    No recent PDFs found in ~/Downloads — will prompt again next run")
 
 
 def main():
@@ -926,6 +1006,11 @@ def main():
     run_parser.add_argument(
         "--folder",
         help=f"Working folder (default: {DEFAULT_FOLDER})",
+    )
+    run_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Ignore stored state — reprocess all matching messages",
     )
 
     # list-rules

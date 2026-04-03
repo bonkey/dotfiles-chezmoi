@@ -31,7 +31,7 @@ swiftlint = "latest"
 "npm:fast-cli" = "latest"                 # Network speed test CLI
 
 # JSON / terminal data tools
-"npm:fx" = "latest"                       # JSON processor / viewer
+"go:github.com/antonmedv/fx@latest" = "latest"                       # JSON processor / viewer
 
 # Mobile development / automation
 "npm:appium" = "latest"                   # Mobile UI automation framework
@@ -48,8 +48,7 @@ swiftlint = "latest"
 "pipx:google-cloud-aiplatform" = "latest" # Google Vertex AI / AI Platform tooling
 
 # LLM foundations / prompt tooling
-"pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
-# "pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp" }
+"pipx:llm" = { version = "latest", uvx_args = "--with llm-openai,llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp  --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
 "pipx:files-to-prompt" = "latest"         # Turn files into prompt context
 "pipx:chunkhound" = "latest"              # Chunking / prompt-context helper
 
@@ -57,22 +56,15 @@ swiftlint = "latest"
 "npm:@openai/codex" = "latest"            # OpenAI Codex CLI
 "npm:@google/gemini-cli" = "latest"       # Google Gemini CLI
 "pipx:kimi-cli" = "latest"                # Kimi CLI
-
-# AI coding agents / coding assistants
 "npm:@qwen-code/qwen-code" = "latest"     # Qwen coding assistant CLI
 "npm:@kilocode/cli" = "latest"            # AI coding assistant CLI
 "npm:@mariozechner/pi-coding-agent" = "latest" # Coding agent CLI
 "npm:opencode-ai" = "latest"              # OpenCode AI CLI
 "npm:opencode-openai-codex-auth" = "latest" # Auth helper for Codex/OpenCode
+
+# AI tools
 "npm:btca" = "latest"                     # opencode / micode related
 "npm:ccusage" = "latest"                  # AI token/cost/usage tracking
-
-# AI editor / protocol integration
-"npm:@nova-mcp/mcp-nova" = "latest"       # MCP integration for Nova/editor workflows
-
-# Misc developer tools
-"github:davidfowl/tally" = "latest"        # Developer utility / counting helper
-"npm:openskills" = "latest"               # Skills taxonomy / related utility
 
 [settings]
 experimental = true

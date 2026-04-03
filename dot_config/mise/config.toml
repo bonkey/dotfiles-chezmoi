@@ -31,7 +31,7 @@ swiftlint = "latest"
 "npm:fast-cli" = "latest"                 # Network speed test CLI
 
 # JSON / terminal data tools
-"go:github.com/antonmedv/fx@latest" = "latest"                       # JSON processor / viewer
+"go:github.com/antonmedv/fx" = "latest"   # JSON processor / viewer
 
 # Mobile development / automation
 "npm:appium" = "latest"                   # Mobile UI automation framework

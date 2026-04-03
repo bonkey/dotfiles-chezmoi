@@ -22,7 +22,7 @@ swiftlint = "latest"
 "pipx:csvkit" = "latest"                  # CSV/TSV/querying utilities
 "pipx:httpie" = "latest"                  # Human-friendly HTTP client
 "pipx:jc" = "latest"                      # Convert command output to JSON
-"pipx:pocmo/confl" = "latest"             # Config/environment helper
+"github:pocmo/confl" = "latest"             # Config/environment helper
 
 # Git / repository tools
 "pipx:git-filter-repo" = "latest"         # Git history rewriting

@@ -5,11 +5,11 @@ Queries Gmail for known recurring senders, downloads attachments,
 files them into the correct folder, and labels+archives the email.
 
 Usage:
-    python3 archive_gmail.py                          # dry-run, all rules
-    python3 archive_gmail.py --execute                # actually download & archive
-    python3 archive_gmail.py --rule "Office Club"     # one rule only
-    python3 archive_gmail.py --since 2026-03-01       # override start date
-    python3 archive_gmail.py --list-rules             # show all rules
+    python3 archive_gmail.py run                      # download & archive
+    python3 archive_gmail.py run --rule "Office Club"  # one rule only
+    python3 archive_gmail.py run --since 2026-03-01    # override start date
+    python3 archive_gmail.py run --folder ~/my/archive # custom working folder
+    python3 archive_gmail.py list-rules                # show all rules
 """
 
 import argparse
@@ -29,9 +29,7 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-BASE_DIR = Path("/Users/bonkey/Documents/Archiwum dokumentów/Deutschland")
-SCRIPT_DIR = Path("/Users/bonkey/Documents/Archiwum dokumentów")
-STATE_FILE = SCRIPT_DIR / ".archiver-state.json"
+DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum dokumentów"
 ARCHIVE_LABEL_NAME = "Stored"
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
@@ -546,18 +544,18 @@ def compute_filename(rule: dict, original_filename: str, subject: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def load_state() -> dict:
+def load_state(state_file: Path) -> dict:
     """Load processed message IDs from state file."""
-    if STATE_FILE.exists():
-        with open(STATE_FILE) as f:
+    if state_file.exists():
+        with open(state_file) as f:
             return json.load(f)
     return {"processed_ids": [], "last_run": None}
 
 
-def save_state(state: dict):
+def save_state(state: dict, state_file: Path):
     """Save state to file."""
     state["last_run"] = datetime.now().strftime("%Y-%m-%d")
-    with open(STATE_FILE, "w") as f:
+    with open(state_file, "w") as f:
         json.dump(state, f, indent=2)
 
 
@@ -715,7 +713,7 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
 
 
 def process_rule(rule: dict, since: str, execute: bool, state: dict,
-                 archive_label_id: str | None,
+                 archive_label_id: str | None, base_dir: Path,
                  manual_pending: list | None = None) -> int:
     """Process a single rule. Returns number of attachments handled."""
     print(f"\n{'='*60}")
@@ -732,7 +730,7 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
 
     print(f"  Found {len(messages)} message(s)")
     count = 0
-    dest_dir = BASE_DIR / rule["destination"]
+    dest_dir = base_dir / rule["destination"]
 
     for msg in messages:
         msg_id = msg["id"]
@@ -793,39 +791,38 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
     return count
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Gmail Attachment Auto-Archiver",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__,
-    )
-    parser.add_argument(
-        "--execute", action="store_true",
-        help="Actually download files and modify emails (default is dry-run)",
-    )
-    parser.add_argument(
-        "--since",
-        help="Start date in YYYY-MM-DD or YYYY/M/D format (default: from state or 45 days ago)",
-    )
-    parser.add_argument(
-        "--rule",
-        help="Run only this rule (by name)",
-    )
-    parser.add_argument(
-        "--list-rules", action="store_true",
-        help="List all rules and exit",
-    )
-    args = parser.parse_args()
+def cmd_list_rules():
+    """List all rules and exit."""
+    print(f"{'#':<3} {'Name':<25} {'Destination':<40}")
+    print(f"{'-'*3} {'-'*25} {'-'*40}")
+    for i, rule in enumerate(RULES, 1):
+        print(f"{i:<3} {rule['name']:<25} {rule['destination']:<40}")
 
-    if args.list_rules:
-        print(f"{'#':<3} {'Name':<25} {'Destination':<40}")
-        print(f"{'-'*3} {'-'*25} {'-'*40}")
-        for i, rule in enumerate(RULES, 1):
-            print(f"{i:<3} {rule['name']:<25} {rule['destination']:<40}")
-        return
+
+def cmd_run(args):
+    """Run the archiver."""
+    # Determine working folder
+    if args.folder:
+        working_folder = Path(args.folder).expanduser().resolve()
+    else:
+        default = str(DEFAULT_FOLDER)
+        sys.stdout.write(f"Working folder [{default}]: ")
+        sys.stdout.flush()
+        user_input = input().strip()
+        if user_input:
+            working_folder = Path(user_input).expanduser().resolve()
+        else:
+            working_folder = DEFAULT_FOLDER
+
+    base_dir = working_folder / "Deutschland"
+    state_file = working_folder / ".archiver-state.json"
+
+    if not working_folder.exists():
+        print(f"ERROR: Working folder does not exist: {working_folder}")
+        sys.exit(1)
 
     # Determine since date
-    state = load_state()
+    state = load_state(state_file)
     if args.since:
         since = args.since.replace("-", "/")
     elif state.get("last_run"):
@@ -833,46 +830,38 @@ def main():
     else:
         since = (datetime.now() - timedelta(days=DEFAULT_SINCE_DAYS)).strftime("%Y/%m/%d")
 
-    mode = "EXECUTE" if args.execute else "DRY-RUN"
-    print(f"Gmail Attachment Archiver [{mode}]")
+    print(f"Gmail Attachment Archiver")
     print(f"Since: {since}")
-    print(f"Base:  {BASE_DIR}")
-
-    if not args.execute:
-        print("\n  *** DRY-RUN MODE — no files will be downloaded, no emails modified ***")
-        print("  *** Use --execute to actually process ***\n")
+    print(f"Base:  {base_dir}")
 
     # Get or create archive label
-    archive_label_id = None
-    if args.execute:
-        archive_label_id = gws_find_label_id(ARCHIVE_LABEL_NAME)
-        if archive_label_id:
-            print(f"Archive label: {ARCHIVE_LABEL_NAME} (id: {archive_label_id})")
-        else:
-            print(f"WARNING: Could not find/create label '{ARCHIVE_LABEL_NAME}'")
+    archive_label_id = gws_find_label_id(ARCHIVE_LABEL_NAME)
+    if archive_label_id:
+        print(f"Archive label: {ARCHIVE_LABEL_NAME} (id: {archive_label_id})")
+    else:
+        print(f"WARNING: Could not find/create label '{ARCHIVE_LABEL_NAME}'")
 
     # Filter rules if --rule specified
     rules = RULES
     if args.rule:
         rules = [r for r in RULES if r["name"].lower() == args.rule.lower()]
         if not rules:
-            print(f"ERROR: No rule named '{args.rule}'. Use --list-rules to see available rules.")
+            print(f"ERROR: No rule named '{args.rule}'. Use 'list-rules' to see available rules.")
             sys.exit(1)
 
     # Process each rule
     total = 0
     manual_pending = []
     for rule in rules:
-        total += process_rule(rule, since, args.execute, state, archive_label_id,
-                              manual_pending)
+        total += process_rule(rule, since, True, state, archive_label_id,
+                              base_dir, manual_pending)
 
     # Save state
-    if args.execute:
-        save_state(state)
-        print(f"\nState saved to {STATE_FILE}")
+    save_state(state, state_file)
+    print(f"\nState saved to {state_file}")
 
     print(f"\n{'='*60}")
-    print(f"Total attachments {'processed' if args.execute else 'found'}: {total}")
+    print(f"Total attachments processed: {total}")
     print(f"{'='*60}")
 
     # Manual portal summary
@@ -894,28 +883,62 @@ def main():
             for item in items:
                 print(f"    - {item['date']}: {item['subject'][:60]}")
 
-            if args.execute:
-                sys.stdout.write(f"\n  Fetched manually from {portal_name}? [y/N] ")
-                sys.stdout.flush()
-                fd = sys.stdin.fileno()
-                old = termios.tcgetattr(fd)
-                try:
-                    tty.setraw(fd)
-                    ch = sys.stdin.read(1).lower()
-                finally:
-                    termios.tcsetattr(fd, termios.TCSADRAIN, old)
-                print(ch)  # echo the keypress
-                if ch == "y":
-                    for item in items:
-                        msg_id = item["msg_id"]
-                        if archive_label_id:
-                            gws_modify_message(msg_id, [archive_label_id], ["INBOX", "UNREAD"])
-                        if msg_id not in state["processed_ids"]:
-                            state["processed_ids"].append(msg_id)
-                    print(f"    Marked {len(items)} email(s) as Stored")
-                    save_state(state)
-                else:
-                    print(f"    Skipped — will prompt again next run")
+            sys.stdout.write(f"\n  Fetched manually from {portal_name}? [y/N] ")
+            sys.stdout.flush()
+            fd = sys.stdin.fileno()
+            old = termios.tcgetattr(fd)
+            try:
+                tty.setraw(fd)
+                ch = sys.stdin.read(1).lower()
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old)
+            print(ch)  # echo the keypress
+            if ch == "y":
+                for item in items:
+                    msg_id = item["msg_id"]
+                    if archive_label_id:
+                        gws_modify_message(msg_id, [archive_label_id], ["INBOX", "UNREAD"])
+                    if msg_id not in state["processed_ids"]:
+                        state["processed_ids"].append(msg_id)
+                print(f"    Marked {len(items)} email(s) as Stored")
+                save_state(state, state_file)
+            else:
+                print(f"    Skipped — will prompt again next run")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Gmail Attachment Auto-Archiver",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    subparsers = parser.add_subparsers(dest="command")
+
+    # run
+    run_parser = subparsers.add_parser("run", help="Download attachments and archive emails")
+    run_parser.add_argument(
+        "--since",
+        help="Start date in YYYY-MM-DD or YYYY/M/D format (default: from state or 45 days ago)",
+    )
+    run_parser.add_argument(
+        "--rule",
+        help="Run only this rule (by name)",
+    )
+    run_parser.add_argument(
+        "--folder",
+        help=f"Working folder (default: {DEFAULT_FOLDER})",
+    )
+
+    # list-rules
+    subparsers.add_parser("list-rules", help="List all rules")
+
+    args = parser.parse_args()
+
+    if args.command == "run":
+        cmd_run(args)
+    elif args.command == "list-rules":
+        cmd_list_rules()
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":

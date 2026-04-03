@@ -33,9 +33,6 @@ swiftlint = "latest"
 # JSON / terminal data tools
 "npm:fx" = "latest"                       # JSON processor / viewer
 
-# Productivity / personal workflow
-"pipx:things-cli" = "latest"              # CLI for Things task manager
-
 # Mobile development / automation
 "npm:appium" = "latest"                   # Mobile UI automation framework
 "npm:@mobilenext/mobilecli" = "latest"    # Mobile development tooling

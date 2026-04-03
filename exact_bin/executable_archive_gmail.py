@@ -11,6 +11,9 @@ Usage:
     python3 archive_gmail.py run --folder ~/my/archive # custom working folder
     python3 archive_gmail.py run --force               # ignore stored state
     python3 archive_gmail.py list-rules                # show all rules
+    python3 archive_gmail.py scan-inbox                # classify inbox files
+    python3 archive_gmail.py scan-inbox --move         # classify and move
+    python3 archive_gmail.py scan-inbox --inbox ~/path # custom inbox folder
 """
 
 import argparse
@@ -35,261 +38,25 @@ DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum dokumentów"
 ARCHIVE_LABEL_NAME = "Stored"
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
-RULES = [
-    # -----------------------------------------------------------------------
-    # Tier 1 — Monthly invoices with established naming conventions
-    # -----------------------------------------------------------------------
-    {
-        "name": "Office Club",
-        "from": "info@officeclub.com",
-        "subject_contains": "Your invoice",
-        "destination": "Firmen/Office Club",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Google Cloud",
-        "from": "payments-noreply@google.com",
-        "subject_contains": "Google Cloud Platform",
-        "destination": "Firmen/Google",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Google Workspace",
-        "from": "payments-noreply@google.com",
-        "subject_contains": "Google Workspace",
-        "destination": "Firmen/Google",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "DNS.NET",
-        "from": "service@dns-net.de",
-        "subject_contains": "Rechnung Nr.",
-        "destination": "Firmen/DNS.NET",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Telekom",
-        "from": "Kundenservice.Rechnungonline@telekom.de",
-        "subject_contains": "RechnungOnline",
-        "destination": "Firmen/Telekom",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "MyPlace",
-        "from": "prenzlauerpromenade@myplace.de",
-        "subject_contains": "Rechnung",
-        "destination": "Firmen/MyPlace",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Natalia",
-        "from": "natalia@hallozusammen.pl",
-        "subject_contains": None,  # match any with attachment
-        "destination": "Firmen/Natalia",
-        "attachment_filter": r"faktura.*\.pdf$",
-    },
-    # -----------------------------------------------------------------------
-    # Tier 2 — SaaS/subscription receipts (Stripe-style)
-    # -----------------------------------------------------------------------
-    {
-        "name": "Anthropic",
-        "from": "invoice+statements@mail.anthropic.com",
-        "subject_contains": "receipt",
-        "destination": "Firmen/Anthropic",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",  # extract receipt ID
-    },
-    {
-        "name": "Raycast",
-        "from": "invoice+statements@raycast.com",
-        "subject_contains": "receipt",
-        "destination": "Firmen/Raycast",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Kagi",
-        "from_contains": "stripe.com",
-        "subject_contains": "Kagi",
-        "destination": "Firmen/Kagi",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Linear",
-        "from_contains": "stripe.com",
-        "subject_contains": "Linear",
-        "destination": "Firmen/Linear",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Midjourney",
-        "from": "invoice+statements@midjourney.com",
-        "subject_contains": "receipt",
-        "destination": "Firmen/Midjourney",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "ElevenLabs",
-        "from_contains": "stripe.com",
-        "subject_contains": "Eleven Labs",
-        "destination": "Firmen/ElevenLabs",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Moonshot AI",
-        "from_contains": "stripe.com",
-        "subject_contains": "MOONSHOT",
-        "destination": "Firmen/Moonshot AI",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Captions",
-        "from": "invoice+statements@captions.ai",
-        "subject_contains": "receipt",
-        "destination": "Firmen/Captions",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Hugging Face",
-        "from_contains": "stripe.com",
-        "subject_contains": "Hugging Face",
-        "destination": "Firmen/Hugging Face",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Vercel",
-        "from": "invoice+statements@vercel.com",
-        "subject_contains": "receipt",
-        "destination": "Firmen/Vercel",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"#(\S+)",
-    },
-    {
-        "name": "Paddle",
-        "from": "help@paddle.com",
-        "subject_contains": "receipt",
-        "destination": "Firmen/Paddle",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-    },
-    # -----------------------------------------------------------------------
-    # Tier 3 — Periodic / as-needed
-    # -----------------------------------------------------------------------
-    {
-        "name": "REWE eBon",
-        "from": "ebon@mailing.rewe.de",
-        "subject_contains": "eBon",
-        "destination": "Firmen/REWE",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-        "rename_from_subject": r"vom (\d{2}\.\d{2}\.\d{4})",  # "vom 27.03.2026" → date
-        "rename_template": "REWE-eBon-{}.pdf",  # REWE-eBon-27.03.2026.pdf
-    },
-    {
-        "name": "WeWork",
-        "from": "noreply@wework.com",
-        "subject_contains": "payment was successfully processed",
-        "destination": "Firmen/WeWork",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "AGILA",
-        "from_contains": "agila.de",
-        "subject_contains": None,  # any with attachment
-        "destination": "Versicherung/AGILA",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-    },
-    {
-        "name": "Apple Invoicing",
-        "from": "EMEA_Invoicing@email.apple.com",
-        "subject_contains": "Rechnungsnummer",
-        "destination": "Firmen/Apple",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Tierarztpraxis Lenk",
-        "from": "info@tierarztpraxis-lenk.de",
-        "subject_contains": "Rechnung",
-        "destination": "Hunde/Tierarzt Lenk",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-    },
-    {
-        "name": "Steuerberatung Schopp",
-        "from_contains": "steuerberatung-schopp.de",
-        "subject_contains": None,
-        "destination": "Ämter/Finanzamt/MSchopp",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Grundeinkommen",
-        "from_contains": "grundeinkommen.de",
-        "subject_contains": "Spendenbescheinigung",
-        "destination": "Geld/Grundeinkommen",
-        "attachment_filter": r"\.pdf$",
-    },
-    {
-        "name": "Starlink",
-        "from": "no-reply@starlink.com",
-        "subject_contains": None,
-        "destination": "Firmen/Starlink",
-        "attachment_filter": r"\.pdf$",
-        "create_folder": True,
-    },
-    # -----------------------------------------------------------------------
-    # Link-based downloads (no attachment, PDF link in email body)
-    # -----------------------------------------------------------------------
-    {
-        "name": "Miles",
-        "from_contains": "miles-mobility.com",
-        "subject_contains": "Your invoice",
-        "destination": "Firmen/Miles",
-        "create_folder": True,
-        "link_download": True,
-        # Direct API URL in HTML email body
-        "link_pattern": r'https://api\.app\.miles-mobility\.com/mobile/InvoiceServices\?asPDF=1&invoiceUUID=[0-9A-Fa-f-]+',
-        # Extract invoice number from plain text body for filename
-        "filename_from_body": r"Invoice nr\.: (\d+)",
-        "filename_template": "Miles-{}.pdf",
-    },
-    # -----------------------------------------------------------------------
-    # Manual portal downloads (can't automate, prompt user)
-    # -----------------------------------------------------------------------
-    {
-        "name": "Gothaer Portal",
-        "from_contains": "gothaer.de",
-        "subject_contains": "Neue Nachricht",
-        "manual_portal": True,
-        "portal_url": "https://www.gothaer.de/meine-gothaer/portal.htm",
-        "destination": "Gesundheit/Arztrechnungen",
-    },
-    {
-        "name": "DNS.NET Portal",
-        "from": "service@dns-net.de",
-        "subject_contains": "Kundenportal",
-        "manual_portal": True,
-        "portal_url": "https://mein.dns-net.de/",
-        "destination": "Firmen/DNS.NET",
-    },
-]
+CONFIG_DIR = Path.home() / ".config" / "archive-gmail"
+CONFIG_FILE = CONFIG_DIR / "rules.json"
+
+
+def _load_config() -> dict:
+    """Load rules from ~/.config/archive-gmail/rules.json."""
+    if not CONFIG_FILE.exists():
+        print(f"ERROR: Config file not found: {CONFIG_FILE}")
+        sys.exit(1)
+    with open(CONFIG_FILE) as f:
+        return json.load(f)
+
+
+def _get_rules() -> list[dict]:
+    return _load_config()["rules"]
+
+
+def _get_folder_keywords() -> dict[str, list[str]]:
+    return _load_config().get("folder_keywords", {})
 
 # ---------------------------------------------------------------------------
 # gws CLI wrappers
@@ -846,8 +613,191 @@ def cmd_list_rules():
     """List all rules and exit."""
     print(f"{'#':<3} {'Name':<25} {'Destination':<40}")
     print(f"{'-'*3} {'-'*25} {'-'*40}")
-    for i, rule in enumerate(RULES, 1):
+    for i, rule in enumerate(_get_rules(), 1):
         print(f"{i:<3} {rule['name']:<25} {rule['destination']:<40}")
+
+
+# ---------------------------------------------------------------------------
+# Inbox scanner — classify files by PDF text content
+# ---------------------------------------------------------------------------
+
+INBOX_DEFAULT = Path.home() / "Documents" / "Archiwum dokumentów" / "### Inbox"
+SUPPORTED_EXTENSIONS = {".pdf"}
+
+
+def extract_pdf_text(path: Path, max_pages: int = 2) -> str:
+    """Extract text from the first pages of a PDF using pdftotext."""
+    try:
+        result = subprocess.run(
+            ["pdftotext", "-l", str(max_pages), str(path), "-"],
+            capture_output=True, text=True, timeout=10,
+        )
+        return result.stdout if result.returncode == 0 else ""
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return ""
+
+
+def _build_keyword_index() -> list[tuple[str, list[str]]]:
+    """Build (destination, keywords) pairs from rules + folder_keywords."""
+    seen = set()
+    index = []
+    for rule in _get_rules():
+        kws = rule.get("keywords", [])
+        if kws and rule["destination"] not in seen:
+            index.append((rule["destination"], kws))
+            seen.add(rule["destination"])
+    for dest, kws in _get_folder_keywords().items():
+        if dest not in seen:
+            index.append((dest, kws))
+            seen.add(dest)
+    return index
+
+
+def _keyword_matches(keyword: str, text_lower: str) -> bool:
+    """Check if keyword matches in text. Short keywords (<=4 chars) use
+    word-boundary matching to avoid substring false positives."""
+    kw_lower = keyword.lower()
+    if len(keyword) <= 4:
+        return bool(re.search(r'\b' + re.escape(kw_lower) + r'\b', text_lower))
+    return kw_lower in text_lower
+
+
+def classify_file(path: Path, keyword_index: list[tuple[str, list[str]]],
+                  ) -> list[tuple[str, int, list[str]]]:
+    """Score a file against all keyword sets.
+
+    Returns list of (destination, score, matched_keywords) sorted by score desc.
+    """
+    text = extract_pdf_text(path)
+    if not text:
+        return []
+
+    text_lower = text.lower()
+    matches = []
+    for dest, keywords in keyword_index:
+        matched = [kw for kw in keywords if _keyword_matches(kw, text_lower)]
+        if matched:
+            matches.append((dest, len(matched), matched))
+
+    matches.sort(key=lambda m: m[1], reverse=True)
+    return matches
+
+
+def cmd_scan_inbox(args):
+    """Scan inbox folder and classify files by content."""
+    inbox = Path(args.inbox).expanduser().resolve() if args.inbox else INBOX_DEFAULT
+
+    if args.folder:
+        base_dir = Path(args.folder).expanduser().resolve() / "Deutschland"
+    else:
+        base_dir = DEFAULT_FOLDER / "Deutschland"
+
+    if not inbox.exists():
+        print(f"ERROR: Inbox folder does not exist: {inbox}")
+        sys.exit(1)
+
+    print(f"Inbox Scanner")
+    print(f"Inbox: {inbox}")
+    print(f"Base:  {base_dir}")
+
+    keyword_index = _build_keyword_index()
+    print(f"Loaded {len(keyword_index)} keyword targets\n")
+
+    # Collect files (skip directories)
+    files = sorted(
+        f for f in inbox.iterdir()
+        if f.is_file() and f.suffix.lower() in SUPPORTED_EXTENSIONS
+    )
+    other_files = sorted(
+        f for f in inbox.iterdir()
+        if f.is_file() and f.suffix.lower() not in SUPPORTED_EXTENSIONS
+    )
+
+    if not files:
+        print("No supported files found in inbox.")
+        if other_files:
+            print(f"\nSkipped {len(other_files)} non-PDF file(s):")
+            for f in other_files:
+                print(f"  {f.name}")
+        return
+
+    matched_files = []
+    unmatched_files = []
+
+    for f in files:
+        results = classify_file(f, keyword_index)
+        if results:
+            matched_files.append((f, results))
+        else:
+            unmatched_files.append(f)
+
+    # Show matched files
+    if matched_files:
+        print(f"{'='*60}")
+        print(f"MATCHED ({len(matched_files)} files)")
+        print(f"{'='*60}")
+
+        for f, results in matched_files:
+            best_dest, best_score, best_kws = results[0]
+            confidence = "HIGH" if best_score >= 2 else "LOW"
+            print(f"\n  {f.name}")
+            print(f"    → {best_dest}  [{confidence}, {best_score} keyword(s): {', '.join(best_kws)}]")
+
+            if len(results) > 1:
+                for dest, score, kws in results[1:3]:
+                    print(f"      also: {dest}  [{score}: {', '.join(kws)}]")
+
+            if args.move:
+                dest_dir = base_dir / best_dest
+                dest_path = dest_dir / f.name
+
+                if confidence == "HIGH":
+                    sys.stdout.write(f"    Move? [Y/n/d(est)] ")
+                else:
+                    sys.stdout.write(f"    Move? [y/N/d(est)] ")
+                sys.stdout.flush()
+                ch = _read_single_key()
+                print(ch)
+
+                if ch == "d":
+                    # Let user type a custom destination
+                    sys.stdout.write(f"    Destination (relative to {base_dir}): ")
+                    sys.stdout.flush()
+                    custom = input().strip()
+                    if custom:
+                        dest_dir = base_dir / custom
+                        dest_path = dest_dir / f.name
+
+                    do_move = True
+                elif confidence == "HIGH":
+                    do_move = ch != "n"
+                else:
+                    do_move = ch == "y"
+
+                if do_move:
+                    dest_dir.mkdir(parents=True, exist_ok=True)
+                    shutil.move(str(f), str(dest_path))
+                    print(f"    MOVED → {dest_path}")
+                else:
+                    print(f"    Skipped")
+
+    # Show unmatched files
+    if unmatched_files:
+        print(f"\n{'='*60}")
+        print(f"UNMATCHED ({len(unmatched_files)} files)")
+        print(f"{'='*60}")
+        for f in unmatched_files:
+            text = extract_pdf_text(f)
+            first_lines = [l.strip() for l in text.split("\n") if l.strip()][:3]
+            print(f"\n  {f.name}")
+            if first_lines:
+                for line in first_lines:
+                    print(f"    | {line[:80]}")
+            else:
+                print(f"    (no text extracted)")
+
+            # Unmatched files are left in place — add keywords to config to match them
+
 
 
 def cmd_run(args):
@@ -893,9 +843,10 @@ def cmd_run(args):
         print(f"WARNING: Could not find/create label '{ARCHIVE_LABEL_NAME}'")
 
     # Filter rules if --rule specified
-    rules = RULES
+    all_rules = _get_rules()
+    rules = all_rules
     if args.rule:
-        rules = [r for r in RULES if r["name"].lower() == args.rule.lower()]
+        rules = [r for r in all_rules if r["name"].lower() == args.rule.lower()]
         if not rules:
             print(f"ERROR: No rule named '{args.rule}'. Use 'list-rules' to see available rules.")
             sys.exit(1)
@@ -1016,12 +967,30 @@ def main():
     # list-rules
     subparsers.add_parser("list-rules", help="List all rules")
 
+    # scan-inbox
+    scan_parser = subparsers.add_parser("scan-inbox", help="Classify inbox files by content")
+    scan_parser.add_argument(
+        "--inbox",
+        help=f"Inbox folder to scan (default: {INBOX_DEFAULT})",
+    )
+    scan_parser.add_argument(
+        "--folder",
+        help=f"Archive working folder (default: {DEFAULT_FOLDER})",
+    )
+    scan_parser.add_argument(
+        "--move",
+        action="store_true",
+        help="Interactively move matched files to destinations",
+    )
+
     args = parser.parse_args()
 
     if args.command == "run":
         cmd_run(args)
     elif args.command == "list-rules":
         cmd_list_rules()
+    elif args.command == "scan-inbox":
+        cmd_scan_inbox(args)
     else:
         parser.print_help()
 

@@ -157,6 +157,7 @@ brew 'xcodes' # Best command-line tool to install and switch between multiple ve
 cask 'xcodes-app' # Install and switch between multiple versions of Xcode
 cask 'mitmproxy'
 cask 'temurin'
+cask 'gcloud-cli'
 
 # Completions
 brew 'brew-cask-completion' # Fish completion for brew-cask

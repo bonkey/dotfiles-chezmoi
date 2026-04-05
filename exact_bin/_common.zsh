@@ -99,14 +99,25 @@ is_outdated() {
     fi
 }
 
+unless_recently_modified() {
+    local file
+    file=$1
+
+    if is_outdated "$file" ; then
+        touch "$file"
+        return 0
+    else
+        return 1
+    fi
+}
+
 exec_unless_recently_modified() {
     local file cmd
     file=$1
     cmd=$2
 
-    if is_outdated "$file" ; then
+    if unless_recently_modified "$file" ; then
         _exec $cmd
-        touch $file
     else
         print -P "$(msg_prefix)Command '$cmd' recently run, skipping (based on $file)."
     fi

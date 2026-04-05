@@ -18,7 +18,10 @@ Usage:
 
 import argparse
 import base64
+import concurrent.futures
+import io
 import json
+import threading
 import os
 import re
 import shutil
@@ -40,6 +43,40 @@ DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
 CONFIG_DIR = Path.home() / ".config" / "archive-gmail"
 CONFIG_FILE = CONFIG_DIR / "rules.json"
+
+VERBOSE = False
+
+# Per-thread log sink: when set, verbose output is buffered here instead of
+# writing directly to stderr. Used during the parallel triage phase so each
+# rule's output can be flushed in order afterwards.
+_tls = threading.local()
+
+
+def _log_stream():
+    """Return the current verbose log stream (thread-local buffer or stderr)."""
+    return getattr(_tls, "buffer", None) or sys.stderr
+
+
+def _shlex_join(cmd: list[str]) -> str:
+    import shlex
+    return " ".join(shlex.quote(c) for c in cmd)
+
+
+def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
+    """Run a subprocess, logging the command and output when VERBOSE."""
+    out = _log_stream()
+    if VERBOSE:
+        print(f"  $ {_shlex_join(cmd)}", file=out)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    if VERBOSE:
+        print(f"  → exit={result.returncode}", file=out)
+        if result.stdout:
+            for line in result.stdout.rstrip("\n").split("\n"):
+                print(f"    stdout: {line}", file=out)
+        if result.stderr:
+            for line in result.stderr.rstrip("\n").split("\n"):
+                print(f"    stderr: {line}", file=out)
+    return result
 
 
 def _load_config() -> dict:
@@ -70,7 +107,7 @@ def gws_check_auth():
         "--params", json.dumps({"userId": "me"}),
         "--format", "json",
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    result = _run(cmd, timeout=30)
     if result.returncode != 0:
         stderr = result.stderr.strip()
         print(f"ERROR: gws authentication failed.")
@@ -86,7 +123,7 @@ def gws_triage(query: str, max_results: int = 100) -> list[dict]:
         "--query", query,
         "--max", str(max_results),
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    result = _run(cmd, timeout=120)
     if result.returncode != 0:
         return []
 
@@ -114,7 +151,7 @@ def gws_get_message(msg_id: str) -> dict:
         "--params", json.dumps({"userId": "me", "id": msg_id}),
         "--format", "json",
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+    result = _run(cmd, timeout=60)
     if result.returncode != 0:
         print(f"  ERROR: Failed to get message {msg_id}: {result.stderr.strip()}")
         return {}
@@ -132,7 +169,7 @@ def gws_get_attachment(msg_id: str, attachment_id: str) -> bytes | None:
         }),
         "--format", "json",
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    result = _run(cmd, timeout=120)
     if result.returncode != 0:
         print(f"  ERROR: Failed to download attachment: {result.stderr.strip()}")
         return None
@@ -159,7 +196,7 @@ def gws_modify_message(msg_id: str, add_labels: list[str], remove_labels: list[s
         "--params", json.dumps({"userId": "me", "id": msg_id}),
         "--json", json.dumps(body),
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    result = _run(cmd, timeout=30)
     if result.returncode != 0:
         print(f"  ERROR: Failed to modify message {msg_id}: {result.stderr.strip()}")
         return False
@@ -178,7 +215,7 @@ def gws_create_label(label_name: str) -> str | None:
         }),
         "--format", "json",
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    result = _run(cmd, timeout=30)
     if result.returncode != 0:
         print(f"  ERROR: Failed to create label '{label_name}': {result.stderr.strip()}")
         return None
@@ -193,7 +230,7 @@ def gws_find_label_id(label_name: str) -> str | None:
         "--params", json.dumps({"userId": "me"}),
         "--format", "json",
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    result = _run(cmd, timeout=30)
     if result.returncode != 0:
         return None
 
@@ -208,13 +245,21 @@ def gws_find_label_id(label_name: str) -> str | None:
 
 def download_url(url: str) -> bytes | None:
     """Download a file from a URL and return raw bytes."""
+    out = _log_stream()
+    if VERBOSE:
+        print(f"  GET {url}", file=out)
     try:
         req = urllib.request.Request(url, headers={
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
         })
         with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read()
+            data = resp.read()
+        if VERBOSE:
+            print(f"  → status=200 bytes={len(data):,}", file=out)
+        return data
     except Exception as e:
+        if VERBOSE:
+            print(f"  → error: {e}", file=out)
         print(f"  ERROR: Failed to download {url}: {e}")
         return None
 
@@ -269,18 +314,19 @@ def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
         if rule["from_contains"].lower() not in msg_from.lower():
             return False
 
-    # Check 'subject_contains' (None means match any)
-    if rule.get("subject_contains") is not None:
-        if rule["subject_contains"].lower() not in msg_subject.lower():
+    # Check 'subject_regex' (None means match any).
+    # Case-insensitive regex applied to the full subject.
+    if rule.get("subject_regex") is not None:
+        if not re.search(rule["subject_regex"], msg_subject, re.IGNORECASE):
             return False
 
     return True
 
 
-def build_gmail_query(rule: dict, since: str) -> str:
+def build_gmail_query(rule: dict, since: str, force: bool = False) -> str:
     """Build a Gmail search query for a rule.
 
-    Note: subject_contains is used for post-filtering only (not in Gmail query),
+    Note: subject_regex is used for post-filtering only (not in Gmail query),
     because Gmail's subject: operator requires exact phrase matching which is
     too strict for subjects like "Office Club | Your invoice".
     """
@@ -292,6 +338,11 @@ def build_gmail_query(rule: dict, since: str) -> str:
         parts.append(f"from:{rule['from']}")
     elif "from_contains" in rule:
         parts.append(f"from:{rule['from_contains']}")
+
+    # Exclude already-archived messages (server-side filtering).
+    # With --force, don't exclude so we can reprocess.
+    if not force:
+        parts.append(f"-label:{ARCHIVE_LABEL_NAME}")
 
     # Don't add subject to Gmail query — use post-filtering in matches_rule()
 
@@ -432,18 +483,18 @@ def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
         print()
         print(f"    Destination: {dest_path}")
 
-        if dest_path.exists():
-            print(f"    SKIP: File already exists on disk")
-        elif execute:
+        if execute:
             if not _ensure_dest_dir(rule, dest_dir):
                 continue
             data = gws_get_attachment(msg_id, att["attachmentId"])
             if data is None:
                 print("    ERROR: Failed to download attachment")
                 continue
+            existed = dest_path.exists()
             with open(dest_path, "wb") as f:
                 f.write(data)
-            print(f"    SAVED: {dest_path} ({len(data):,} bytes)")
+            verb = "OVERWROTE" if existed else "SAVED"
+            print(f"    {verb}: {dest_path} ({len(data):,} bytes)")
             count += 1
         else:
             print(f"    DRY-RUN: Would download and save ({att.get('mimeType', 'unknown')})")
@@ -486,9 +537,18 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
     html_body = _get_html_body(full_msg.get("payload", {}))
     text_body = _get_text_body(full_msg.get("payload", {}))
 
-    # Find the download URL in HTML body
-    link_pattern = rule.get("link_pattern", "")
-    urls = re.findall(link_pattern, html_body)
+    # Find the download URL in HTML body. `link_pattern` may be a single
+    # regex string or a list of regexes tried in order (first match wins).
+    patterns = rule.get("link_pattern", "")
+    if isinstance(patterns, str):
+        patterns = [patterns]
+    urls = []
+    for pat in patterns:
+        if not pat:
+            continue
+        urls = re.findall(pat, html_body)
+        if urls:
+            break
     if not urls:
         print("    No download link found in email.")
         return 0
@@ -520,19 +580,17 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
     print(f"    Filename: {filename}")
     print(f"    Destination: {dest_path}")
 
-    if dest_path.exists():
-        print(f"    SKIP: File already exists on disk")
-        return 0
-
     if execute:
         if not _ensure_dest_dir(rule, dest_dir):
             return 0
         data = download_url(pdf_url)
         if data is None:
             return 0
+        existed = dest_path.exists()
         with open(dest_path, "wb") as f:
             f.write(data)
-        print(f"    SAVED: {dest_path} ({len(data):,} bytes)")
+        verb = "OVERWROTE" if existed else "SAVED"
+        print(f"    {verb}: {dest_path} ({len(data):,} bytes)")
         return 1
     else:
         print(f"    DRY-RUN: Would download PDF from link")
@@ -547,21 +605,24 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
 def process_rule(rule: dict, since: str, execute: bool, state: dict,
                  archive_label_id: str | None, base_dir: Path,
                  manual_pending: list | None = None,
-                 force: bool = False) -> int:
-    """Process a single rule. Returns number of attachments handled."""
-    print(f"\n{'='*60}")
-    print(f"Rule: {rule['name']}")
-    print(f"{'='*60}")
+                 force: bool = False,
+                 messages: list[dict] | None = None) -> int:
+    """Process a single rule. Returns number of attachments handled.
 
-    query = build_gmail_query(rule, since)
-    print(f"  Query: {query}")
+    If ``messages`` is provided (e.g. pre-fetched in parallel), the triage
+    query is skipped.
+    """
+    if messages is None:
+        query = build_gmail_query(rule, since, force=force)
+        if VERBOSE:
+            print(f"  Query: {query}")
+        messages = gws_triage(query)
 
-    messages = gws_triage(query)
     if not messages:
-        print("  No messages found.")
+        print(f"── {rule['name']}: no messages")
         return 0
 
-    print(f"  Found {len(messages)} message(s)")
+    print(f"── {rule['name']}: {len(messages)} message(s)")
     count = 0
     dest_dir = base_dir / rule["destination"]
 
@@ -644,9 +705,9 @@ SUPPORTED_EXTENSIONS = {".pdf"}
 def extract_pdf_text(path: Path, max_pages: int = 2) -> str:
     """Extract text from the first pages of a PDF using pdftotext."""
     try:
-        result = subprocess.run(
+        result = _run(
             ["pdftotext", "-l", str(max_pages), str(path), "-"],
-            capture_output=True, text=True, timeout=10,
+            timeout=10,
         )
         return result.stdout if result.returncode == 0 else ""
     except (FileNotFoundError, subprocess.TimeoutExpired):
@@ -870,12 +931,37 @@ def cmd_run(args):
             print(f"ERROR: No rule named '{args.rule}'. Use 'list-rules' to see available rules.")
             sys.exit(1)
 
-    # Process each rule
+    # Pre-fetch triage results in parallel for non-manual_portal rules.
+    # Manual portal rules stay sequential (they prompt the user).
+    prefetch_targets = [r for r in rules if not r.get("manual_portal")]
+    prefetched: dict[str, list[dict]] = {}
+    if prefetch_targets:
+        def _triage_one(rule):
+            _tls.buffer = io.StringIO()
+            try:
+                q = build_gmail_query(rule, since, force=args.force)
+                if VERBOSE:
+                    print(f"  Query: {q}", file=_tls.buffer)
+                msgs = gws_triage(q)
+                return rule["name"], msgs, _tls.buffer.getvalue()
+            finally:
+                _tls.buffer = None
+
+        max_workers = min(8, len(prefetch_targets))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as ex:
+            for name, msgs, log in ex.map(_triage_one, prefetch_targets):
+                prefetched[name] = msgs
+                if log and VERBOSE:
+                    sys.stderr.write(f"── {name}\n")
+                    sys.stderr.write(log)
+
+    # Process each rule sequentially (per-message work is serial)
     total = 0
     manual_pending = []
     for rule in rules:
         total += process_rule(rule, since, True, state, archive_label_id,
-                              base_dir, manual_pending, force=args.force)
+                              base_dir, manual_pending, force=args.force,
+                              messages=prefetched.get(rule["name"]))
 
     # Save state
     save_state(state, state_file)
@@ -961,10 +1047,25 @@ def main():
         description="Gmail Attachment Auto-Archiver",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Print each external command and its output (to stderr)",
+    )
+
+    # Shared options — allow --verbose after the subcommand too
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument(
+        "-v", "--verbose",
+        dest="verbose_sub",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
+
     subparsers = parser.add_subparsers(dest="command")
 
     # run
-    run_parser = subparsers.add_parser("run", help="Download attachments and archive emails")
+    run_parser = subparsers.add_parser("run", parents=[common], help="Download attachments and archive emails")
     run_parser.add_argument(
         "--since",
         help="Start date in YYYY-MM-DD or YYYY/M/D format (default: from state or 45 days ago)",
@@ -984,10 +1085,10 @@ def main():
     )
 
     # list-rules
-    subparsers.add_parser("list-rules", help="List all rules")
+    subparsers.add_parser("list-rules", parents=[common], help="List all rules")
 
     # scan-inbox
-    scan_parser = subparsers.add_parser("scan-inbox", help="Classify inbox files by content")
+    scan_parser = subparsers.add_parser("scan-inbox", parents=[common], help="Classify inbox files by content")
     scan_parser.add_argument(
         "--inbox",
         help=f"Inbox folder to scan (default: {INBOX_DEFAULT})",
@@ -1003,6 +1104,9 @@ def main():
     )
 
     args = parser.parse_args()
+
+    global VERBOSE
+    VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
 
     if args.command == "run":
         cmd_run(args)

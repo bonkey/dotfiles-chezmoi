@@ -31,7 +31,6 @@ cask 'antigravity' # AI Coding Agent IDE
 brew 'peekaboo' # Lightning-fast macOS screenshots & AI vision analysis
 cask 'conductor' # Claude code parallelisation
 cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
-cask 'itermai' # Enable generative AI features in iTerm2
 
 # Shell and terminal
 brew 'atuin' # Improved shell history for zsh and bash

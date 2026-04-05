@@ -63,6 +63,22 @@ def _get_folder_keywords() -> dict[str, list[str]]:
 # ---------------------------------------------------------------------------
 
 
+def gws_check_auth():
+    """Verify gws Gmail authentication works. Exit with a clear message if not."""
+    cmd = [
+        "gws", "gmail", "users", "labels", "list",
+        "--params", json.dumps({"userId": "me"}),
+        "--format", "json",
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    if result.returncode != 0:
+        stderr = result.stderr.strip()
+        print(f"ERROR: gws authentication failed.")
+        print(f"  {stderr}")
+        print(f"\nRun 'gws auth login' to authenticate.")
+        sys.exit(1)
+
+
 def gws_triage(query: str, max_results: int = 100) -> list[dict]:
     """Run gws gmail +triage and return list of {id, from, subject, date}."""
     cmd = [
@@ -834,6 +850,9 @@ def cmd_run(args):
     print(f"Gmail Attachment Archiver")
     print(f"Since: {since}")
     print(f"Base:  {base_dir}")
+
+    # Verify gws is authenticated before doing any work
+    gws_check_auth()
 
     # Get or create archive label
     archive_label_id = gws_find_label_id(ARCHIVE_LABEL_NAME)

@@ -4,4 +4,6 @@ set +o pipefail
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
+npx skills add bonkey/skills --global --yes
+
 npx skills update --global

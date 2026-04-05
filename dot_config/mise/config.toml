@@ -70,7 +70,7 @@ swiftlint = "latest"
 experimental = true
 pipx.uvx = true
 npm.bun = true
-vfox = false
+# vfox = false
 idiomatic_version_file_enable_tools = ["ruby", "python", "node"]
 
 trusted_config_paths = [

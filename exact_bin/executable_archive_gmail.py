@@ -95,6 +95,11 @@ def _get_rules() -> list[dict]:
 def _get_folder_keywords() -> dict[str, list[str]]:
     return _load_config().get("folder_keywords", {})
 
+
+def _get_filename_rules() -> list[dict]:
+    """Return filename_rules from config: [{pattern, destination}, ...]."""
+    return _load_config().get("filename_rules", [])
+
 # ---------------------------------------------------------------------------
 # gws CLI wrappers
 # ---------------------------------------------------------------------------
@@ -699,7 +704,7 @@ def cmd_list_rules():
 # ---------------------------------------------------------------------------
 
 INBOX_DEFAULT = Path.home() / "Documents" / "Archiwum dokumentów" / "### Inbox"
-SUPPORTED_EXTENSIONS = {".pdf"}
+SUPPORTED_EXTENSIONS = {".pdf", ".csv"}
 
 
 def extract_pdf_text(path: Path, max_pages: int = 2) -> str:
@@ -798,8 +803,9 @@ def cmd_scan_inbox(args):
     print(f"Inbox: {inbox}")
     print(f"Base:  {base_dir}")
 
+    filename_rules = _get_filename_rules()
     keyword_index = _build_keyword_index()
-    print(f"Loaded {len(keyword_index)} keyword targets\n")
+    print(f"Loaded {len(filename_rules)} filename rules, {len(keyword_index)} keyword targets\n")
 
     # Collect files (skip directories)
     files = sorted(
@@ -814,7 +820,7 @@ def cmd_scan_inbox(args):
     if not files:
         print("No supported files found in inbox.")
         if other_files:
-            print(f"\nSkipped {len(other_files)} non-PDF file(s):")
+            print(f"\nSkipped {len(other_files)} unsupported file(s):")
             for f in other_files:
                 print(f"  {f.name}")
         return
@@ -823,6 +829,16 @@ def cmd_scan_inbox(args):
     unmatched_files = []
 
     for f in files:
+        # Try filename-pattern rules first
+        fn_match = None
+        for rule in filename_rules:
+            if re.match(rule["pattern"], f.name):
+                fn_match = [(rule["destination"], 99, ["filename:" + rule["pattern"]])]
+                break
+        if fn_match:
+            matched_files.append((f, fn_match))
+            continue
+
         results = classify_file(f, keyword_index)
         if results:
             matched_files.append((f, results))

@@ -7,7 +7,7 @@
 
     "cli-dev": ["shellwright"],
     "web-dev": ["shadcn", "vibium"],
-    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud"],
+    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud", "xcode-instruments"],
 
     "ui-automation": ["peekaboo"],
 
@@ -61,6 +61,10 @@
     "xcstrings-crud": {
       "type": "local",
       "command": ["xcstrings-crud", "mcp"]
+    },
+    "xcode-instruments": {
+      "type": "local",
+      "command": ["npx", "-y", "instrumentsmcp@latest"]
     },
     "peekaboo": {
       "type": "local",

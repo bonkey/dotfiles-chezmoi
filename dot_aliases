@@ -326,7 +326,7 @@ fdd() { f -t d "$@" }
 # --- rg
 
 rg() {
-    "$HOMEBREW_PREFIX/bin/rb" \
+    "$HOMEBREW_PREFIX/bin/rg" \
         --colors 'path:style:italic' --colors 'path:fg:green' \
         --colors 'line:style:nobold' --colors 'line:fg:cyan' \
         --colors 'match:style:bold' --colors 'match:fg:red' --colors 'match:bg:black' \
@@ -350,35 +350,52 @@ rgc() {
 
 # --- ag
 
-ag() {
-    new_cmd=${0/^ag/rg}
-    command echo "Using 'rg'. Consider ${new_cmd} instead" >&2
-    rg "$@"
+_ag_replaced() {
+  local old_cmd new_cmd suggested
+  old_cmd="$1"
+  new_cmd="$2"
+  shift 2
+
+  suggested="${new_cmd} ${(@q)@}"
+  print -r -- "$suggested" | pbcopy
+  printf "Error: '%s' has been replaced by '%s'. Suggested command copied to pbcopy:\n%s\n" "$old_cmd" "$new_cmd" "$suggested"
+  return 1
 }
 
-alias agw="ag -w"
-alias aga="ag -u"
-alias agh="ag -U --hidden"
-alias agl="ag -l"
+ag() {
+  _ag_replaced ag rg "$@"
+}
 
-agz() {
-  ag "$@" $_shell_init_files
+agw() {
+  _ag_replaced agw rgw "$@"
+}
+
+aga() {
+  _ag_replaced aga rga "$@"
+}
+
+agh() {
+  _ag_replaced agh rgh "$@"
+}
+
+agl() {
+  _ag_replaced agl rgl "$@"
 }
 
 ags() {
-  ag --ignore=Carthage --ignore=Pods --ignore=\*.framework --objc --objcpp --swift "$@"
+  _ag_replaced ags rgs "$@"
 }
 
 agsw() {
-  ags -w "$@"
+  _ag_replaced agsw rgsw "$@"
 }
 
 agst() {
-  agsw " *(protocol|actor|struct|typealias|class) +$1"
+  _ag_replaced agst rgst "$@"
 }
 
 agc() {
-  ag -c "$@" | awk -F: 'BEGIN { c = 0} { c += $2 } END { print "found:", c}'
+  _ag_replaced agc rgc "$@"
 }
 
 # --- Node / nvm

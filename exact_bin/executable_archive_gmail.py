@@ -739,22 +739,43 @@ def _keyword_matches(keyword: str, text_lower: str) -> bool:
     return kw_lower in text_lower
 
 
+def _extract_year(text: str, filename: str) -> str | None:
+    """Extract a 4-digit year from PDF text or filename."""
+    # Try common date patterns in text: DD.MM.YYYY, YYYY-MM-DD, Month YYYY
+    for pattern in [r'\b(\d{4})-\d{2}-\d{2}\b', r'\b\d{2}\.\d{2}\.(\d{4})\b',
+                    r'\b(?:Jan|Feb|Mär|Apr|Mai|Jun|Jul|Aug|Sep|Okt|Nov|Dez)\w*\s+(\d{4})\b',
+                    r'\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*[\s-](\d{4})\b']:
+        m = re.search(pattern, text, re.IGNORECASE)
+        if m:
+            return m.group(1)
+    # Fallback: year from filename
+    m = re.search(r'(\d{4})', filename)
+    return m.group(1) if m else None
+
+
 def classify_file(path: Path, keyword_index: list[tuple[str, list[str]]],
                   ) -> list[tuple[str, int, list[str]]]:
     """Score a file against all keyword sets.
 
     Returns list of (destination, score, matched_keywords) sorted by score desc.
+    Destinations containing <YEAR> are resolved from the PDF content or filename.
     """
     text = extract_pdf_text(path)
     if not text:
         return []
 
     text_lower = text.lower()
+    year = None
     matches = []
     for dest, keywords in keyword_index:
         matched = [kw for kw in keywords if _keyword_matches(kw, text_lower)]
         if matched:
-            matches.append((dest, len(matched), matched))
+            resolved_dest = dest
+            if "<YEAR>" in dest:
+                if year is None:
+                    year = _extract_year(text, path.name) or "unknown"
+                resolved_dest = dest.replace("<YEAR>", year)
+            matches.append((resolved_dest, len(matched), matched))
 
     matches.sort(key=lambda m: m[1], reverse=True)
     return matches

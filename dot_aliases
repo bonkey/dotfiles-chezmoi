@@ -325,15 +325,7 @@ fdd() { f -t d "$@" }
 
 # --- rg
 
-rg() {
-    "$HOMEBREW_PREFIX/bin/rg" \
-        --colors 'path:style:italic' --colors 'path:fg:green' \
-        --colors 'line:style:nobold' --colors 'line:fg:cyan' \
-        --colors 'match:style:bold' --colors 'match:fg:red' --colors 'match:bg:black' \
-        "$@"
-}
-
-alias rgs="rg --type swift --type objc --type objcpp --glob '!Pods' --glob '!*.framework'"
+alias rgs="rg --type ios"
 alias rgw="rg -w"
 alias rga="rg -u"
 alias rgh="rg -uu --hidden"

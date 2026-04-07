@@ -323,12 +323,43 @@ fda() { f --no-ignore --hidden "$@" }
 fdf() { f -t f "$@" }
 fdd() { f -t d "$@" }
 
-alias ag='ag --color-path "3;32" --color-line-number "0;36" --color-match "1;31;40"'
+# --- rg
+
+rg() {
+    "$HOMEBREW_PREFIX/bin/rb" \
+        --colors 'path:style:italic' --colors 'path:fg:green' \
+        --colors 'line:style:nobold' --colors 'line:fg:cyan' \
+        --colors 'match:style:bold' --colors 'match:fg:red' --colors 'match:bg:black' \
+        "$@"
+}
+
+alias rgs="rg --type swift --type objc --type objcpp --glob '!Pods' --glob '!*.framework'"
+alias rgw="rg -w"
+alias rga="rg -u"
+alias rgh="rg -uu --hidden"
+alias rgl="rg -l"
+alias rgsw="rgs -w"
+
+rgst() {
+    rgsw " *(protocol|actor|struct|typealias|class) +$1"
+}
+
+rgc() {
+    rg -c "$@" | awk -F: 'BEGIN { c = 0 } { c += $2 } END { print "found:", c }'
+}
+
+# --- ag
+
+ag() {
+    new_cmd=${0/^ag/rg}
+    command echo "Using 'rg'. Consider ${new_cmd} instead" >&2
+    rg "$@"
+}
+
 alias agw="ag -w"
 alias aga="ag -u"
 alias agh="ag -U --hidden"
 alias agl="ag -l"
-
 
 agz() {
   ag "$@" $_shell_init_files

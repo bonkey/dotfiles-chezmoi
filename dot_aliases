@@ -325,7 +325,7 @@ fdd() { f -t d "$@" }
 
 # --- rg
 
-alias rgs="rg --type ios"
+alias rgs="rg -t ios"
 alias rgw="rg -w"
 alias rga="rg -u"
 alias rgh="rg -uu --hidden"
@@ -333,7 +333,7 @@ alias rgl="rg -l"
 alias rgsw="rgs -w"
 
 rgst() {
-    rgsw " *(protocol|actor|struct|typealias|class) +$1"
+    rgs " *(protocol|actor|struct|typealias|class) +$1"
 }
 
 rgc() {

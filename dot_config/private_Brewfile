@@ -32,6 +32,7 @@ brew 'peekaboo' # Lightning-fast macOS screenshots & AI vision analysis
 cask 'conductor' # Claude code parallelisation
 cask 'commander'
 cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
+cask 'vibe-island'
 
 # Shell and terminal
 brew 'atuin' # Improved shell history for zsh and bash

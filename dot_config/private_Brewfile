@@ -30,6 +30,7 @@ brew 'mistral-vibe' # Minimal CLI coding agent
 cask 'antigravity' # AI Coding Agent IDE
 brew 'peekaboo' # Lightning-fast macOS screenshots & AI vision analysis
 cask 'conductor' # Claude code parallelisation
+cask 'commander'
 cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
 
 # Shell and terminal

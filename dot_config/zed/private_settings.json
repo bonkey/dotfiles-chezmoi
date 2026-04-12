@@ -23,7 +23,7 @@
     "basic-memory-cloud": {
       "settings": {},
 
-      "enabled": true,
+      "enabled": false,
       "url": "https://cloud.basicmemory.com/mcp",
     },
     "Ref": {

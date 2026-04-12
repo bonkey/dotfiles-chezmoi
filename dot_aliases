@@ -1105,7 +1105,6 @@ jira-ticket-summary() {
 
   # Check if Jira setup is complete
   if [[ -z "${JIRA_SERVER}" || -z "${JIRA_USER}" || -z "${JIRA_API_TOKEN}" ]]; then
-    echo "No Jira setup"
     return
   fi
 

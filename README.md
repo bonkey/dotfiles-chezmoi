@@ -12,8 +12,16 @@ Check the latest command on https://brew.sh
 
 ## Setup brew in shell
 
+### Apple Silicon
+
 ```shell
-eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+### Intel
+
+```shell
+eval "$(/usr/local/bin/brew shellenv)"
 ```
 
 ## Install chezmoi
@@ -24,66 +32,31 @@ brew install chezmoi
 
 ## Configure chezmoi
 
-```shell
-mkdir -p ~/.config/chezmoi
-vi ~/.config/chezmoi/chezmoi.toml
-```
-
-`~/.config/chezmoi/chezmoi.toml`:
-
 ```toml
 [data]
-email = "XXXX"
-gpgkey = "XXXX"
+    email = "XXXX"
+    gpgkey = "XXXX"
 
 [edit]
-command = "zed"
-args = ["--wait", "--new"]
+    command = "zed"
+    args = ["--wait", "--new"]
 
 [git]
-autoCommit = true
-autoPush = true
+    autoCommit = true
+    autoPush = true
 
 [diff]
-exclude = ["scripts"]
+    exclude = ["scripts"]
 
 [[textconv]]
-pattern = "**/*.kmsync"
-command = "/bin/zsh"
-args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
+    pattern = "**/*.plist"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
 
-[hooks.edit.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.edit.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
-[hooks.re-add.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.re-add.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
-[hooks.apply.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.apply.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
-[hooks.update.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.update.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
+[[textconv]]
+    pattern = "**/*.kmsync"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
 ```
 
 ## Add ssh key from 1password

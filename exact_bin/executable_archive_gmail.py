@@ -31,6 +31,7 @@ import termios
 import tty
 import urllib.request
 from datetime import datetime, timedelta
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -389,8 +390,46 @@ def load_state(state_file: Path) -> dict:
     """Load processed message IDs from state file."""
     if state_file.exists():
         with open(state_file) as f:
-            return json.load(f)
-    return {"processed_ids": [], "last_run": None}
+            state = json.load(f)
+    else:
+        state = {}
+    state.setdefault("processed_ids", [])
+    state.setdefault("last_run", None)
+    # pending: list of {"msg_id": ..., "date": "YYYY-MM-DD"} entries for
+    # messages that had a transient failure and should be retried.
+    state.setdefault("pending", [])
+    return state
+
+
+def _msg_date_iso(msg_date: str) -> str | None:
+    """Parse an RFC2822 Date header into YYYY-MM-DD, or None on failure."""
+    try:
+        return parsedate_to_datetime(msg_date).strftime("%Y-%m-%d")
+    except (TypeError, ValueError):
+        return None
+
+
+def _add_pending(state: dict, msg_id: str, msg_date: str) -> None:
+    """Record a message as pending retry. Deduped by msg_id."""
+    date_iso = _msg_date_iso(msg_date) or datetime.now().strftime("%Y-%m-%d")
+    state["pending"] = [p for p in state.get("pending", []) if p.get("msg_id") != msg_id]
+    state["pending"].append({"msg_id": msg_id, "date": date_iso})
+
+
+def _clear_pending(state: dict, msg_id: str) -> None:
+    """Remove a message from the pending-retry list, if present."""
+    if not state.get("pending"):
+        return
+    state["pending"] = [p for p in state["pending"] if p.get("msg_id") != msg_id]
+
+
+def _oldest_pending_date(state: dict) -> str | None:
+    """Return the earliest pending date as YYYY/MM/DD, or None."""
+    pending = state.get("pending") or []
+    dates = [p.get("date") for p in pending if p.get("date")]
+    if not dates:
+        return None
+    return min(dates).replace("-", "/")
 
 
 def save_state(state: dict, state_file: Path):
@@ -466,8 +505,13 @@ def _ensure_dest_dir(rule: dict, dest_dir: Path) -> bool:
 
 def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
                                   subject: str, dest_dir: Path,
-                                  execute: bool) -> int:
-    """Download attachments from a Gmail message. Returns count."""
+                                  execute: bool) -> tuple[int, bool]:
+    """Download attachments from a Gmail message.
+
+    Returns ``(count, may_archive)`` where ``may_archive`` is False when a
+    transient failure (e.g. Gmail API returned no data) should leave the
+    message in the inbox for a retry next run.
+    """
     attachments = extract_attachments(full_msg.get("payload", {}))
     att_filter = rule.get("attachment_filter", r"\.pdf$")
     matched = [a for a in attachments
@@ -475,9 +519,10 @@ def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
 
     if not matched:
         print("    No matching attachments found.")
-        return 0
+        return 0, True  # nothing to do — archive so we don't keep revisiting
 
     count = 0
+    any_failed = False
     for att in matched:
         filename = compute_filename(rule, att["filename"], subject)
         dest_path = dest_dir / filename
@@ -490,10 +535,12 @@ def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
 
         if execute:
             if not _ensure_dest_dir(rule, dest_dir):
+                any_failed = True
                 continue
             data = gws_get_attachment(msg_id, att["attachmentId"])
             if data is None:
                 print("    ERROR: Failed to download attachment")
+                any_failed = True
                 continue
             existed = dest_path.exists()
             with open(dest_path, "wb") as f:
@@ -504,7 +551,7 @@ def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
         else:
             print(f"    DRY-RUN: Would download and save ({att.get('mimeType', 'unknown')})")
             count += 1
-    return count
+    return count, not any_failed
 
 
 def _get_html_body(payload: dict) -> str:
@@ -537,8 +584,13 @@ def _get_text_body(payload: dict) -> str:
 
 def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
                             subject: str, dest_dir: Path,
-                            execute: bool, state: dict) -> int:
-    """Download PDF via link found in email body. Returns count."""
+                            execute: bool, state: dict) -> tuple[int, bool]:
+    """Download PDF via link found in email body.
+
+    Returns ``(count, may_archive)`` — ``may_archive`` is False when the
+    download failed transiently (e.g. connection refused) so the message
+    stays in the inbox for a retry.
+    """
     html_body = _get_html_body(full_msg.get("payload", {}))
     text_body = _get_text_body(full_msg.get("payload", {}))
 
@@ -556,7 +608,7 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
             break
     if not urls:
         print("    No download link found in email.")
-        return 0
+        return 0, True  # permanent — no link will ever appear, archive it
 
     pdf_url = urls[0]
     print(f"    Link: {pdf_url[:80]}...")
@@ -587,19 +639,19 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
 
     if execute:
         if not _ensure_dest_dir(rule, dest_dir):
-            return 0
+            return 0, False  # filesystem error — retry later
         data = download_url(pdf_url)
         if data is None:
-            return 0
+            return 0, False  # network failure — retry later
         existed = dest_path.exists()
         with open(dest_path, "wb") as f:
             f.write(data)
         verb = "OVERWROTE" if existed else "SAVED"
         print(f"    {verb}: {dest_path} ({len(data):,} bytes)")
-        return 1
+        return 1, True
     else:
         print(f"    DRY-RUN: Would download PDF from link")
-        return 1
+        return 1, True
 
 
 # ---------------------------------------------------------------------------
@@ -623,23 +675,38 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
             print(f"  Query: {query}")
         messages = gws_triage(query)
 
-    if not messages:
-        print(f"── {rule['name']}: no messages")
+    # Post-filter: triage query is broad (no subject), so apply subject_regex
+    # and from filters here. Do it before the count print so the reported
+    # number reflects what will actually be processed.
+    filtered = [m for m in messages if matches_rule(rule, m["from"], m["subject"])]
+    dropped = len(messages) - len(filtered)
+    dropped_note = f" ({dropped} subject mismatch)" if dropped else ""
+
+    if not filtered:
+        print(f"── {rule['name']}: no messages{dropped_note}")
+        if dropped and VERBOSE:
+            for m in messages:
+                print(f"    dropped: {m['subject'][:70]}")
         return 0
 
-    print(f"── {rule['name']}: {len(messages)} message(s)")
+    print(f"── {rule['name']}: {len(filtered)} message(s){dropped_note}")
+    if dropped and VERBOSE:
+        kept_ids = {m["id"] for m in filtered}
+        for m in messages:
+            if m["id"] not in kept_ids:
+                print(f"    dropped: {m['subject'][:70]}")
     count = 0
     dest_dir = base_dir / rule["destination"]
+    pending_ids = {p["msg_id"] for p in state.get("pending", [])}
 
-    for msg in messages:
+    for msg in filtered:
         msg_id = msg["id"]
 
-        # Skip already processed (unless --force)
-        if not force and msg_id in state["processed_ids"]:
-            continue
-
-        # Double-check rule match (triage query is broad, verify subject)
-        if not matches_rule(rule, msg["from"], msg["subject"]):
+        # Skip already processed (unless --force or queued for retry).
+        # Pending retries take priority — they were left in inbox on purpose.
+        if not force and msg_id in state["processed_ids"] and msg_id not in pending_ids:
+            if VERBOSE:
+                print(f"    skipped (already processed): {msg['subject'][:60]}")
             continue
 
         print(f"\n  Message: {msg['subject'][:70]}")
@@ -668,14 +735,22 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
             continue  # skip label/archive until user confirms
         elif rule.get("link_download"):
             # --- Link-based download: extract URL from HTML email body ---
-            count += _process_link_download(
+            msg_count, may_archive = _process_link_download(
                 rule, full_msg, msg_id, subject, dest_dir, execute, state,
             )
         else:
             # --- Standard attachment download ---
-            count += _process_attachment_download(
+            msg_count, may_archive = _process_attachment_download(
                 rule, full_msg, msg_id, subject, dest_dir, execute,
             )
+        count += msg_count
+
+        # Transient failure: leave the message in the inbox and record it
+        # as pending so the next run rolls `since` back to include it.
+        if execute and not may_archive:
+            _add_pending(state, msg_id, msg["date"])
+            print(f"    PENDING: left in inbox, will retry next run")
+            continue
 
         # Label + archive + mark as read
         if execute and archive_label_id:
@@ -685,8 +760,10 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
                 print(f"    WARNING: Failed to label/archive email")
 
         # Mark as processed (only in execute mode)
-        if execute and msg_id not in state["processed_ids"]:
-            state["processed_ids"].append(msg_id)
+        if execute:
+            _clear_pending(state, msg_id)
+            if msg_id not in state["processed_ids"]:
+                state["processed_ids"].append(msg_id)
 
     return count
 
@@ -944,6 +1021,13 @@ def cmd_run(args):
         since = state["last_run"].replace("-", "/")
     else:
         since = (datetime.now() - timedelta(days=DEFAULT_SINCE_DAYS)).strftime("%Y/%m/%d")
+
+    # Roll `since` back if there are older pending retries — ensures the
+    # Gmail triage query still covers any message left over from last run.
+    pending_since = _oldest_pending_date(state)
+    if pending_since and pending_since < since:
+        print(f"Rolling since back to {pending_since} for {len(state['pending'])} pending retry(s)")
+        since = pending_since
 
     print(f"Gmail Attachment Archiver")
     print(f"Since: {since}")

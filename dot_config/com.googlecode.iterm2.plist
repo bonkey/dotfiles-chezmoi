@@ -6437,7 +6437,7 @@
 			<key>Set Local Environment Vars</key>
 			<integer>2</integer>
 			<key>Shortcut</key>
-			<string>W</string>
+			<string>T</string>
 			<key>Show Status Bar</key>
 			<true/>
 			<key>Show Timestamps</key>

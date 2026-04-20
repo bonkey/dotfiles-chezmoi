@@ -19,7 +19,6 @@ tap 'mvp/uhubctl', 'https://github.com/mvp/uhubctl'
 tap 'samwho/spacer'
 tap 'steipete/tap'
 tap 'ycd/tap'
-tap 'michel-kraemer/zsh-patina'
 
 # AI and coding agents
 brew 'ollama' # Create, run, and share large language models (LLMs)
@@ -50,7 +49,7 @@ brew 'zoxide' # Shell extension to navigate your filesystem faster
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 brew 'mole'
-brew 'zsh-patina/zsh-patina'
+brew 'michel-kraemer/zsh-patina/zsh-patina'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting

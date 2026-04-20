@@ -50,7 +50,7 @@ brew 'zoxide' # Shell extension to navigate your filesystem faster
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 brew 'mole'
-brew 'zsh-patina'
+brew 'zsh-patina/zsh-patina'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting

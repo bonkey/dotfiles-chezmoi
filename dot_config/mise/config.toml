@@ -74,7 +74,6 @@ idiomatic_version_file_enable_tools = ["ruby", "python", "node"]
 
 trusted_config_paths = [
     '~/Projects',
-    '~/conductor',
     '~/.superset/worktrees/',
     '~/.codex/worktrees/',
 ]

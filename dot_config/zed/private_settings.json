@@ -2,6 +2,12 @@
   // ================================
   // CONTEXT SERVERS
   // ================================
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "focus_follows_mouse": {
+    "enabled": true
+  },
   "agent_servers": {
     "codex-acp": {
       "type": "registry",

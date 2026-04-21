@@ -2,6 +2,8 @@
 
 set +o pipefail
 
+source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
 if command -v atuin &> /dev/null; then

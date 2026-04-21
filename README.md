@@ -24,6 +24,11 @@ brew install chezmoi
 
 ## Configure chezmoi
 
+```shell
+mkdir -p ~/.config/chezmoi
+vi ~/.config/chezmoi/chezmoi.toml
+```
+
 ```toml
 [data]
     email = "XXXX"

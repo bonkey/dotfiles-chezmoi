@@ -16,10 +16,11 @@ Check the latest command on https://brew.sh
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
-## Install chezmoi
+## Install chezmoi and basic tools
 
 ```shell
-brew install chezmoi 1password-cli
+brew install chezmoi 1password-cli mise gh
+gh auth login
 ```
 
 ## Configure chezmoi

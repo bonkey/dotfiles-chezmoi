@@ -12,16 +12,8 @@ Check the latest command on https://brew.sh
 
 ## Setup brew in shell
 
-### Apple Silicon
-
 ```shell
 eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-### Intel
-
-```shell
-eval "$(/usr/local/bin/brew shellenv)"
 ```
 
 ## Install chezmoi

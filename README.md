@@ -19,7 +19,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 ## Install chezmoi
 
 ```shell
-brew install chezmoi
+brew install chezmoi 1password-cli
 ```
 
 ## Configure chezmoi
@@ -87,11 +87,6 @@ args = ["restore"]
 
 1. Install 1password
 2. Enable CLI and SSH in Developer settings
-3. Install CLI
-
-```shell
-brew install 1password-cli
-```
 
 ## Install dotfiles & run scripts
 

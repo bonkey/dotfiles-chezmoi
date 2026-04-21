@@ -12,82 +12,62 @@ Check the latest command on https://brew.sh
 
 ## Setup brew in shell
 
+### Apple Silicon
+
 ```shell
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
-## Install chezmoi and basic tools
+### Intel
 
 ```shell
-brew install chezmoi 1password-cli mise gh
-gh auth login
+eval "$(/usr/local/bin/brew shellenv)"
+```
+
+## Install chezmoi
+
+```shell
+brew install chezmoi
 ```
 
 ## Configure chezmoi
 
-```shell
-mkdir -p ~/.config/chezmoi
-vi ~/.config/chezmoi/chezmoi.toml
-```
-
 ```toml
 [data]
-email = "xxx@yyy.zzz"
-gpgkey = "XXX"
+    email = "XXXX"
+    gpgkey = "XXXX"
 
 [edit]
-command = "zed"
-args = ["--wait", "--new"]
+    command = "zed"
+    args = ["--wait", "--new"]
 
 [git]
-autoCommit = true
-autoPush = true
+    autoCommit = true
+    autoPush = true
 
 [diff]
-exclude = ["scripts"]
+    exclude = ["scripts"]
 
 [[textconv]]
-pattern = "**/*.kmsync"
-command = "/bin/zsh"
-args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
+    pattern = "**/*.plist"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
 
-[hooks.edit.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.edit.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
-[hooks.re-add.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.re-add.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
-[hooks.apply.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.apply.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
-
-[hooks.update.pre]
-command = "bin/secrets-scrubber.py"
-args = ["scrub"]
-
-[hooks.update.post]
-command = "bin/secrets-scrubber.py"
-args = ["restore"]
+[[textconv]]
+    pattern = "**/*.kmsync"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
 ```
 
 ## Add ssh key from 1password
 
 1. Install 1password
 2. Enable CLI and SSH in Developer settings
+3. Install CLI
+
+```shell
+brew install 1password-cli
+```
 
 ## Install dotfiles & run scripts
 

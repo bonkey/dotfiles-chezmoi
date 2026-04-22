@@ -3,10 +3,10 @@
   // CONTEXT SERVERS
   // ================================
   "session": {
-    "trust_all_worktrees": true
+    "trust_all_worktrees": true,
   },
   "focus_follows_mouse": {
-    "enabled": true
+    "enabled": true,
   },
   "agent_servers": {
     "codex-acp": {
@@ -80,43 +80,43 @@
   "agent": {
     "tool_permissions": {
       "default": "allow",
-      "tools": {}
+      "tools": {},
     },
     "profiles": {
       "yolo": {
         "name": "YOLO",
         "tools": {},
         "enable_all_context_servers": false,
-        "context_servers": {}
-      }
+        "context_servers": {},
+      },
     },
     "default_profile": "write",
     "favorite_models": [
       {
         "provider": "google",
         "model": "gemini-3-flash-preview",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "google",
         "model": "gemini-3-pro-preview",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "openai",
         "model": "gpt-5.4",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "openai",
         "model": "gpt-5.3-codex",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "copilot_chat",
         "model": "gpt-5.4",
-        "enable_thinking": false
-      }
+        "enable_thinking": false,
+      },
     ],
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -180,7 +180,7 @@
   // ================================
   "theme": {
     "mode": "system",
-    "dark": "Zedokai Darker (Filter Spectrum)",
+    "dark": "Zedokai Darker (Filter Ristretto)",
     "light": "Zedokai Light",
   },
   "colorize_brackets": true,

@@ -76,7 +76,4 @@ if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
 fi
 
-tsrc "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh)"
-
 # vim:set ft=zsh:

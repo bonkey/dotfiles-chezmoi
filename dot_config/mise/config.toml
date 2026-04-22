@@ -3,8 +3,8 @@ UV_NATIVE_TLS = "true"
 
 [tools]
 # Runtime languages
-python = "3.12"
-ruby = "3.3"
+python = "3.14"
+ruby = "4.0"
 node = "latest"
 bun = "latest"
 

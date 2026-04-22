@@ -50,6 +50,7 @@ cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acce
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 brew 'mole'
 brew 'michel-kraemer/zsh-patina/zsh-patina'
+brew 'duf'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting

@@ -177,15 +177,15 @@ z() {
   fi
 }
 
-Cll() {
+CC() {
     claude --dangerously-skip-permissions "$@"
 }
 
-Coo() {
+OC() {
     opencode "$@"
 }
 
-Cxx() {
+CX() {
     codex --dangerously-bypass-approvals-and-sandbox "$@"
 }
 

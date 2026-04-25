@@ -233,31 +233,27 @@ man() {
 
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
 
-cvz() {
+Cvz() {
     ced $(eval "echo $_shell_init_files")
     exit
 }
 
-cem() {
+Cem() {
     ced $HOME/.config/mise/config.toml
     mise up
 }
 
-ceb() {
+Ceb() {
     ced $HOME/.config/Brewfile
 }
 
-cea() {
+Cea() {
     ced $HOME/.aliases
     exit
 }
 
-ceo() {
+Ceo() {
     ced $HOME/.config/opencode/opencode.json
-}
-
-ceom() {
-    ced $HOME/.config/opencode/scripts/oc-mcp.py
 }
 
 

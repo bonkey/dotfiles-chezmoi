@@ -3,7 +3,7 @@
     "opencode-openai-codex-auth@latest",
     "@plannotator/opencode@latest",
     "@franlol/opencode-md-table-formatter@latest",
-    "@mohak34/opencode-notifier@latest"
+    "@morphllm/opencode-morph-plugin"
   ],
   "disabled_providers": [
     "anthropic",
@@ -131,7 +131,7 @@
         "mcp"
       ],
       "type": "local",
-      "enabled": false
+      "enabled": true
     },
     "shellwright": {
       "command": [
@@ -194,7 +194,31 @@
       ],
       "type": "local",
       "enabled": true
+    },
+    "shadcn": {
+      "command": [
+        "npx",
+        "shadcn@latest",
+        "mcp"
+      ],
+      "type": "local",
+      "enabled": true
+    },
+    "morph": {
+      "command": [
+        "npx",
+        "-y",
+        "@morphllm/morphmcp"
+      ],
+      "type": "local",
+      "environment": {
+        "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
+      },
+      "enabled": true
     }
   },
-  "$schema": "https://opencode.ai/config.json"
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
+  ]
 }

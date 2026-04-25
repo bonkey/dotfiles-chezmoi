@@ -9,6 +9,8 @@
     "web-dev": ["shadcn", "vibium"],
     "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud", "xcode-instruments"],
 
+    "code-search": ["morph"],
+
     "ui-automation": ["peekaboo"],
 
     "docs": ["ref", "tavily", "deepwiki"],
@@ -87,6 +89,13 @@
       "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
         "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+      }
+    },
+    "morph": {
+      "type": "local",
+      "command": ["npx", "-y", "@morphllm/morphmcp"],
+      "environment": {
+        "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       }
     },
     "deepwiki": {

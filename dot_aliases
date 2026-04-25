@@ -261,7 +261,7 @@ Cea() {
 }
 
 Ceo() {
-    ced $HOME/.config/opencode
+    ced $HOME/.config/opencode.json
 }
 
 

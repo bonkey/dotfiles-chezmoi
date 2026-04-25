@@ -5,35 +5,50 @@
     "@franlol/opencode-md-table-formatter@latest",
     "@mohak34/opencode-notifier@latest"
   ],
-  "disabled_providers": ["anthropic", "openrouter", "perplexity"],
+  "disabled_providers": [
+    "anthropic",
+    "openrouter",
+    "perplexity"
+  ],
   "formatter": {
     "swiftformat": {
-      "command": ["swiftformat", "$FILE"],
-      "extensions": [".swift"]
+      "command": [
+        "swiftformat",
+        "$FILE"
+      ],
+      "extensions": [
+        ".swift"
+      ]
     }
   },
   "mcp": {
     "ref": {
+      "command": [
+        "npx",
+        "ref-tools-mcp@latest"
+      ],
       "type": "local",
-      "command": ["npx", "ref-tools-mcp@latest"],
       "environment": {
         "REF_API_KEY": "<REF_API_KEY_REDACTED>"
       },
       "enabled": true
     },
     "chunkhound": {
+      "command": [
+        "chunkhound",
+        "mcp"
+      ],
       "type": "local",
-      "command": ["chunkhound", "mcp"],
-      "enabled": true
+      "enabled": false
     },
     "tavily": {
-      "type": "remote",
       "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
+      "type": "remote",
       "enabled": true
     },
     "basic-memory-cloud": {
-      "type": "remote",
       "url": "https://cloud.basicmemory.com/mcp",
+      "type": "remote",
       "enabled": true
     },
     "atlassian": {
@@ -42,80 +57,117 @@
       "enabled": false
     },
     "sosumi": {
-      "type": "remote",
       "url": "https://sosumi.ai/mcp",
+      "type": "remote",
       "enabled": true
     },
     "serena": {
       "type": "local",
-      "command": ["uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"],
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ],
       "enabled": true
     },
     "mobile-mcp": {
-      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "@mobilenext/mobile-mcp@latest"
+      ],
       "type": "local",
-      "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
+      "enabled": true
     },
     "simctl": {
-      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "simctl-mcp"
+      ],
       "type": "local",
-      "command": ["npx", "-y", "simctl-mcp"]
+      "enabled": true
     },
     "xcodebuild": {
       "enabled": true,
       "type": "local",
-      "command": ["npx", "-y", "xcodebuildmcp@latest"],
+      "command": [
+        "npx",
+        "-y",
+        "xcodebuildmcp@latest"
+      ],
       "environment": {
         "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
         "INCREMENTAL_BUILDS_ENABLED": "true"
       }
     },
     "xcstrings-crud": {
+      "command": [
+        "xcstrings-crud",
+        "mcp"
+      ],
       "type": "local",
-      "command": ["xcstrings-crud", "mcp"],
       "enabled": true
     },
     "peekaboo": {
-      "enabled": true,
+      "command": [
+        "peekaboo",
+        "mcp"
+      ],
       "type": "local",
-      "command": ["peekaboo", "mcp"],
       "environment": {
         "PEEKABOO_AI_PROVIDERS": "openai/gpt-4.1",
         "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
-      }
+      },
+      "enabled": true
     },
     "vibium": {
-      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "vibium",
+        "mcp"
+      ],
       "type": "local",
-      "command": ["npx", "-y", "vibium"]
+      "enabled": false
     },
     "shellwright": {
-      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "@dwmkerr/shellwright"
+      ],
       "type": "local",
-      "command": ["npx", "-y", "@dwmkerr/shellwright"]
+      "enabled": false
     },
     "firecrawl": {
-      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "firecrawl-mcp"
+      ],
       "type": "local",
-      "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
         "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
-      }
+      },
+      "enabled": true
     },
     "deepwiki": {
-      "enabled": true,
+      "url": "https://mcp.deepwiki.com/mcp",
       "type": "remote",
-      "url": "https://mcp.deepwiki.com/mcp"
+      "enabled": true
     },
     "exa": {
-      "enabled": true,
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>",
       "type": "remote",
-      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
+      "enabled": true
     },
     "linear": {
-      "type": "remote",
       "url": "https://mcp.linear.app/mcp",
-      "enabled": false
+      "type": "remote",
+      "enabled": true
     },
     "pencil": {
       "command": [
@@ -125,6 +177,23 @@
       ],
       "enabled": true,
       "type": "local"
+    },
+    "swiftlens": {
+      "command": [
+        "uvx",
+        "swiftlens"
+      ],
+      "type": "local",
+      "enabled": true
+    },
+    "xcode-instruments": {
+      "command": [
+        "npx",
+        "-y",
+        "instrumentsmcp@latest"
+      ],
+      "type": "local",
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json"

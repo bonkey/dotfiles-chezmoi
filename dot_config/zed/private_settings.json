@@ -2,11 +2,18 @@
   // ================================
   // CONTEXT SERVERS
   // ================================
-  "session": {
-    "trust_all_worktrees": true,
+  "cli_default_open_behavior": "new_window",
+  "project_panel": {
+    "dock": "left"
   },
-  "focus_follows_mouse": {
-    "enabled": true,
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "auto_update_extensions": {
+    "jsonl": false
   },
   "agent_servers": {
     "codex-acp": {
@@ -27,8 +34,6 @@
   },
   "context_servers": {
     "basic-memory-cloud": {
-      "settings": {},
-
       "enabled": false,
       "url": "https://cloud.basicmemory.com/mcp",
     },
@@ -80,15 +85,15 @@
   "agent": {
     "tool_permissions": {
       "default": "allow",
-      "tools": {},
+      "tools": {}
     },
     "profiles": {
       "yolo": {
         "name": "YOLO",
         "tools": {},
         "enable_all_context_servers": false,
-        "context_servers": {},
-      },
+        "context_servers": {}
+      }
     },
     "default_profile": "write",
     "favorite_models": [
@@ -112,11 +117,6 @@
         "model": "gpt-5.3-codex",
         "enable_thinking": false,
       },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.4",
-        "enable_thinking": false,
-      },
     ],
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -127,9 +127,8 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "effort": "high",
       "enable_thinking": false,
-      "provider": "copilot_chat",
+      "provider": "openai",
       "model": "gpt-5.4",
     },
     "commit_message_model": {
@@ -180,7 +179,7 @@
   // ================================
   "theme": {
     "mode": "system",
-    "dark": "Zedokai Darker (Filter Ristretto)",
+    "dark": "Zedokai Darker (Filter Spectrum)",
     "light": "Zedokai Light",
   },
   "colorize_brackets": true,
@@ -237,7 +236,7 @@
     "show": "auto",
   },
   "title_bar": {
-    "show_branch_icon": true,
+    "show_branch_status_icon": true,
     "show_branch_name": true,
     "show_project_items": true,
     "show_onboarding_banner": true,

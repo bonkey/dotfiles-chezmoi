@@ -38,8 +38,6 @@ handle_result() {
 
 stop_apps
 
-export GITHUB_ACCESS_TOKEN=$GITHUB_ACCESS_TOKEN
-
 chezmoi update
 CHEZMOI_EXIT_CODE=$?
 

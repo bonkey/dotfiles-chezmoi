@@ -13,8 +13,6 @@ uv = "latest"
 pipx = "latest"
 
 # Swift development
-swiftformat = "latest"
-swiftlint = "latest"
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
 
 # Python CLI tools

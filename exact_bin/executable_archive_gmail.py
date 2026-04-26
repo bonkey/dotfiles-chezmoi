@@ -60,6 +60,7 @@ def _log_stream():
 
 def _shlex_join(cmd: list[str]) -> str:
     import shlex
+
     return " ".join(shlex.quote(c) for c in cmd)
 
 
@@ -101,6 +102,7 @@ def _get_filename_rules() -> list[dict]:
     """Return filename_rules from config: [{pattern, destination}, ...]."""
     return _load_config().get("filename_rules", [])
 
+
 # ---------------------------------------------------------------------------
 # gws CLI wrappers
 # ---------------------------------------------------------------------------
@@ -109,9 +111,15 @@ def _get_filename_rules() -> list[dict]:
 def gws_check_auth():
     """Verify gws Gmail authentication works. Exit with a clear message if not."""
     cmd = [
-        "gws", "gmail", "users", "labels", "list",
-        "--params", json.dumps({"userId": "me"}),
-        "--format", "json",
+        "gws",
+        "gmail",
+        "users",
+        "labels",
+        "list",
+        "--params",
+        json.dumps({"userId": "me"}),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
@@ -125,9 +133,13 @@ def gws_check_auth():
 def gws_triage(query: str, max_results: int = 100) -> list[dict]:
     """Run gws gmail +triage and return list of {id, from, subject, date}."""
     cmd = [
-        "gws", "gmail", "+triage",
-        "--query", query,
-        "--max", str(max_results),
+        "gws",
+        "gmail",
+        "+triage",
+        "--query",
+        query,
+        "--max",
+        str(max_results),
     ]
     result = _run(cmd, timeout=120)
     if result.returncode != 0:
@@ -141,21 +153,29 @@ def gws_triage(query: str, max_results: int = 100) -> list[dict]:
         # Parse the table output: columns separated by 2+ spaces
         parts = re.split(r" {2,}", line.strip())
         if len(parts) >= 4:
-            messages.append({
-                "date": parts[0].strip(),
-                "from": parts[1].strip(),
-                "id": parts[2].strip(),
-                "subject": parts[3].strip(),
-            })
+            messages.append(
+                {
+                    "date": parts[0].strip(),
+                    "from": parts[1].strip(),
+                    "id": parts[2].strip(),
+                    "subject": parts[3].strip(),
+                }
+            )
     return messages
 
 
 def gws_get_message(msg_id: str) -> dict:
     """Get full message JSON including attachment metadata."""
     cmd = [
-        "gws", "gmail", "users", "messages", "get",
-        "--params", json.dumps({"userId": "me", "id": msg_id}),
-        "--format", "json",
+        "gws",
+        "gmail",
+        "users",
+        "messages",
+        "get",
+        "--params",
+        json.dumps({"userId": "me", "id": msg_id}),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=60)
     if result.returncode != 0:
@@ -167,13 +187,22 @@ def gws_get_message(msg_id: str) -> dict:
 def gws_get_attachment(msg_id: str, attachment_id: str) -> bytes | None:
     """Download attachment and return raw bytes."""
     cmd = [
-        "gws", "gmail", "users", "messages", "attachments", "get",
-        "--params", json.dumps({
-            "userId": "me",
-            "messageId": msg_id,
-            "id": attachment_id,
-        }),
-        "--format", "json",
+        "gws",
+        "gmail",
+        "users",
+        "messages",
+        "attachments",
+        "get",
+        "--params",
+        json.dumps(
+            {
+                "userId": "me",
+                "messageId": msg_id,
+                "id": attachment_id,
+            }
+        ),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=120)
     if result.returncode != 0:
@@ -198,9 +227,15 @@ def gws_modify_message(msg_id: str, add_labels: list[str], remove_labels: list[s
         body["removeLabelIds"] = remove_labels
 
     cmd = [
-        "gws", "gmail", "users", "messages", "modify",
-        "--params", json.dumps({"userId": "me", "id": msg_id}),
-        "--json", json.dumps(body),
+        "gws",
+        "gmail",
+        "users",
+        "messages",
+        "modify",
+        "--params",
+        json.dumps({"userId": "me", "id": msg_id}),
+        "--json",
+        json.dumps(body),
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
@@ -212,18 +247,29 @@ def gws_modify_message(msg_id: str, add_labels: list[str], remove_labels: list[s
 def gws_create_label(label_name: str) -> str | None:
     """Create a Gmail label and return its ID."""
     cmd = [
-        "gws", "gmail", "users", "labels", "create",
-        "--params", json.dumps({"userId": "me"}),
-        "--json", json.dumps({
-            "name": label_name,
-            "labelListVisibility": "labelShow",
-            "messageListVisibility": "show",
-        }),
-        "--format", "json",
+        "gws",
+        "gmail",
+        "users",
+        "labels",
+        "create",
+        "--params",
+        json.dumps({"userId": "me"}),
+        "--json",
+        json.dumps(
+            {
+                "name": label_name,
+                "labelListVisibility": "labelShow",
+                "messageListVisibility": "show",
+            }
+        ),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
-        print(f"  ERROR: Failed to create label '{label_name}': {result.stderr.strip()}")
+        print(
+            f"  ERROR: Failed to create label '{label_name}': {result.stderr.strip()}"
+        )
         return None
     data = json.loads(result.stdout)
     return data.get("id")
@@ -232,9 +278,15 @@ def gws_create_label(label_name: str) -> str | None:
 def gws_find_label_id(label_name: str) -> str | None:
     """Find a label ID by name, creating it if it doesn't exist."""
     cmd = [
-        "gws", "gmail", "users", "labels", "list",
-        "--params", json.dumps({"userId": "me"}),
-        "--format", "json",
+        "gws",
+        "gmail",
+        "users",
+        "labels",
+        "list",
+        "--params",
+        json.dumps({"userId": "me"}),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
@@ -255,9 +307,12 @@ def download_url(url: str) -> bytes | None:
     if VERBOSE:
         print(f"  GET {url}", file=out)
     try:
-        req = urllib.request.Request(url, headers={
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-        })
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+            },
+        )
         with urllib.request.urlopen(req, timeout=30) as resp:
             data = resp.read()
         if VERBOSE:
@@ -284,11 +339,13 @@ def extract_attachments(payload: dict) -> list[dict]:
     filename = payload.get("filename", "")
     attachment_id = payload.get("body", {}).get("attachmentId", "")
     if filename and attachment_id:
-        attachments.append({
-            "filename": filename,
-            "attachmentId": attachment_id,
-            "mimeType": payload.get("mimeType", ""),
-        })
+        attachments.append(
+            {
+                "filename": filename,
+                "attachmentId": attachment_id,
+                "mimeType": payload.get("mimeType", ""),
+            }
+        )
     for part in payload.get("parts", []):
         attachments.extend(extract_attachments(part))
     return attachments
@@ -313,11 +370,6 @@ def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
     # Check 'from' (exact match on email address)
     if "from" in rule:
         if rule["from"].lower() not in msg_from.lower():
-            return False
-
-    # Check 'from_contains' (partial match)
-    if "from_contains" in rule:
-        if rule["from_contains"].lower() not in msg_from.lower():
             return False
 
     # Check 'subject_regex' (None means match any).
@@ -412,7 +464,9 @@ def _msg_date_iso(msg_date: str) -> str | None:
 def _add_pending(state: dict, msg_id: str, msg_date: str) -> None:
     """Record a message as pending retry. Deduped by msg_id."""
     date_iso = _msg_date_iso(msg_date) or datetime.now().strftime("%Y-%m-%d")
-    state["pending"] = [p for p in state.get("pending", []) if p.get("msg_id") != msg_id]
+    state["pending"] = [
+        p for p in state.get("pending", []) if p.get("msg_id") != msg_id
+    ]
     state["pending"].append({"msg_id": msg_id, "date": date_iso})
 
 
@@ -459,8 +513,9 @@ def _read_single_key() -> str:
     return ch
 
 
-def _scan_downloads_recent(extensions: tuple = (".pdf",),
-                           max_age_minutes: int = 90) -> list[dict]:
+def _scan_downloads_recent(
+    extensions: tuple = (".pdf",), max_age_minutes: int = 90
+) -> list[dict]:
     """Scan ~/Downloads for recently created files.
 
     Returns files matching the extension created within the last max_age_minutes,
@@ -477,15 +532,15 @@ def _scan_downloads_recent(extensions: tuple = (".pdf",),
         if not any(f.name.lower().endswith(ext) for ext in extensions):
             continue
         stat = f.stat()
-        created = datetime.fromtimestamp(
-            getattr(stat, "st_birthtime", stat.st_mtime)
-        )
+        created = datetime.fromtimestamp(getattr(stat, "st_birthtime", stat.st_mtime))
         if created >= cutoff:
-            candidates.append({
-                "path": f,
-                "created": created,
-                "size": stat.st_size,
-            })
+            candidates.append(
+                {
+                    "path": f,
+                    "created": created,
+                    "size": stat.st_size,
+                }
+            )
 
     candidates.sort(key=lambda c: c["created"], reverse=True)
     return candidates
@@ -503,9 +558,9 @@ def _ensure_dest_dir(rule: dict, dest_dir: Path) -> bool:
     return False
 
 
-def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
-                                  subject: str, dest_dir: Path,
-                                  execute: bool) -> tuple[int, bool]:
+def _process_attachment_download(
+    rule: dict, full_msg: dict, msg_id: str, subject: str, dest_dir: Path, execute: bool
+) -> tuple[int, bool]:
     """Download attachments from a Gmail message.
 
     Returns ``(count, may_archive)`` where ``may_archive`` is False when a
@@ -514,8 +569,9 @@ def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
     """
     attachments = extract_attachments(full_msg.get("payload", {}))
     att_filter = rule.get("attachment_filter", r"\.pdf$")
-    matched = [a for a in attachments
-               if re.search(att_filter, a["filename"], re.IGNORECASE)]
+    matched = [
+        a for a in attachments if re.search(att_filter, a["filename"], re.IGNORECASE)
+    ]
 
     if not matched:
         print("    No matching attachments found.")
@@ -549,7 +605,9 @@ def _process_attachment_download(rule: dict, full_msg: dict, msg_id: str,
             print(f"    {verb}: {dest_path} ({len(data):,} bytes)")
             count += 1
         else:
-            print(f"    DRY-RUN: Would download and save ({att.get('mimeType', 'unknown')})")
+            print(
+                f"    DRY-RUN: Would download and save ({att.get('mimeType', 'unknown')})"
+            )
             count += 1
     return count, not any_failed
 
@@ -560,7 +618,9 @@ def _get_html_body(payload: dict) -> str:
     if mime == "text/html":
         data = payload.get("body", {}).get("data", "")
         if data:
-            return base64.urlsafe_b64decode(data + "==").decode("utf-8", errors="replace")
+            return base64.urlsafe_b64decode(data + "==").decode(
+                "utf-8", errors="replace"
+            )
     for part in payload.get("parts", []):
         result = _get_html_body(part)
         if result:
@@ -574,7 +634,9 @@ def _get_text_body(payload: dict) -> str:
     if mime == "text/plain":
         data = payload.get("body", {}).get("data", "")
         if data:
-            return base64.urlsafe_b64decode(data + "==").decode("utf-8", errors="replace")
+            return base64.urlsafe_b64decode(data + "==").decode(
+                "utf-8", errors="replace"
+            )
     for part in payload.get("parts", []):
         result = _get_text_body(part)
         if result:
@@ -582,9 +644,15 @@ def _get_text_body(payload: dict) -> str:
     return ""
 
 
-def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
-                            subject: str, dest_dir: Path,
-                            execute: bool, state: dict) -> tuple[int, bool]:
+def _process_link_download(
+    rule: dict,
+    full_msg: dict,
+    msg_id: str,
+    subject: str,
+    dest_dir: Path,
+    execute: bool,
+    state: dict,
+) -> tuple[int, bool]:
     """Download PDF via link found in email body.
 
     Returns ``(count, may_archive)`` — ``may_archive`` is False when the
@@ -659,11 +727,17 @@ def _process_link_download(rule: dict, full_msg: dict, msg_id: str,
 # ---------------------------------------------------------------------------
 
 
-def process_rule(rule: dict, since: str, execute: bool, state: dict,
-                 archive_label_id: str | None, base_dir: Path,
-                 manual_pending: list | None = None,
-                 force: bool = False,
-                 messages: list[dict] | None = None) -> int:
+def process_rule(
+    rule: dict,
+    since: str,
+    execute: bool,
+    state: dict,
+    archive_label_id: str | None,
+    base_dir: Path,
+    manual_pending: list | None = None,
+    force: bool = False,
+    messages: list[dict] | None = None,
+) -> int:
     """Process a single rule. Returns number of attachments handled.
 
     If ``messages`` is provided (e.g. pre-fetched in parallel), the triage
@@ -723,25 +797,38 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
 
         if rule.get("manual_portal"):
             # --- Manual portal: collect for end-of-run summary ---
-            manual_pending.append({
-                "rule_name": rule["name"],
-                "portal_url": rule.get("portal_url", ""),
-                "destination": rule["destination"],
-                "subject": subject,
-                "date": msg["date"],
-                "msg_id": msg_id,
-            })
+            manual_pending.append(
+                {
+                    "rule_name": rule["name"],
+                    "portal_url": rule.get("portal_url", ""),
+                    "destination": rule["destination"],
+                    "subject": subject,
+                    "date": msg["date"],
+                    "msg_id": msg_id,
+                }
+            )
             print(f"    Portal login required — will prompt at end of run")
             continue  # skip label/archive until user confirms
         elif rule.get("link_download"):
             # --- Link-based download: extract URL from HTML email body ---
             msg_count, may_archive = _process_link_download(
-                rule, full_msg, msg_id, subject, dest_dir, execute, state,
+                rule,
+                full_msg,
+                msg_id,
+                subject,
+                dest_dir,
+                execute,
+                state,
             )
         else:
             # --- Standard attachment download ---
             msg_count, may_archive = _process_attachment_download(
-                rule, full_msg, msg_id, subject, dest_dir, execute,
+                rule,
+                full_msg,
+                msg_id,
+                subject,
+                dest_dir,
+                execute,
             )
         count += msg_count
 
@@ -771,7 +858,7 @@ def process_rule(rule: dict, since: str, execute: bool, state: dict,
 def cmd_list_rules():
     """List all rules and exit."""
     print(f"{'#':<3} {'Name':<25} {'Destination':<40}")
-    print(f"{'-'*3} {'-'*25} {'-'*40}")
+    print(f"{'-' * 3} {'-' * 25} {'-' * 40}")
     for i, rule in enumerate(_get_rules(), 1):
         print(f"{i:<3} {rule['name']:<25} {rule['destination']:<40}")
 
@@ -817,26 +904,31 @@ def _keyword_matches(keyword: str, text_lower: str) -> bool:
     word-boundary matching to avoid substring false positives."""
     kw_lower = keyword.lower()
     if len(keyword) <= 4:
-        return bool(re.search(r'\b' + re.escape(kw_lower) + r'\b', text_lower))
+        return bool(re.search(r"\b" + re.escape(kw_lower) + r"\b", text_lower))
     return kw_lower in text_lower
 
 
 def _extract_year(text: str, filename: str) -> str | None:
     """Extract a 4-digit year from PDF text or filename."""
     # Try common date patterns in text: DD.MM.YYYY, YYYY-MM-DD, Month YYYY
-    for pattern in [r'\b(\d{4})-\d{2}-\d{2}\b', r'\b\d{2}\.\d{2}\.(\d{4})\b',
-                    r'\b(?:Jan|Feb|Mär|Apr|Mai|Jun|Jul|Aug|Sep|Okt|Nov|Dez)\w*\s+(\d{4})\b',
-                    r'\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*[\s-](\d{4})\b']:
+    for pattern in [
+        r"\b(\d{4})-\d{2}-\d{2}\b",
+        r"\b\d{2}\.\d{2}\.(\d{4})\b",
+        r"\b(?:Jan|Feb|Mär|Apr|Mai|Jun|Jul|Aug|Sep|Okt|Nov|Dez)\w*\s+(\d{4})\b",
+        r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\w*[\s-](\d{4})\b",
+    ]:
         m = re.search(pattern, text, re.IGNORECASE)
         if m:
             return m.group(1)
     # Fallback: year from filename
-    m = re.search(r'(\d{4})', filename)
+    m = re.search(r"(\d{4})", filename)
     return m.group(1) if m else None
 
 
-def classify_file(path: Path, keyword_index: list[tuple[str, list[str]]],
-                  ) -> list[tuple[str, int, list[str]]]:
+def classify_file(
+    path: Path,
+    keyword_index: list[tuple[str, list[str]]],
+) -> list[tuple[str, int, list[str]]]:
     """Score a file against all keyword sets.
 
     Returns list of (destination, score, matched_keywords) sorted by score desc.
@@ -882,15 +974,19 @@ def cmd_scan_inbox(args):
 
     filename_rules = _get_filename_rules()
     keyword_index = _build_keyword_index()
-    print(f"Loaded {len(filename_rules)} filename rules, {len(keyword_index)} keyword targets\n")
+    print(
+        f"Loaded {len(filename_rules)} filename rules, {len(keyword_index)} keyword targets\n"
+    )
 
     # Collect files (skip directories)
     files = sorted(
-        f for f in inbox.iterdir()
+        f
+        for f in inbox.iterdir()
         if f.is_file() and f.suffix.lower() in SUPPORTED_EXTENSIONS
     )
     other_files = sorted(
-        f for f in inbox.iterdir()
+        f
+        for f in inbox.iterdir()
         if f.is_file() and f.suffix.lower() not in SUPPORTED_EXTENSIONS
     )
 
@@ -924,15 +1020,17 @@ def cmd_scan_inbox(args):
 
     # Show matched files
     if matched_files:
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         print(f"MATCHED ({len(matched_files)} files)")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         for f, results in matched_files:
             best_dest, best_score, best_kws = results[0]
             confidence = "HIGH" if best_score >= 2 else "LOW"
             print(f"\n  {f.name}")
-            print(f"    → {best_dest}  [{confidence}, {best_score} keyword(s): {', '.join(best_kws)}]")
+            print(
+                f"    → {best_dest}  [{confidence}, {best_score} keyword(s): {', '.join(best_kws)}]"
+            )
 
             if len(results) > 1:
                 for dest, score, kws in results[1:3]:
@@ -974,9 +1072,9 @@ def cmd_scan_inbox(args):
 
     # Show unmatched files
     if unmatched_files:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"UNMATCHED ({len(unmatched_files)} files)")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         for f in unmatched_files:
             text = extract_pdf_text(f)
             first_lines = [l.strip() for l in text.split("\n") if l.strip()][:3]
@@ -988,7 +1086,6 @@ def cmd_scan_inbox(args):
                 print(f"    (no text extracted)")
 
             # Unmatched files are left in place — add keywords to config to match them
-
 
 
 def cmd_run(args):
@@ -1020,13 +1117,17 @@ def cmd_run(args):
     elif state.get("last_run"):
         since = state["last_run"].replace("-", "/")
     else:
-        since = (datetime.now() - timedelta(days=DEFAULT_SINCE_DAYS)).strftime("%Y/%m/%d")
+        since = (datetime.now() - timedelta(days=DEFAULT_SINCE_DAYS)).strftime(
+            "%Y/%m/%d"
+        )
 
     # Roll `since` back if there are older pending retries — ensures the
     # Gmail triage query still covers any message left over from last run.
     pending_since = _oldest_pending_date(state)
     if pending_since and pending_since < since:
-        print(f"Rolling since back to {pending_since} for {len(state['pending'])} pending retry(s)")
+        print(
+            f"Rolling since back to {pending_since} for {len(state['pending'])} pending retry(s)"
+        )
         since = pending_since
 
     print(f"Gmail Attachment Archiver")
@@ -1049,7 +1150,9 @@ def cmd_run(args):
     if args.rule:
         rules = [r for r in all_rules if r["name"].lower() == args.rule.lower()]
         if not rules:
-            print(f"ERROR: No rule named '{args.rule}'. Use 'list-rules' to see available rules.")
+            print(
+                f"ERROR: No rule named '{args.rule}'. Use 'list-rules' to see available rules."
+            )
             sys.exit(1)
 
     # Pre-fetch triage results in parallel for non-manual_portal rules.
@@ -1057,6 +1160,7 @@ def cmd_run(args):
     prefetch_targets = [r for r in rules if not r.get("manual_portal")]
     prefetched: dict[str, list[dict]] = {}
     if prefetch_targets:
+
         def _triage_one(rule):
             _tls.buffer = io.StringIO()
             try:
@@ -1080,17 +1184,25 @@ def cmd_run(args):
     total = 0
     manual_pending = []
     for rule in rules:
-        total += process_rule(rule, since, True, state, archive_label_id,
-                              base_dir, manual_pending, force=args.force,
-                              messages=prefetched.get(rule["name"]))
+        total += process_rule(
+            rule,
+            since,
+            True,
+            state,
+            archive_label_id,
+            base_dir,
+            manual_pending,
+            force=args.force,
+            messages=prefetched.get(rule["name"]),
+        )
 
     # Save state
     save_state(state, state_file)
     print(f"\nState saved to {state_file}")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Total attachments processed: {total}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     # Manual portal summary
     if manual_pending:
@@ -1100,9 +1212,9 @@ def cmd_run(args):
             key = item["rule_name"]
             portals.setdefault(key, []).append(item)
 
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"MANUAL DOWNLOADS NEEDED")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         for portal_name, items in portals.items():
             url = items[0]["portal_url"]
@@ -1114,7 +1226,9 @@ def cmd_run(args):
                 print(f"    - {item['date']}: {item['subject'][:60]}")
 
             # Ask user to download from portal first
-            sys.stdout.write(f"\n  Download from {portal_name} now, press any key when done (s to skip): ")
+            sys.stdout.write(
+                f"\n  Download from {portal_name} now, press any key when done (s to skip): "
+            )
             sys.stdout.flush()
             ch = _read_single_key()
             print(ch)
@@ -1132,9 +1246,11 @@ def cmd_run(args):
                 for i, c in enumerate(candidates):
                     created_str = c["created"].strftime("%H:%M:%S")
                     size_kb = c["size"] / 1024
-                    print(f"    [{i+1}] {c['path'].name}  ({created_str}, {size_kb:,.0f} KB)")
+                    print(
+                        f"    [{i + 1}] {c['path'].name}  ({created_str}, {size_kb:,.0f} KB)"
+                    )
 
-                    sys.stdout.write(f"        Move to \"{dest_dir}\"? [Y/n] ")
+                    sys.stdout.write(f'        Move to "{dest_dir}"? [Y/n] ')
                     sys.stdout.flush()
                     ch = _read_single_key()
                     print(ch)
@@ -1152,7 +1268,9 @@ def cmd_run(args):
                     for item in items:
                         msg_id = item["msg_id"]
                         if archive_label_id:
-                            gws_modify_message(msg_id, [archive_label_id], ["INBOX", "UNREAD"])
+                            gws_modify_message(
+                                msg_id, [archive_label_id], ["INBOX", "UNREAD"]
+                            )
                         if msg_id not in state["processed_ids"]:
                             state["processed_ids"].append(msg_id)
                     print(f"    Marked {len(items)} email(s) as Stored")
@@ -1160,7 +1278,9 @@ def cmd_run(args):
                 else:
                     print(f"    No files moved — will prompt again next run")
             else:
-                print(f"    No recent PDFs found in ~/Downloads — will prompt again next run")
+                print(
+                    f"    No recent PDFs found in ~/Downloads — will prompt again next run"
+                )
 
 
 def main():
@@ -1169,7 +1289,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
         help="Print each external command and its output (to stderr)",
     )
@@ -1177,7 +1298,8 @@ def main():
     # Shared options — allow --verbose after the subcommand too
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         dest="verbose_sub",
         action="store_true",
         help=argparse.SUPPRESS,
@@ -1186,7 +1308,9 @@ def main():
     subparsers = parser.add_subparsers(dest="command")
 
     # run
-    run_parser = subparsers.add_parser("run", parents=[common], help="Download attachments and archive emails")
+    run_parser = subparsers.add_parser(
+        "run", parents=[common], help="Download attachments and archive emails"
+    )
     run_parser.add_argument(
         "--since",
         help="Start date in YYYY-MM-DD or YYYY/M/D format (default: from state or 45 days ago)",
@@ -1209,7 +1333,9 @@ def main():
     subparsers.add_parser("list-rules", parents=[common], help="List all rules")
 
     # scan-inbox
-    scan_parser = subparsers.add_parser("scan-inbox", parents=[common], help="Classify inbox files by content")
+    scan_parser = subparsers.add_parser(
+        "scan-inbox", parents=[common], help="Classify inbox files by content"
+    )
     scan_parser.add_argument(
         "--inbox",
         help=f"Inbox folder to scan (default: {INBOX_DEFAULT})",

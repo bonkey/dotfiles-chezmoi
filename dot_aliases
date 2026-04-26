@@ -181,7 +181,7 @@ CC() {
     claude --dangerously-skip-permissions "$@"
 }
 
-OO() {
+OC() {
     opencode "$@"
 }
 

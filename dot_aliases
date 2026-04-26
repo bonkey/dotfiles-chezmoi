@@ -181,11 +181,11 @@ CC() {
     claude --dangerously-skip-permissions "$@"
 }
 
-OC() {
+CO() {
     opencode "$@"
 }
 
-KK() {
+CK() {
     kimi --yolo "$@"
 }
 

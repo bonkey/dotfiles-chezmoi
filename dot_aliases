@@ -253,6 +253,7 @@ Cem() {
 
 Ceb() {
     ced $HOME/.config/Brewfile
+    brew bundle install --file $HOME/.config/Brewfile
 }
 
 Cea() {

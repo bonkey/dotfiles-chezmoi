@@ -30,6 +30,7 @@ cask 'conductor' # Claude code parallelisation
 cask 'commander'
 cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
 cask 'vibe-island'
+cask 'jazzyalex/agent-sessions/agent-sessions'
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely

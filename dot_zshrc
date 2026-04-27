@@ -63,7 +63,6 @@ _eval_for_cmd_cached fzf "fzf --zsh"
 _eval_for_cmd_cached dyff "dyff completion zsh"
 _eval_for_cmd_cached codex "codex completion zsh"
 _eval_for_cmd_cached zoxide "zoxide init zsh --no-cmd"
-_eval_for_cmd_cached opencode "opencode completion"
 _eval_for_cmd_cached wt "wt config shell init zsh"
 _eval_for_cmd_cached opencode "opencode completion zsh"
 
@@ -77,8 +76,5 @@ tsrc "${HOME}/.iterm2_shell_integration.zsh" \
 if [[ $ZSH_DEBUGRC == true ]]; then
   zprof
 fi
-
-tsrc "$HOME/.atuin/bin/env"
-eval "$(atuin init zsh)"
 
 # vim:set ft=zsh:

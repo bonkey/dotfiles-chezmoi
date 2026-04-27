@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Archive documents from Gmail, link downloads, portals, and local inbox.
+"""Gmail Attachment Auto-Archiver.
 
-Sources:
-  - Gmail attachments (rules match sender/subject)
-  - Link-based PDF downloads (extract URL from email body)
-  - Manual portal downloads (prompt user, scan ~/Downloads)
-  - Local inbox scanning (classify files by PDF text content)
+Queries Gmail for known recurring senders, downloads attachments,
+files them into the correct folder, and labels+archives the email.
 
 Usage:
     python3 archive_gmail.py run                      # download & archive
@@ -41,18 +38,18 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum"
-ARCHIVE_LABEL_NAME = "Stored"  # Gmail label applied after archiving
+DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum dokumentów"
+ARCHIVE_LABEL_NAME = "Stored"
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
-CONFIG_DIR = Path.home() / ".config" / "archive-inbox"
+CONFIG_DIR = Path.home() / ".config" / "archive-gmail"
 CONFIG_FILE = CONFIG_DIR / "rules.json"
 
 VERBOSE = False
-DEBUG = False
 
-# Per-thread log sink: buffers verbose output during parallel triage so each
-# rule's output can be flushed in order afterward.
+# Per-thread log sink: when set, verbose output is buffered here instead of
+# writing directly to stderr. Used during the parallel triage phase so each
+# rule's output can be flushed in order afterwards.
 _tls = threading.local()
 
 
@@ -68,12 +65,12 @@ def _shlex_join(cmd: list[str]) -> str:
 
 
 def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
-    """Run a subprocess, logging the command and output when VERBOSE or DEBUG."""
+    """Run a subprocess, logging the command and output when VERBOSE."""
     out = _log_stream()
-    if VERBOSE or DEBUG:
+    if VERBOSE:
         print(f"  $ {_shlex_join(cmd)}", file=out)
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-    if DEBUG:
+    if VERBOSE:
         print(f"  → exit={result.returncode}", file=out)
         if result.stdout:
             for line in result.stdout.rstrip("\n").split("\n"):
@@ -81,15 +78,6 @@ def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
         if result.stderr:
             for line in result.stderr.rstrip("\n").split("\n"):
                 print(f"    stderr: {line}", file=out)
-    elif VERBOSE:
-        if result.returncode != 0:
-            print(f"  → exit={result.returncode}", file=out)
-            if result.stdout:
-                for line in result.stdout.rstrip("\n").split("\n"):
-                    print(f"    stdout: {line}", file=out)
-            if result.stderr:
-                for line in result.stderr.rstrip("\n").split("\n"):
-                    print(f"    stderr: {line}", file=out)
     return result
 
 
@@ -116,12 +104,12 @@ def _get_filename_rules() -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Gmail API wrappers (via gws CLI)
+# gws CLI wrappers
 # ---------------------------------------------------------------------------
 
 
 def gws_check_auth():
-    """Verify gws Gmail authentication works. Attempt to login if not authenticated."""
+    """Verify gws Gmail authentication works. Exit with a clear message if not."""
     cmd = [
         "gws",
         "gmail",
@@ -136,19 +124,10 @@ def gws_check_auth():
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
         stderr = result.stderr.strip()
-        print(f"gws authentication failed. Attempting 'gws auth login'...")
+        print(f"ERROR: gws authentication failed.")
         print(f"  {stderr}")
-        login_result = _run(["gws", "auth", "login"], timeout=120)
-        if login_result.returncode != 0:
-            print(f"ERROR: gws auth login failed.")
-            print(f"  {login_result.stderr.strip()}")
-            sys.exit(1)
-        print("gws auth login completed. Retrying...")
-        result = _run(cmd, timeout=30)
-        if result.returncode != 0:
-            print(f"ERROR: gws authentication still failed after login.")
-            print(f"  {result.stderr.strip()}")
-            sys.exit(1)
+        print(f"\nRun 'gws auth login' to authenticate.")
+        sys.exit(1)
 
 
 def gws_triage(query: str, max_results: int = 100) -> list[dict]:
@@ -388,47 +367,18 @@ def get_header(message: dict, name: str) -> str:
 
 def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
     """Check if a message matches a rule's from/subject criteria."""
-    from_match = True
-    subject_match = True
-
     # Check 'from' (exact match on email address)
     if "from" in rule:
-        from_match = rule["from"].lower() in msg_from.lower()
-
-    # Check 'from_contains' (partial match on email address)
-    # Handle truncated output: extract domain after @ and match prefix
-    if "from_contains" in rule:
-        contains = rule["from_contains"].lower()
-        from_lower = msg_from.lower()
-        # Full match first
-        if contains not in from_lower:
-            # Truncation workaround: check domain after @ matches prefix
-            at_pos = from_lower.find("@")
-            if at_pos >= 0:
-                domain = from_lower[at_pos + 1 :]
-                # 'stripe.com' → check if domain is prefix (accounting for … truncation)
-                # e.g., domain='strip…' matches 'stripe' prefix
-                if "@" in contains:
-                    check = contains.split("@")[1]
-                else:
-                    check = contains.split(".")[0]  # 'stripe.com' → 'stripe'
-                # Check each character matches (… counts as any char)
-                from_match = all(
-                    dc in (check[di], "…") for di, dc in enumerate(domain)
-                ) and len(domain) <= len(check)
-            else:
-                from_match = False
-
-    if not from_match:
-        return False
+        if rule["from"].lower() not in msg_from.lower():
+            return False
 
     # Check 'subject_regex' (None means match any).
     # Case-insensitive regex applied to the full subject.
     if rule.get("subject_regex") is not None:
         if not re.search(rule["subject_regex"], msg_subject, re.IGNORECASE):
-            subject_match = False
+            return False
 
-    return subject_match
+    return True
 
 
 def build_gmail_query(rule: dict, since: str, force: bool = False) -> str:
@@ -1344,12 +1294,6 @@ def main():
         action="store_true",
         help="Print each external command and its output (to stderr)",
     )
-    parser.add_argument(
-        "-d",
-        "--debug",
-        action="store_true",
-        help="Print everything including stdout and stderr",
-    )
 
     # Shared options — allow --verbose after the subcommand too
     common = argparse.ArgumentParser(add_help=False)
@@ -1357,13 +1301,6 @@ def main():
         "-v",
         "--verbose",
         dest="verbose_sub",
-        action="store_true",
-        help=argparse.SUPPRESS,
-    )
-    common.add_argument(
-        "-d",
-        "--debug",
-        dest="debug_sub",
         action="store_true",
         help=argparse.SUPPRESS,
     )
@@ -1415,9 +1352,8 @@ def main():
 
     args = parser.parse_args()
 
-    global VERBOSE, DEBUG
+    global VERBOSE
     VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
-    DEBUG = args.debug or getattr(args, "debug_sub", False)
 
     if args.command == "run":
         cmd_run(args)

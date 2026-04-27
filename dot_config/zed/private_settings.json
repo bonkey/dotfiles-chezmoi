@@ -4,7 +4,7 @@
   // ================================
   "cli_default_open_behavior": "new_window",
   "project_panel": {
-    "dock": "left"
+    "dock": "right"
   },
   "collaboration_panel": {
     "dock": "left"
@@ -16,18 +16,6 @@
     "jsonl": false
   },
   "agent_servers": {
-    "opencode": {
-      "type": "registry",
-      "favorite_config_option_values": {
-        "model": [
-          "deepseek/deepseek-v4-flash",
-          "opencode-go/kimi-k2.6",
-          "opencode-go/glm-5.1",
-          "opencode-go/qwen3.6-plus",
-          "opencode-go/deepseek-v4-flash"
-        ]
-      }
-    },
     "codex-acp": {
       "type": "registry",
       "default_mode": "full-access",

@@ -45,10 +45,11 @@ DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum"
 ARCHIVE_LABEL_NAME = "Stored"  # Gmail label applied after archiving
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
-CONFIG_DIR = Path.home() / ".config" / "archive-gmail"
+CONFIG_DIR = Path.home() / ".config" / "archive-inbox"
 CONFIG_FILE = CONFIG_DIR / "rules.json"
 
 VERBOSE = False
+DEBUG = False
 
 # Per-thread log sink: buffers verbose output during parallel triage so each
 # rule's output can be flushed in order afterward.
@@ -67,12 +68,12 @@ def _shlex_join(cmd: list[str]) -> str:
 
 
 def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
-    """Run a subprocess, logging the command and output when VERBOSE."""
+    """Run a subprocess, logging the command and output when VERBOSE or DEBUG."""
     out = _log_stream()
-    if VERBOSE:
+    if VERBOSE or DEBUG:
         print(f"  $ {_shlex_join(cmd)}", file=out)
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-    if VERBOSE:
+    if DEBUG:
         print(f"  → exit={result.returncode}", file=out)
         if result.stdout:
             for line in result.stdout.rstrip("\n").split("\n"):
@@ -80,6 +81,15 @@ def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
         if result.stderr:
             for line in result.stderr.rstrip("\n").split("\n"):
                 print(f"    stderr: {line}", file=out)
+    elif VERBOSE:
+        if result.returncode != 0:
+            print(f"  → exit={result.returncode}", file=out)
+            if result.stdout:
+                for line in result.stdout.rstrip("\n").split("\n"):
+                    print(f"    stdout: {line}", file=out)
+            if result.stderr:
+                for line in result.stderr.rstrip("\n").split("\n"):
+                    print(f"    stderr: {line}", file=out)
     return result
 
 
@@ -378,18 +388,47 @@ def get_header(message: dict, name: str) -> str:
 
 def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
     """Check if a message matches a rule's from/subject criteria."""
+    from_match = True
+    subject_match = True
+
     # Check 'from' (exact match on email address)
     if "from" in rule:
-        if rule["from"].lower() not in msg_from.lower():
-            return False
+        from_match = rule["from"].lower() in msg_from.lower()
+
+    # Check 'from_contains' (partial match on email address)
+    # Handle truncated output: extract domain after @ and match prefix
+    if "from_contains" in rule:
+        contains = rule["from_contains"].lower()
+        from_lower = msg_from.lower()
+        # Full match first
+        if contains not in from_lower:
+            # Truncation workaround: check domain after @ matches prefix
+            at_pos = from_lower.find("@")
+            if at_pos >= 0:
+                domain = from_lower[at_pos + 1 :]
+                # 'stripe.com' → check if domain is prefix (accounting for … truncation)
+                # e.g., domain='strip…' matches 'stripe' prefix
+                if "@" in contains:
+                    check = contains.split("@")[1]
+                else:
+                    check = contains.split(".")[0]  # 'stripe.com' → 'stripe'
+                # Check each character matches (… counts as any char)
+                from_match = all(
+                    dc in (check[di], "…") for di, dc in enumerate(domain)
+                ) and len(domain) <= len(check)
+            else:
+                from_match = False
+
+    if not from_match:
+        return False
 
     # Check 'subject_regex' (None means match any).
     # Case-insensitive regex applied to the full subject.
     if rule.get("subject_regex") is not None:
         if not re.search(rule["subject_regex"], msg_subject, re.IGNORECASE):
-            return False
+            subject_match = False
 
-    return True
+    return subject_match
 
 
 def build_gmail_query(rule: dict, since: str, force: bool = False) -> str:
@@ -1305,6 +1344,12 @@ def main():
         action="store_true",
         help="Print each external command and its output (to stderr)",
     )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_true",
+        help="Print everything including stdout and stderr",
+    )
 
     # Shared options — allow --verbose after the subcommand too
     common = argparse.ArgumentParser(add_help=False)
@@ -1312,6 +1357,13 @@ def main():
         "-v",
         "--verbose",
         dest="verbose_sub",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
+    common.add_argument(
+        "-d",
+        "--debug",
+        dest="debug_sub",
         action="store_true",
         help=argparse.SUPPRESS,
     )
@@ -1363,8 +1415,9 @@ def main():
 
     args = parser.parse_args()
 
-    global VERBOSE
+    global VERBOSE, DEBUG
     VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
+    DEBUG = args.debug or getattr(args, "debug_sub", False)
 
     if args.command == "run":
         cmd_run(args)

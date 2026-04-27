@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Gmail Attachment Auto-Archiver.
+"""Archive documents from Gmail, link downloads, portals, and local inbox.
 
-Queries Gmail for known recurring senders, downloads attachments,
-files them into the correct folder, and labels+archives the email.
+Sources:
+  - Gmail attachments (rules match sender/subject)
+  - Link-based PDF downloads (extract URL from email body)
+  - Manual portal downloads (prompt user, scan ~/Downloads)
+  - Local inbox scanning (classify files by PDF text content)
 
 Usage:
     python3 archive_gmail.py run                      # download & archive
@@ -38,8 +41,8 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum dokumentów"
-ARCHIVE_LABEL_NAME = "Stored"
+DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum"
+ARCHIVE_LABEL_NAME = "Stored"  # Gmail label applied after archiving
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
 CONFIG_DIR = Path.home() / ".config" / "archive-gmail"
@@ -47,9 +50,8 @@ CONFIG_FILE = CONFIG_DIR / "rules.json"
 
 VERBOSE = False
 
-# Per-thread log sink: when set, verbose output is buffered here instead of
-# writing directly to stderr. Used during the parallel triage phase so each
-# rule's output can be flushed in order afterwards.
+# Per-thread log sink: buffers verbose output during parallel triage so each
+# rule's output can be flushed in order afterward.
 _tls = threading.local()
 
 
@@ -104,12 +106,12 @@ def _get_filename_rules() -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# gws CLI wrappers
+# Gmail API wrappers (via gws CLI)
 # ---------------------------------------------------------------------------
 
 
 def gws_check_auth():
-    """Verify gws Gmail authentication works. Exit with a clear message if not."""
+    """Verify gws Gmail authentication works. Attempt to login if not authenticated."""
     cmd = [
         "gws",
         "gmail",
@@ -124,10 +126,19 @@ def gws_check_auth():
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
         stderr = result.stderr.strip()
-        print(f"ERROR: gws authentication failed.")
+        print(f"gws authentication failed. Attempting 'gws auth login'...")
         print(f"  {stderr}")
-        print(f"\nRun 'gws auth login' to authenticate.")
-        sys.exit(1)
+        login_result = _run(["gws", "auth", "login"], timeout=120)
+        if login_result.returncode != 0:
+            print(f"ERROR: gws auth login failed.")
+            print(f"  {login_result.stderr.strip()}")
+            sys.exit(1)
+        print("gws auth login completed. Retrying...")
+        result = _run(cmd, timeout=30)
+        if result.returncode != 0:
+            print(f"ERROR: gws authentication still failed after login.")
+            print(f"  {result.stderr.strip()}")
+            sys.exit(1)
 
 
 def gws_triage(query: str, max_results: int = 100) -> list[dict]:

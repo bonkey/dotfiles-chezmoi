@@ -181,6 +181,11 @@ CC() {
     claude --dangerously-skip-permissions "$@"
 }
 
+CCA() {
+    claude --permission-mode auto "$@"
+}
+
+
 CO() {
     opencode "$@"
 }

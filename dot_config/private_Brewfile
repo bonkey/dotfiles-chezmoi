@@ -217,6 +217,7 @@ cask 'rectangle-pro' # Window snapping tool
 cask 'setapp' # Collection of apps available by subscription
 cask 'superkey' # Search and click text anywhere on screen
 cask 'typora' # Configurable document editor that supports Markdown
+cask 'resolutionator'
 
 # Editors and writing
 cask 'macvim-app' # Text editor

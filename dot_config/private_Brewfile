@@ -157,6 +157,7 @@ cask 'xcodes-app' # Install and switch between multiple versions of Xcode
 cask 'mitmproxy'
 cask 'temurin'
 cask 'gcloud-cli'
+cask 'hazel'
 
 # Completions
 brew 'brew-cask-completion' # Fish completion for brew-cask

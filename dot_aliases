@@ -498,31 +498,31 @@ ff_gif() {
 alias bef="bue fastlane"
 
 alias Xco="xcodes"
-alias Xcos="Xco select"
+alias Xco-select="Xco select"
 
-alias Xcou="Xco uninstall"
-alias Xcou!="Xcou --empty-trash"
+alias Xco-uninstall="Xco uninstall"
+alias Xco-uninstall-empty-trash="Xco-uninstall --empty-trash"
 
-alias Xcol="Xco list"
-alias Xcola="Xco list --data-source apple"
+alias Xco-list="Xco list"
+alias Xco-list-apple="Xco list --data-source apple"
 
-alias Xcoi="Xco install --experimental-unxip --empty-trash --update"
-alias Xcoil="Xcoi --latest"
-alias Xcoip="Xcoi --latest-prerelease"
+alias Xco-install="Xco install --experimental-unxip --empty-trash --update"
+alias Xco-install-latest="Xco-install --latest"
+alias Xco-install-latest-prerelease="Xco-install --latest-prerelease"
 
-alias Xcoia="Xcoi --data-source apple"
-alias Xcoial="Xcoia --latest"
-alias Xcoiap="Xcoia --latest-prerelease"
+alias Xco-install-apple="Xco-install --data-source apple"
+alias Xco-install-apple-latest="Xco-install-apple --latest"
+alias Xco-install-apple-latest-prerelease="Xco-install-apple --latest-prerelease"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 
 alias Xrs="xcrun simctl"
-alias Xrsl="Xrs list"
-alias Xrsld="Xrsl devices"
-alias Xrsldb="Xrsld | grep boot -i"
-alias Xrslr="Xrsl runtimes"
+alias Xrs-list="Xrs list"
+alias Xrs-list-devices="Xrs-list devices"
+alias Xrs-list-devices-booted="Xrs-list-devices | grep boot -i"
+alias Xrs-list-runtimes="Xrs-list runtimes"
 
-alias Xrslog="Xrs spawn booted log stream --color always --debug --style compact"
+alias Xrs-log="Xrs spawn booted log stream --color always --debug --style compact"
 
 xcsclogg() {
   xcsclog --predicate "$1"

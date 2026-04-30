@@ -45,7 +45,7 @@ fdc() {
     cd "$(fd -t d $@ | fzf -1)"
 }
 
-alias '??'="llm cmd -m gemini-flash-latest"
+alias '..'="llm cmd -m gemini-flash-latest"
 alias gy="gemini --yolo"
 
 alias ced="cz edit --apply"
@@ -296,29 +296,6 @@ ping() {
 
 alias host=doggo
 alias dig=doggo
-
-# --- LLM
-
-lgf() {
-    llmm gemini-flash-latest "$@"
-}
-
-lgp() {
-    llmm gemini-pro-latest "$@"
-}
-
-lgt() {
-    llmm gemini-2.0-flash-thinking-exp-01-21 "$@"
-}
-
-lgl() {
-    llmm gemini-2.0-flash-lite "$@"
-}
-
-llmm() {
-    llm -m "$@"
-}
-
 
 # --- Search
 
@@ -826,7 +803,7 @@ alias gst="git status -s"
 alias gco="git checkout"
 alias gcm="gco main"
 
-gcai() {
+.gc() {
     local GIT_PAGER=""
     export GIT_PAGER
     local prompt="Create one-liner commit message from the git diff changes. \

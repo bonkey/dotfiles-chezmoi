@@ -735,6 +735,7 @@ alias Wl='wt list'
 
 alias Wr='wt remove'
 alias Wrf='Wr --force'
+alias Wrfd='Wr --force -D'
 
 alias Wm='wt merge'
 

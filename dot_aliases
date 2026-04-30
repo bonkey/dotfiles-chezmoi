@@ -803,6 +803,10 @@ alias gst="git status -s"
 alias gco="git checkout"
 alias gcm="gco main"
 
+alias .gca=".gc -a"
+alias .gcn=".gc -np"
+alias .gcan=".gc -a -np"
+
 .gc() {
     local GIT_PAGER=""
     export GIT_PAGER

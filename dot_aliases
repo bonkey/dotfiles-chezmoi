@@ -186,11 +186,11 @@ CCA() {
 }
 
 
-CO() {
+OC() {
     opencode "$@"
 }
 
-CK() {
+KM() {
     kimi --yolo "$@"
 }
 

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Gmail Attachment Auto-Archiver.
+"""Archive documents from Gmail, link downloads, portals, and local inbox.
 
-Queries Gmail for known recurring senders, downloads attachments,
-files them into the correct folder, and labels+archives the email.
+Sources:
+  - Gmail attachments (rules match sender/subject)
+  - Link-based PDF downloads (extract URL from email body)
+  - Manual portal downloads (prompt user, scan ~/Downloads)
+  - Local inbox scanning (classify files by PDF text content)
 
 Usage:
     python3 archive_gmail.py run                      # download & archive
@@ -38,18 +41,18 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum dokumentów"
-ARCHIVE_LABEL_NAME = "Stored"
+DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum"
+ARCHIVE_LABEL_NAME = "Stored"  # Gmail label applied after archiving
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
-CONFIG_DIR = Path.home() / ".config" / "archive-gmail"
+CONFIG_DIR = Path.home() / ".config" / "archive-inbox"
 CONFIG_FILE = CONFIG_DIR / "rules.json"
 
 VERBOSE = False
+DEBUG = False
 
-# Per-thread log sink: when set, verbose output is buffered here instead of
-# writing directly to stderr. Used during the parallel triage phase so each
-# rule's output can be flushed in order afterwards.
+# Per-thread log sink: buffers verbose output during parallel triage so each
+# rule's output can be flushed in order afterward.
 _tls = threading.local()
 
 
@@ -65,12 +68,12 @@ def _shlex_join(cmd: list[str]) -> str:
 
 
 def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
-    """Run a subprocess, logging the command and output when VERBOSE."""
+    """Run a subprocess, logging the command and output when VERBOSE or DEBUG."""
     out = _log_stream()
-    if VERBOSE:
+    if VERBOSE or DEBUG:
         print(f"  $ {_shlex_join(cmd)}", file=out)
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-    if VERBOSE:
+    if DEBUG:
         print(f"  → exit={result.returncode}", file=out)
         if result.stdout:
             for line in result.stdout.rstrip("\n").split("\n"):
@@ -78,6 +81,15 @@ def _run(cmd: list[str], timeout: int) -> subprocess.CompletedProcess:
         if result.stderr:
             for line in result.stderr.rstrip("\n").split("\n"):
                 print(f"    stderr: {line}", file=out)
+    elif VERBOSE:
+        if result.returncode != 0:
+            print(f"  → exit={result.returncode}", file=out)
+            if result.stdout:
+                for line in result.stdout.rstrip("\n").split("\n"):
+                    print(f"    stdout: {line}", file=out)
+            if result.stderr:
+                for line in result.stderr.rstrip("\n").split("\n"):
+                    print(f"    stderr: {line}", file=out)
     return result
 
 
@@ -104,12 +116,12 @@ def _get_filename_rules() -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# gws CLI wrappers
+# Gmail API wrappers (via gws CLI)
 # ---------------------------------------------------------------------------
 
 
 def gws_check_auth():
-    """Verify gws Gmail authentication works. Exit with a clear message if not."""
+    """Verify gws Gmail authentication works. Attempt to login if not authenticated."""
     cmd = [
         "gws",
         "gmail",
@@ -118,16 +130,25 @@ def gws_check_auth():
         "list",
         "--params",
         json.dumps({"userId": "me"}),
-        "--format",
-        "json",
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
         stderr = result.stderr.strip()
-        print(f"ERROR: gws authentication failed.")
-        print(f"  {stderr}")
-        print(f"\nRun 'gws auth login' to authenticate.")
-        sys.exit(1)
+        print(f"gws authentication failed. Running 'gws auth login'...")
+        if stderr:
+            print(f"  {stderr}")
+        # Inherit stdio so the user can interact with scope selection and the
+        # browser-auth URL prompt. capture_output would hide both.
+        login_rc = subprocess.run(["gws", "auth", "login"]).returncode
+        if login_rc != 0:
+            print(f"ERROR: gws auth login failed (exit {login_rc}).")
+            sys.exit(1)
+        print("gws auth login completed. Retrying...")
+        result = _run(cmd, timeout=30)
+        if result.returncode != 0:
+            print(f"ERROR: gws authentication still failed after login.")
+            print(f"  {result.stderr.strip()}")
+            sys.exit(1)
 
 
 def gws_triage(query: str, max_results: int = 100) -> list[dict]:
@@ -140,28 +161,25 @@ def gws_triage(query: str, max_results: int = 100) -> list[dict]:
         query,
         "--max",
         str(max_results),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=120)
     if result.returncode != 0:
         return []
 
-    messages = []
-    for line in result.stdout.strip().split("\n"):
-        # Skip header lines and separator
-        if not line.strip() or line.startswith("date") or line.startswith("──"):
-            continue
-        # Parse the table output: columns separated by 2+ spaces
-        parts = re.split(r" {2,}", line.strip())
-        if len(parts) >= 4:
-            messages.append(
-                {
-                    "date": parts[0].strip(),
-                    "from": parts[1].strip(),
-                    "id": parts[2].strip(),
-                    "subject": parts[3].strip(),
-                }
-            )
-    return messages
+    data = json.loads(result.stdout)
+    items = data if isinstance(data, list) else data.get("messages", [])
+    return [
+        {
+            "date": str(item.get("date", "")).strip(),
+            "from": str(item.get("from", "")).strip(),
+            "id": str(item.get("id", "")).strip(),
+            "subject": str(item.get("subject", "")).strip(),
+        }
+        for item in items
+        if item.get("id")
+    ]
 
 
 def gws_get_message(msg_id: str) -> dict:
@@ -236,10 +254,28 @@ def gws_modify_message(msg_id: str, add_labels: list[str], remove_labels: list[s
         json.dumps({"userId": "me", "id": msg_id}),
         "--json",
         json.dumps(body),
+        "--format",
+        "json",
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
         print(f"  ERROR: Failed to modify message {msg_id}: {result.stderr.strip()}")
+        return False
+    data = json.loads(result.stdout)
+    got = set(data.get("labelIds", []))
+    expected_add = set(add_labels or [])
+    expected_remove = set(remove_labels or [])
+    missing = expected_add - got
+    if missing:
+        print(
+            f"  WARNING: modify returned OK but addLabelIds {missing} not in labelIds {got}"
+        )
+        return False
+    still_present = expected_remove & got
+    if still_present:
+        print(
+            f"  WARNING: modify returned OK but removeLabelIds {still_present} still in labelIds {got}"
+        )
         return False
     return True
 
@@ -290,6 +326,7 @@ def gws_find_label_id(label_name: str) -> str | None:
     ]
     result = _run(cmd, timeout=30)
     if result.returncode != 0:
+        print(f"  ERROR: Failed to list labels: {result.stderr.strip()}")
         return None
 
     data = json.loads(result.stdout)
@@ -367,18 +404,31 @@ def get_header(message: dict, name: str) -> str:
 
 def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
     """Check if a message matches a rule's from/subject criteria."""
+    from_match = True
+    subject_match = True
+
     # Check 'from' (exact match on email address)
     if "from" in rule:
-        if rule["from"].lower() not in msg_from.lower():
-            return False
+        from_match = rule["from"].lower() in msg_from.lower()
+
+    # Check 'from_contains' (regex or list of regexes, OR logic)
+    if "from_contains" in rule:
+        patterns = rule["from_contains"]
+        if isinstance(patterns, str):
+            patterns = [patterns]
+        if not any(re.search(p, msg_from, re.IGNORECASE) for p in patterns):
+            from_match = False
+
+    if not from_match:
+        return False
 
     # Check 'subject_regex' (None means match any).
     # Case-insensitive regex applied to the full subject.
     if rule.get("subject_regex") is not None:
         if not re.search(rule["subject_regex"], msg_subject, re.IGNORECASE):
-            return False
+            subject_match = False
 
-    return True
+    return subject_match
 
 
 def build_gmail_query(rule: dict, since: str, force: bool = False) -> str:
@@ -394,7 +444,7 @@ def build_gmail_query(rule: dict, since: str, force: bool = False) -> str:
 
     if "from" in rule:
         parts.append(f"from:{rule['from']}")
-    elif "from_contains" in rule:
+    elif "from_contains" in rule and isinstance(rule["from_contains"], str):
         parts.append(f"from:{rule['from_contains']}")
 
     # Exclude already-archived messages (server-side filtering).
@@ -753,27 +803,38 @@ def process_rule(
     # and from filters here. Do it before the count print so the reported
     # number reflects what will actually be processed.
     filtered = [m for m in messages if matches_rule(rule, m["from"], m["subject"])]
-    dropped = len(messages) - len(filtered)
-    dropped_note = f" ({dropped} subject mismatch)" if dropped else ""
 
-    if not filtered:
+    # Triage truncates long from fields with … at the end.  Collect messages
+    # that didn't match due to truncation — they will be resolved later using
+    # the full From header from the fetched message.
+    uncertain = []
+    if "from_contains" in rule:
+        uncertain = [m for m in messages if m not in filtered and "…" in m["from"]]
+    uncertain_ids = {m["id"] for m in uncertain}
+
+    dropped = len(messages) - len(filtered) - len(uncertain)
+    dropped_note = f" ({dropped} not matched)" if dropped else ""
+
+    if not filtered and not uncertain:
         print(f"── {rule['name']}: no messages{dropped_note}")
         if dropped and VERBOSE:
             for m in messages:
-                print(f"    dropped: {m['subject'][:70]}")
+                print(f"    not matched [{m['from'][:40]}]: {m['subject'][:60]}")
         return 0
 
-    print(f"── {rule['name']}: {len(filtered)} message(s){dropped_note}")
+    nc = len(filtered)
+    label = f"{nc} message(s)" + (f" + {len(uncertain)} truncated" if uncertain else "")
+    print(f"── {rule['name']}: {label}{dropped_note}")
     if dropped and VERBOSE:
-        kept_ids = {m["id"] for m in filtered}
+        all_ids = {m["id"] for m in filtered} | uncertain_ids
         for m in messages:
-            if m["id"] not in kept_ids:
-                print(f"    dropped: {m['subject'][:70]}")
+            if m["id"] not in all_ids:
+                print(f"    not matched [{m['from'][:40]}]: {m['subject'][:60]}")
     count = 0
     dest_dir = base_dir / rule["destination"]
     pending_ids = {p["msg_id"] for p in state.get("pending", [])}
 
-    for msg in filtered:
+    for msg in filtered + uncertain:
         msg_id = msg["id"]
 
         # Skip already processed (unless --force or queued for retry).
@@ -794,6 +855,17 @@ def process_rule(
             continue
 
         subject = get_header(full_msg, "Subject")
+
+        # Resolve uncertain messages: triage from was truncated so recheck
+        # against the full From header from the fetched message.
+        if msg_id in uncertain_ids:
+            full_from = get_header(full_msg, "From")
+            if not matches_rule(rule, full_from, subject):
+                if VERBOSE:
+                    print(f"    not matched (full header): {full_from[:60]}")
+                continue
+            if VERBOSE:
+                print(f"    resolved via full header: {full_from[:60]}")
 
         if rule.get("manual_portal"):
             # --- Manual portal: collect for end-of-run summary ---
@@ -1294,6 +1366,12 @@ def main():
         action="store_true",
         help="Print each external command and its output (to stderr)",
     )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_true",
+        help="Print everything including stdout and stderr",
+    )
 
     # Shared options — allow --verbose after the subcommand too
     common = argparse.ArgumentParser(add_help=False)
@@ -1301,6 +1379,13 @@ def main():
         "-v",
         "--verbose",
         dest="verbose_sub",
+        action="store_true",
+        help=argparse.SUPPRESS,
+    )
+    common.add_argument(
+        "-d",
+        "--debug",
+        dest="debug_sub",
         action="store_true",
         help=argparse.SUPPRESS,
     )
@@ -1352,8 +1437,9 @@ def main():
 
     args = parser.parse_args()
 
-    global VERBOSE
+    global VERBOSE, DEBUG
     VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
+    DEBUG = args.debug or getattr(args, "debug_sub", False)
 
     if args.command == "run":
         cmd_run(args)

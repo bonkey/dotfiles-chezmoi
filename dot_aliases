@@ -181,6 +181,10 @@ CC() {
     claude --dangerously-skip-permissions "$@"
 }
 
+CCP() {
+    claude --permission-mode plan "$@"
+}
+
 CCA() {
     claude --permission-mode auto "$@"
 }

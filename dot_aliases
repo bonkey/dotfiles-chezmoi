@@ -45,7 +45,7 @@ fdc() {
     cd "$(fd -t d $@ | fzf -1)"
 }
 
-alias '..'="llm cmd -m gemini-flash-latest"
+alias '??'="llm cmd -m gemini-flash-latest"
 alias gy="gemini --yolo"
 
 alias ced="cz edit --apply"

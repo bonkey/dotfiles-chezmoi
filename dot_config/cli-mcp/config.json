@@ -7,7 +7,7 @@
 
     "cli-dev": ["shellwright"],
     "web-dev": ["shadcn", "vibium"],
-    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud", "xcode-instruments"],
+    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud", "xcode-instruments", "xcode-mcpbridge"],
 
     "code-search": ["morph"],
 
@@ -67,6 +67,10 @@
     "xcode-instruments": {
       "type": "local",
       "command": ["npx", "-y", "instrumentsmcp@latest"]
+    },
+    "xcode-mcpbridge": {
+      "type": "local",
+      "command": ["xcrun", "mcpbridge"]
     },
     "peekaboo": {
       "type": "local",

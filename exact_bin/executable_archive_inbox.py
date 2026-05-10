@@ -168,7 +168,18 @@ def gws_triage(query: str, max_results: int = 100) -> list[dict]:
     if result.returncode != 0:
         return []
 
-    data = json.loads(result.stdout)
+    if not result.stdout.strip():
+        return []
+
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        if VERBOSE:
+            print(
+                f"  WARNING: gws +triage returned non-JSON output (first 200 chars): {result.stdout[:200]}",
+                file=_log_stream(),
+            )
+        return []
     items = data if isinstance(data, list) else data.get("messages", [])
     return [
         {

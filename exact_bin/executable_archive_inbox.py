@@ -8,15 +8,15 @@ Sources:
   - Local inbox scanning (classify files by PDF text content)
 
 Usage:
-    python3 archive_gmail.py run                      # download & archive
-    python3 archive_gmail.py run --rule "Office Club"  # one rule only
-    python3 archive_gmail.py run --since 2026-03-01    # override start date
-    python3 archive_gmail.py run --folder ~/my/archive # custom working folder
-    python3 archive_gmail.py run --force               # ignore stored state
-    python3 archive_gmail.py list-rules                # show all rules
-    python3 archive_gmail.py scan-inbox                # classify inbox files
-    python3 archive_gmail.py scan-inbox --move         # classify and move
-    python3 archive_gmail.py scan-inbox --inbox ~/path # custom inbox folder
+    python3 archive_inbox.py gmail                     # download & archive
+    python3 archive_inbox.py gmail --rule "Office Club" # one rule only
+    python3 archive_inbox.py gmail --since 2026-03-01   # override start date
+    python3 archive_inbox.py gmail --folder ~/my/archive # custom working folder
+    python3 archive_inbox.py gmail --force              # ignore stored state
+    python3 archive_inbox.py list-rules                 # show all rules
+    python3 archive_inbox.py folder                     # classify inbox files
+    python3 archive_inbox.py folder --move              # classify and move
+    python3 archive_inbox.py folder ~/path              # custom inbox folder
 """
 
 import argparse
@@ -940,10 +940,39 @@ def process_rule(
 
 def cmd_list_rules():
     """List all rules and exit."""
-    print(f"{'#':<3} {'Name':<25} {'Destination':<40}")
-    print(f"{'-' * 3} {'-' * 25} {'-' * 40}")
-    for i, rule in enumerate(_get_rules(), 1):
-        print(f"{i:<3} {rule['name']:<25} {rule['destination']:<40}")
+    print(
+        "Matches Gmail messages by sender/subject and save attachments or linked PDFs."
+    )
+    print(f"{'#':<3} {'Name':<35} {'Destination':<40}")
+    print(f"{'-' * 3} {'-' * 35} {'-' * 40}")
+    sorted_rules = sorted(_get_rules(), key=lambda r: r["name"].lower())
+    for i, rule in enumerate(sorted_rules, 1):
+        print(f"{i:<3} {rule['name']:<35} {rule['destination']:<40}")
+
+    folder_keywords = _get_folder_keywords()
+    if folder_keywords:
+        print(
+            "\nRoute files from \"folder\" to a destination when the extracted text contains any keyword."
+        )
+        print(f"{'#':<3} {'Keywords':<35} {'Destination':<40}")
+        print(f"{'-' * 3} {'-' * 35} {'-' * 40}")
+        sorted_fk = sorted(folder_keywords.items(), key=lambda kv: kv[0].lower())
+        for i, (dest, kws) in enumerate(sorted_fk, 1):
+            kw_str = ", ".join(kws)
+            if len(kw_str) > 35:
+                kw_str = kw_str[:32] + "..."
+            print(f"{i:<3} {kw_str:<35} {dest:<40}")
+
+    filename_rules = _get_filename_rules()
+    if filename_rules:
+        print(
+            "\nRoutes files from \"folder\" to a destination when the filename matches the regex (checked before keywords)."
+        )
+        print(f"{'#':<3} {'Pattern':<35} {'Destination':<40}")
+        print(f"{'-' * 3} {'-' * 35} {'-' * 40}")
+        sorted_fn = sorted(filename_rules, key=lambda r: r["pattern"].lower())
+        for i, rule in enumerate(sorted_fn, 1):
+            print(f"{i:<3} {rule['pattern']:<35} {rule['destination']:<40}")
 
 
 # ---------------------------------------------------------------------------
@@ -1403,9 +1432,9 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    # run
+    # gmail
     run_parser = subparsers.add_parser(
-        "run", parents=[common], help="Download attachments and archive emails"
+        "gmail", parents=[common], help="Download attachments and archive emails"
     )
     run_parser.add_argument(
         "--since",
@@ -1428,12 +1457,14 @@ def main():
     # list-rules
     subparsers.add_parser("list-rules", parents=[common], help="List all rules")
 
-    # scan-inbox
+    # folder
     scan_parser = subparsers.add_parser(
-        "scan-inbox", parents=[common], help="Classify inbox files by content"
+        "folder", parents=[common], help="Classify inbox files by content"
     )
     scan_parser.add_argument(
-        "--inbox",
+        "inbox",
+        nargs="?",
+        default=None,
         help=f"Inbox folder to scan (default: {INBOX_DEFAULT})",
     )
     scan_parser.add_argument(
@@ -1452,11 +1483,11 @@ def main():
     VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
     DEBUG = args.debug or getattr(args, "debug_sub", False)
 
-    if args.command == "run":
+    if args.command == "gmail":
         cmd_run(args)
     elif args.command == "list-rules":
         cmd_list_rules()
-    elif args.command == "scan-inbox":
+    elif args.command == "folder":
         cmd_scan_inbox(args)
     else:
         parser.print_help()

@@ -130,6 +130,7 @@ cask 'kaleidoscope' # Spot and merge differences in text and image files or fold
 cask 'retcon' # Drag-and-drop Git history editor
 cask 'sublime-merge' # Git client
 brew 'worktrunk'
+brew 'modem-dev/tap/hunk'
 
 # Developer tools and runtimes
 brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps

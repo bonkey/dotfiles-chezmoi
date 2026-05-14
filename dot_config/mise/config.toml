@@ -12,8 +12,9 @@ bun = "latest"
 uv = "latest"
 pipx = "latest"
 
-# Swift development
+# Apple development
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
+swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
 
 # Python CLI tools
 "pipx:black" = "latest"                   # Python code formatter
@@ -60,7 +61,6 @@ pipx = "latest"
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related
 "npm:ccusage" = "latest"                  # AI token/cost/usage tracking
-swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
 
 [settings]
 experimental = true

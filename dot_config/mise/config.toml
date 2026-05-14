@@ -1,5 +1,5 @@
 [env]
-UV_NATIVE_TLS = "true"
+UV_SYSTEM_CERTS = "true"
 
 [tools]
 # Runtime languages

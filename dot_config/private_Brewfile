@@ -177,7 +177,7 @@ brew 'zsh-completion' # Additional completion definitions for zsh
 brew 'gpg' # GNU Pretty Good Privacy (PGP) package
 brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
-cask '1password-cli' # Command-line interface for 1Password
+cask '1password-cli@beta' # Command-line interface for 1Password
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
 # Fonts

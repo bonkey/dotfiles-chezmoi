@@ -14,6 +14,9 @@ RUNTIME_DEVICES = {
     'iPad Pro 13-inch (M4)',
     'iPhone SE (3rd generation)'
   ],
+  'iOS 26.4' => [
+    'iPhone 17 Pro'
+  ],
   'iOS 18.6' => [
     'iPhone 16 Pro',
     'iPhone 16'
@@ -115,7 +118,7 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
     create_device(
       device_type: device_type['identifier'],
       runtime: runtime_name,
-      name: "#{device_name} (#{runtime_name})"
+      name: device_name
     )
   end
 

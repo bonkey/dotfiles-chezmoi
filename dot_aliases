@@ -318,8 +318,8 @@ fdd() { f -t d "$@" }
 
 alias rgs="rg -t ios"
 alias rgw="rg -w"
-alias rgh="rg -u"
-alias rga="rg -uu --hidden"
+alias rga="rg -u"
+alias rgh="rg -uu --hidden"
 alias rgl="rg -l"
 alias rgsw="rgs -w"
 

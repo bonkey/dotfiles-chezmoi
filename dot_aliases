@@ -505,21 +505,13 @@ alias Xco-install-apple-latest-prerelease="Xco-install-apple --latest-prerelease
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 
-alias Xrs="xcrun simctl"
-alias Xrs-list="Xrs list"
-alias Xrs-list-devices="Xrs-list devices"
-alias Xrs-list-devices-booted="Xrs-list-devices | grep boot -i"
-alias Xrs-list-runtimes="Xrs-list runtimes"
+alias Xsim="xcrun simctl"
+alias Xsim-list="Xsim list"
+alias Xsim-list-devices="Xsim-list devices"
+alias Xsim-list-devices-booted="Xsim-list-devices | grep Booted"
+alias Xsim-list-runtimes="Xsim-list runtimes"
 
-alias Xrs-log="Xrs spawn booted log stream --color always --debug --style compact"
-
-xcsclogg() {
-  xcsclog --predicate "$1"
-}
-
-xcsclogge() {
-  xcsclog "eventMessage contains '$1'"
-}
+alias Xsim-log="Xsim spawn booted log stream --color always --debug --style compact"
 
 xck() {
   _exec "pkill -9 Xcode"

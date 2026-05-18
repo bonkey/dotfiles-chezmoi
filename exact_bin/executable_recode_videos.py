@@ -110,6 +110,7 @@ def fmt_duration(s: float) -> str:
 class ProbeInfo:
     path: Path
     video_codec: str
+    codec_tag: str
     width: int
     height: int
     pix_fmt: str
@@ -187,6 +188,7 @@ def probe(path: Path) -> Optional[ProbeInfo]:
     return ProbeInfo(
         path=path,
         video_codec=v.get("codec_name", "?"),
+        codec_tag=(v.get("codec_tag_string") or "").lower(),
         width=int(v.get("width", 0)),
         height=int(v.get("height", 0)),
         pix_fmt=pix_fmt,
@@ -223,12 +225,22 @@ def estimate_encode_seconds(info: ProbeInfo, tier_name: str) -> float:
 def decide(info: ProbeInfo, tier: str, policy: str, min_savings_pct: float):
     if policy == "always":
         return "recode", ""
-    tgt = target_bitrate(info, tier)
-    if info.video_codec in ("hevc", "av1") and info.bit_rate <= tgt * 1.15:
+    # Destination codec match: skip. HEVC is what we'd write; AV1 is strictly more
+    # efficient than our target. Re-encoding either is almost always a loss
+    # (quality drop with no meaningful size win). Use --encoding-policy always to
+    # force.
+    if info.video_codec == "hevc":
+        # hvc1 tag is what this script writes, so it's a strong "already
+        # processed by us" signal worth surfacing in the reason.
+        marker = " (hvc1)" if info.codec_tag == "hvc1" else ""
         return ("skip-efficient",
-                f"already efficient: {info.video_codec} {fmt_bps(info.bit_rate)}")
+                f"already HEVC{marker} {fmt_bps(info.bit_rate)}")
+    if info.video_codec == "av1":
+        return ("skip-efficient",
+                f"already AV1 {fmt_bps(info.bit_rate)}")
     if info.bit_rate <= 0:
         return "recode", ""
+    tgt = target_bitrate(info, tier)
     projected = (1 - tgt / info.bit_rate) * 100
     if projected < min_savings_pct:
         return ("skip-efficient",
@@ -356,21 +368,31 @@ def verify_output(src: ProbeInfo, dst: Path):
     return True, ""
 
 
-def move_to_trash(path: Path) -> bool:
-    """Move a file to the macOS Trash (recoverable)."""
+def move_to_trash(path: Path) -> tuple[bool, str]:
+    """Move a file to the macOS Trash (recoverable).
+
+    Returns (ok, reason). On failure, reason is the AppleScript stderr or a
+    short diagnostic. External volumes without a usable .Trashes (e.g. exFAT)
+    will fail here — Finder refuses rather than deleting immediately.
+    """
     posix = str(path).replace('"', '\\"')
     script = f'tell application "Finder" to delete POSIX file "{posix}"'
     try:
-        subprocess.run(["osascript", "-e", script],
-                       check=True, capture_output=True)
-        return not path.exists()
-    except (subprocess.CalledProcessError, OSError):
-        return False
+        r = subprocess.run(["osascript", "-e", script],
+                           capture_output=True, text=True)
+    except OSError as e:
+        return False, f"osascript invocation failed: {e}"
+    if r.returncode != 0:
+        return False, (r.stderr or r.stdout or "osascript failed").strip()
+    if path.exists():
+        return False, "Finder reported success but file still present"
+    return True, ""
 
 
-def find_videos(root: Path, exts: set) -> list:
+def find_videos(root: Path, exts: set, recursive: bool = False) -> list:
     result = []
-    for p in sorted(root.rglob("*")):
+    iterator = root.rglob("*") if recursive else root.glob("*")
+    for p in sorted(iterator):
         if not p.is_file() or p.name.startswith("."):
             continue
         if PARTIAL_SUFFIX in p.name:
@@ -518,6 +540,9 @@ def main() -> int:
     ap.add_argument("--encoding-policy", choices=["smart", "always"], default="smart")
     ap.add_argument("--replace", action="store_true",
                     help="Replace source after verify; original moved to Trash.")
+    ap.add_argument("-r", "--recursive", action="store_true",
+                    help="Recurse into subdirectories of --input. Directory "
+                         "mode only; off by default.")
     ap.add_argument("--include-ext", default=",".join(sorted(DEFAULT_EXTS)),
                     help="Comma-separated extensions (with dots). Directory mode only.")
     ap.add_argument("--min-savings-pct", type=float, default=15.0)
@@ -565,7 +590,7 @@ def main() -> int:
         files = [input_path.resolve()]
     else:
         in_root = input_path.resolve()
-        files = find_videos(in_root, exts)
+        files = find_videos(in_root, exts, recursive=args.recursive)
 
     # Resolve output root / single-file destination
     out_root: Optional[Path] = None
@@ -628,7 +653,12 @@ def main() -> int:
             continue
 
         if args.replace:
-            final_dst = src.with_suffix(".mp4")
+            # Keep the source's exact path (incl. extension case). The encoder
+            # writes MP4 into `partial`; after trash + rename, partial takes
+            # src's path. Using src.with_suffix(".mp4") would point at a
+            # different path on case-sensitive volumes and could clobber an
+            # unrelated pre-existing file.
+            final_dst = src
         else:
             if single_file_mode:
                 assert single_out_file is not None
@@ -740,9 +770,12 @@ def main() -> int:
             continue
 
         if args.replace:
-            if not move_to_trash(src):
+            trashed, trash_reason = move_to_trash(src)
+            if not trashed:
                 print(f"        {C.RED}✗  trash failed; source kept. "
                       f"Partial at {partial}{C.RESET}")
+                if trash_reason:
+                    print(f"           {C.DIM}{trash_reason}{C.RESET}")
                 summary["failed"] += 1
                 continue
             try:

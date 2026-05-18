@@ -189,6 +189,9 @@ CCA() {
     claude --permission-mode auto "$@"
 }
 
+CCU() {
+    claude update "$@"
+}
 
 OC() {
     opencode "$@"

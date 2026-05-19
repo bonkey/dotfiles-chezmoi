@@ -1,5 +1,5 @@
 [env]
-UV_SYSTEM_CERTS = "true"
+UV_NATIVE_TLS = "true"
 
 [tools]
 # Runtime languages
@@ -12,9 +12,8 @@ bun = "latest"
 uv = "latest"
 pipx = "latest"
 
-# Apple development
+# Swift development
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
-swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
 
 # Python CLI tools
 "pipx:black" = "latest"                   # Python code formatter
@@ -61,6 +60,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related
 "npm:ccusage" = "latest"                  # AI token/cost/usage tracking
+swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
 
 [settings]
 experimental = true

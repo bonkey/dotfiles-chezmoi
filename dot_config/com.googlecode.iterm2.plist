@@ -5607,14 +5607,8 @@
 				<dict>
 					<key>action</key>
 					<string>iTermHyperlinkTrigger</string>
-					<key>contentregex</key>
-					<string></string>
 					<key>disabled</key>
-					<integer>0</integer>
-					<key>matchType</key>
-					<integer>0</integer>
-					<key>name</key>
-					<string>Git links</string>
+					<false/>
 					<key>parameter</key>
 					<string>https://\1/\2</string>
 					<key>partial</key>
@@ -5625,14 +5619,6 @@
 				<dict>
 					<key>action</key>
 					<string>iTermHyperlinkTrigger</string>
-					<key>contentregex</key>
-					<string></string>
-					<key>disabled</key>
-					<integer>0</integer>
-					<key>matchType</key>
-					<integer>0</integer>
-					<key>name</key>
-					<string>HTTPS Links</string>
 					<key>parameter</key>
 					<string>https://\1/\2</string>
 					<key>partial</key>
@@ -5643,38 +5629,12 @@
 				<dict>
 					<key>action</key>
 					<string>iTermHyperlinkTrigger</string>
-					<key>contentregex</key>
-					<string></string>
-					<key>disabled</key>
-					<integer>0</integer>
-					<key>matchType</key>
-					<integer>0</integer>
-					<key>name</key>
-					<string>1KFF Links</string>
-					<key>parameter</key>
-					<string>https://linear.app/1kff/issue/\0</string>
-					<key>partial</key>
-					<true/>
-					<key>regex</key>
-					<string>(HORN|LL|LG|DIG)-[0-9]+</string>
-				</dict>
-				<dict>
-					<key>action</key>
-					<string>iTermHyperlinkTrigger</string>
-					<key>contentregex</key>
-					<string></string>
-					<key>disabled</key>
-					<integer>0</integer>
-					<key>matchType</key>
-					<integer>0</integer>
-					<key>name</key>
-					<string>Jira Links</string>
 					<key>parameter</key>
 					<string>https://everlong.atlassian.net/browse/\0</string>
 					<key>partial</key>
 					<true/>
 					<key>regex</key>
-					<string>[A-Z]{3,10}[0-9]*-[0-9]+</string>
+					<string>[A-Z]{2,10}[0-9]*-[0-9]+</string>
 				</dict>
 			</array>
 			<key>Unicode Normalization</key>

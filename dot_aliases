@@ -56,6 +56,8 @@ alias cup="open ~/bin/update_chezmoi.terminal"
 alias cma="cz merge-all"
 alias cfo="cz forget"
 
+alias hd="hunk diff"
+
 alias hyf="hyperfine -m 3"
 
 alias src='source ~/.zshrc'

@@ -127,9 +127,8 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "effort": "high",
-      "enable_thinking": true,
-      "provider": "copilot_chat",
+      "enable_thinking": false,
+      "provider": "openai",
       "model": "gpt-5.4",
     },
     "commit_message_model": {

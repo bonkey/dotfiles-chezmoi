@@ -34,12 +34,12 @@ export ZHIPU_API_KEY=$ZAI_CODING_API_KEY
 export VOYAGEAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").VOYAGEAI_API_KEY.value -}}"
 export VOYAGEAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").VOYAGEAI_API_KEY.value -}}"
 
-export _OP_SERVICE_ACCOUNT_TOKEN="{{- onepasswordRead "op://1KFF/5ohlkqcqjx7uxg2s4a4cpbhhse/credential" -}}"
+export _OP_SERVICE_ACCOUNT_TOKEN="{{- (onepasswordItemFields "5ohlkqcqjx7uxg2s4a4cpbhhse" "3nxkw7zk6refhfgv3lshmzaste" "bonkey.1password.com").credential.value -}}"
 
 {{- end }}
 
-export KAGI_API_KEY="{{- onepasswordRead "op://Private/lk3cxlvcjdbti27r7ivrcj646y/KAGI_API_KEY" -}}"
-export SUPERMEMORY_API_KEY="{{- onepasswordRead "op://Private/lk3cxlvcjdbti27r7ivrcj646y/SUPERMEMORY_API_KEY" -}}"
+export KAGI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").KAGI_API_KEY.value -}}"
+export SUPERMEMORY_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").SUPERMEMORY_API_KEY.value -}}"
 
 export EDITOR="zed -w"
 export CLICOLOR=1

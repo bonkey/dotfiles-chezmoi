@@ -967,7 +967,8 @@ gpu() {
 }
 
 git-retrigger-checks() {
-  git commit -m "Retrigger checks" --allow-empty && git push
+  local msg="${1:-Retrigger checks}"
+  git commit -m "$msg" --allow-empty && git push
 }
 
 git_pull_and_back() {

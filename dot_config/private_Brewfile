@@ -177,7 +177,7 @@ brew 'zsh-completion' # Additional completion definitions for zsh
 brew 'gpg' # GNU Pretty Good Privacy (PGP) package
 brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
-cask '1password-cli' # Command-line interface for 1Password
+cask '1password-cli@beta' # Command-line interface for 1Password
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
 # Fonts
@@ -205,20 +205,23 @@ cask 'syntax-highlight' # Quicklook extension for source files
 cask 'webpquicklook' # QuickLook plugin for webp files
 
 # Productivity and desktop apps
-cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'cap' # Screen recording software
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'handbrake-app' # Open-source video transcoder
-cask 'karabiner-elements' # Keyboard customizer
-cask 'keyboard-maestro' # Automation software
-cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
 cask 'raycast' # Control your tools with a few keystrokes
 cask 'rectangle-pro' # Window snapping tool
 cask 'setapp' # Collection of apps available by subscription
 cask 'superkey' # Search and click text anywhere on screen
 cask 'typora' # Configurable document editor that supports Markdown
+
+# Hardware boosting
+cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'resolutionator'
+cask 'darrylmorley/whatcable/whatcable'
+cask 'karabiner-elements' # Keyboard customizer
+cask 'keyboard-maestro' # Automation software
+cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
 
 # Editors and writing
 cask 'macvim-app' # Text editor

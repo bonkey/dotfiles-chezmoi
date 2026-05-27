@@ -5282,58 +5282,12 @@
 					<key>auto-rainbow style</key>
 					<integer>3</integer>
 					<key>font</key>
-					<string>.SFNS-Regular 12</string>
+					<string>.AppleSystemUIFont 12</string>
 					<key>remove empty components</key>
 					<true/>
 				</dict>
 				<key>components</key>
 				<array>
-					<dict>
-						<key>class</key>
-						<string>iTermStatusBarWorkingDirectoryComponent</string>
-						<key>configuration</key>
-						<dict>
-							<key>knobs</key>
-							<dict>
-								<key>base: compression resistance</key>
-								<real>2</real>
-								<key>base: priority</key>
-								<real>5</real>
-								<key>maxwidth</key>
-								<real>+infinity</real>
-								<key>minwidth</key>
-								<integer>0</integer>
-								<key>path</key>
-								<string>path</string>
-								<key>shared font</key>
-								<string></string>
-								<key>shared text color</key>
-								<dict>
-									<key>Alpha Component</key>
-									<real>1</real>
-									<key>Blue Component</key>
-									<real>0.63590961694717407</real>
-									<key>Color Space</key>
-									<string>P3</string>
-									<key>Green Component</key>
-									<real>0.6414334774017334</real>
-									<key>Red Component</key>
-									<real>0.86000317335128784</real>
-								</dict>
-							</dict>
-							<key>layout advanced configuration dictionary value</key>
-							<dict>
-								<key>algorithm</key>
-								<integer>1</integer>
-								<key>auto-rainbow style</key>
-								<integer>3</integer>
-								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
-								<key>remove empty components</key>
-								<true/>
-							</dict>
-						</dict>
-					</dict>
 					<dict>
 						<key>class</key>
 						<string>iTermStatusBarSwiftyStringComponent</string>
@@ -5358,6 +5312,50 @@
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
+									<real>0.63590961694717407</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.6414334774017334</real>
+									<key>Red Component</key>
+									<real>0.86000317335128784</real>
+								</dict>
+							</dict>
+							<key>layout advanced configuration dictionary value</key>
+							<dict>
+								<key>algorithm</key>
+								<integer>1</integer>
+								<key>auto-rainbow style</key>
+								<integer>0</integer>
+								<key>remove empty components</key>
+								<false/>
+							</dict>
+						</dict>
+					</dict>
+					<dict>
+						<key>class</key>
+						<string>iTermStatusBarWorkingDirectoryComponent</string>
+						<key>configuration</key>
+						<dict>
+							<key>knobs</key>
+							<dict>
+								<key>base: compression resistance</key>
+								<real>2</real>
+								<key>base: priority</key>
+								<real>5</real>
+								<key>maxwidth</key>
+								<real>+infinity</real>
+								<key>minwidth</key>
+								<integer>0</integer>
+								<key>path</key>
+								<string>path</string>
+								<key>shared font</key>
+								<string></string>
+								<key>shared text color</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
 									<real>0.65761250257492065</real>
 									<key>Color Space</key>
 									<string>P3</string>
@@ -5374,7 +5372,7 @@
 								<key>auto-rainbow style</key>
 								<integer>3</integer>
 								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
+								<string>.SFNS-Regular 12</string>
 								<key>remove empty components</key>
 								<true/>
 							</dict>
@@ -5420,7 +5418,7 @@
 								<key>auto-rainbow style</key>
 								<integer>3</integer>
 								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
+								<string>.SFNS-Regular 12</string>
 								<key>remove empty components</key>
 								<true/>
 							</dict>
@@ -5462,7 +5460,7 @@
 								<key>auto-rainbow style</key>
 								<integer>3</integer>
 								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
+								<string>.SFNS-Regular 12</string>
 								<key>remove empty components</key>
 								<true/>
 							</dict>
@@ -5506,7 +5504,7 @@
 								<key>auto-rainbow style</key>
 								<integer>3</integer>
 								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
+								<string>.SFNS-Regular 12</string>
 								<key>remove empty components</key>
 								<true/>
 							</dict>
@@ -5544,7 +5542,7 @@
 								<key>auto-rainbow style</key>
 								<integer>3</integer>
 								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
+								<string>.SFNS-Regular 12</string>
 								<key>remove empty components</key>
 								<true/>
 							</dict>
@@ -5582,7 +5580,7 @@
 								<key>auto-rainbow style</key>
 								<integer>3</integer>
 								<key>font</key>
-								<string>.AppleSystemUIFont 12</string>
+								<string>.SFNS-Regular 12</string>
 								<key>remove empty components</key>
 								<true/>
 							</dict>

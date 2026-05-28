@@ -1,23 +1,142 @@
 #!/usr/bin/env zsh
-set -euo pipefail
+set -uo pipefail
 
 # claude-worktrunk
-# Create a new worktree off a base branch and launch Claude in it.
+# Create a worktree off a base branch and launch Claude in it.
+# Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug> with no ticket)
 #
 # Usage: claude-worktrunk [base]
 #   .         branch off the current branch
 #   <name>    branch off <name>
-#   (empty)   branch off the default branch (gt trunk)
+#   (empty)   branch off the repo's default branch
+#
+# The clipboard (pbpaste) is scanned for a Jira/Linear ticket; a short branch
+# slug is generated from a purpose you type, via the `llm` CLI.
 
+source "${HOME}/bin/_common.zsh"
+
+model="gemini-flash-latest"
+
+# Default branch: ask gh first, then origin/HEAD, then a local main/master/trunk.
+default_branch() {
+    local b c
+    b="$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name 2>/dev/null)"
+    if [[ -z "$b" ]]; then
+        b="$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)"
+        b="${b#origin/}"
+    fi
+    if [[ -z "$b" ]]; then
+        for c in main master trunk; do
+            if git show-ref --verify --quiet "refs/heads/$c"; then b="$c"; break; fi
+        done
+    fi
+    print -r -- "$b"
+}
+
+# --- resolve base branch ---------------------------------------------------
 arg="${1-}"
-
 case "$arg" in
-    .)  base="$(git rev-parse --abbrev-ref HEAD)" ;;
-    "") base="$(gt trunk)" ;;
+    .)  base="$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -1)" ;;
+    "") base="$(default_branch)" ;;
     *)  base="$arg" ;;
 esac
+if [[ -z "$base" ]]; then
+    print -ru2 -- "could not resolve base branch"
+    exit 1
+fi
 
-branch="claude/$(date +%Y%m%d-%H%M%S)"
+# --- find a ticket in the clipboard ----------------------------------------
+clip="$(pbpaste 2>/dev/null || true)"
+ticket_id=""
+ticket_ctx=""
 
-exec wt switch "$branch" --create --base "$base" \
-    --execute="claude --dangerously-skip-permissions"
+if grep -qE 'linear\.app/.+/issue/' <<<"$clip"; then
+    # Linear: ID and title come straight from the URL, no API needed.
+    seg="$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+(/[A-Za-z0-9-]+)?' <<<"$clip" | head -1)"
+    seg="${seg#issue/}"
+    id="${seg%%/*}"
+    ticket_id="${(U)id}"
+    title="${seg#*/}"
+    [[ "$title" == "$seg" ]] && title=""
+    ticket_ctx="Linear ${ticket_id}: ${title//-/ }"
+else
+    ticket_id="$(grep -oE '[A-Z]{2,}-[0-9]+' <<<"$clip" | head -1 || true)"
+    if [[ -n "$ticket_id" ]]; then
+        summary=""
+        if [[ -n "${JIRA_SERVER:-}" && -n "${JIRA_USER:-}" && -n "${JIRA_API_TOKEN:-}" ]]; then
+            summary="$(http --verify=no GET "${JIRA_SERVER}/rest/api/3/issue/${ticket_id}" \
+                --auth "${JIRA_USER}:${JIRA_API_TOKEN}" 2>/dev/null \
+                | jq -r '.fields.summary // empty' 2>/dev/null || true)"
+        fi
+        ticket_ctx="Jira ${ticket_id}: ${summary}"
+    fi
+fi
+
+[[ -n "$ticket_ctx" ]] && print -r -- "ticket: ${ticket_ctx}"
+
+# --- helpers ---------------------------------------------------------------
+system_prompt='Generate a git branch slug for the described work. Output ONLY the slug inside a single fenced code block. Rules: lowercase, 2-5 words, hyphen-separated, ASCII letters/digits/hyphens only, no spaces, no ticket IDs, no quotes, max ~40 chars.'
+
+sanitize() {
+    local s="${(L)1}"
+    s="${s//[^a-z0-9-]/-}"
+    while [[ "$s" == *--* ]]; do s="${s//--/-}"; done
+    s="${s##-}"; s="${s%%-}"
+    s="${s[1,40]}"
+    print -r -- "${s%%-}"
+}
+
+# make_slug <description> -> slug from the llm, falling back to the raw text.
+# A second arg of "continue" keeps the prior conversation (llm -c), so refined
+# descriptions build on the former prompt and avoid repeating taken names.
+make_slug() {
+    local raw s
+    if [[ "${2-}" == continue ]]; then
+        raw="$(llm -x -c -- "That branch name is taken. More context: $1. Propose a different slug." 2>/dev/null || true)"
+    else
+        local input="Purpose: $1"
+        [[ -n "$ticket_ctx" ]] && input+=$'\n'"Context: ${ticket_ctx}"
+        raw="$(llm -x -m "$model" -s "$system_prompt" -- "$input" 2>/dev/null || true)"
+    fi
+    s="$(sanitize "$raw")"
+    [[ -z "$s" ]] && s="$(sanitize "$1")"
+    print -r -- "$s"
+}
+
+user="$(whoami)"
+compose_branch() {  # <slug> -> branch name
+    if [[ -n "$ticket_id" ]]; then
+        print -r -- "${user}/${ticket_id}-$1"
+    else
+        print -r -- "${user}/$1"
+    fi
+}
+
+branch_exists() { git show-ref --verify --quiet "refs/heads/$1"; }
+
+# --- ask for the purpose, derive a unique branch name ----------------------
+read -r "purpose?Purpose of this worktree: "
+slug="$(make_slug "$purpose")"
+if [[ -z "$slug" ]]; then
+    print -ru2 -- "could not generate a branch slug (empty purpose and llm output)"
+    exit 1
+fi
+branch="$(compose_branch "$slug")"
+
+# On collision, ask for a more specific description (the llm can't disambiguate
+# without more input); Enter falls back to a numeric suffix.
+while branch_exists "$branch"; do
+    print -ru2 -- "▲ branch ${branch} already exists"
+    read -r "refine?  refine the purpose (Enter to auto-number): "
+    if [[ -z "$refine" ]]; then
+        n=2
+        while branch_exists "${branch}-${n}"; do (( n++ )); done
+        branch="${branch}-${n}"
+        break
+    fi
+    slug="$(make_slug "$refine" continue)"
+    [[ -n "$slug" ]] && branch="$(compose_branch "$slug")"
+done
+
+_exec wt switch "$branch" --create --base "$base" \
+    --execute claude -- --dangerously-skip-permissions

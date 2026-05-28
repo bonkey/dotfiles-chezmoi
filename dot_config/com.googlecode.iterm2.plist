@@ -6316,7 +6316,7 @@
 			<key>Columns</key>
 			<integer>140</integer>
 			<key>Command</key>
-			<string>zsh -i -c "claude --worktree --dangerously-skip-permissions"</string>
+			<string>zsh -i -c "claude-worktrunk"</string>
 			<key>Cursor Boost</key>
 			<real>0.0</real>
 			<key>Cursor Color</key>

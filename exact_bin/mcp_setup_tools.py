@@ -192,7 +192,7 @@ TOOLS = {
     },
     "gemini": {
         "format": "json",
-        "path": "~/Projects/Personal/cli-mcp/examples/settings.json",
+        "path": "~/.gemini/settings.json",
         "config_node": "mcpServers",
         "command": ["gemini"],
         "transformer": make_transformer(

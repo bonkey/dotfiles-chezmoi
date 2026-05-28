@@ -7,7 +7,7 @@ import argparse
 import subprocess
 import curses
 
-from cli_mcp_tools import get_tools, get_transformer
+from mcp_setup_tools import get_tools, get_transformer
 
 try:
     import tomllib

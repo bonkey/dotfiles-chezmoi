@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+# claude-worktrunk
+# Create a new worktree off a base branch and launch Claude in it.
+#
+# Usage: claude-worktrunk [base]
+#   .         branch off the current branch
+#   <name>    branch off <name>
+#   (empty)   branch off the default branch (gt trunk)
+
+arg="${1-}"
+
+case "$arg" in
+    .)  base="$(git rev-parse --abbrev-ref HEAD)" ;;
+    "") base="$(gt trunk)" ;;
+    *)  base="$arg" ;;
+esac
+
+branch="claude/$(date +%Y%m%d-%H%M%S)"
+
+exec wt switch "$branch" --create --base "$base" \
+    --execute="claude --dangerously-skip-permissions"

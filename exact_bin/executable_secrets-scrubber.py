@@ -69,7 +69,7 @@ FILES_TO_SCRUB = [
     Path.home() / ".config" / "chunkhound" / "config.json",
     Path.home() / ".config" / "opencode" / "opencode.json",
     Path.home() / ".config" / "crush" / "crush.json",
-    Path.home() / ".config" / "cli-mcp" / "config.json",
+    Path.home() / ".config" / "mcp-setup" / "config.json",
 ]
 
 def log(message, verbose):

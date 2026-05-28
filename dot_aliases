@@ -189,6 +189,9 @@ CCA() {
     claude --permission-mode auto "$@"
 }
 
+CCT() {
+    claude-worktrunk
+}
 
 OC() {
     opencode "$@"

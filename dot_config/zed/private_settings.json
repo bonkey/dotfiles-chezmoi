@@ -131,10 +131,9 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "effort": "high",
-      "enable_thinking": true,
-      "provider": "copilot_chat",
-      "model": "gpt-5.4",
+      "enable_thinking": false,
+      "provider": "opencode",
+      "model": "free/big-pickle",
     },
     "commit_message_model": {
       "provider": "google",

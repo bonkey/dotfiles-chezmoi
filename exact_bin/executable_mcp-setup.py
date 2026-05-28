@@ -19,7 +19,7 @@ try:
 except ModuleNotFoundError:
     tomli_w = None
 
-CLI_CONFIG_DIR = os.path.expanduser("~/.config/cli-mcp")
+CLI_CONFIG_DIR = os.path.expanduser("~/.config/mcp-setup")
 CLI_CONFIG_FILE = os.path.join(CLI_CONFIG_DIR, "config.json")
 
 def load_cli_config():

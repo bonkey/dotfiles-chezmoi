@@ -138,5 +138,6 @@ while branch_exists "$branch"; do
     [[ -n "$slug" ]] && branch="$(compose_branch "$slug")"
 done
 
+session_name="${branch#${user}/}"
 _exec wt switch "$branch" --create --base "$base" \
-    --execute claude -- --dangerously-skip-permissions
+    --execute claude -- -n "$session_name" --dangerously-skip-permissions

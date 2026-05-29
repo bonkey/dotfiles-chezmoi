@@ -5,13 +5,15 @@ set -uo pipefail
 # Create a worktree off a base branch and launch Claude in it.
 # Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug> with no ticket)
 #
-# Usage: claude-worktrunk [base]
+# Usage: claude-worktrunk [--resume] [base]
+#   --resume  reuse this ticket's existing worktree instead of creating a new one
 #   .         branch off the current branch
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
 #
-# The clipboard (pbpaste) is scanned for a Jira/Linear ticket; a short branch
-# slug is generated from a purpose you type, via the `llm` CLI.
+# The clipboard (pbpaste) is scanned for a single Jira/Linear ticket: its title
+# becomes the branch slug (shortened via the `llm` CLI). With no ticket — or
+# several — you're asked for a purpose and the slug is generated from that.
 
 source "${HOME}/bin/_common.zsh"
 
@@ -33,8 +35,18 @@ default_branch() {
     print -r -- "$b"
 }
 
+# --- parse args ------------------------------------------------------------
+resume=0
+positional=()
+for a in "$@"; do
+    case "$a" in
+        --resume) resume=1 ;;
+        *)        positional+=("$a") ;;
+    esac
+done
+
 # --- resolve base branch ---------------------------------------------------
-arg="${1-}"
+arg="${positional[1]-}"
 case "$arg" in
     .)  base="$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -1)" ;;
     "") base="$(default_branch)" ;;
@@ -49,26 +61,48 @@ fi
 clip="$(pbpaste 2>/dev/null || true)"
 ticket_id=""
 ticket_ctx=""
+ticket_title=""
 
+# A clipboard holding several tickets (a triage list, say) is not a request to
+# branch off any one of them, so detection is skipped unless exactly one is found.
 if grep -qE 'linear\.app/.+/issue/' <<<"$clip"; then
     # Linear: ID and title come straight from the URL, no API needed.
-    seg="$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+(/[A-Za-z0-9-]+)?' <<<"$clip" | head -1)"
-    seg="${seg#issue/}"
-    id="${seg%%/*}"
-    ticket_id="${(U)id}"
-    title="${seg#*/}"
-    [[ "$title" == "$seg" ]] && title=""
-    ticket_ctx="Linear ${ticket_id}: ${title//-/ }"
+    ids=("${(@f)$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+' <<<"$clip" | sort -u)}")
+    if (( ${#ids} > 1 )); then
+        print -ru2 -- "▲ ${#ids} tickets in clipboard — ignoring (copy a single ticket to use it)"
+    else
+        seg="$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+(/[A-Za-z0-9-]+)?' <<<"$clip" | head -1)"
+        seg="${seg#issue/}"
+        id="${seg%%/*}"
+        ticket_id="${(U)id}"
+        title="${seg#*/}"
+        [[ "$title" == "$seg" ]] && title=""
+        ticket_title="${title//-/ }"
+        ticket_ctx="Linear ${ticket_id}: ${ticket_title}"
+    fi
 else
-    ticket_id="$(grep -oE '[A-Z]{2,}-[0-9]+' <<<"$clip" | head -1 || true)"
-    if [[ -n "$ticket_id" ]]; then
-        summary=""
-        if [[ -n "${JIRA_SERVER:-}" && -n "${JIRA_USER:-}" && -n "${JIRA_API_TOKEN:-}" ]]; then
-            summary="$(http --verify=no GET "${JIRA_SERVER}/rest/api/3/issue/${ticket_id}" \
-                --auth "${JIRA_USER}:${JIRA_API_TOKEN}" 2>/dev/null \
-                | jq -r '.fields.summary // empty' 2>/dev/null || true)"
+    raw_ids="$(grep -oE '[A-Z]{2,}-[0-9]+' <<<"$clip" | sort -u)"
+    if [[ -n "$raw_ids" ]]; then
+        ids=("${(@f)raw_ids}")
+        if (( ${#ids} > 1 )); then
+            print -ru2 -- "▲ ${#ids} tickets in clipboard — ignoring (copy a single ticket to use it)"
+        else
+            ticket_id="${ids[1]}"
+            summary=""
+            if [[ -n "${JIRA_SERVER:-}" && -n "${JIRA_USER:-}" && -n "${JIRA_API_TOKEN:-}" ]]; then
+                summary="$(http --verify=no GET "${JIRA_SERVER}/rest/api/3/issue/${ticket_id}" \
+                    --auth "${JIRA_USER}:${JIRA_API_TOKEN}" 2>/dev/null \
+                    | jq -r '.fields.summary // empty' 2>/dev/null || true)"
+            fi
+            # Only call it Jira when a Jira summary actually came back; a bare ID
+            # (e.g. a Linear key) stays generic with no title to slug from.
+            if [[ -n "$summary" ]]; then
+                ticket_title="$summary"
+                ticket_ctx="Jira ${ticket_id}: ${summary}"
+            else
+                ticket_ctx="ticket ${ticket_id}"
+            fi
         fi
-        ticket_ctx="Jira ${ticket_id}: ${summary}"
     fi
 fi
 
@@ -114,30 +148,60 @@ compose_branch() {  # <slug> -> branch name
 
 branch_exists() { git show-ref --verify --quiet "refs/heads/$1"; }
 
-# --- ask for the purpose, derive a unique branch name ----------------------
-read -r "purpose?Purpose of this worktree: "
-slug="$(make_slug "$purpose")"
-if [[ -z "$slug" ]]; then
-    print -ru2 -- "could not generate a branch slug (empty purpose and llm output)"
-    exit 1
+# --- resolve the branch ----------------------------------------------------
+# Default is to create a new worktree. With --resume, reuse this ticket's
+# existing worktree instead of forking a numbered sibling.
+existing=""
+if (( resume )) && [[ -n "$ticket_id" ]]; then
+    existing="$(git for-each-ref --format='%(refname:short)' refs/heads \
+        | grep -m1 "^${user}/${ticket_id}-" || true)"
 fi
-branch="$(compose_branch "$slug")"
 
-# On collision, ask for a more specific description (the llm can't disambiguate
-# without more input); Enter falls back to a numeric suffix.
-while branch_exists "$branch"; do
-    print -ru2 -- "▲ branch ${branch} already exists"
-    read -r "refine?  refine the purpose (Enter to auto-number): "
-    if [[ -z "$refine" ]]; then
-        n=2
-        while branch_exists "${branch}-${n}"; do (( n++ )); done
-        branch="${branch}-${n}"
-        break
+if [[ -n "$existing" ]]; then
+    branch="$existing"
+    create_args=()
+    print -r -- "resuming existing branch ${branch}"
+else
+    # With a ticket title from the clipboard, shorten it into a slug
+    # automatically; otherwise ask for a purpose to describe the work.
+    if [[ -n "$ticket_title" ]]; then
+        slug="$(make_slug "$ticket_title")"
+    else
+        read -r "purpose?Purpose of this worktree: "
+        slug="$(make_slug "$purpose")"
     fi
-    slug="$(make_slug "$refine" continue)"
-    [[ -n "$slug" ]] && branch="$(compose_branch "$slug")"
-done
+    if [[ -z "$slug" ]]; then
+        print -ru2 -- "could not generate a branch slug (empty purpose and llm output)"
+        exit 1
+    fi
+    branch="$(compose_branch "$slug")"
 
-session_name="${branch#${user}/}"
-_exec wt switch "$branch" --create --base "$base" \
-    --execute claude -- -n "$session_name" --dangerously-skip-permissions
+    if [[ -n "$ticket_id" ]]; then
+        # The slug is derived from the ticket title, so refining it is pointless;
+        # if the branch is taken (re-running on the same ticket) just number it.
+        if branch_exists "$branch"; then
+            n=2
+            while branch_exists "${branch}-${n}"; do (( n++ )); done
+            branch="${branch}-${n}"
+        fi
+    else
+        # A purpose-derived name clashing with an unrelated branch: ask for a more
+        # specific description; Enter falls back to a numeric suffix.
+        while branch_exists "$branch"; do
+            print -ru2 -- "▲ branch ${branch} already exists"
+            read -r "refine?  refine the purpose (Enter to auto-number): "
+            if [[ -z "$refine" ]]; then
+                n=2
+                while branch_exists "${branch}-${n}"; do (( n++ )); done
+                branch="${branch}-${n}"
+                break
+            fi
+            slug="$(make_slug "$refine" continue)"
+            [[ -n "$slug" ]] && branch="$(compose_branch "$slug")"
+        done
+    fi
+    create_args=(--create --base "$base")
+fi
+
+_exec wt switch "$branch" "${create_args[@]}" \
+    --execute claude -- --dangerously-skip-permissions

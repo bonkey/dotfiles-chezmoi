@@ -5,15 +5,17 @@ set -uo pipefail
 # Create a worktree off a base branch and launch Claude in it.
 # Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug> with no ticket)
 #
-# Usage: claude-worktrunk [--resume] [base]
+# Usage: claude-worktrunk [--resume] [base] [ticket-url-or-key]
 #   --resume  reuse this ticket's existing worktree instead of creating a new one
 #   .         branch off the current branch
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
+#   <url|KEY> a Jira/Linear ticket URL or key (e.g. ABC-123) to slug from
 #
-# The clipboard (pbpaste) is scanned for a single Jira/Linear ticket: its title
-# becomes the branch slug (shortened via the `llm` CLI). With no ticket — or
-# several — you're asked for a purpose and the slug is generated from that.
+# A Jira/Linear ticket URL or key passed as an argument supplies the branch
+# slug: its title is shortened via the `llm` CLI. With no ticket argument you're
+# asked for a purpose and the slug is generated from that. The clipboard is
+# never scanned on its own.
 
 source "${HOME}/bin/_common.zsh"
 
@@ -36,12 +38,18 @@ default_branch() {
 }
 
 # --- parse args ------------------------------------------------------------
+# A ticket is detected only from a URL the user passes explicitly — never from
+# the clipboard on its own. Any argument that looks like a ticket URL/key is
+# treated as the ticket source; the remaining positional is the base branch.
 resume=0
 positional=()
+ticket_input=""
 for a in "$@"; do
     case "$a" in
-        --resume) resume=1 ;;
-        *)        positional+=("$a") ;;
+        --resume)               resume=1 ;;
+        *://*|*linear.app*)     ticket_input="$a" ;;
+        [A-Z][A-Z]*-[0-9]*)     ticket_input="$a" ;;
+        *)                      positional+=("$a") ;;
     esac
 done
 
@@ -57,19 +65,21 @@ if [[ -z "$base" ]]; then
     exit 1
 fi
 
-# --- find a ticket in the clipboard ----------------------------------------
-clip="$(pbpaste 2>/dev/null || true)"
+# --- find a ticket in the URL the user passed ------------------------------
+# Detection runs only against an explicitly-supplied ticket URL/key, so an
+# unrelated clipboard never silently steers the branch name.
+clip="$ticket_input"
 ticket_id=""
 ticket_ctx=""
 ticket_title=""
 
-# A clipboard holding several tickets (a triage list, say) is not a request to
-# branch off any one of them, so detection is skipped unless exactly one is found.
+# A passed URL holding several tickets is not a request to branch off any one of
+# them, so detection is skipped unless exactly one is found.
 if grep -qE 'linear\.app/.+/issue/' <<<"$clip"; then
     # Linear: ID and title come straight from the URL, no API needed.
     ids=("${(@f)$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+' <<<"$clip" | sort -u)}")
     if (( ${#ids} > 1 )); then
-        print -ru2 -- "▲ ${#ids} tickets in clipboard — ignoring (copy a single ticket to use it)"
+        print -ru2 -- "▲ ${#ids} tickets in the URL — ignoring (pass a single ticket to use it)"
     else
         seg="$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+(/[A-Za-z0-9-]+)?' <<<"$clip" | head -1)"
         seg="${seg#issue/}"
@@ -85,7 +95,7 @@ else
     if [[ -n "$raw_ids" ]]; then
         ids=("${(@f)raw_ids}")
         if (( ${#ids} > 1 )); then
-            print -ru2 -- "▲ ${#ids} tickets in clipboard — ignoring (copy a single ticket to use it)"
+            print -ru2 -- "▲ ${#ids} tickets in the URL — ignoring (pass a single ticket to use it)"
         else
             ticket_id="${ids[1]}"
             summary=""
@@ -162,7 +172,7 @@ if [[ -n "$existing" ]]; then
     create_args=()
     print -r -- "resuming existing branch ${branch}"
 else
-    # With a ticket title from the clipboard, shorten it into a slug
+    # With a ticket title from the passed URL, shorten it into a slug
     # automatically; otherwise ask for a purpose to describe the work.
     if [[ -n "$ticket_title" ]]; then
         slug="$(make_slug "$ticket_title")"

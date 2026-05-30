@@ -46,7 +46,6 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 # LLM foundations / prompt tooling
 "pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp  --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
 "pipx:files-to-prompt" = "latest"         # Turn files into prompt context
-"pipx:chunkhound" = "latest"              # Chunking / prompt-context helper
 
 # AI model CLIs
 "npm:@openai/codex" = "latest"            # OpenAI Codex CLI
@@ -61,6 +60,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related
 "npm:ccusage" = "latest"                  # AI token/cost/usage tracking
+"npm:codeburn" = "latest"
 
 [settings]
 experimental = true

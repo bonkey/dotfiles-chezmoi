@@ -9,10 +9,14 @@ ignorecase = true
 quotepath = false
 fsmonitor = false
 untrackedcache = true
-pager = hunk pager
+pager = bat
 
 ; [interactive]
 ; diffFilter = delta --color-only
+
+[pager]
+diff = hunk pager
+show = hunk pager
 
 [diff]
 algorithm = histogram

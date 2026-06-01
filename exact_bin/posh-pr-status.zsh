@@ -46,7 +46,9 @@ _posh_pr_status_precmd() {
   if [[ -f $cache_file ]]; then
     local line
     line=$(<"$cache_file")
-    if [[ -n $line ]]; then
+    # Only honor entries in the new "<status>\t<url>" format. Old cache files
+    # without a tab are ignored; the background refresh will rewrite them.
+    if [[ $line == *$'\t'* ]]; then
       POSH_PR_STATUS=${line%%$'\t'*}
       POSH_PR_URL=${line#*$'\t'}
     fi

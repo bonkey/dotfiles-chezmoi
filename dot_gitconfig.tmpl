@@ -127,7 +127,7 @@ wc = whatchanged -p --abbrev-commit --pretty=medium
 amend = commit -a --amend
 out = log origin..HEAD
 lo = log --oneline --graph
-l1 = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+l1 = log --pretty=format:'%C(160)%h%Creset -%C(yellow)%d%Creset %s %C(150)(%cr) %C(bold 117)<%an>%Creset' --abbrev-commit --date=relative
 lg = l1 --graph
 dcn = diff --name-only --diff-filter=AMCR
 dcnm = dcn main

@@ -5,6 +5,7 @@
     "blue": "#4B95E9",
     "darkgreen": "#06B800",
     "green": "#59C9A5",
+    "grey": "#6E7681",
     "orange": "#F07623",
     "purple": "#9B5DE5",
     "red": "#D81E5B",
@@ -123,7 +124,9 @@
           "powerline_symbol": "\ue0b4",
           "foreground": "p:white",
           "background": "p:blue",
-          "template": "{{ if .Env.POSH_PR_STATUS }} {{ url (printf \"\ueb40 %s\" .Env.POSH_PR_STATUS) .Env.POSH_PR_URL }} {{ end }}"
+          "background_templates": ["{{ if .Env.POSH_PR_COLOR }}{{ .Env.POSH_PR_COLOR }}{{ end }}"],
+          "foreground_templates": ["{{ if or (eq .Env.POSH_PR_COLOR \"p:yellow\") (eq .Env.POSH_PR_COLOR \"p:green\") }}p:black{{ end }}"],
+          "template": "{{ if .Env.POSH_PR_NUMBER }} {{ .Env.POSH_PR_PREFIX }} {{ url .Env.POSH_PR_NUMBER .Env.POSH_PR_URL }}{{ .Env.POSH_PR_SUFFIX }} {{ end }}"
         },
         {
           "options": {

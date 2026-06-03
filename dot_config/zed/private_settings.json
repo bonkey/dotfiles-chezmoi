@@ -131,9 +131,10 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "enable_thinking": false,
-      "provider": "opencode",
-      "model": "free/big-pickle",
+      "effort": "medium",
+      "enable_thinking": true,
+      "provider": "openai-subscribed",
+      "model": "gpt-5.5",
     },
     "commit_message_model": {
       "provider": "google",

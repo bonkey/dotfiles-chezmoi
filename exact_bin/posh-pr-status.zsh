@@ -1,37 +1,75 @@
 #!/usr/bin/env zsh
-# Populates $POSH_PR_STATUS and $POSH_PR_URL for the oh-my-posh PR segment.
-# Refresh is fire-and-forget so the prompt never blocks. Cache lives in
-# $XDG_CACHE_HOME/posh-pr-status, keyed per repo+branch, TTL configurable.
+# Populates the oh-my-posh PR segment env vars. Refresh is fire-and-forget so
+# the prompt never blocks. Cache lives in $XDG_CACHE_HOME/posh-pr-status,
+# keyed per repo+branch, TTL configurable.
+#
+# Emitted env vars:
+#   POSH_PR_PREFIX  leading type glyph (rendered plain, NOT linked)
+#   POSH_PR_NUMBER  "#<n>" (the only part the theme turns into a link)
+#   POSH_PR_SUFFIX  checks/review/conflict glyphs (rendered plain, NOT linked)
+#   POSH_PR_URL     PR url (link target for the number)
+#   POSH_PR_COLOR   oh-my-posh palette ref for the segment background
 
 POSH_PR_STATUS_TTL=${POSH_PR_STATUS_TTL:-15}
 POSH_PR_STATUS_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/posh-pr-status"
 
-# Nerd Font codepoints: U+F044 pencil, U+F00D x, U+F254 hourglass,
-# U+F00C check, U+F164 thumbs-up, U+F165 thumbs-down, U+F06E eye.
-typeset -g _POSH_PR_JQ='select(.number) | ("#\(.number)"
-  + (if .isDraft then " " else "" end)
-  + (if (.statusCheckRollup // []) == [] then ""
-     elif any(.statusCheckRollup[]; .conclusion == "FAILURE" or .conclusion == "CANCELLED") then " "
-     elif any(.statusCheckRollup[]; (.status == "COMPLETED") | not) then " "
-     else " " end)
-  + (if .reviewDecision == "APPROVED" then " "
-     elif .reviewDecision == "CHANGES_REQUESTED" then " "
-     elif .reviewDecision == "REVIEW_REQUIRED" then " "
-     else "" end))
-  + "\t" + .url'
+# Nerd Font codepoints:
+#   prefix: U+EB40 git-pull-request (ready), U+F044 pencil (draft)
+#   checks: U+F00D x (fail), U+F254 hourglass (pending), U+F00C check (pass)
+#   review: U+F164 thumbs-up (approved), U+F165 thumbs-down (changes), U+F06E eye (required)
+#   merge:  U+F071 warning triangle (conflict)
+# jq \uXXXX escapes render the codepoint; inside this single-quoted string
+# the backslashes pass through to jq untouched.
+#
+# Output is "<prefix>\t<number>\t<suffix>\t<url>\t<color>". The color is an
+# oh-my-posh palette ref picked by severity so the most urgent state wins the
+# background: fail/conflict > changes-requested > pending > draft > approved.
+typeset -g _POSH_PR_JQ='select(.number)
+  | (.statusCheckRollup // []) as $cs
+  | (if ($cs | length) == 0 then "none"
+     elif any($cs[]; .conclusion == "FAILURE" or .conclusion == "CANCELLED") then "fail"
+     elif any($cs[]; (.status == "COMPLETED") | not) then "pending"
+     else "pass" end) as $check
+  | (.mergeable == "CONFLICTING") as $conflict
+  | .reviewDecision as $review
+  | (if .isDraft then "\uf044" else "\ueb40" end) as $prefix
+  | "#\(.number)" as $number
+  | ((if $check == "fail" then " \uf00d"
+      elif $check == "pending" then " \uf254"
+      elif $check == "pass" then " \uf00c"
+      else "" end)
+     + (if $review == "APPROVED" then " \uf164"
+        elif $review == "CHANGES_REQUESTED" then " \uf165"
+        elif $review == "REVIEW_REQUIRED" then " \uf06e"
+        else "" end)
+     + (if $conflict then " \uf071" else "" end)) as $suffix
+  | (if $check == "fail" then "p:red"
+     elif $conflict then "p:red"
+     elif $review == "CHANGES_REQUESTED" then "p:orange"
+     elif $check == "pending" then "p:yellow"
+     elif .isDraft then "p:grey"
+     elif $review == "APPROVED" then "p:green"
+     else "p:blue" end) as $color
+  | $prefix + "\t" + $number + "\t" + $suffix + "\t" + .url + "\t" + $color'
 
 _posh_pr_status_refresh() {
   local toplevel=$1 branch=$2 cache_file=$3
   local out
   out=$(cd "$toplevel" && gh pr view "$branch" \
-    --json number,isDraft,reviewDecision,statusCheckRollup,url \
+    --json number,isDraft,reviewDecision,statusCheckRollup,mergeable,url \
     -q "$_POSH_PR_JQ" 2>/dev/null)
-  print -rn -- "$out" >| "$cache_file"
+  # Write to a temp file and rename so a concurrent prompt never reads a
+  # half-written line (rename is atomic on the same filesystem).
+  local tmp="$cache_file.$$"
+  print -rn -- "$out" >| "$tmp" && mv -f "$tmp" "$cache_file"
 }
 
 _posh_pr_status_precmd() {
-  export POSH_PR_STATUS=""
+  export POSH_PR_PREFIX=""
+  export POSH_PR_NUMBER=""
+  export POSH_PR_SUFFIX=""
   export POSH_PR_URL=""
+  export POSH_PR_COLOR=""
 
   local toplevel branch
   toplevel=$(git rev-parse --show-toplevel 2>/dev/null) || return
@@ -46,11 +84,15 @@ _posh_pr_status_precmd() {
   if [[ -f $cache_file ]]; then
     local line
     line=$(<"$cache_file")
-    # Only honor entries in the new "<status>\t<url>" format. Old cache files
-    # without a tab are ignored; the background refresh will rewrite them.
-    if [[ $line == *$'\t'* ]]; then
-      POSH_PR_STATUS=${line%%$'\t'*}
-      POSH_PR_URL=${line#*$'\t'}
+    # New 5-field format "<prefix>\t<number>\t<suffix>\t<url>\t<color>" (4
+    # tabs). Older cache files are ignored; the background refresh rewrites them.
+    if [[ $line == *$'\t'*$'\t'*$'\t'*$'\t'* ]]; then
+      local rest
+      POSH_PR_PREFIX=${line%%$'\t'*};  rest=${line#*$'\t'}
+      POSH_PR_NUMBER=${rest%%$'\t'*};  rest=${rest#*$'\t'}
+      POSH_PR_SUFFIX=${rest%%$'\t'*};  rest=${rest#*$'\t'}
+      POSH_PR_URL=${rest%%$'\t'*};     rest=${rest#*$'\t'}
+      POSH_PR_COLOR=$rest
     fi
   fi
 

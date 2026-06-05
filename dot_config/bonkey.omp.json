@@ -7,7 +7,6 @@
     "green": "#59C9A5",
     "grey": "#6E7681",
     "orange": "#F07623",
-    "purple": "#9B5DE5",
     "red": "#D81E5B",
     "white": "#E0DEF4",
     "yellow": "#F3AE35"
@@ -60,14 +59,6 @@
           "type": "path",
           "style": "powerline",
           "leading_powerline_symbol": " \ue0b6"
-        },
-        {
-          "template": " \uf401 {{ first (splitList \".\" .RepoName) }} ",
-          "foreground": "p:white",
-          "powerline_symbol": "\ue0b4",
-          "background": "p:purple",
-          "type": "git",
-          "style": "powerline"
         },
         {
           "options": {

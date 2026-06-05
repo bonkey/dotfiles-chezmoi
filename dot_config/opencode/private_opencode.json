@@ -169,15 +169,6 @@
       "type": "remote",
       "enabled": true
     },
-    "pencil": {
-      "command": [
-        "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
-        "--app",
-        "desktop"
-      ],
-      "enabled": true,
-      "type": "local"
-    },
     "swiftlens": {
       "command": [
         "uvx",
@@ -215,6 +206,17 @@
         "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       },
       "enabled": true
+    },
+    "pencil": {
+      "command": [
+        "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
+        "--app",
+        "desktop",
+        "--agent",
+        "openCodeCLI"
+      ],
+      "enabled": true,
+      "type": "local"
     }
   },
   "$schema": "https://opencode.ai/config.json",

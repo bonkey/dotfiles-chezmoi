@@ -66,9 +66,7 @@ _eval_for_cmd_cached zoxide "zoxide init zsh --no-cmd"
 _eval_for_cmd_cached wt "wt config shell init zsh"
 _eval_for_cmd_cached opencode "opencode completion zsh"
 
-source ~/bin/posh-pr-status.zsh
 _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
-
 _eval_for_cmd zsh-patina "zsh-patina activate"
 
 tsrc "${HOME}/.iterm2_shell_integration.zsh" \

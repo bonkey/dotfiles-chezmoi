@@ -29,7 +29,7 @@
 	<key>AiMaxTokens</key>
 	<integer>1048576</integer>
 	<key>AiModel</key>
-	<string>gemini-3-flash-preview</string>
+	<string>gemini-3.5-flash</string>
 	<key>AiResponseMaxTokens</key>
 	<integer>65536</integer>
 	<key>AitermURL</key>

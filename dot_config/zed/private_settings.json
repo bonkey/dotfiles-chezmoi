@@ -2,6 +2,12 @@
   // ================================
   // CONTEXT SERVERS
   // ================================
+  "language_models": {
+    "opencode": {
+      "show_free_models": false,
+      "show_zen_models": false
+    }
+  },
   "cli_default_open_behavior": "new_window",
   "project_panel": {
     "dock": "right",
@@ -16,6 +22,9 @@
     "jsonl": false,
   },
   "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    },
     "codex-acp": {
       "type": "registry",
       "default_mode": "full-access",
@@ -103,24 +112,53 @@
     "favorite_models": [
       {
         "provider": "google",
-        "model": "gemini-3-flash-preview",
-        "enable_thinking": false,
-      },
-      {
-        "provider": "google",
         "model": "gemini-3-pro-preview",
-        "enable_thinking": false,
+        "enable_thinking": false
       },
       {
         "provider": "openai",
         "model": "gpt-5.4",
-        "enable_thinking": false,
+        "enable_thinking": false
       },
       {
         "provider": "openai",
         "model": "gpt-5.3-codex",
-        "enable_thinking": false,
+        "enable_thinking": false
       },
+      {
+        "provider": "google",
+        "model": "gemini-3.5-flash",
+        "enable_thinking": true,
+        "effort": "medium"
+      },
+      {
+        "provider": "openai-subscribed",
+        "model": "gpt-5.4",
+        "enable_thinking": true,
+        "effort": "medium"
+      },
+      {
+        "provider": "opencode",
+        "model": "go/deepseek-v4-flash",
+        "enable_thinking": true,
+        "effort": "max"
+      },
+      {
+        "provider": "opencode",
+        "model": "go/kimi-k2.6",
+        "enable_thinking": false
+      },
+      {
+        "provider": "opencode",
+        "model": "go/deepseek-v4-pro",
+        "enable_thinking": true,
+        "effort": "max"
+      },
+      {
+        "provider": "opencode",
+        "model": "go/qwen3.6-plus",
+        "enable_thinking": false
+      }
     ],
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -134,7 +172,7 @@
       "effort": "medium",
       "enable_thinking": true,
       "provider": "openai-subscribed",
-      "model": "gpt-5.5",
+      "model": "gpt-5.4",
     },
     "commit_message_model": {
       "provider": "google",

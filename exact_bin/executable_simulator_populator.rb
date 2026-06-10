@@ -26,7 +26,7 @@ end
 
 # Devices created for runtimes in the latest two installed major iOS versions.
 # Older runtimes get a minimal setup: the newest iPhone they support.
-BIG_DEVICE_LIST = [
+DEVICE_LIST = [
   'iPhone 17 Pro',
   'iPhone 17',
   'iPad Pro 11-inch (M4)',
@@ -109,17 +109,17 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
     run_command("xcrun simctl list -j #{kind}") { |output| return JSON.parse(output) }
   end
 
-  # Latest two major iOS versions get BIG_DEVICE_LIST (filtered to what the
+  # Latest two major iOS versions get DEVICE_LIST (filtered to what the
   # runtime supports); older runtimes get the newest iPhone they support.
   # supportedDeviceTypes is ordered newest-first by simctl.
   def build_runtime_device_mapping
     ios_runtimes = @available_runtimes.select { |r| r['name'].start_with?('iOS') }
-    big_majors = ios_runtimes.map { |r| major_version(r) }.uniq.max(2)
+    latest_majors = ios_runtimes.map { |r| major_version(r) }.uniq.max(2)
 
     ios_runtimes.sort_by { |r| Gem::Version.new(r['version']) }.reverse.to_h do |runtime|
       supported = runtime['supportedDeviceTypes'].map { |dt| dt['name'] }
-      devices = if big_majors.include?(major_version(runtime))
-                  BIG_DEVICE_LIST.select { |name| supported.include?(name) }
+      devices = if latest_majors.include?(major_version(runtime))
+                  DEVICE_LIST.select { |name| supported.include?(name) }
                 else
                   [top_iphone(runtime)].compact
                 end

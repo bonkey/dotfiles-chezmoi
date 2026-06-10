@@ -6,6 +6,13 @@ source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
-exec_unless_recently_modified $file "npx -y skills add bonkey/skills --global --yes"
+skills=(
+    wisdom-in-a-nutshell/agents
+    bonkey/skills
+)
+
+for skill in "${skills[@]}"; do
+    exec_unless_recently_modified $file "npx -y skills add $skill --global --yes"
+done
 
 exec_unless_recently_modified $file "npx -y skills update --global"

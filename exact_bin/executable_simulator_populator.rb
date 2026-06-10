@@ -3,30 +3,39 @@
 
 require 'optparse'
 require 'json'
-require 'rainbow'
 require 'English'
 
-RUNTIME_DEVICES = {
-  'iOS 26.5' => [
-    'iPhone 17 Pro',
-    'iPhone 17',
-    'iPad Pro 11-inch (M4)',
-    'iPad Pro 13-inch (M4)',
-    'iPhone SE (3rd generation)'
-  ],
-  'iOS 26.4' => [
-    'iPhone 17 Pro'
-  ],
-  'iOS 18.6' => [
-    'iPhone 16 Pro',
-    'iPhone 16'
-  ],
-  'iOS 17.5' => ['iPhone 15']
-}.freeze
+# Minimal ANSI colorizer — no external gems. Coloring is skipped when output
+# isn't a TTY (e.g. piped) or NO_COLOR is set (https://no-color.org).
+module Tint
+  CODES = { red: 31, green: 32, yellow: 33, blue: 34, magenta: 35, cyan: 36 }.freeze
+
+  module_function
+
+  def enabled?
+    $stdout.tty? && !ENV.key?('NO_COLOR')
+  end
+
+  def paint(text, color, bright: false)
+    return text.to_s unless enabled?
+
+    weight = bright ? '1;' : ''
+    "\e[#{weight}#{CODES.fetch(color)}m#{text}\e[0m"
+  end
+end
+
+# Devices created for runtimes in the latest two installed major iOS versions.
+# Older runtimes get a minimal setup: the newest iPhone they support.
+BIG_DEVICE_LIST = [
+  'iPhone 17 Pro',
+  'iPhone 17',
+  'iPad Pro 11-inch (M4)',
+  'iPad Pro 13-inch (M4)',
+  'iPhone SE (3rd generation)'
+].freeze
 
 class SimulatorPopulator # rubocop:disable Metrics/ClassLength
-  def initialize(runtime_device_mapping:, verbose: false, runtimes_filter: nil)
-    @runtime_device_mapping = runtime_device_mapping
+  def initialize(verbose: false, runtimes_filter: nil)
     @verbose = verbose
     @runtimes_filter = runtimes_filter
 
@@ -37,6 +46,8 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
     @available_runtimes = @runtimes['runtimes'].select do |runtime|
       runtime['availability'] == '(available)' || runtime['isAvailable'] == true
     end
+
+    @runtime_device_mapping = build_runtime_device_mapping
 
     validate_runtime_filter if @runtimes_filter
   end
@@ -51,23 +62,23 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
       next unless runtime_matches_filter?(runtime_name, target_runtimes)
 
       runtime_devices.each do |device|
-        puts "Removing: #{Rainbow("#{device['name']} (#{device['udid']})").color(:red).bright}"
+        puts "Removing: #{Tint.paint("#{device['name']} (#{device['udid']})", :red, bright: true)}"
         run_command("xcrun simctl delete #{device['udid']}")
       end
     end
   end
 
   def remove_all_simulators
-    puts Rainbow('Removing ALL simulators (every runtime)...').color(:red).bright
+    puts Tint.paint('Removing ALL simulators (every runtime)...', :red, bright: true)
     run_command('xcrun simctl delete all') do |_output|
-      puts Rainbow('Deleted all simulators').color(:green).bright if $CHILD_STATUS.success?
+      puts Tint.paint('Deleted all simulators', :green, bright: true) if $CHILD_STATUS.success?
     end
   end
 
   def delete_unavailable
     puts 'Deleting unavailable simulators...'
     run_command('xcrun simctl delete unavailable') do |_output|
-      puts Rainbow('Deleted unavailable simulators').color(:green).bright if $CHILD_STATUS.success?
+      puts Tint.paint('Deleted unavailable simulators', :green, bright: true) if $CHILD_STATUS.success?
     end
   end
 
@@ -83,9 +94,9 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
   end
 
   def list_mapping
-    puts Rainbow('Runtime to Device Mapping:').color(:cyan).bright
+    puts Tint.paint('Runtime to Device Mapping:', :cyan, bright: true)
     @runtime_device_mapping.each do |runtime, devices|
-      puts Rainbow("  #{runtime}:").color(:blue)
+      puts Tint.paint("  #{runtime}:", :blue)
       devices.each do |device|
         puts "    - #{device} → #{device} (#{runtime})"
       end
@@ -98,20 +109,47 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
     run_command("xcrun simctl list -j #{kind}") { |output| return JSON.parse(output) }
   end
 
+  # Latest two major iOS versions get BIG_DEVICE_LIST (filtered to what the
+  # runtime supports); older runtimes get the newest iPhone they support.
+  # supportedDeviceTypes is ordered newest-first by simctl.
+  def build_runtime_device_mapping
+    ios_runtimes = @available_runtimes.select { |r| r['name'].start_with?('iOS') }
+    big_majors = ios_runtimes.map { |r| major_version(r) }.uniq.max(2)
+
+    ios_runtimes.sort_by { |r| Gem::Version.new(r['version']) }.reverse.to_h do |runtime|
+      supported = runtime['supportedDeviceTypes'].map { |dt| dt['name'] }
+      devices = if big_majors.include?(major_version(runtime))
+                  BIG_DEVICE_LIST.select { |name| supported.include?(name) }
+                else
+                  [top_iphone(runtime)].compact
+                end
+      [runtime['name'], devices]
+    end
+  end
+
+  def major_version(runtime)
+    runtime['version'].split('.').first.to_i
+  end
+
+  def top_iphone(runtime)
+    device = runtime['supportedDeviceTypes'].find { |dt| dt['productFamily'] == 'iPhone' }
+    device && device['name']
+  end
+
   def create_runtime_devices(runtime_name, devices)
     unless @available_runtimes.any? { |r| r['name'] == runtime_name }
-      puts Rainbow("Runtime #{runtime_name} not available, skipping...").color(:yellow)
+      puts Tint.paint("Runtime #{runtime_name} not available, skipping...", :yellow)
       return
     end
 
-    puts Rainbow("## #{runtime_name}").color(:blue).bright
+    puts Tint.paint("## #{runtime_name}", :blue, bright: true)
     devices.each { |device_name| create_for_runtime(device_name, runtime_name) }
   end
 
   def create_for_runtime(device_name, runtime_name)
     device_type = @device_types['devicetypes'].find { |dt| dt['name'] == device_name }
     unless device_type
-      puts Rainbow("Device type #{device_name} not found, skipping...").color(:yellow)
+      puts Tint.paint("Device type #{device_name} not found, skipping...", :yellow)
       return
     end
 
@@ -136,18 +174,18 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
     name ||= device_type
     runtime_id = find_runtime(name: runtime)
     if runtime_id.nil?
-      puts "Runtime #{Rainbow(runtime).color(:red).bright} not found"
+      puts "Runtime #{Tint.paint(runtime, :red, bright: true)} not found"
       return
     end
     args = ["'#{name}'", "'#{device_type}'", "'#{runtime_id}'"].join ' '
 
     run_command("xcrun simctl create #{args} 2> /dev/null") do |_output|
-      puts "Created #{Rainbow(name).color(:green).bright}" if $CHILD_STATUS.success?
+      puts "Created #{Tint.paint(name, :green, bright: true)}" if $CHILD_STATUS.success?
     end
   end
 
   def run_command(command)
-    puts Rainbow("$ #{command}").color(:magenta) if @verbose
+    puts Tint.paint("$ #{command}", :magenta) if @verbose
     output = `#{command}`
     yield output if block_given?
     output
@@ -178,8 +216,8 @@ class SimulatorPopulator # rubocop:disable Metrics/ClassLength
     invalid = @runtimes_filter.reject { |r| valid_runtime?(r, valid_runtimes) }
     return if invalid.empty?
 
-    puts Rainbow("Error: Invalid runtime identifier(s): #{invalid.join(', ')}").color(:red).bright
-    puts Rainbow("Available runtime identifiers: #{valid_runtimes.join(', ')}").color(:cyan).bright
+    puts Tint.paint("Error: Invalid runtime identifier(s): #{invalid.join(', ')}", :red, bright: true)
+    puts Tint.paint("Available runtime identifiers: #{valid_runtimes.join(', ')}", :cyan, bright: true)
     exit 1
   end
 
@@ -234,7 +272,6 @@ end
 option_parser.parse!
 
 populator = SimulatorPopulator.new(
-  runtime_device_mapping: RUNTIME_DEVICES,
   verbose: options[:verbose],
   runtimes_filter: options[:runtimes]
 )
@@ -249,6 +286,6 @@ if options[:remove_all]
   populator.remove_all_simulators
 elsif options[:remove_existing]
   populator.remove_simulators
-  puts Rainbow('Hint: pass --remove-all to also wipe simulators in runtimes outside the mapping.').color(:cyan)
+  puts Tint.paint('Hint: pass --remove-all to also wipe simulators in runtimes outside the mapping.', :cyan)
 end
 populator.create if options[:create_all_variants]

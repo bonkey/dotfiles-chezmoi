@@ -38,6 +38,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 
 # Observability / delivery tooling
 "npm:@sentry/cli" = "latest"              # Sentry release/debug/upload CLI
+"npm:vercel" = "latest"
 
 # Google / workspace tooling
 "npm:@googleworkspace/cli" = "latest"     # Google Workspace CLI

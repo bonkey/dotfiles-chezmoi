@@ -729,14 +729,27 @@ alias Wsc='Ws --create'
 alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
 
 Wcb() {
-    wt list --format json | jq -r '.[] | select(
-      .is_main == false and
-      .is_current == false and
-      .worktree.state != "locked" and
-      .working_tree.staged == false and
-      .working_tree.modified == false and
-      .working_tree.untracked == false
-    ) | .branch'
+    wt list --format json |
+      jq -r '
+        .[]
+        | select(.is_main | not)
+        | select(.is_current | not)
+        | select(.worktree.state != "locked")
+        | select(.working_tree.staged | not)
+        | select(.working_tree.modified | not)
+        | select(.working_tree.untracked | not)
+        | .branch
+      ' |
+      while IFS= read -r branch; do
+        marker=$(wt config state marker get --branch "$branch" --format json 2>/dev/null |
+          jq -r '.. | objects | .marker? // empty' 2>/dev/null)
+
+        case "$marker" in
+          "🤖"|"💬") continue ;;
+        esac
+
+        printf '%s\n' "$branch"
+      done
 }
 
 Wcbr() {

@@ -189,6 +189,10 @@ CCA() {
     claude --permission-mode auto "$@"
 }
 
+CCR() {
+    claude --resume "$@"
+}
+
 CCT() {
     claude-worktrunk
 }

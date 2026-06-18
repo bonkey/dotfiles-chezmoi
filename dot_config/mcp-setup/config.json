@@ -7,11 +7,17 @@
 
     "cli-dev": ["shellwright"],
     "web-dev": ["shadcn", "vibium"],
-    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "swiftlens", "xcstrings-crud", "xcode-instruments", "xcode-mcpbridge"],
+    "ios-dev": [
+      "sosumi",
+      "mobile-mcp",
+      "simctl",
+      "swiftlens",
+      "xcstrings-crud",
+      "xcode-instruments",
+      "xcode-mcpbridge"
+    ],
 
     "code-search": ["morph"],
-
-    "ui-automation": ["peekaboo"],
 
     "docs": ["ref", "tavily", "deepwiki"],
     "research": ["exa", "tavily", "firecrawl"]
@@ -71,14 +77,6 @@
     "xcode-mcpbridge": {
       "type": "local",
       "command": ["xcrun", "mcpbridge"]
-    },
-    "peekaboo": {
-      "type": "local",
-      "command": ["peekaboo", "mcp"],
-      "environment": {
-        "PEEKABOO_AI_PROVIDERS": "openai/gpt-4.1",
-        "OPENAI_API_KEY": "<OPENAI_API_KEY_REDACTED>"
-      }
     },
     "vibium": {
       "type": "local",

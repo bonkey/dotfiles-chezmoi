@@ -86,6 +86,11 @@ md() {
     open -a Marked "$@"
 }
 
+Mup() {
+    export GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN
+    mise up
+}
+
 br() {
     brew "$@"
 }
@@ -135,10 +140,6 @@ y() {
 dfh() {
     fs=${1:/}
     duf -output 'filesystem, size, used, avail, usage, mountpoint' "${fs}"
-}
-
-x86() {
-  arch -x86_64 "$@"
 }
 
 alias m=make

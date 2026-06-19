@@ -67,6 +67,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 experimental = true
 pipx.uvx = true
 npm.bun = true
+minimum_release_age = "0" # always install newest release; disable mise 2026.x quarantine
 idiomatic_version_file_enable_tools = ["ruby", "python", "node"]
 
 trusted_config_paths = [

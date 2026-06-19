@@ -15,6 +15,7 @@ alias -g G='| grep -E'
 alias -g GI='| grep -Ei'
 alias -g L="| less"
 alias -g R21="2>&1"
+alias -g R21G="2>&1 | grep"
 alias -g R2N="2> /dev/null"
 alias -g RN="> /dev/null 2>&1"
 alias -g SS="| sort"

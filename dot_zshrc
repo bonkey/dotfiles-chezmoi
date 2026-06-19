@@ -70,6 +70,10 @@ _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json
 
 _eval_for_cmd zsh-patina "zsh-patina activate"
 
+shell-in-worktrunk() {
+    source "$HOME/bin/_exec-in-worktrunk" shell "$@"
+}
+
 tsrc "${HOME}/.iterm2_shell_integration.zsh" \
     "${HOME}/.aliases" \
     "${HOME}/.aliases.local"

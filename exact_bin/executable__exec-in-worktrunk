@@ -1,5 +1,15 @@
 #!/usr/bin/env zsh
-set -uo pipefail
+
+# Save the caller's `nounset` / `pipefail` state so sourcing this script
+# (e.g. from a wrapper function in .zshrc) doesn't leak `set -u` into
+# the interactive shell — that would break widgets that read unset
+# variables (jira-ticket-summary, zvm, ...). The EXIT trap below
+# restores them when the script finishes.
+[[ -o nounset ]]  && saved_nounset=1  || saved_nounset=0
+[[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
+trap '(( saved_nounset ))  || set +u
+     (( saved_pipefail )) || set +o pipefail
+     unfunction default_branch make_slug compose_branch branch_exists sanitize' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -23,6 +33,16 @@ set -uo pipefail
 # never scanned on its own.
 
 source "${HOME}/bin/_common.zsh"
+
+# Pull in the wt shell wrapper that performs the post-switch `builtin cd`.
+# The user's interactive shell has the same line in .zshrc, so `wt switch`
+# works there. Inside a script the wrapper isn't loaded and the binary falls
+# back to printing the cd path to stdout with a "shell requires restart"
+# warning — eval the init here so the script's `wt switch` calls behave
+# the same way.
+_eval_for_cmd wt "wt config shell init zsh"
+
+set -uo pipefail
 
 model="gemini-flash-latest"
 
@@ -221,26 +241,49 @@ fi
 # Session name: the branch without its <whoami>/ prefix.
 session_name="${branch#${user}/}"
 
+# --- determine mode --------------------------------------------------------
+# The symlink basename (claude-in-worktrunk, opencode-in-worktrunk,
+# shell-in-worktrunk) picks the CLI and its predefined args. When sourced
+# via a wrapper function (e.g. `source _exec-in-worktrunk shell`),
+# $0 is the real filename, so the mode is taken from the first positional
+# instead.
+mode="${0##*/}"
+if (( $# )) && [[ "$1" == (shell|claude|opencode) ]]; then
+    mode="$1"
+    shift
+fi
+
 # --- dispatch --------------------------------------------------------------
-# The symlink basename (e.g. claude-in-worktrunk, opencode-in-worktrunk) picks
-# the CLI and its predefined args. Add another tool by dropping a case here
-# and symlinking `<tool>-in-worktrunk` -> this file.
+# Add another tool by dropping a case here and symlinking
+# `<tool>-in-worktrunk` -> this file. `shell-in-worktrunk` is the no-CLI
+# variant: it just creates/switches the worktree without spawning a child
+# process — the user stays in their original shell.
 cli=()
 cli_args=()
-case "${0##*/}" in
-    claude-in-worktrunk)
+case "$mode" in
+    claude-in-worktrunk|claude)
         cli=(claude)
         cli_args=(--dangerously-skip-permissions --name "$session_name")
         ;;
-    opencode-in-worktrunk)
+    opencode-in-worktrunk|opencode)
         cli=(opencode)
         cli_args=()
         ;;
+    shell-in-worktrunk|shell)
+        cli=()
+        cli_args=()
+        ;;
     *)
-        print -ru2 -- "invoke via claude-in-worktrunk or opencode-in-worktrunk (got: ${0##*/})"
+        print -ru2 -- "invoke via claude-in-worktrunk, opencode-in-worktrunk, or shell-in-worktrunk (got: $mode)"
         exit 1
         ;;
 esac
 
-_exec wt switch "$branch" "${create_args[@]}" \
-    --execute "${cli[@]}" -- "${cli_args[@]}"
+if (( ${#cli[@]} )); then
+    _exec wt switch "$branch" "${create_args[@]}" \
+        --execute "${cli[@]}" -- "${cli_args[@]}"
+else
+    # shell-in-worktrunk: the wt wrapper loaded above does the post-switch
+    # `builtin cd`, so no --execute and no second call is needed.
+    _exec wt switch "$branch" "${create_args[@]}"
+fi

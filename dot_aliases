@@ -198,7 +198,6 @@ CCT() {
     claude-in-worktrunk
 }
 
-
 OC() {
     opencode "$@"
 }
@@ -739,7 +738,7 @@ alias Wm='wt merge'
 alias Ws='wt switch'
 alias Wsm='Ws main'
 alias Wsc='Ws --create'
-alias Wscc='Wsc --execute="claude --dangerously-skip-permissions"'
+alias WT='shell-in-worktree'
 
 Wcb() {
     wt list --format json |

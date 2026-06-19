@@ -195,11 +195,16 @@ CCR() {
 }
 
 CCT() {
-    claude-worktrunk
+    claude-in-worktrunk
 }
+
 
 OC() {
     opencode "$@"
+}
+
+OCT() {
+    opencode-in-worktrunk
 }
 
 KM() {

@@ -1,11 +1,16 @@
 #!/usr/bin/env zsh
 set -uo pipefail
 
-# claude-worktrunk
-# Create a worktree off a base branch and launch Claude in it.
-# Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug> with no ticket)
+# _exec-in-worktrunk
+# Create a worktree off a base branch and launch a configured CLI in it.
 #
-# Usage: claude-worktrunk [--resume] [base] [ticket-url-or-key]
+# This script is dispatched by symlink: invoke as `claude-in-worktrunk` or
+# `opencode-in-worktrunk` and the symlink's basename picks the CLI and its
+# predefined args. The dispatch table lives at the bottom of this file.
+#
+# Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug>)
+#
+# Usage: <symlink> [--resume] [base] [ticket-url-or-key]
 #   --resume  reuse this ticket's existing worktree instead of creating a new one
 #   .         branch off the current branch
 #   <name>    branch off <name>
@@ -216,5 +221,26 @@ fi
 # Session name: the branch without its <whoami>/ prefix.
 session_name="${branch#${user}/}"
 
+# --- dispatch --------------------------------------------------------------
+# The symlink basename (e.g. claude-in-worktrunk, opencode-in-worktrunk) picks
+# the CLI and its predefined args. Add another tool by dropping a case here
+# and symlinking `<tool>-in-worktrunk` -> this file.
+cli=()
+cli_args=()
+case "${0##*/}" in
+    claude-in-worktrunk)
+        cli=(claude)
+        cli_args=(--dangerously-skip-permissions --name "$session_name")
+        ;;
+    opencode-in-worktrunk)
+        cli=(opencode)
+        cli_args=()
+        ;;
+    *)
+        print -ru2 -- "invoke via claude-in-worktrunk or opencode-in-worktrunk (got: ${0##*/})"
+        exit 1
+        ;;
+esac
+
 _exec wt switch "$branch" "${create_args[@]}" \
-    --execute claude -- --dangerously-skip-permissions --name "$session_name"
+    --execute "${cli[@]}" -- "${cli_args[@]}"

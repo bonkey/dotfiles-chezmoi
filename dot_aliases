@@ -222,6 +222,8 @@ alias Skl="Sk list"
 alias diff=colordiff
 alias diffstat="diffstat -f3 -C"
 
+alias D="diff -Nru"
+
 cat() {
   type glow >/dev/null 2>&1
   has_glow=$?

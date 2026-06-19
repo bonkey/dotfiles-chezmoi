@@ -223,6 +223,7 @@ alias diff=colordiff
 alias diffstat="diffstat -f3 -C"
 
 alias D="diff -Nru"
+alias DD="hunk diff"
 
 cat() {
   type glow >/dev/null 2>&1

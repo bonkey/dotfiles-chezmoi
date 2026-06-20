@@ -730,8 +730,8 @@ alias pos="_pod search"
 alias Wl='wt list'
 
 alias Wr='wt remove'
-alias Wrf='Wr --force'
-alias Wrfd='Wr --force -D'
+alias WR='Wr --force'
+alias WRD='Wr --force -D'
 
 alias Wm='wt merge'
 
@@ -740,7 +740,7 @@ alias Wsm='Ws main'
 alias Wsc='Ws --create'
 alias WT='shell-in-worktree'
 
-Wcb() {
+Wc() {
     wt list --format json |
       jq -r '
         .[]
@@ -764,7 +764,7 @@ Wcb() {
       done
 }
 
-Wcbr() {
+WC() {
     Wcb | xargs wt remove "$@"
 }
 

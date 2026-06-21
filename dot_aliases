@@ -765,7 +765,7 @@ Wc() {
 }
 
 WC() {
-    Wcb | xargs wt remove "$@"
+    Wc | xargs wt remove "$@"
 }
 
 # --- git

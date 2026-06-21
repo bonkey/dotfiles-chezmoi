@@ -423,16 +423,6 @@ montage() {
   gm montage +frame +shadow +label -tile $tile -geometry +1+1 "$@"
 }
 
-yt-subtitles() {
-    yt-dlp --skip-download \
-    --write-subs \
-    --write-auto-subs \
-    --sub-langs en \
-    --convert-subs srt \
-    --cookies-from-browser Safari \
-    "$@"
-}
-
 ff_silent_sound() {
   for i in "$@" ; do
     dst=${i:r}-nosound.${i:e}
@@ -852,7 +842,7 @@ _gb_merged_prune() {
     _exec "git fetch origin '$default_branch':'refs/heads/$default_branch' --no-tags"
   fi
 
-  branches_to_remove=(${(f)$(git branch --merged "$default_branch" | sed 's/^..//' | grep -vE "^(${default_branch}|${current_branch})$")})
+  branches_to_remove=("${(@f)$(git branch --merged "$default_branch" | sed 's/^..//' | grep -vE "^(${default_branch}|${current_branch})$")}")
 
   if (( ${#branches_to_remove[@]} == 0 )); then
     log_message "No local branches merged to '$default_branch'"

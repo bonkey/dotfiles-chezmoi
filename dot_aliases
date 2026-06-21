@@ -779,6 +779,111 @@ gl-pr-changelog() {
   git log --pretty='format:* %s' "$@" | sd '[A-Z]{3,}-[0-9]+: ' ''
 }
 
+_git_default_branch() {
+  local remote_head default_branch
+
+  remote_head=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+  if [[ -n "$remote_head" ]]; then
+    echo "${remote_head#origin/}"
+    return 0
+  fi
+
+  default_branch=$(git remote show origin 2>/dev/null | sed -n '/HEAD branch/s/.*: //p' | head -1)
+  if [[ -n "$default_branch" ]]; then
+    echo "$default_branch"
+    return 0
+  fi
+
+  for default_branch in main master develop; do
+    if git show-ref --verify --quiet "refs/heads/$default_branch"; then
+      echo "$default_branch"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+_gb_merged_prune() {
+  local force=false confirm=true branch default_branch current_branch
+  local -a branches_to_remove
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --force)
+        force=true
+        confirm=false
+        shift
+        ;;
+      --no-confirm)
+        confirm=false
+        shift
+        ;;
+      *)
+        shift
+        ;;
+    esac
+  done
+
+  current_branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+  if [[ -z "$current_branch" ]]; then
+    log_error "Not on a git branch"
+    return 1
+  fi
+
+  default_branch=$(_git_default_branch)
+  if [[ -z "$default_branch" ]]; then
+    log_error "Could not determine default branch"
+    return 1
+  fi
+
+  if ! git show-ref --verify --quiet "refs/heads/$default_branch"; then
+    log_message "Fetching default branch '$default_branch' from origin"
+    _exec "git fetch origin '$default_branch':'refs/heads/$default_branch' --no-tags"
+  fi
+
+  branches_to_remove=(${(f)$(git branch --merged "$default_branch" | sed 's/^..//' | grep -vE "^(${default_branch}|${current_branch})$")})
+
+  if (( ${#branches_to_remove[@]} == 0 )); then
+    log_message "No local branches merged to '$default_branch'"
+    return 0
+  fi
+
+  printf "Default branch: %s\n" "$default_branch"
+  printf "Branches to remove:\n"
+  printf "  %s\n" "${branches_to_remove[@]}"
+
+  if [[ "$confirm" == true ]]; then
+    echo -n "Remove these branches? [y/N]: "
+    read -k 1 response
+    echo
+    [[ "$response" =~ ^[Yy]$ ]] || {
+      log_message "Aborted"
+      return 0
+    }
+  fi
+
+  branch_cmd="git branch "
+  if [[ "$force" == true ]]; then
+    branch_cmd+="-D"
+  else
+    branch_cmd+="-d"
+  fi
+
+  local branch_cmd
+  for branch in "${branches_to_remove[@]}"; do
+    _exec "$branch_cmd '$branch'"
+  done
+}
+
+Gbm() {
+  _gb_merged_prune
+}
+
+GbM() {
+  _gb_merged_prune --force --no-confirm
+}
+
 GWab() {
     branch=$1
     base_branch=${2:-main}

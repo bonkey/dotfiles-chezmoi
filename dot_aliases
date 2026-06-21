@@ -876,13 +876,8 @@ _gb_merged_prune() {
   done
 }
 
-Gbm() {
-  _gb_merged_prune
-}
-
-GbM() {
-  _gb_merged_prune --force --no-confirm
-}
+alias Gbm='_gb_merged_prune'
+alias GbM='_gb_merged_prune --force --no-confirm'
 
 GWab() {
     branch=$1

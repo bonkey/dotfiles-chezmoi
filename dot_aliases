@@ -423,6 +423,16 @@ montage() {
   gm montage +frame +shadow +label -tile $tile -geometry +1+1 "$@"
 }
 
+yt-subtitles() {
+    yt-dlp --skip-download \
+    --write-subs \
+    --write-auto-subs \
+    --sub-langs en \
+    --convert-subs srt \
+    --cookies-from-browser Safari \
+    "$@"
+}
+
 ff_silent_sound() {
   for i in "$@" ; do
     dst=${i:r}-nosound.${i:e}

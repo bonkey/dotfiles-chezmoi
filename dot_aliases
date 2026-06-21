@@ -805,7 +805,7 @@ _git_default_branch() {
 }
 
 _gb_merged_prune() {
-  local force=false confirm=true branch default_branch current_branch
+  local force=false confirm=true branch default_branch current_branch branch_cmd
   local -a branches_to_remove
 
   while [[ $# -gt 0 ]]; do
@@ -870,7 +870,6 @@ _gb_merged_prune() {
     branch_cmd+="-d"
   fi
 
-  local branch_cmd
   for branch in "${branches_to_remove[@]}"; do
     _exec "$branch_cmd '$branch'"
   done

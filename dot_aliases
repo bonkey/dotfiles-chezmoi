@@ -270,9 +270,14 @@ Cvz() {
     exit
 }
 
+Mup() {
+    export GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN
+    mise up
+}
+
 Cem() {
     ced $HOME/.config/mise/config.toml
-    mise up
+    Mup
 }
 
 Ceb() {

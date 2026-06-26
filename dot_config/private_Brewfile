@@ -208,7 +208,7 @@ cask 'cap' # Screen recording software
 cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'handbrake-app' # Open-source video transcoder
-cask 'raycast' # Control your tools with a few keystrokes
+# cask 'raycast' # Control your tools with a few keystrokes
 cask 'rectangle-pro' # Window snapping tool
 cask 'setapp' # Collection of apps available by subscription
 cask 'superkey' # Search and click text anywhere on screen

@@ -1067,6 +1067,22 @@ def classify_file(
     return matches
 
 
+def classify_path(
+    path: Path,
+    filename_rules: list[dict],
+    keyword_index: list[tuple[str, list[str]]],
+) -> list[tuple[str, int, list[str]]]:
+    """Classify a file: filename-pattern rules first, then content keywords.
+
+    Filename rules win (score 99) and short-circuit content scanning.
+    Returns the same (destination, score, reasons) list as ``classify_file``.
+    """
+    for rule in filename_rules:
+        if re.match(rule["pattern"], path.name):
+            return [(rule["destination"], 99, ["filename:" + rule["pattern"]])]
+    return classify_file(path, keyword_index)
+
+
 def cmd_scan_inbox(args):
     """Scan inbox folder and classify files by content."""
     inbox = Path(args.inbox).expanduser().resolve() if args.inbox else INBOX_DEFAULT
@@ -1114,17 +1130,7 @@ def cmd_scan_inbox(args):
     unmatched_files = []
 
     for f in files:
-        # Try filename-pattern rules first
-        fn_match = None
-        for rule in filename_rules:
-            if re.match(rule["pattern"], f.name):
-                fn_match = [(rule["destination"], 99, ["filename:" + rule["pattern"]])]
-                break
-        if fn_match:
-            matched_files.append((f, fn_match))
-            continue
-
-        results = classify_file(f, keyword_index)
+        results = classify_path(f, filename_rules, keyword_index)
         if results:
             matched_files.append((f, results))
         else:
@@ -1318,6 +1324,12 @@ def cmd_run(args):
 
     # Manual portal summary
     if manual_pending:
+        # Portal pages serve mixed document types (e.g. Gothaer serves both
+        # Leistungsabrechnungen and contract docs), so classify each download
+        # and route per-file instead of dumping all into the rule destination.
+        filename_rules = _get_filename_rules()
+        keyword_index = _build_keyword_index()
+
         # Group by portal
         portals: dict[str, list] = {}
         for item in manual_pending:
@@ -1330,10 +1342,10 @@ def cmd_run(args):
 
         for portal_name, items in portals.items():
             url = items[0]["portal_url"]
-            dest_dir = base_dir / items[0]["destination"]
+            default_dest = items[0]["destination"]
             print(f"\n  {portal_name} ({len(items)} new)")
             print(f"  Login: {url}")
-            print(f"  Dest:  {dest_dir}")
+            print(f"  Dest:  {base_dir / default_dest} (default; auto-classified per file)")
             for item in items:
                 print(f"    - {item['date']}: {item['subject'][:60]}")
 
@@ -1362,16 +1374,29 @@ def cmd_run(args):
                         f"    [{i + 1}] {c['path'].name}  ({created_str}, {size_kb:,.0f} KB)"
                     )
 
-                    sys.stdout.write(f'        Move to "{dest_dir}"? [Y/n] ')
+                    # Classify each file; fall back to the rule destination.
+                    results = classify_path(c["path"], filename_rules, keyword_index)
+                    dest_rel = results[0][0] if results else default_dest
+                    file_dest_dir = base_dir / dest_rel
+
+                    sys.stdout.write(f'        Move to "{dest_rel}"? [Y/n/d(est)] ')
                     sys.stdout.flush()
                     ch = _read_single_key()
                     print(ch)
 
-                    if ch != "n":
-                        if not dest_dir.exists():
-                            dest_dir.mkdir(parents=True, exist_ok=True)
-                            print(f"        Created folder: {dest_dir}")
-                        dest_path = dest_dir / c["path"].name
+                    if ch == "d":
+                        sys.stdout.write(f"        Destination (relative to {base_dir}): ")
+                        sys.stdout.flush()
+                        custom = input().strip()
+                        if custom:
+                            file_dest_dir = base_dir / custom
+                        do_move = True
+                    else:
+                        do_move = ch != "n"
+
+                    if do_move:
+                        file_dest_dir.mkdir(parents=True, exist_ok=True)
+                        dest_path = file_dest_dir / c["path"].name
                         shutil.move(str(c["path"]), str(dest_path))
                         print(f"        MOVED → {dest_path}")
                         moved_any = True

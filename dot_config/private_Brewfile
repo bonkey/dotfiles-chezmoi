@@ -226,7 +226,7 @@ cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolli
 cask 'macvim-app' # Text editor
 cask 'notepadexe' # Lightweight code editor
 cask 'spokenly' # Dictation and transcription app with AI-powered editing
-cask 'zed' # Multiplayer code editor
+cask 'zed-preview' # Multiplayer code editor
 
 # Audio, video, and streaming
 cask 'elgato-control-center' # Control your Elgato key lights

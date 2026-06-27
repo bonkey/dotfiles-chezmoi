@@ -5,6 +5,7 @@ Sources:
   - Gmail attachments (rules match sender/subject)
   - Link-based PDF downloads (extract URL from email body)
   - Manual portal downloads (prompt user, scan ~/Downloads)
+  - Unknown senders (prompt to save + auto-add a rule, or ignore the sender)
   - Local inbox scanning (classify files by PDF text content)
 
 Usage:
@@ -13,6 +14,7 @@ Usage:
     python3 archive_inbox.py gmail --since 2026-03-01   # override start date
     python3 archive_inbox.py gmail --folder ~/my/archive # custom working folder
     python3 archive_inbox.py gmail --force              # ignore stored state
+    python3 archive_inbox.py gmail --no-discover        # skip unknown-sender prompts
     python3 archive_inbox.py list-rules                 # show all rules
     python3 archive_inbox.py folder                     # classify inbox files
     python3 archive_inbox.py folder --move              # classify and move
@@ -30,11 +32,12 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import termios
 import tty
 import urllib.request
 from datetime import datetime, timedelta
-from email.utils import parsedate_to_datetime
+from email.utils import parsedate_to_datetime, parseaddr
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -113,6 +116,18 @@ def _get_folder_keywords() -> dict[str, list[str]]:
 def _get_filename_rules() -> list[dict]:
     """Return filename_rules from config: [{pattern, destination}, ...]."""
     return _load_config().get("filename_rules", [])
+
+
+def _get_ignore_senders() -> list[str]:
+    """Return ignore_senders: From substrings skipped during discovery."""
+    return _load_config().get("ignore_senders", [])
+
+
+def _save_config(config: dict) -> None:
+    """Write the full config back to rules.json, preserving non-ASCII text."""
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(config, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 
 # ---------------------------------------------------------------------------
@@ -413,33 +428,61 @@ def get_header(message: dict, name: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
-    """Check if a message matches a rule's from/subject criteria."""
-    from_match = True
-    subject_match = True
+def _from_matches(rule: dict, msg_from: str) -> bool:
+    """True if From matches the rule's sender criteria (subject ignored)."""
+    # 'from': substring match on the email address.
+    if "from" in rule and rule["from"].lower() not in msg_from.lower():
+        return False
 
-    # Check 'from' (exact match on email address)
-    if "from" in rule:
-        from_match = rule["from"].lower() in msg_from.lower()
-
-    # Check 'from_contains' (regex or list of regexes, OR logic)
+    # 'from_contains': regex or list of regexes, OR logic.
     if "from_contains" in rule:
         patterns = rule["from_contains"]
         if isinstance(patterns, str):
             patterns = [patterns]
         if not any(re.search(p, msg_from, re.IGNORECASE) for p in patterns):
-            from_match = False
+            return False
 
-    if not from_match:
+    return True
+
+
+def matches_rule(rule: dict, msg_from: str, msg_subject: str) -> bool:
+    """Check if a message matches a rule's from/subject criteria."""
+    if not _from_matches(rule, msg_from):
         return False
 
     # Check 'subject_regex' (None means match any).
     # Case-insensitive regex applied to the full subject.
     if rule.get("subject_regex") is not None:
         if not re.search(rule["subject_regex"], msg_subject, re.IGNORECASE):
-            subject_match = False
+            return False
 
-    return subject_match
+    return True
+
+
+def _bare_email(msg_from: str) -> str:
+    """Extract the bare, lowercased email address from a From header."""
+    return parseaddr(msg_from)[1].strip().lower()
+
+
+def _is_ignored(msg_from: str, ignore_senders: list[str]) -> bool:
+    """True if any ignore entry is a substring of the From header."""
+    low = msg_from.lower()
+    return any(ig.lower() in low for ig in ignore_senders if ig)
+
+
+def _derive_rule_name(msg_from: str, existing_names: set[str]) -> str:
+    """Pick a unique, human-readable rule name from a From header."""
+    real, addr = parseaddr(msg_from)
+    base = real.strip()
+    if not base and "@" in addr:
+        base = addr.split("@")[1].split(".")[0]
+    base = re.sub(r"[^\w .&-]", "", base).strip()[:30] or "Unknown"
+    name = base
+    n = 2
+    while name in existing_names:
+        name = f"{base} {n}"
+        n += 1
+    return name
 
 
 def build_gmail_query(rule: dict, since: str, force: bool = False) -> str:
@@ -974,6 +1017,12 @@ def cmd_list_rules():
         for i, rule in enumerate(sorted_fn, 1):
             print(f"{i:<3} {rule['pattern']:<35} {rule['destination']:<40}")
 
+    ignore_senders = _get_ignore_senders()
+    if ignore_senders:
+        print("\nSenders skipped during unknown-sender discovery.")
+        for s in sorted(ignore_senders):
+            print(f"  {s}")
+
 
 # ---------------------------------------------------------------------------
 # Inbox scanner — classify files by PDF text content
@@ -1206,6 +1255,188 @@ def cmd_scan_inbox(args):
             # Unmatched files are left in place — add keywords to config to match them
 
 
+def discover_unknown_senders(
+    config: dict,
+    since: str,
+    state: dict,
+    archive_label_id: str | None,
+    base_dir: Path,
+    state_file: Path,
+) -> int:
+    """Interactively handle inbox attachments from senders no rule covers.
+
+    For each unknown sender's PDF: classify it by content (the same keyword /
+    filename rules used elsewhere) to suggest a destination, then either save
+    it — auto-adding a permanent rule for that sender — or add the sender to
+    the ignore list so it is skipped on future runs. Returns count saved.
+    """
+    rules = config["rules"]
+    ignore_senders = config.setdefault("ignore_senders", [])
+    filename_rules = _get_filename_rules()
+    keyword_index = _build_keyword_index()
+
+    query = f"after:{since} in:inbox has:attachment -label:{ARCHIVE_LABEL_NAME}"
+    if VERBOSE:
+        print(f"  Discover query: {query}")
+    messages = gws_triage(query)
+
+    def _seen(msg_from: str) -> bool:
+        return _is_ignored(msg_from, ignore_senders) or any(
+            _from_matches(r, msg_from) for r in rules
+        )
+
+    # Cheap pre-filter on the (possibly truncated) triage `from`. Triage may
+    # truncate long senders with "…", so keep those for a definitive recheck
+    # against the full From header after fetching the message.
+    candidates = [
+        m
+        for m in messages
+        if m["id"] not in state["processed_ids"]
+        and ("…" in m["from"] or not _seen(m["from"]))
+    ]
+    if not candidates:
+        return 0
+
+    existing_names = {r["name"] for r in rules}
+    saved = 0
+    header_shown = False
+    tmpdir = Path(tempfile.mkdtemp(prefix="archive-inbox-"))
+    try:
+        for msg in candidates:
+            msg_id = msg["id"]
+            full_msg = gws_get_message(msg_id)
+            if not full_msg:
+                continue
+            full_from = get_header(full_msg, "From")
+            subject = get_header(full_msg, "Subject")
+
+            # Definitive recheck with the full (untruncated) From header.
+            if _seen(full_from):
+                continue
+
+            atts = [
+                a
+                for a in extract_attachments(full_msg.get("payload", {}))
+                if re.search(r"\.pdf$", a["filename"], re.IGNORECASE)
+            ]
+            if not atts:
+                continue
+
+            if not header_shown:
+                print(f"\n{'=' * 60}")
+                print("UNKNOWN SENDERS")
+                print(f"{'=' * 60}")
+                header_shown = True
+
+            sender_email = _bare_email(full_from)
+            print(f"\n  {subject[:70]}")
+            print(f"    From: {full_from[:70]}")
+            print(f"    Date: {msg['date']}")
+            print(f"    Attachment(s): {', '.join(a['filename'] for a in atts)}")
+
+            # Download the first PDF and classify it by content — same keyword
+            # and filename rules used by the folder/portal classifier.
+            data = gws_get_attachment(msg_id, atts[0]["attachmentId"])
+            if data is None:
+                print("    ERROR: could not download to classify — skipped")
+                continue
+            tmp_path = tmpdir / atts[0]["filename"]
+            with open(tmp_path, "wb") as fh:
+                fh.write(data)
+
+            results = classify_path(tmp_path, filename_rules, keyword_index)
+            suggested = results[0][0] if results else None
+            if results:
+                _, score, kws = results[0]
+                print(
+                    f"    Suggested: {suggested}  [{score} keyword(s): {', '.join(kws)}]"
+                )
+            else:
+                first_lines = [
+                    l.strip()
+                    for l in extract_pdf_text(tmp_path).split("\n")
+                    if l.strip()
+                ][:2]
+                for line in first_lines:
+                    print(f"    | {line[:80]}")
+
+            if suggested:
+                sys.stdout.write(
+                    "    Save? [Y=dest / d=other / i=ignore / s=skip / q=quit] "
+                )
+            else:
+                sys.stdout.write(
+                    "    No keyword match. [d=dest / i=ignore / s=skip / q=quit] "
+                )
+            sys.stdout.flush()
+            ch = _read_single_key()
+            print(ch)
+
+            if ch == "q":
+                break
+            if ch == "s":
+                continue
+            if ch in ("i", "n"):
+                if sender_email and sender_email not in ignore_senders:
+                    ignore_senders.append(sender_email)
+                    _save_config(config)
+                    print(f"    Ignored sender: {sender_email}")
+                continue
+
+            # Default (Y/Enter) uses the suggestion; 'd' or no suggestion asks.
+            dest_rel = suggested
+            if ch == "d" or not suggested:
+                sys.stdout.write(f"    Destination (relative to {base_dir}): ")
+                sys.stdout.flush()
+                dest_rel = input().strip()
+                if not dest_rel:
+                    print("    No destination — skipped")
+                    continue
+
+            dest_dir = base_dir / dest_rel
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            for i, a in enumerate(atts):
+                blob = data if i == 0 else gws_get_attachment(msg_id, a["attachmentId"])
+                if blob is None:
+                    print(f"    ERROR: failed to download {a['filename']}")
+                    continue
+                dest_path = dest_dir / a["filename"]
+                existed = dest_path.exists()
+                with open(dest_path, "wb") as fh:
+                    fh.write(blob)
+                verb = "OVERWROTE" if existed else "SAVED"
+                print(f"    {verb}: {dest_path} ({len(blob):,} bytes)")
+
+            # Confirmed save -> always add a rule so this sender is automatic next time.
+            name = _derive_rule_name(full_from, existing_names)
+            existing_names.add(name)
+            rules.append(
+                {
+                    "name": name,
+                    "from": sender_email,
+                    "destination": dest_rel,
+                    "attachment_filter": r"\.pdf$",
+                    "subject_regex": None,
+                }
+            )
+            _save_config(config)
+            print(f"    Added rule '{name}': {sender_email} → {dest_rel}")
+
+            # Label + archive + mark as read, same as a normal rule match.
+            if archive_label_id and gws_modify_message(
+                msg_id, [archive_label_id], ["INBOX", "UNREAD"]
+            ):
+                print("    Labeled + archived + marked as read")
+            if msg_id not in state["processed_ids"]:
+                state["processed_ids"].append(msg_id)
+            save_state(state, state_file)
+            saved += 1
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+    return saved
+
+
 def cmd_run(args):
     """Run the archiver."""
     # Determine working folder
@@ -1419,6 +1650,17 @@ def cmd_run(args):
                     f"    No recent PDFs found in ~/Downloads — will prompt again next run"
                 )
 
+    # Discover attachments from senders that no rule covers (interactive):
+    # save (auto-adding a rule) or add the sender to the ignore list.
+    if not args.rule and not args.no_discover:
+        config = _load_config()
+        n = discover_unknown_senders(
+            config, since, state, archive_label_id, base_dir, state_file
+        )
+        if n:
+            save_state(state, state_file)
+            print(f"\nDiscovered and saved {n} new sender(s)")
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -1477,6 +1719,11 @@ def main():
         "--force",
         action="store_true",
         help="Ignore stored state — reprocess all matching messages",
+    )
+    run_parser.add_argument(
+        "--no-discover",
+        action="store_true",
+        help="Skip the interactive unknown-sender discovery step",
     )
 
     # list-rules

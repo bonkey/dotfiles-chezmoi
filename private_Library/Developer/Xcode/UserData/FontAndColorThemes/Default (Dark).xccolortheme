@@ -5,27 +5,27 @@
 	<key>DVTConsoleDebuggerInputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleDebuggerInputTextFont</key>
-	<string>SFMono-Bold - 18.0</string>
+	<string>0xProtoNFP-Regular - 12.0</string>
 	<key>DVTConsoleDebuggerOutputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleDebuggerOutputTextFont</key>
-	<string>SFMono-Regular - 18.0</string>
+	<string>0xProtoNFP-Regular - 12.0</string>
 	<key>DVTConsoleDebuggerPromptTextColor</key>
-	<string>0.255 0.714 0.27 1</string>
+	<string>0.309804 0.788235 0.254902 1</string>
 	<key>DVTConsoleDebuggerPromptTextFont</key>
-	<string>SFMono-Bold - 18.0</string>
+	<string>0xProtoNFP-Regular - 12.0</string>
 	<key>DVTConsoleExectuableInputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleExectuableInputTextFont</key>
-	<string>SFMono-Regular - 18.0</string>
+	<string>0xProtoNFP-Regular - 12.0</string>
 	<key>DVTConsoleExectuableOutputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleExectuableOutputTextFont</key>
-	<string>SFMono-Bold - 18.0</string>
+	<string>0xProtoNFP-Regular - 12.0</string>
 	<key>DVTConsoleTextBackgroundColor</key>
 	<string>0.120543 0.122844 0.141312 1</string>
 	<key>DVTConsoleTextInsertionPointColor</key>
-	<string>1 1 1 1</string>
+	<string>0.0408148 0.374814 0.998368 1</string>
 	<key>DVTConsoleTextSelectionColor</key>
 	<string>0.317647 0.356862 0.439215 1</string>
 	<key>DVTFontAndColorVersion</key>
@@ -89,7 +89,7 @@
 	<key>DVTSourceTextCurrentLineHighlightColor</key>
 	<string>0.138526 0.146864 0.169283 1</string>
 	<key>DVTSourceTextInsertionPointColor</key>
-	<string>1 1 1 1</string>
+	<string>0.0408148 0.374814 0.998368 1</string>
 	<key>DVTSourceTextInvisiblesColor</key>
 	<string>0.258298 0.300954 0.355207 1</string>
 	<key>DVTSourceTextSelectionColor</key>
@@ -164,69 +164,69 @@
 	<key>DVTSourceTextSyntaxFonts</key>
 	<dict>
 		<key>xcode.syntax.attribute</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.character</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.comment</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterQuattroV-Italic - 16.0</string>
 		<key>xcode.syntax.comment.doc</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterQuattroV-Italic - 16.0</string>
 		<key>xcode.syntax.comment.doc.keyword</key>
-		<string>FiraCodeRoman-Bold - 16.0</string>
+		<string>iAWriterMonoV-Semibold - 16.0</string>
 		<key>xcode.syntax.declaration.other</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.declaration.type</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.class</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.class.system</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.constant</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.constant.system</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.function</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.function.system</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.macro</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.macro.system</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.type</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.type.system</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.variable</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.identifier.variable.system</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.keyword</key>
-		<string>FiraCodeRoman-Bold - 16.0</string>
+		<string>iAWriterMonoV-Semibold - 16.0</string>
 		<key>xcode.syntax.mark</key>
-		<string>FiraCodeRoman-Bold - 16.0</string>
+		<string>iAWriterMonoV-Semibold - 16.0</string>
 		<key>xcode.syntax.markup.code</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.number</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.plain</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.preprocessor</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.regex</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.regex.capturename</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.regex.charname</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.regex.number</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.regex.other</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.string</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 		<key>xcode.syntax.url</key>
-		<string>FiraCode-Retina - 16.0</string>
+		<string>iAWriterMonoV-Regular - 16.0</string>
 	</dict>
 </dict>
 </plist>

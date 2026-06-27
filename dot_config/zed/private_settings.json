@@ -145,7 +145,7 @@
       "effort": "medium",
       "enable_thinking": true,
       "provider": "openai-subscribed",
-      "model": "gpt-5.4",
+      "model": "gpt-5.5",
     },
     "commit_message_model": {
       "provider": "google",

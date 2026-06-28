@@ -47,6 +47,9 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
+zle -N git-peek
+bindkey '^O' git-peek
+
 after_zvm() {
   bindkey '^r' _atuin_search_widget
   bindkey '^[[1;5D' backward-word # ctrl+left-arrow

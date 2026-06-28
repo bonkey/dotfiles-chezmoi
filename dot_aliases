@@ -1130,7 +1130,7 @@ git_pull_and_back() {
   is_in_worktree=""
   if git worktree list --porcelain | grep -q "branch refs/heads/$merging_branch"; then
     is_in_worktree="true"
-    log_message "Branch '$merging_branch' is checked out in another worktree. Will fetch updates inste    # Push an empty commit to retrigger CI checks.
+    log_message "Branch '$merging_branch' is checked out in another worktree. Will fetch updates instead"    # Push an empty commit to retrigger CI checks.
     git-retrigger-checks() {  # Stash changes if any exist
   if ! git diff-index --quiet HEAD --; then
     stashed=$(git stash push --include-untracked -m "Temporary stash for git_pull_and_back")

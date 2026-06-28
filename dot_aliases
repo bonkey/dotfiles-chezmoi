@@ -1,9 +1,16 @@
-# --- Paths / Globals
+###############################################################################
+# GLOBAL PATH ALIASES
+###############################################################################
 
 alias -g ddw='"$HOME/Downloads"'
 alias -g ddc='"$HOME/Documents"'
 alias -g dpr='"$HOME/Projects"'
 alias -g ddd='"$HOME/Library/Developer/Xcode/DerivedData/"'
+
+
+###############################################################################
+# GLOBAL PIPE ALIASES
+###############################################################################
 
 alias -g X="| xargs"
 alias -g X0="| xargs -0"
@@ -21,7 +28,63 @@ alias -g SS="| sort"
 alias -g SU="| sort | uniq"
 alias -g XCB="| xcbeautify -q --disable-logging"
 
-# --- System
+
+###############################################################################
+# NAVIGATION & LISTING
+###############################################################################
+
+# Fuzzy-find a directory with fd and cd into it.
+fdc() {
+    cd "$(fd -t d $@ | fzf -1)"
+}
+
+# Jump with zoxide's z command.
+zz() {
+    __zoxide_z "$@"
+}
+
+# Select and jump with zoxide interactively.
+zx() {
+    __zoxide_zi "$@"
+}
+
+# Open yazi and cd to the selected exit directory.
+y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
+alias ez="eza --group-directories-first --icons=auto --smart-group --git -h"
+alias e="ez -1"
+alias el="ez -l"
+alias ea="el -a"
+unalias l ll la 2> /dev/null
+alias l=e ll=el la=ea
+alias lt="l -s modified -r"
+alias llt="ll -m -s modified -r"
+
+# Show a compact duf disk-usage table for a filesystem.
+dfh() {
+    fs=${1:/}
+    duf -output 'filesystem, size, used, avail, usage, mountpoint' "${fs}"
+}
+
+# Open the current directory or provided paths with macOS open.
+o() {
+  if [[ -z "$1" ]]; then
+    open .
+  else
+    open "$@"
+  fi
+}
+
+
+###############################################################################
+# SYSTEM & MACOS
+###############################################################################
 
 # Flush macOS DNS caches.
 flush_dns() {
@@ -39,18 +102,31 @@ notify() {
   fi
 }
 
+alias lsg="lsof | grep -i"
+alias lsig="lsof -i | grep -i"
+
+alias duh="du -csh"
+alias du="du -h"
+
+# Search running processes case-insensitively.
+psg() {
+    ps aux | grep -i "$@" | grep -vE -- "grep.*-i $@"
+}
+
+# Remove the macOS quarantine extended attribute.
+alias xdq="xattr -d com.apple.quarantine"
+
+alias cal="gcal -s 1"
+
+
+###############################################################################
+# PACKAGE MANAGERS
+###############################################################################
+
 # Forward arguments to chezmoi.
 cz() {
     chezmoi "$@"
 }
-
-# Fuzzy-find a directory with fd and cd into it.
-fdc() {
-    cd "$(fd -t d $@ | fzf -1)"
-}
-
-alias '??'="llm cmd -m gemini-flash-latest"
-alias gy="gemini --yolo"
 
 alias ced="cz edit --apply"
 alias cap="cz apply"
@@ -59,45 +135,6 @@ alias cra="cz re-add"
 alias cup="open ~/bin/update_chezmoi.terminal"
 alias cma="cz merge-all"
 alias cfo="cz forget"
-
-alias hyf="hyperfine -m 3"
-
-alias src='source ~/.zshrc'
-alias alg='alias | grep'
-
-alias ez="eza --group-directories-first --icons=auto --smart-group --git -h"
-alias e="ez -1"
-alias el="ez -l"
-alias ea="el -a"
-unalias l ll la 2> /dev/null
-alias l=e ll=el la=ea
-alias lt="l -s modified -r"
-alias llt="ll -m -s modified -r"
-
-alias cal="gcal -s 1"
-
-alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
-
-# Run the MCP setup helper.
-cm() {
-    mcp-setup.py "$@"
-}
-
-# Launch MCP setup in interactive mode.
-cmi() {
-    cm --mcp-interactive "$@"
-}
-
-# Open files in Marked.
-md() {
-    open -a Marked "$@"
-}
-
-# Run mise up with the GitHub token exported.
-Mup() {
-    export GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN
-    mise up
-}
 
 # Forward arguments to Homebrew.
 br() {
@@ -121,56 +158,55 @@ alias brinc="br install --cask"
 alias brun="br uninstall"
 alias brunc="br uninstall --cask"
 
-alias lsg="lsof | grep -i"
-alias lsig="lsof -i | grep -i"
-# alias top="glances --process-short-name"
-alias duh="du -csh"
-alias du="du -h"
-
-# Search running processes case-insensitively.
-psg() {
-    ps aux | grep -i "$@" | grep -vE -- "grep.*-i $@"
+# Run mise up with the GitHub token exported.
+Mup() {
+    export GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN
+    mise up
 }
 
-# Jump with zoxide's z command.
-zz() {
-    __zoxide_z "$@"
+
+###############################################################################
+# SHELL CONFIGURATION
+###############################################################################
+
+alias src='source ~/.zshrc'
+alias alg='alias | grep'
+
+_shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
+
+# Edit shell initialization files through chezmoi.
+Cvz() {
+    ced $(eval "echo $_shell_init_files")
+    exit
 }
 
-# Select and jump with zoxide interactively.
-zx() {
-    __zoxide_zi "$@"
+# Edit mise config through chezmoi and update mise.
+Cem() {
+    ced $HOME/.config/mise/config.toml
+    mise up
 }
 
-# Open yazi and cd to the selected exit directory.
-y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	command yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
-	rm -f -- "$tmp"
+# Edit Brewfile through chezmoi and apply bundle changes.
+Ceb() {
+    ced $HOME/.config/Brewfile
+    brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
 }
 
-# Show a compact duf disk-usage table for a filesystem.
-dfh() {
-    fs=${1:/}
-    duf -output 'filesystem, size, used, avail, usage, mountpoint' "${fs}"
+# Edit aliases through chezmoi.
+Cea() {
+    ced $HOME/.aliases
+    exit
 }
 
-alias m=make
-alias j=just
-
-# Open the current directory or provided paths with macOS open.
-o() {
-  if [[ -z "$1" ]]; then
-    open .
-  else
-    open "$@"
-  fi
+# Edit opencode config through chezmoi.
+Ceo() {
+    ced $HOME/.config/opencode.json
 }
 
-alias xdq="xattr -d com.apple.quarantine"
-alias xf="xmllint --format"
+
+###############################################################################
+# EDITORS
+###############################################################################
 
 alias v=vim
 alias g=gvim
@@ -197,6 +233,19 @@ z() {
   fi
 }
 
+# Open files in Marked.
+md() {
+    open -a Marked "$@"
+}
+
+
+###############################################################################
+# AI / CODING ASSISTANTS
+###############################################################################
+
+alias '??'="llm cmd -m gemini-flash-latest"
+alias gy="gemini --yolo"
+
 # Run Claude with permission checks skipped.
 CC() {
     claude --dangerously-skip-permissions "$@"
@@ -217,7 +266,6 @@ CCB() {
     cd ~/bin
     CC "$@"
 }
-
 
 # Resume a Claude session.
 CCR() {
@@ -259,11 +307,100 @@ alias Ski=Ska
 alias Skr="Sk remove"
 alias Skl="Sk list"
 
+# Run the MCP setup helper.
+cm() {
+    mcp-setup.py "$@"
+}
+
+# Launch MCP setup in interactive mode.
+cmi() {
+    cm --mcp-interactive "$@"
+}
+
+
+###############################################################################
+# NETWORK & HTTP
+###############################################################################
+
+alias h="http"
+alias hv="h -v"
+alias hf="h --follow"
+alias hvf="hv --follow"
+
+alias curl="curlie"
+
+alias mtr="sudo mtr"
+alias p1="ping 1.1.1.1"
+alias m1="mtr 1.1.1.1"
+alias m8="mtr 8.8.8.8"
+alias mg="mtr google.com"
+
+# Use gping when available, otherwise fall back to system ping.
+ping() {
+  if type gping 2>&1 > /dev/null ; then
+    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 "$@"
+  else
+    /sbin/ping "$@"
+  fi
+}
+
+alias host=doggo
+alias dig=doggo
+
+alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
+
+
+###############################################################################
+# SEARCH
+###############################################################################
+
+# Search paths with fd while following symlinks.
+f() { fd --follow "$@"; }
+# Search paths with fd and print null-separated results.
+f0() { f "$@" --print0; }
+
+# Search files with fd.
+ff() { f --type f "$@"; }
+# Search files with fd and print null-separated results.
+ff0() { f0 --type f "$@"; }
+
+# Search all hidden and ignored paths with fd.
+fda() { f --no-ignore --hidden "$@"; }
+
+# Search regular files with fd.
+fdf() { f -t f "$@"; }
+# Search directories with fd.
+fdd() { f -t d "$@"; }
+
+alias rgs="rg -t ios"
+alias rgw="rg -w"
+alias rgh="rg -u"
+alias rga="rg -uu --hidden"
+alias rgl="rg -l"
+alias rgsw="rgs -w"
+
+# Search Swift-like type declarations by name.
+rgst() {
+    rgs " *(protocol|actor|struct|typealias|class) +$1"
+}
+
+# Count total ripgrep matches across files.
+rgc() {
+    rg -c "$@" | awk -F: 'BEGIN { c = 0 } { c += $2 } END { print "found:", c }'
+}
+
+
+###############################################################################
+# DIFF & OUTPUT VIEWING
+###############################################################################
+
 alias diff=colordiff
 alias diffstat="diffstat -f3 -C"
 
 alias D="diff -Nru"
 alias DD="hunk diff"
+
+alias xf="xmllint --format"
 
 # Render Markdown with glow when possible, otherwise use bat.
 cat() {
@@ -302,107 +439,20 @@ man() {
     tldr "$@" || dm "$@"
 }
 
-# --- zsh
 
-_shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
+###############################################################################
+# BUILD TOOLS & BENCHMARKS
+###############################################################################
 
-# Edit shell initialization files through chezmoi.
-Cvz() {
-    ced $(eval "echo $_shell_init_files")
-    exit
-}
+alias m=make
+alias j=just
 
-# Edit mise config through chezmoi and update mise.
-Cem() {
-    ced $HOME/.config/mise/config.toml
-    mise up
-}
-
-# Edit Brewfile through chezmoi and apply bundle changes.
-Ceb() {
-    ced $HOME/.config/Brewfile
-    brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
-}
-
-# Edit aliases through chezmoi.
-Cea() {
-    ced $HOME/.aliases
-    exit
-}
-
-# Edit opencode config through chezmoi.
-Ceo() {
-    ced $HOME/.config/opencode.json
-}
+alias hyf="hyperfine -m 3"
 
 
-# --- Network
-
-alias h="http"
-alias hv="h -v"
-alias hf="h --follow"
-alias hvf="hv --follow"
-
-alias curl="curlie"
-
-alias mtr="sudo mtr"
-alias p1="ping 1.1.1.1"
-alias m1="mtr 1.1.1.1"
-alias m8="mtr 8.8.8.8"
-alias mg="mtr google.com"
-
-# Use gping when available, otherwise fall back to system ping.
-ping() {
-  if type gping 2>&1 > /dev/null ; then
-    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 "$@"
-  else
-    /sbin/ping "$@"
-  fi
-}
-
-alias host=doggo
-alias dig=doggo
-
-# --- Search
-
-# Search paths with fd while following symlinks.
-f() { fd --follow "$@"; }
-# Search paths with fd and print null-separated results.
-f0() { f "$@" --print0; }
-
-# Search files with fd.
-ff() { f --type f "$@"; }
-# Search files with fd and print null-separated results.
-ff0() { f0 --type f "$@"; }
-
-# Search all hidden and ignored paths with fd.
-fda() { f --no-ignore --hidden "$@"; }
-
-# Search regular files with fd.
-fdf() { f -t f "$@"; }
-# Search directories with fd.
-fdd() { f -t d "$@"; }
-
-# --- rg
-
-alias rgs="rg -t ios"
-alias rgw="rg -w"
-alias rgh="rg -u"
-alias rga="rg -uu --hidden"
-alias rgl="rg -l"
-alias rgsw="rgs -w"
-
-# Search Swift-like type declarations by name.
-rgst() {
-    rgs " *(protocol|actor|struct|typealias|class) +$1"
-}
-
-# Count total ripgrep matches across files.
-rgc() {
-    rg -c "$@" | awk -F: 'BEGIN { c = 0 } { c += $2 } END { print "found:", c }'
-}
-
-# --- Node / nvm
+###############################################################################
+# NODE / NVM
+###############################################################################
 
 # Initialize nvm and its shell completion.
 nvm-init() {
@@ -411,7 +461,31 @@ nvm-init() {
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
 
-# --- Media
+
+###############################################################################
+# RUBY / BUNDLER
+###############################################################################
+
+# Run Bundler commands through _exec.
+bu() {
+  _exec "bundle $@"
+}
+
+# Ensure bundle dependencies are installed before running Bundler.
+buc() {
+  _exec "bundle check || bundle install"
+  bu $@
+}
+
+alias bue="buc exec"
+alias buu="bu update --all"
+alias buo="bu outdated"
+alias bui="bu install"
+
+
+###############################################################################
+# MEDIA / VIDEO
+###############################################################################
 
 unalias gm 2> /dev/null
 
@@ -479,7 +553,6 @@ ff_format() {
   done
 }
 
-
 # Re-encode videos at a requested frame rate.
 ff_fps() {
   local i
@@ -522,9 +595,10 @@ ff_gif() {
   ffmpeg -i "$input" -filter_complex "[0:v] fps=${fps},scale=w=${width}:h=${height},split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" -f gif -y -hide_banner "${output}"
 }
 
-# --- iOS
 
-alias bef="bue fastlane"
+###############################################################################
+# XCODE: VERSION & SIMULATOR
+###############################################################################
 
 alias Xco="xcodes"
 alias Xco-select="Xco select"
@@ -572,6 +646,11 @@ xck() {
 xcbk() {
   _exec "pkill -9 xcodebuild"
 }
+
+
+###############################################################################
+# XCODE: BUILD & RESOLVE
+###############################################################################
 
 # Clean and resolve package dependencies for an Xcode project or workspace.
 xcresolve() {
@@ -670,15 +749,10 @@ xcreset() {
   _exec "fd -t d --full-path 'SourcePackages/repositories/.*/remotes$' '$HOME/Library/Developer/Xcode/DerivedData/' -x rm -rf"
 }
 
-# Extract a Jira-style ticket key from the current branch name.
-ticket_from_branch() {
-  local BRANCH TICKET
-  BRANCH=$(git symbolic-ref --short HEAD)
-  (echo $BRANCH | grep -q "/") || return
-  TICKET=$(echo $BRANCH | sed -E 's#.*/([A-Z]+-[0-9]+)[^/]*#\1#')
-  [[ -z "$TICKET" ]] && return
-  echo $TICKET
-}
+
+###############################################################################
+# XCODE: OPEN PROJECT
+###############################################################################
 
 # Find an Xcode project, workspace, or Package.swift to open.
 find_xcode_proj() {
@@ -749,6 +823,13 @@ xco() {
   xc "$project" "$@"
 }
 
+
+###############################################################################
+# IOS DEPENDENCIES
+###############################################################################
+
+alias bef="bue fastlane"
+
 # Run CocoaPods directly or through Bundler when a Gemfile exists.
 _pod() {
   if [[ -f "Gemfile" || -f "../Gemfile" ]]; then
@@ -766,52 +847,10 @@ alias poun="_pod update --no-repo-update"
 alias poo="_pod outdated"
 alias pos="_pod search"
 
-# --- git worktree / worktrunk
 
-alias Wl='wt list'
-
-alias Wr='wt remove'
-alias WR='Wr --force'
-alias WRD='Wr --force -D'
-
-alias Wm='wt merge'
-
-alias Ws='wt switch'
-alias Wsm='Ws main'
-alias Wsc='Ws --create'
-alias WT='shell-in-worktree'
-
-# List removable clean worktree branches excluding active agent markers.
-Wc() {
-    wt list --format json |
-      jq -r '
-        .[]
-        | select(.is_main | not)
-        | select(.is_current | not)
-        | select(.worktree.state != "locked")
-        | select(.working_tree.staged | not)
-        | select(.working_tree.modified | not)
-        | select(.working_tree.untracked | not)
-        | .branch
-      ' |
-      while IFS= read -r branch; do
-        marker=$(wt config state marker get --branch "$branch" --format json 2>/dev/null |
-          jq -r '.. | objects | .marker? // empty' 2>/dev/null)
-
-        case "$marker" in
-          "🤖"|"💬") continue ;;
-        esac
-
-        printf '%s\n' "$branch"
-      done
-}
-
-# Remove clean worktrees listed by Wc.
-WC() {
-    Wc | xargs wt remove "$@"
-}
-
-# --- git
+###############################################################################
+# GIT: FORK & HELPERS
+###############################################################################
 
 alias gf > /dev/null && unalias gf
 # Open the current repository in Fork.
@@ -819,124 +858,69 @@ gf() {
   fork .
 }
 
+alias gip="gitup"
+alias rc="retcon"
+
 # Print git commit subjects formatted as a PR changelog.
 gl-pr-changelog() {
   git log --pretty='format:* %s' "$@" | sd '[A-Z]{3,}-[0-9]+: ' ''
 }
 
-# Determine the repository's default branch.
-_git_default_branch() {
-  local remote_head default_branch
 
-  remote_head=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
-  if [[ -n "$remote_head" ]]; then
-    echo "${remote_head#origin/}"
-    return 0
-  fi
+###############################################################################
+# GIT: STATUS & DIFF
+###############################################################################
 
-  default_branch=$(git remote show origin 2>/dev/null | sed -n '/HEAD branch/s/.*: //p' | head -1)
-  if [[ -n "$default_branch" ]]; then
-    echo "$default_branch"
-    return 0
-  fi
+alias gst="git status -s"
 
-  for default_branch in main master develop; do
-    if git show-ref --verify --quiet "refs/heads/$default_branch"; then
-      echo "$default_branch"
-      return 0
-    fi
-  done
-
-  return 1
-}
-
-# Remove local branches already merged into the default branch.
-_gb_merged_prune() {
-  local force=false confirm=true branch default_branch current_branch branch_cmd
-  local -a branches_to_remove
-
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --force)
-        force=true
-        confirm=false
-        shift
-        ;;
-      --no-confirm)
-        confirm=false
-        shift
-        ;;
-      *)
-        shift
-        ;;
-    esac
-  done
-
-  current_branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
-  if [[ -z "$current_branch" ]]; then
-    log_error "Not on a git branch"
-    return 1
-  fi
-
-  default_branch=$(_git_default_branch)
-  if [[ -z "$default_branch" ]]; then
-    log_error "Could not determine default branch"
-    return 1
-  fi
-
-  if ! git show-ref --verify --quiet "refs/heads/$default_branch"; then
-    log_message "Fetching default branch '$default_branch' from origin"
-    _exec "git fetch origin '$default_branch':'refs/heads/$default_branch' --no-tags"
-  fi
-
-  branches_to_remove=("${(@f)$(git branch --merged "$default_branch" | sed 's/^..//' | grep -vE "^(${default_branch}|${current_branch})$")}")
-
-  if (( ${#branches_to_remove[@]} == 0 )); then
-    log_message "No local branches merged to '$default_branch'"
-    return 0
-  fi
-
-  printf "Default branch: %s\n" "$default_branch"
-  printf "Branches to remove:\n"
-  printf "  %s\n" "${branches_to_remove[@]}"
-
-  if [[ "$confirm" == true ]]; then
-    echo -n "Remove these branches? [y/N]: "
-    read -k 1 response
-    echo
-    [[ "$response" =~ ^[Yy]$ ]] || {
-      log_message "Aborted"
-      return 0
-    }
-  fi
-
-  branch_cmd="git branch "
-  if [[ "$force" == true ]]; then
-    branch_cmd+="-D"
-  else
-    branch_cmd+="-d"
-  fi
-
-  for branch in "${branches_to_remove[@]}"; do
-    _exec "$branch_cmd '$branch'"
-  done
-}
-
-alias Gbm='_gb_merged_prune'
-alias GbM='_gb_merged_prune --force --no-confirm'
-
-
-alias gip="gitup"
-alias rc="retcon"
-
-alias gl="git pull --autostash"
 alias gd="git diff"
 alias gdfg="forgit::diff"
 alias gdn="gd --names-only"
-alias gst="git status -s"
+
+alias gds="gd --stat"
+
+alias gdt="git difftool"
+alias gdtd="git difftool main"
+
+alias gls="git ls-files"
+alias glsm="gls -m"
+
+git-peek() {
+  if git rev-parse --is-inside-work-tree &>/dev/null; then
+    git lg --no-merges -10
+  fi
+  zle reset-prompt
+}
+
+###############################################################################
+# GIT: BRANCH & CHECKOUT
+###############################################################################
 
 alias gco="git checkout"
 alias gcm="gco main"
+
+alias gcl="git clone --recurse-submodules --progress"
+
+unalias gpu 2> /dev/null
+# Push the current branch to a named remote and set upstream.
+gpu() {
+  test -z "$1" && echo "$0 <remote_name>" && return
+  git push -u $1 $(git branch --show-current)
+}
+
+alias gpo="gpu origin"
+
+# List branches merged into develop excluding primary branches.
+git-merged-show() {
+  git branch --merged develop|tr -d ' '| grep -vE '^(develop|master|main)$'
+}
+
+
+###############################################################################
+# GIT: COMMIT & PUSH
+###############################################################################
+
+alias gcam="git commit -am"
 
 alias .gca=".gc -a"
 alias .gcn=".gc -np"
@@ -1069,40 +1053,35 @@ alias .gcan=".gc -a -np"
     fi
 }
 
-alias gl1m="git lg --merges"
-alias gl1="git lg --no-merges"
-alias gl10="gl1 -10"
-
-alias gcl="git clone --recurse-submodules --progress"
-
-alias gds="gd --stat"
-alias gdn="gd --name-only"
-
-alias gdt="git difftool"
-alias gdtd="git difftool main"
-
-alias gcam="git commit -am"
-alias gls="git ls-files"
-alias glsm="gls -m"
-alias gpo="gpu origin"
-
-# List branches merged into develop excluding primary branches.
-git-merged-show() {
-  git branch --merged develop|tr -d ' '| grep -vE '^(develop|master|main)$'
-}
-
-unalias gpu 2> /dev/null
-# Push the current branch to a named remote and set upstream.
-gpu() {
-  test -z "$1" && echo "$0 <remote_name>" && return
-  git push -u $1 $(git branch --show-current)
-}
-
 # Push an empty commit to retrigger CI checks.
 git-retrigger-checks() {
   local msg="${1:-Retrigger checks}"
   git commit -m "$msg" --allow-empty && git push
 }
+
+# Add all changes, commit with a generated or provided message, pull, and push.
+gicpa() {
+  git add -A .
+
+  if [[ -n "$1" ]]; then
+    msg=$1
+  else
+    msg="Changed $(git diff --cached --name-only | uniq | tr '\n' ' ')"
+  fi
+
+  gcam "$msg" && git pull && git push
+}
+
+
+###############################################################################
+# GIT: SYNC & MERGE
+###############################################################################
+
+alias gl="git pull --autostash"
+
+alias gl1m="git lg --merges"
+alias gl1="git lg --no-merges"
+alias gl10="gl1 -10"
 
 # Temporarily update another branch, run a command, then restore the current branch.
 git_pull_and_back() {
@@ -1201,38 +1180,164 @@ gpr() {
   git_pull_and_back "$src_branch" "git rebase {branch}"
 }
 
-# Add all changes, commit with a generated or provided message, pull, and push.
-gicpa() {
-  git add -A .
 
-  if [[ -n "$1" ]]; then
-    msg=$1
-  else
-    msg="Changed $(git diff --cached --name-only | uniq | tr '\n' ' ')"
+###############################################################################
+# GIT: MAINTENANCE
+###############################################################################
+
+# Determine the repository's default branch.
+_git_default_branch() {
+  local remote_head default_branch
+
+  remote_head=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+  if [[ -n "$remote_head" ]]; then
+    echo "${remote_head#origin/}"
+    return 0
   fi
 
-  gcam "$msg" && git pull && git push
+  default_branch=$(git remote show origin 2>/dev/null | sed -n '/HEAD branch/s/.*: //p' | head -1)
+  if [[ -n "$default_branch" ]]; then
+    echo "$default_branch"
+    return 0
+  fi
+
+  for default_branch in main master develop; do
+    if git show-ref --verify --quiet "refs/heads/$default_branch"; then
+      echo "$default_branch"
+      return 0
+    fi
+  done
+
+  return 1
 }
 
-# -- Ruby
+# Remove local branches already merged into the default branch.
+_gb_merged_prune() {
+  local force=false confirm=true branch default_branch current_branch branch_cmd
+  local -a branches_to_remove
 
-# Run Bundler commands through _exec.
-bu() {
-  _exec "bundle $@"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --force)
+        force=true
+        confirm=false
+        shift
+        ;;
+      --no-confirm)
+        confirm=false
+        shift
+        ;;
+      *)
+        shift
+        ;;
+    esac
+  done
+
+  current_branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null)
+  if [[ -z "$current_branch" ]]; then
+    log_error "Not on a git branch"
+    return 1
+  fi
+
+  default_branch=$(_git_default_branch)
+  if [[ -z "$default_branch" ]]; then
+    log_error "Could not determine default branch"
+    return 1
+  fi
+
+  if ! git show-ref --verify --quiet "refs/heads/$default_branch"; then
+    log_message "Fetching default branch '$default_branch' from origin"
+    _exec "git fetch origin '$default_branch':'refs/heads/$default_branch' --no-tags"
+  fi
+
+  branches_to_remove=("${(@f)$(git branch --merged "$default_branch" | sed 's/^..//' | grep -vE "^(${default_branch}|${current_branch})$")}")
+
+  if (( ${#branches_to_remove[@]} == 0 )); then
+    log_message "No local branches merged to '$default_branch'"
+    return 0
+  fi
+
+  printf "Default branch: %s\n" "$default_branch"
+  printf "Branches to remove:\n"
+  printf "  %s\n" "${branches_to_remove[@]}"
+
+  if [[ "$confirm" == true ]]; then
+    echo -n "Remove these branches? [y/N]: "
+    read -k 1 response
+    echo
+    [[ "$response" =~ ^[Yy]$ ]] || {
+      log_message "Aborted"
+      return 0
+    }
+  fi
+
+  branch_cmd="git branch "
+  if [[ "$force" == true ]]; then
+    branch_cmd+="-D"
+  else
+    branch_cmd+="-d"
+  fi
+
+  for branch in "${branches_to_remove[@]}"; do
+    _exec "$branch_cmd '$branch'"
+  done
 }
 
-# Ensure bundle dependencies are installed before running Bundler.
-buc() {
-  _exec "bundle check || bundle install"
-  bu $@
+alias Gbm='_gb_merged_prune'
+alias GbM='_gb_merged_prune --force --no-confirm'
+
+
+###############################################################################
+# GIT: WORKTREE
+###############################################################################
+
+alias Wl='wt list'
+
+alias Wr='wt remove'
+alias WR='Wr --force'
+alias WRD='Wr --force -D'
+
+alias Wm='wt merge'
+
+alias Ws='wt switch'
+alias Wsm='Ws main'
+alias Wsc='Ws --create'
+alias WT='shell-in-worktree'
+
+# List removable clean worktree branches excluding active agent markers.
+Wc() {
+    wt list --format json |
+      jq -r '
+        .[]
+        | select(.is_main | not)
+        | select(.is_current | not)
+        | select(.worktree.state != "locked")
+        | select(.working_tree.staged | not)
+        | select(.working_tree.modified | not)
+        | select(.working_tree.untracked | not)
+        | .branch
+      ' |
+      while IFS= read -r branch; do
+        marker=$(wt config state marker get --branch "$branch" --format json 2>/dev/null |
+          jq -r '.. | objects | .marker? // empty' 2>/dev/null)
+
+        case "$marker" in
+          "🤖"|"💬") continue ;;
+        esac
+
+        printf '%s\n' "$branch"
+      done
 }
 
-alias bue="buc exec"
-alias buu="bu update --all"
-alias buo="bu outdated"
-alias bui="bu install"
+# Remove clean worktrees listed by Wc.
+WC() {
+    Wc | xargs wt remove "$@"
+}
 
-# -- Jira
+
+###############################################################################
+# JIRA & ITERM2
+###############################################################################
 
 # Extract a Jira ticket key from the current git branch.
 jira-ticket-in-branch() {
@@ -1240,6 +1345,16 @@ jira-ticket-in-branch() {
   git_branch=$(git symbolic-ref --short HEAD 2> /dev/null)
   (echo $git_branch | grep -qE "[A-Z]{3,}-[0-9]+") || return
   echo $git_branch | sd '.*?([A-Z]{3,}-[0-9]+).*' '$1'
+}
+
+# Extract a Jira-style ticket key from the current branch name.
+ticket_from_branch() {
+  local BRANCH TICKET
+  BRANCH=$(git symbolic-ref --short HEAD)
+  (echo $BRANCH | grep -q "/") || return
+  TICKET=$(echo $BRANCH | sed -E 's#.*/([A-Z]+-[0-9]+)[^/]*#\1#')
+  [[ -z "$TICKET" ]] && return
+  echo $TICKET
 }
 
 # Fetch and print the summary for the current branch's Jira ticket.
@@ -1265,7 +1380,7 @@ jira-ticket-summary() {
 jira-extract-tickets() {
   local i
   for i in "$@" ; do
-    echo "$i" | grep -E '[A-Z0-9]+[0-9]+' | sd '([A-Z0-9]+-[0-9]+)' '>>>>>$1<<<<<'|sd '.*>>>>>' '' | sd '<<<<<.*' ''
+    echo "$i" | grep -E '[A-Z0-9]+[0-9]+' | sd '([A-Z0-9]+-[0-9]+)' '>>>>>>$1<<<<<'|sd '.*>>>>>' '' | sd '<<<<<.*' ''
   done | sort -u
 }
 

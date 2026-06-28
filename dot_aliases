@@ -190,6 +190,12 @@ CCA() {
     claude --permission-mode auto "$@"
 }
 
+CCB() {
+    cd ~/bin
+    CC "$@"
+}
+
+
 CCR() {
     claude --resume "$@"
 }

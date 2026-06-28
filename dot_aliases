@@ -1106,13 +1106,14 @@ git-retrigger-checks() {
 
 # Temporarily update another branch, run a command, then restore the current branch.
 git_pull_and_back() {
-  local merging_branch stashed current_branch
+  local merging_branch stashed current_branch is_in_worktree cmd branch_ref
 
   if [[ -z "$1" ]]; then
     log_error "Please provide branch name for git_pull_and_back"
     return 1
   fi
   merging_branch=$1; shift
+  cmd="$*"
 
   # Get current branch for better error handling
   current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
@@ -1131,8 +1132,10 @@ git_pull_and_back() {
   is_in_worktree=""
   if git worktree list --porcelain | grep -q "branch refs/heads/$merging_branch"; then
     is_in_worktree="true"
-    log_message "Branch '$merging_branch' is checked out in another worktree. Will fetch updates instead"    # Push an empty commit to retrigger CI checks.
-    git-retrigger-checks() {  # Stash changes if any exist
+    log_message "Branch '$merging_branch' is checked out in another worktree. Will fetch updates instead"
+  fi
+
+  # Stash changes if any exist
   if ! git diff-index --quiet HEAD --; then
     stashed=$(git stash push --include-untracked -m "Temporary stash for git_pull_and_back")
     log_message "Stashed changes: $stashed"
@@ -1142,11 +1145,12 @@ git_pull_and_back() {
 
   # Execute the git operations with proper error handling
   if [[ -n "$is_in_worktree" ]]; then
-    log_message "Fetching and updating latest changes for $merging_branch from remote"
+    branch_ref="origin/$merging_branch"
+    log_message "Fetching latest changes for $merging_branch from remote"
     if git fetch origin "$merging_branch" --no-tags; then
-      log_message "Successfully updated local branch $merging_branch"
-      # Now run the additional commands in the current directory
-      if eval "$*"; then
+      log_message "Successfully fetched $branch_ref"
+      # Run the additional commands in the current directory using the remote ref
+      if eval "${cmd//\{branch\}/$branch_ref}"; then
         log_message "Successfully ran extra commands in current directory"
       else
         log_error "Extra commands failed in current directory"
@@ -1159,11 +1163,12 @@ git_pull_and_back() {
       return 1
     fi
   else
+    branch_ref="$merging_branch"
     log_message "Switching to $merging_branch, pulling latest, then returning to $current_branch"
     if git checkout "$merging_branch" && \
        git pull && \
        git checkout "$current_branch" && \
-       eval "$*"; then
+       eval "${cmd//\{branch\}/$branch_ref}"; then
       log_message "Successfully completed git operations"
     else
       log_error "Git operations failed, attempting to return to original state"
@@ -1187,13 +1192,13 @@ git_pull_and_back() {
 # Pull and merge a source branch into the current branch.
 gpm() {
   src_branch=${1:-main}
-  git_pull_and_back $src_branch "git merge --no-edit $src_branch"
+  git_pull_and_back "$src_branch" "git merge --no-edit {branch}"
 }
 
 # Pull and rebase the current branch onto a source branch.
 gpr() {
   src_branch=${1:-main}
-  git_pull_and_back $src_branch "git rebase $src_branch"
+  git_pull_and_back "$src_branch" "git rebase {branch}"
 }
 
 # Add all changes, commit with a generated or provided message, pull, and push.

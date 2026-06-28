@@ -366,22 +366,22 @@ alias dig=doggo
 # --- Search
 
 # Search paths with fd while following symlinks.
-f() { fd --follow "$@" }
+f() { fd --follow "$@"; }
 # Search paths with fd and print null-separated results.
-f0() { f "$@" --print0 }
+f0() { f "$@" --print0; }
 
 # Search files with fd.
-ff() { f --type f "$@" }
+ff() { f --type f "$@"; }
 # Search files with fd and print null-separated results.
-ff0() { f0 --type f "$@" }
+ff0() { f0 --type f "$@"; }
 
 # Search all hidden and ignored paths with fd.
-fda() { f --no-ignore --hidden "$@" }
+fda() { f --no-ignore --hidden "$@"; }
 
 # Search regular files with fd.
-fdf() { f -t f "$@" }
+fdf() { f -t f "$@"; }
 # Search directories with fd.
-fdd() { f -t d "$@" }
+fdd() { f -t d "$@"; }
 
 # --- rg
 
@@ -687,6 +687,7 @@ find_xcode_proj() {
   if [[ -e "$1" ]]; then
     xcode_proj=$1
   else
+    # shellcheck disable=SC1036
     projects=(*.{xcworkspace,xcodeproj}(N) Package.swift(N))
     xcode_proj=$projects[1]
   fi
@@ -1264,6 +1265,7 @@ jira-extract-tickets() {
 }
 
 # Publish shell-derived values to iTerm2 user variables.
+# shellcheck disable=SC1035,SC1072,SC1009,SC1073
 iterm2_print_user_vars() {
     {
       iterm2_set_user_var jira_ticket_summary "$(jira-ticket-summary)"

@@ -48,7 +48,6 @@ bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
 zle -N git-peek
-bindkey '^O' git-peek
 
 after_zvm() {
   bindkey '^r' _atuin_search_widget
@@ -56,6 +55,8 @@ after_zvm() {
   bindkey '^[[1;5C' forward-word # ctrl+right-arrow
 
   bindkey "$ZSH_AI_CMD_KEY" _zsh_ai_cmd_suggest
+
+  bindkey '^O' git-peek
 
   # export INTELLI_VARIABLE_HOTKEY="^V"
   # _eval_for_cmd_cached intelli-shell "intelli-shell init zsh"

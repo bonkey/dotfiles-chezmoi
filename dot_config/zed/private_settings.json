@@ -131,6 +131,11 @@
         "model": "gpt-5.4-mini",
         "enable_thinking": true,
         "effort": "medium"
+      },
+      {
+        "provider": "opencode",
+        "model": "go/glm-5.2",
+        "enable_thinking": false
       }
     ],
     "inline_assistant_model": {

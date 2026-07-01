@@ -46,14 +46,11 @@ set -uo pipefail
 
 model="gemini-flash-latest"
 
-# Default branch: ask gh first, then origin/HEAD, then a local main/master/trunk.
+# Default branch: ask origin/HEAD first, then a local main/master/trunk.
 default_branch() {
     local b c
-    b="$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name 2>/dev/null)"
-    if [[ -z "$b" ]]; then
-        b="$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)"
-        b="${b#origin/}"
-    fi
+    b="$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)"
+    b="${b#origin/}"
     if [[ -z "$b" ]]; then
         for c in main master trunk; do
             if git show-ref --verify --quiet "refs/heads/$c"; then b="$c"; break; fi

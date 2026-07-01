@@ -269,7 +269,7 @@ CCB() {
 
 # Resume a Claude session.
 CCR() {
-    claude --resume "$@"
+    CC --resume "$@"
 }
 
 # Start Claude inside a worktrunk.

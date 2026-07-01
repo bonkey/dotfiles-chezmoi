@@ -2,8 +2,35 @@
 # Full iOS Simulator reset: kills every sim process tree (including orphans that
 # killed `xcodebuild test` runs leave behind) + leaked lldb-rpc-server, and
 # restarts CoreSimulatorService. Reclaims the RAM/swap those orphans wire down.
+# --check: list what would be killed and estimate reclaimable memory, no cleanup.
 
 swap() { sysctl -n vm.swapusage | sed -E 's/.*used = ([0-9.]+M).*/\1/'; }
+
+# keep in sync with the pkill/killall lines below
+sim_pids() {
+  { pgrep -x launchd_sim
+    pgrep -f 'CoreSimulator/Volumes'
+    pgrep -f 'SimulatorRuntime-'
+    pgrep -x lldb-rpc-server
+    pgrep -f com.apple.CoreSimulator.CoreSimulatorService
+  } 2>/dev/null | sort -un
+}
+
+if [[ "$1" == "--check" ]]; then
+  pids=$(sim_pids)
+  [[ -z "$pids" ]] && { echo "nothing to kill; swap used: $(swap)"; exit 0; }
+  ps -o rss=,comm= -p $pids | sort -rn | awk '
+    { total += $1 }
+    NR <= 5 { cmd = $0; sub(/^ *[0-9]+ +/, "", cmd); sub(/.*\//, "", cmd)
+              printf "%9.1fM  %s\n", $1 / 1024, cmd }
+    END {
+      if (NR > 5) printf "%9s   ... %d more\n", "", NR - 5
+      printf "%d processes, est. reclaim: %.0fM rss\n", NR, total / 1024
+    }'
+  echo "swap used: $(swap)"
+  exit 0
+fi
+
 echo "swap before: $(swap)"
 
 xcrun simctl shutdown all >/dev/null 2>&1

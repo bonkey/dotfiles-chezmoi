@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Full iOS Simulator reset: kills every sim process tree (including orphans that
+# killed `xcodebuild test` runs leave behind) + leaked lldb-rpc-server, and
+# restarts CoreSimulatorService. Reclaims the RAM/swap those orphans wire down.
+
+swap() { sysctl -n vm.swapusage | sed -E 's/.*used = ([0-9.]+M).*/\1/'; }
+echo "swap before: $(swap)"
+
+xcrun simctl shutdown all >/dev/null 2>&1
+pkill -9 -x launchd_sim
+pkill -9 -f 'CoreSimulator/Volumes'
+pkill -9 -f 'SimulatorRuntime-'
+pkill -9 -x lldb-rpc-server
+killall -9 com.apple.CoreSimulator.CoreSimulatorService 2>/dev/null
+
+sleep 5
+echo "swap after:  $(swap)"

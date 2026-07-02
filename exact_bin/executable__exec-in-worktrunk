@@ -238,6 +238,14 @@ fi
 # Session name: the branch without its <whoami>/ prefix.
 session_name="${branch#${user}/}"
 
+# Name the iTerm2 tab after the session so parallel worktree sessions can be
+# told apart at a glance. OSC 1 sets only the tab (icon) title, not the
+# window title. Guarded on iTerm2 + a tty so redirected runs and other
+# terminals (including tmux, which overrides TERM_PROGRAM) stay untouched.
+if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]]; then
+    printf '\e]1;%s\a' "$session_name"
+fi
+
 # --- determine mode --------------------------------------------------------
 # The symlink basename (claude-in-worktrunk, opencode-in-worktrunk,
 # shell-in-worktrunk) picks the CLI and its predefined args. When sourced

@@ -1299,7 +1299,7 @@ alias WR='Wr --force'
 alias WRD='Wr --force -D'
 
 alias Wm='wt merge'
-alias Wmn='Wm --no-merge'
+alias Wmn='Wm --no-remove'
 
 alias Ws='wt switch'
 alias Wsm='Ws main'

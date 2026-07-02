@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch make_slug compose_branch branch_exists sanitize retitle_iterm_tab' EXIT
+     unfunction default_branch make_slug compose_branch branch_exists sanitize' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -238,36 +238,6 @@ fi
 # Session name: the branch without its <whoami>/ prefix.
 session_name="${branch#${user}/}"
 
-# --- iTerm2 tab title -------------------------------------------------------
-# Name the tab after the session so parallel worktree sessions can be told
-# apart at a glance. A one-shot escape isn't enough: iTerm2's automatic
-# session naming ("job in dir") recomputes when the foreground job changes —
-# i.e. moments after the CLI launches — and clobbers OSC- and user-set names
-# alike. So the OSC 1 below only covers the stretch until the CLI starts,
-# and retitle_iterm_tab re-asserts the name afterwards at the user level via
-# AppleScript: post-launch user-level names survive job changes and are only
-# recomputed at the next shell prompt, which never comes in --execute mode.
-retitle_iterm_tab() {
-    [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -n "${ITERM_SESSION_ID:-}" ]] || return 0
-    local uuid="${ITERM_SESSION_ID#*:}"
-    ( for delay in 4 6 8 12 20 30; do
-        sleep "$delay"
-        osascript \
-            -e 'on run argv' \
-            -e 'tell application "iTerm2"' \
-            -e 'repeat with w in windows' \
-            -e 'repeat with t in tabs of w' \
-            -e 'repeat with s in sessions of t' \
-            -e 'if id of s is item 1 of argv then set name of s to item 2 of argv' \
-            -e 'end repeat' -e 'end repeat' -e 'end repeat' \
-            -e 'end tell' -e 'end run' \
-            "$uuid" "$1"
-    done ) &>/dev/null &!
-}
-if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]]; then
-    printf '\e]1;%s\a' "$session_name"
-fi
-
 # --- determine mode --------------------------------------------------------
 # The symlink basename (claude-in-worktrunk, opencode-in-worktrunk,
 # shell-in-worktrunk) picks the CLI and its predefined args. When sourced
@@ -289,13 +259,8 @@ cli=()
 cli_args=()
 case "$mode" in
     claude-in-worktrunk|claude)
-        # Claude Code keeps rewriting the terminal title while it runs, which
-        # clobbers the session-name tab title set above. Route through `env`
-        # to disable that for the child only — exporting here would leak into
-        # the caller's shell when this script is sourced.
-        cli=(env)
-        cli_args=(CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
-                  claude --dangerously-skip-permissions --name "$session_name")
+        cli=(claude)
+        cli_args=(--dangerously-skip-permissions --name "$session_name")
         ;;
     opencode-in-worktrunk|opencode)
         cli=(opencode)
@@ -312,9 +277,6 @@ case "$mode" in
 esac
 
 if (( ${#cli[@]} )); then
-    # Only CLI modes get the re-asserter: in shell mode the prompt returns
-    # and iTerm2's auto-naming would legitimately take over again.
-    retitle_iterm_tab "$session_name"
     _exec wt switch "$branch" "${create_args[@]}" \
         --execute "${cli[@]}" -- "${cli_args[@]}"
 else

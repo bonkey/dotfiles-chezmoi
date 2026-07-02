@@ -132,18 +132,9 @@ alias ced="cz edit --apply"
 alias cap="cz apply"
 alias cad="cz add"
 alias cra="cz re-add"
+alias cup="open ~/bin/update_chezmoi.terminal"
 alias cma="cz merge-all"
 alias cfo="cz forget"
-
-# Run the chezmoi update script in a new window (Ghostty if available, else Terminal).
-cup() {
-    local ghostty='/Applications/Ghostty.app/Contents/MacOS/ghostty'
-    if [[ -x $ghostty ]]; then
-        $ghostty -e ~/bin/update_chezmoi.sh &> /dev/null &!
-    else
-        open ~/bin/update_chezmoi.terminal
-    fi
-}
 
 # Forward arguments to Homebrew.
 br() {

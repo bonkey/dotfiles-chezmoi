@@ -267,8 +267,13 @@ cli=()
 cli_args=()
 case "$mode" in
     claude-in-worktrunk|claude)
-        cli=(claude)
-        cli_args=(--dangerously-skip-permissions --name "$session_name")
+        # Claude Code keeps rewriting the terminal title while it runs, which
+        # clobbers the session-name tab title set above. Route through `env`
+        # to disable that for the child only — exporting here would leak into
+        # the caller's shell when this script is sourced.
+        cli=(env)
+        cli_args=(CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
+                  claude --dangerously-skip-permissions --name "$session_name")
         ;;
     opencode-in-worktrunk|opencode)
         cli=(opencode)

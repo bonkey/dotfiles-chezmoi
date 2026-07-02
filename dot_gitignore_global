@@ -24,3 +24,5 @@ xcodebuild*.log
 .opencode/plans
 .claude/settings.local.json
 .claude/worktrees
+
+**/.claude/settings.local.json

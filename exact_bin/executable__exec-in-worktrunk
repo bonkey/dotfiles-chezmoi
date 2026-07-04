@@ -16,11 +16,15 @@ trap '(( saved_nounset ))  || set +u
 #
 # This script is dispatched by symlink: invoke as `claude-in-worktrunk` or
 # `opencode-in-worktrunk` and the symlink's basename picks the CLI and its
-# predefined args. The dispatch table lives at the bottom of this file.
+# predefined args. The no-CLI `shell` mode has no symlink — it must change
+# the caller's cwd, so it only works sourced, via the shell-in-worktrunk
+# wrapper function in .zshrc (`source _exec-in-worktrunk shell`). The
+# dispatch table lives at the bottom of this file.
 #
 # Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug>)
 #
 # Usage: <symlink> [--resume] [base] [ticket-url-or-key]
+#        source _exec-in-worktrunk <mode> [--resume] [base] [ticket-url-or-key]
 #   --resume  reuse this ticket's existing worktree instead of creating a new one
 #   .         branch off the current branch
 #   <name>    branch off <name>
@@ -58,6 +62,20 @@ default_branch() {
     fi
     print -r -- "$b"
 }
+
+# --- determine mode ----------------------------------------------------------
+# The symlink basename (claude-in-worktrunk, opencode-in-worktrunk) picks the
+# CLI and its predefined args. When sourced via a wrapper function (e.g.
+# `source _exec-in-worktrunk shell`), $0 is the real filename, so the mode is
+# taken from the first argument instead — consumed here, before positional
+# parsing, or it would be mistaken for the base branch. The $0 guard keeps a
+# symlink invocation from eating a base branch named after a mode.
+mode="${0##*/}"
+if [[ "$mode" != (claude|opencode|shell)-in-worktrunk ]] \
+    && (( $# )) && [[ "$1" == (shell|claude|opencode) ]]; then
+    mode="$1"
+    shift
+fi
 
 # --- parse args ------------------------------------------------------------
 # A ticket is detected only from a URL the user passes explicitly — never from
@@ -278,22 +296,10 @@ report_iterm_cwd() {
     printf '\e]1337;CurrentDir=%s\a' "$PWD"
 }
 
-# --- determine mode --------------------------------------------------------
-# The symlink basename (claude-in-worktrunk, opencode-in-worktrunk,
-# shell-in-worktrunk) picks the CLI and its predefined args. When sourced
-# via a wrapper function (e.g. `source _exec-in-worktrunk shell`),
-# $0 is the real filename, so the mode is taken from the first positional
-# instead.
-mode="${0##*/}"
-if (( $# )) && [[ "$1" == (shell|claude|opencode) ]]; then
-    mode="$1"
-    shift
-fi
-
 # --- dispatch --------------------------------------------------------------
 # Add another tool by dropping a case here and symlinking
-# `<tool>-in-worktrunk` -> this file. `shell-in-worktrunk` is the no-CLI
-# variant: it just creates/switches the worktree without spawning a child
+# `<tool>-in-worktrunk` -> this file. `shell` is the no-CLI variant (sourced,
+# no symlink): it just creates/switches the worktree without spawning a child
 # process — the user stays in their original shell.
 cli=()
 cli_args=()
@@ -316,7 +322,7 @@ case "$mode" in
         cli_args=()
         ;;
     *)
-        print -ru2 -- "invoke via claude-in-worktrunk, opencode-in-worktrunk, or shell-in-worktrunk (got: $mode)"
+        print -ru2 -- "invoke via claude-in-worktrunk, opencode-in-worktrunk, or the shell-in-worktrunk function (got: $mode)"
         exit 1
         ;;
 esac

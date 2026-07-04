@@ -311,12 +311,17 @@ report_iterm_cwd() {
 # --- tmux launch -------------------------------------------------------------
 # With --tmux the CLI runs inside a tmux session named after the branch, so
 # it outlives the terminal window. All of the iTerm2 title/cwd machinery
-# above is skipped in this mode: `-n` pins the window name (naming a window
-# at creation disables tmux's automatic-rename for it), iTerm2 in control
-# mode takes tab title and cwd straight from tmux, and the claude case still
-# ships CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 because ~/.tmux.conf has
-# `allow-rename on`, which would otherwise let the CLI's title escapes rename
-# the window.
+# above is skipped in this mode: iTerm2 in control mode takes tab title and
+# cwd straight from tmux. `-n` pins the window name (naming a window at
+# creation disables tmux's automatic-rename for it), but that alone doesn't
+# name the tab: iTerm2 -CC labels tabs with the pane title (#{pane_title}),
+# not the window name, and Claude Code writes its own
+# "<repo> · <session> · <id>" pane title through escapes that
+# CLAUDE_CODE_DISABLE_TERMINAL_TITLE no longer fully suppresses (seen with
+# 2.1.x). So for CLI modes the pane title is pinned to the session name and
+# `allow-set-title off` blocks the CLI's title escapes at the tmux layer.
+# Shell mode keeps the default: the interactive shell legitimately
+# re-titles its pane ("zsh in <dir>").
 #
 # PATH is forwarded with -e: a tmux server that is already running keeps the
 # environment it was started with, which may predate the version managers
@@ -326,14 +331,19 @@ launch_in_tmux() {
     # Plain tmux calls, not _exec: its eval would re-parse "=name" targets
     # (zsh =word expansion), its "Executing" line would dump the whole
     # forwarded PATH, and --silent's output capture would eat control mode.
-    if [[ -n "${TMUX:-}" ]]; then
-        # Already inside tmux: never nest a client. Create the session
-        # detached and move this client over. "=" forces an exact session
-        # match — numbered branch variants are prefixes of each other.
-        tmux has-session -t "=${session_name}" 2>/dev/null \
-            || tmux new-session -d -s "$session_name" -n "$session_name" \
-                   -c "$PWD" -e "PATH=${PATH}" "${cli[@]}" "${cli_args[@]}" \
+    # "=" forces an exact session match — numbered branch variants are
+    # prefixes of each other.
+    if ! tmux has-session -t "=${session_name}" 2>/dev/null; then
+        tmux new-session -d -s "$session_name" -n "$session_name" \
+            -c "$PWD" -e "PATH=${PATH}" "${cli[@]}" "${cli_args[@]}" \
             || return 1
+        if (( ${#cli[@]} )); then
+            tmux set-option -w -t "=${session_name}:" allow-set-title off
+            tmux select-pane -t "=${session_name}:" -T "$session_name"
+        fi
+    fi
+    if [[ -n "${TMUX:-}" ]]; then
+        # Already inside tmux: never nest a client — move this client over.
         tmux switch-client -t "=${session_name}"
     else
         local client=(tmux)
@@ -341,12 +351,10 @@ launch_in_tmux() {
         # tmux decides whether the session opens as a native tab or window).
         # Everywhere else a plain attached tmux still buys persistence.
         [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]] && client+=(-CC)
-        # -A attaches (ignoring the command) when the session already
-        # exists — that is what makes --resume pick up a still-running CLI.
+        # Attaching to an already-existing session is what makes --resume
+        # pick up a still-running CLI.
         print -r -- "tmux session: ${session_name}"
-        "${client[@]}" new-session -A -s "$session_name" \
-            -n "$session_name" -c "$PWD" -e "PATH=${PATH}" \
-            "${cli[@]}" "${cli_args[@]}"
+        "${client[@]}" attach-session -t "=${session_name}"
     fi
 }
 

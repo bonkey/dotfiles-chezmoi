@@ -200,8 +200,8 @@
   // ================================
   "theme": {
     "mode": "system",
-    "dark": "Zedokai Darker (Filter Spectrum)",
-    "light": "Zedokai Light",
+    "dark": "One Dark",
+    "light": "One Light",
   },
   "colorize_brackets": true,
   "icon_theme": {

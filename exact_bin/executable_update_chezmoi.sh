@@ -6,11 +6,7 @@ stop_apps() {
 
 open_apps() {
     open -a 'Keyboard Maestro Engine'
-    if [[ -x '/Applications/Ghostty.app/Contents/MacOS/ghostty' ]]; then
-        open -a Ghostty
-    else
-        open -a Terminal
-    fi
+    open -a iTerm
 }
 
 countdown() {

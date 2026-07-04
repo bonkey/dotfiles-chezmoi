@@ -315,13 +315,19 @@ report_iterm_cwd() {
 # cwd straight from tmux. `-n` pins the window name (naming a window at
 # creation disables tmux's automatic-rename for it), but that alone doesn't
 # name the tab: iTerm2 -CC labels tabs with the pane title (#{pane_title}),
-# not the window name, and Claude Code writes its own
-# "<repo> · <session> · <id>" pane title through escapes that
-# CLAUDE_CODE_DISABLE_TERMINAL_TITLE no longer fully suppresses (seen with
-# 2.1.x). So for CLI modes the pane title is pinned to the session name and
-# `allow-set-title off` blocks the CLI's title escapes at the tmux layer.
-# Shell mode keeps the default: the interactive shell legitimately
-# re-titles its pane ("zsh in <dir>").
+# not the window name. Claude Code (2.1.x) then renames the tab past every
+# escape-level defense: with CLAUDE_CODE_DISABLE_TERMINAL_TITLE set it
+# emits no title escapes on its pty and runs no tmux commands (verified
+# with pipe-pane and a tmux shim), yet the tab still becomes
+# "<dir> · <claude session id>" — it hands the title to iTerm2 out of band
+# (it probes #{client_termtype} to detect iTerm2 behind tmux; the iTerm2
+# Python API server is enabled here), and iTerm2 writes that name back
+# into the tmux pane title as a control-mode client command, which
+# `allow-set-title off` (global, in ~/.tmux.conf) cannot block. So the
+# pane title is seeded with the session name and, for CLI modes, a
+# session-scoped pane-title-changed hook re-pins it whenever anything
+# rewrites it. The hook only guards the window named after the session;
+# extra windows keep iTerm2's usual "zsh in <dir>" naming.
 #
 # PATH is forwarded with -e: a tmux server that is already running keeps the
 # environment it was started with, which may predate the version managers
@@ -337,9 +343,10 @@ launch_in_tmux() {
         tmux new-session -d -s "$session_name" -n "$session_name" \
             -c "$PWD" -e "PATH=${PATH}" "${cli[@]}" "${cli_args[@]}" \
             || return 1
+        tmux select-pane -t "=${session_name}:" -T "$session_name"
         if (( ${#cli[@]} )); then
-            tmux set-option -w -t "=${session_name}:" allow-set-title off
-            tmux select-pane -t "=${session_name}:" -T "$session_name"
+            tmux set-hook -t "=${session_name}:" pane-title-changed \
+                "if -F '#{&&:#{==:#{window_name},${session_name}},#{!=:#{pane_title},${session_name}}}' 'select-pane -t =${session_name}:${session_name} -T ${session_name}'"
         fi
     fi
     if [[ -n "${TMUX:-}" ]]; then

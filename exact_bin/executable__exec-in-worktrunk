@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch make_slug compose_branch branch_exists sanitize retitle_iterm_tab report_iterm_cwd' EXIT
+     unfunction default_branch make_slug compose_branch branch_exists sanitize retitle_iterm_tab report_iterm_cwd launch_in_tmux' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -23,9 +23,14 @@ trap '(( saved_nounset ))  || set +u
 #
 # Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug>)
 #
-# Usage: <symlink> [--resume] [base] [ticket-url-or-key]
-#        source _exec-in-worktrunk <mode> [--resume] [base] [ticket-url-or-key]
+# Usage: <symlink> [--resume] [--tmux] [base] [ticket-url-or-key]
+#        source _exec-in-worktrunk <mode> [--resume] [--tmux] [base] [ticket-url-or-key]
 #   --resume  reuse this ticket's existing worktree instead of creating a new one
+#   --tmux    run inside a tmux session named after the branch: it survives the
+#             terminal window (closing detaches, the CLI keeps running), and
+#             `--resume --tmux` reattaches to a still-running session. From
+#             iTerm2 control mode (-CC) renders it as a native tab/window.
+#             Detached sessions are listed with `tmux ls`.
 #   .         branch off the current branch
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
@@ -82,16 +87,23 @@ fi
 # the clipboard on its own. Any argument that looks like a ticket URL/key is
 # treated as the ticket source; the remaining positional is the base branch.
 resume=0
+use_tmux=0
 positional=()
 ticket_input=""
 for a in "$@"; do
     case "$a" in
         --resume)               resume=1 ;;
+        --tmux)                 use_tmux=1 ;;
         *://*|*linear.app*)     ticket_input="$a" ;;
         [A-Z][A-Z]*-[0-9]*)     ticket_input="$a" ;;
         *)                      positional+=("$a") ;;
     esac
 done
+
+if (( use_tmux )) && ! command -v tmux >/dev/null; then
+    print -ru2 -- "--tmux requires tmux (brew install tmux)"
+    exit 1
+fi
 
 # --- resolve base branch ---------------------------------------------------
 arg="${positional[1]-}"
@@ -282,7 +294,7 @@ retitle_iterm_tab() {
             "$uuid" "$1"
     done ) &>/dev/null &!
 }
-if [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]]; then
+if (( ! use_tmux )) && [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]]; then
     printf '\e]1;%s\a' "$session_name"
 fi
 
@@ -294,6 +306,48 @@ fi
 report_iterm_cwd() {
     [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]] || return 0
     printf '\e]1337;CurrentDir=%s\a' "$PWD"
+}
+
+# --- tmux launch -------------------------------------------------------------
+# With --tmux the CLI runs inside a tmux session named after the branch, so
+# it outlives the terminal window. All of the iTerm2 title/cwd machinery
+# above is skipped in this mode: `-n` pins the window name (naming a window
+# at creation disables tmux's automatic-rename for it), iTerm2 in control
+# mode takes tab title and cwd straight from tmux, and the claude case still
+# ships CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 because ~/.tmux.conf has
+# `allow-rename on`, which would otherwise let the CLI's title escapes rename
+# the window.
+#
+# PATH is forwarded with -e: a tmux server that is already running keeps the
+# environment it was started with, which may predate the version managers
+# this script eval'd, and PATH is not in tmux's default update-environment
+# list.
+launch_in_tmux() {
+    # Plain tmux calls, not _exec: its eval would re-parse "=name" targets
+    # (zsh =word expansion), its "Executing" line would dump the whole
+    # forwarded PATH, and --silent's output capture would eat control mode.
+    if [[ -n "${TMUX:-}" ]]; then
+        # Already inside tmux: never nest a client. Create the session
+        # detached and move this client over. "=" forces an exact session
+        # match — numbered branch variants are prefixes of each other.
+        tmux has-session -t "=${session_name}" 2>/dev/null \
+            || tmux new-session -d -s "$session_name" -n "$session_name" \
+                   -c "$PWD" -e "PATH=${PATH}" "${cli[@]}" "${cli_args[@]}" \
+            || return 1
+        tmux switch-client -t "=${session_name}"
+    else
+        local client=(tmux)
+        # Control mode only makes sense from iTerm2 (Settings → General →
+        # tmux decides whether the session opens as a native tab or window).
+        # Everywhere else a plain attached tmux still buys persistence.
+        [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]] && client+=(-CC)
+        # -A attaches (ignoring the command) when the session already
+        # exists — that is what makes --resume pick up a still-running CLI.
+        print -r -- "tmux session: ${session_name}"
+        "${client[@]}" new-session -A -s "$session_name" \
+            -n "$session_name" -c "$PWD" -e "PATH=${PATH}" \
+            "${cli[@]}" "${cli_args[@]}"
+    fi
 }
 
 # --- dispatch --------------------------------------------------------------
@@ -334,11 +388,18 @@ esac
 # replaces the wt process with the CLI, so the worktree path would never be
 # observable from here.
 _exec wt switch "$branch" "${create_args[@]}"
-report_iterm_cwd
 
-if (( ${#cli[@]} )); then
-    # Only CLI modes get the re-asserter: in shell mode the prompt returns
-    # and iTerm2's auto-naming would legitimately take over again.
-    retitle_iterm_tab "$session_name"
-    _exec "${cli[@]}" "${cli_args[@]}"
+if (( use_tmux )); then
+    # In shell mode (empty cli) tmux gets no command and opens the default
+    # shell in the worktree, so --tmux works from the symlinks and sourced
+    # alike — the tmux pane does the cd, not the caller.
+    launch_in_tmux
+else
+    report_iterm_cwd
+    if (( ${#cli[@]} )); then
+        # Only CLI modes get the re-asserter: in shell mode the prompt returns
+        # and iTerm2's auto-naming would legitimately take over again.
+        retitle_iterm_tab "$session_name"
+        _exec "${cli[@]}" "${cli_args[@]}"
+    fi
 fi

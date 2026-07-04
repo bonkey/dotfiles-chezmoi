@@ -888,7 +888,7 @@ alias glsm="gls -m"
 git-peek() {
   if git rev-parse --is-inside-work-tree &>/dev/null; then
     echo
-    git lg --no-merges -10
+    git lg --no-merges -20
   fi
   zle reset-prompt
 }

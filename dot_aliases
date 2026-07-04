@@ -28,6 +28,13 @@ alias -g SS="| sort"
 alias -g SU="| sort | uniq"
 alias -g XCB="| xcbeautify -q --disable-logging"
 
+###############################################################################
+# TMUX
+###############################################################################
+
+alias Tl="tmux list-sessions"
+alias Tk="tmux kill-session -t"
+alias Ta="tmux attach-session -t"
 
 ###############################################################################
 # NAVIGATION & LISTING

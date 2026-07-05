@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch make_slug compose_branch branch_exists sanitize retitle_iterm_tab report_iterm_cwd launch_in_tmux' EXIT
+     unfunction default_branch make_slug compose_branch branch_exists sanitize retitle_iterm_tab report_iterm_cwd launch_in_cmux' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -23,14 +23,15 @@ trap '(( saved_nounset ))  || set +u
 #
 # Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug>)
 #
-# Usage: <symlink> [--resume] [--tmux] [base] [ticket-url-or-key]
-#        source _exec-in-worktrunk <mode> [--resume] [--tmux] [base] [ticket-url-or-key]
+# Usage: <symlink> [--resume] [--cmux] [base] [ticket-url-or-key]
+#        source _exec-in-worktrunk <mode> [--resume] [--cmux] [base] [ticket-url-or-key]
 #   --resume  reuse this ticket's existing worktree instead of creating a new one
-#   --tmux    run inside a tmux session named after the branch: it survives the
-#             terminal window (closing detaches, the CLI keeps running), and
-#             `--resume --tmux` reattaches to a still-running session. From
-#             iTerm2 control mode (-CC) renders it as a native tab/window.
-#             Detached sessions are listed with `tmux ls`.
+#   --cmux    run inside a cmux workspace named after the branch. cmux is a
+#             persistent GUI multiplexer (a separate app driven over a Unix
+#             socket), so the workspace outlives this terminal window and
+#             survives an app restart — closing the window leaves the CLI
+#             running, and `--resume --cmux` returns to it. Open workspaces
+#             are listed with `cmux list-workspaces`.
 #   .         branch off the current branch
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
@@ -87,21 +88,21 @@ fi
 # the clipboard on its own. Any argument that looks like a ticket URL/key is
 # treated as the ticket source; the remaining positional is the base branch.
 resume=0
-use_tmux=0
+use_cmux=0
 positional=()
 ticket_input=""
 for a in "$@"; do
     case "$a" in
         --resume)               resume=1 ;;
-        --tmux)                 use_tmux=1 ;;
+        --cmux)                 use_cmux=1 ;;
         *://*|*linear.app*)     ticket_input="$a" ;;
         [A-Z][A-Z]*-[0-9]*)     ticket_input="$a" ;;
         *)                      positional+=("$a") ;;
     esac
 done
 
-if (( use_tmux )) && ! command -v tmux >/dev/null; then
-    print -ru2 -- "--tmux requires tmux (brew install tmux)"
+if (( use_cmux )) && ! command -v cmux >/dev/null; then
+    print -ru2 -- "--cmux requires cmux (brew install --cask cmux)"
     exit 1
 fi
 
@@ -294,7 +295,7 @@ retitle_iterm_tab() {
             "$uuid" "$1"
     done ) &>/dev/null &!
 }
-if (( ! use_tmux )) && [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]]; then
+if (( ! use_cmux )) && [[ "${TERM_PROGRAM:-}" == "iTerm.app" && -t 1 ]]; then
     printf '\e]1;%s\a' "$session_name"
 fi
 
@@ -308,61 +309,56 @@ report_iterm_cwd() {
     printf '\e]1337;CurrentDir=%s\a' "$PWD"
 }
 
-# --- tmux launch -------------------------------------------------------------
-# With --tmux the CLI runs inside a tmux session named after the branch, so
-# it outlives the terminal window. All of the iTerm2 title/cwd machinery
-# above is skipped in this mode: iTerm2 in control mode takes tab title and
-# cwd straight from tmux. `-n` pins the window name (naming a window at
-# creation disables tmux's automatic-rename for it), but that alone doesn't
-# name the tab: iTerm2 -CC labels tabs with the pane title (#{pane_title}),
-# not the window name. Claude Code (2.1.x) then renames the tab past every
-# escape-level defense: with CLAUDE_CODE_DISABLE_TERMINAL_TITLE set it
-# emits no title escapes on its pty and runs no tmux commands (verified
-# with pipe-pane and a tmux shim), yet the tab still becomes
-# "<dir> · <claude session id>" — it hands the title to iTerm2 out of band
-# (it probes #{client_termtype} to detect iTerm2 behind tmux; the iTerm2
-# Python API server is enabled here), and iTerm2 writes that name back
-# into the tmux pane title as a control-mode client command, which
-# `allow-set-title off` (global, in ~/.tmux.conf) cannot block. So the
-# pane title is seeded with the session name and, for CLI modes, a
-# session-scoped pane-title-changed hook re-pins it whenever anything
-# rewrites it. The hook only guards the window named after the session;
-# extra windows keep iTerm2's usual "zsh in <dir>" naming.
+# --- cmux launch -------------------------------------------------------------
+# With --cmux the CLI runs in a cmux workspace named after the branch. cmux is
+# a persistent GUI multiplexer (a separate app driven over a Unix socket), so
+# the workspace outlives this terminal window and survives an app restart via
+# cmux's session manifest — closing the window leaves the CLI running, and
+# `--resume --cmux` returns to it. This call returns immediately rather than
+# blocking on the CLI: cmux opens its own window and names the tab from --name, so
+# none of the iTerm2 title/cwd machinery above applies (it is skipped for
+# --cmux). If we are already inside a cmux surface ($CMUX_WORKSPACE_ID set)
+# the socket is already up, so the new workspace just lands in the caller's
+# window and --focus switches to it.
 #
-# PATH is forwarded with -e: a tmux server that is already running keeps the
-# environment it was started with, which may predate the version managers
-# this script eval'd, and PATH is not in tmux's default update-environment
-# list.
-launch_in_tmux() {
-    # Plain tmux calls, not _exec: its eval would re-parse "=name" targets
-    # (zsh =word expansion), its "Executing" line would dump the whole
-    # forwarded PATH, and --silent's output capture would eat control mode.
-    # "=" forces an exact session match — numbered branch variants are
-    # prefixes of each other.
-    if ! tmux has-session -t "=${session_name}" 2>/dev/null; then
-        tmux new-session -d -s "$session_name" -n "$session_name" \
-            -c "$PWD" -e "PATH=${PATH}" "${cli[@]}" "${cli_args[@]}" \
-            || return 1
-        tmux select-pane -t "=${session_name}:" -T "$session_name"
-        if (( ${#cli[@]} )); then
-            tmux set-hook -t "=${session_name}:" pane-title-changed \
-                "if -F '#{&&:#{==:#{window_name},${session_name}},#{!=:#{pane_title},${session_name}}}' 'select-pane -t =${session_name}:${session_name} -T ${session_name}'"
-        fi
+# PATH is forwarded with --env: the app is usually launched by macOS
+# LaunchServices, whose environment predates the version managers this script
+# eval'd. cmux applies --env to the workspace's shell and every later surface.
+launch_in_cmux() {
+    # The control socket only exists while the app runs; `cmux ping` fails
+    # until then. `open -a cmux` starts it, then poll until the socket is up.
+    if ! cmux ping >/dev/null 2>&1; then
+        open -a cmux || { print -ru2 -- "could not launch cmux.app"; return 1; }
+        local i
+        for i in {1..50}; do
+            cmux ping >/dev/null 2>&1 && break
+            sleep 0.2
+        done
+        cmux ping >/dev/null 2>&1 \
+            || { print -ru2 -- "cmux did not come up in time"; return 1; }
     fi
-    if [[ -n "${TMUX:-}" ]]; then
-        # Already inside tmux: never nest a client — move this client over.
-        tmux switch-client -t "=${session_name}"
-    else
-        local client=(tmux)
-        # Control mode only makes sense from iTerm2 (Settings → General →
-        # tmux decides whether the session opens as a native tab or window).
-        # Everywhere else a plain attached tmux still buys persistence.
-        [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]] && client+=(-CC)
-        # Attaching to an already-existing session is what makes --resume
-        # pick up a still-running CLI.
-        print -r -- "tmux session: ${session_name}"
-        "${client[@]}" attach-session -t "=${session_name}"
+
+    # Reuse an already-open workspace of this name instead of spawning a twin:
+    # cmux workspaces persist, so a branch worked on before is likely still
+    # open. This is what makes --resume return to a running CLI.
+    local existing
+    existing="$(cmux list-workspaces 2>/dev/null \
+        | grep -F -- "$session_name" | grep -oE 'workspace:[0-9]+' | head -1)"
+    if [[ -n "$existing" ]]; then
+        print -r -- "cmux workspace: ${session_name} (existing)"
+        cmux select-workspace --workspace "$existing"
+        return
     fi
+
+    # Command line cmux types into the new workspace's shell. In shell mode
+    # (empty cli) there is no --command: the workspace opens a plain shell in
+    # the worktree, so --cmux works from the symlinks and sourced alike.
+    local -a launch=("${cli[@]}" "${cli_args[@]}")
+    local -a nw=(--name "$session_name" --cwd "$PWD"
+                 --env "PATH=${PATH}" --focus true)
+    (( ${#launch[@]} )) && nw+=(--command "${(j: :)${(@q)launch}}")
+    print -r -- "cmux workspace: ${session_name}"
+    cmux new-workspace "${nw[@]}"
 }
 
 # --- dispatch --------------------------------------------------------------
@@ -404,11 +400,10 @@ esac
 # observable from here.
 _exec wt switch "$branch" "${create_args[@]}"
 
-if (( use_tmux )); then
-    # In shell mode (empty cli) tmux gets no command and opens the default
-    # shell in the worktree, so --tmux works from the symlinks and sourced
-    # alike — the tmux pane does the cd, not the caller.
-    launch_in_tmux
+if (( use_cmux )); then
+    # cmux owns its own window and cwd (--cwd), so the iTerm2 title/cwd
+    # re-asserters below don't apply — hand the worktree straight to cmux.
+    launch_in_cmux
 else
     report_iterm_cwd
     if (( ${#cli[@]} )); then

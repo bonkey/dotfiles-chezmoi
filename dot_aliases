@@ -280,7 +280,7 @@ CCR() {
 }
 
 # Start Claude inside a worktrunk.
-CCT() {
+CCW() {
     claude-in-worktrunk
 }
 

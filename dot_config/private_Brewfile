@@ -43,7 +43,6 @@ brew 'pstree' # Show ps output as a tree
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
 brew 'spacer' # Small command-line utility for adding spacers to command output
-brew 'tmux' # Terminal multiplexer
 brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'zoxide' # Shell extension to navigate your filesystem faster
 cask 'ghostty@tip' # Terminal emulator that uses platform-native UI and GPU acceleration
@@ -52,6 +51,9 @@ brew 'mole'
 brew 'michel-kraemer/zsh-patina/zsh-patina'
 brew 'duf'
 brew 'tlrc'
+
+brew 'tmux' # Terminal multiplexer
+brew 'tmuxpack/tpack/tpack'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting

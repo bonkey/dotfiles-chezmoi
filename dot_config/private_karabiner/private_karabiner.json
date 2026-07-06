@@ -108,14 +108,6 @@
                         "vendor_id": 5426
                     },
                     "ignore": false
-                },
-                {
-                    "identifiers": {
-                        "device_address": "d5-02-ab-c8-37-ce",
-                        "is_keyboard": true,
-                        "is_pointing_device": true
-                    },
-                    "ignore": false
                 }
             ],
             "fn_function_keys": [

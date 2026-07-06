@@ -139,7 +139,14 @@ alias ced="cz edit --apply"
 alias cap="cz apply"
 alias cad="cz add"
 alias cra="cz re-add"
-alias cup="open ~/bin/update_chezmoi.terminal"
+# Update chezmoi in a new terminal window; prefer Ghostty when installed.
+cup() {
+  if [[ -d /Applications/Ghostty.app || -d "$HOME/Applications/Ghostty.app" ]]; then
+    open -na Ghostty --args -e ~/bin/update_chezmoi.sh
+  else
+    open ~/bin/update_chezmoi.terminal
+  fi
+}
 alias cma="cz merge-all"
 alias cfo="cz forget"
 

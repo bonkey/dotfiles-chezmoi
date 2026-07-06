@@ -279,9 +279,9 @@ CCR() {
     CC --resume "$@"
 }
 
-# Start Claude inside a worktrunk.
+# Start Claude inside a worktrunk, in its own cmux workspace.
 CCW() {
-    claude-in-worktrunk
+    claude-in-worktrunk --cmux "$@"
 }
 
 # Forward arguments to opencode.

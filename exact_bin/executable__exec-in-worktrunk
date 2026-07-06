@@ -338,16 +338,28 @@ launch_in_cmux() {
             || { print -ru2 -- "cmux did not come up in time"; return 1; }
     fi
 
-    # Reuse an already-open workspace of this name instead of spawning a twin:
-    # cmux workspaces persist, so a branch worked on before is likely still
-    # open. This is what makes --resume return to a running CLI.
-    local existing
-    existing="$(cmux list-workspaces 2>/dev/null \
-        | grep -F -- "$session_name" | grep -oE 'workspace:[0-9]+' | head -1)"
-    if [[ -n "$existing" ]]; then
-        print -r -- "cmux workspace: ${session_name} (existing)"
-        cmux select-workspace --workspace "$existing"
-        return
+    # Reuse an already-open workspace of this name instead of spawning a twin —
+    # but ONLY under --resume. cmux auto-titles every workspace after its active
+    # surface, and that title embeds the cwd and running command (e.g.
+    # "bin · in @_exec-in-worktrunk --cmux · <id>"). A bare substring match on
+    # the branch slug therefore hits the *launching* workspace whenever the slug
+    # echoes the work context ("worktrunk", "cmux", the dir name, ...). Left
+    # ungated that made an ordinary --cmux launch select the current workspace
+    # and return before new-workspace ever ran — the CLI never opened. So gate
+    # on $resume (matching the intent below) and drop the current workspace from
+    # the candidates so a resume can't self-match either.
+    if (( resume )); then
+        local current existing
+        current="$(cmux current-workspace 2>/dev/null)"
+        existing="$(cmux list-workspaces 2>/dev/null \
+            | grep -F -- "$session_name" \
+            | grep -oE 'workspace:[0-9]+' \
+            | grep -vxF -- "$current" | head -1)"
+        if [[ -n "$existing" ]]; then
+            print -r -- "cmux workspace: ${session_name} (existing)"
+            cmux select-workspace --workspace "$existing"
+            return
+        fi
     fi
 
     # Command line cmux types into the new workspace's shell. In shell mode

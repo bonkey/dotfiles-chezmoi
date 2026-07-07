@@ -51,7 +51,7 @@ zz() {
 }
 
 # Select and jump with zoxide interactively.
-zx() {
+ZZ() {
     __zoxide_zi "$@"
 }
 

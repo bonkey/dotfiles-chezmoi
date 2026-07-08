@@ -139,7 +139,7 @@ brew 'colima' # Container runtimes on MacOS (and Linux) with minimal setup
 brew 'direnv' # Load/unload environment variables based on $PWD
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
 brew 'docker-compose' # Isolated development environments using Docker
-brew 'ffmpeg' # Play, record, convert, and stream audio and video
+brew 'ffmpeg-full' # Play, record, convert, and stream audio and video
 brew 'golang' # Open source programming language to build simple/reliable/efficient software
 brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
 # brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators

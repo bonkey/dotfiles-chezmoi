@@ -53,7 +53,6 @@ brew 'duf'
 brew 'tlrc'
 
 brew 'tmux' # Terminal multiplexer
-brew 'tmuxpack/tpack/tpack'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting

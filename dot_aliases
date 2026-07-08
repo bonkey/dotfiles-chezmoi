@@ -1320,7 +1320,7 @@ alias Wsm='Ws main'
 alias Wsc='Ws --create'
 alias WT='shell-in-worktree'
 
-# List removable clean worktree branches excluding active agent markers.
+# List removable clean worktree branches excluding active agent start markers.
 Wc() {
     wt list --format json |
       jq -r '
@@ -1338,7 +1338,7 @@ Wc() {
           jq -r '.. | objects | .marker? // empty' 2>/dev/null)
 
         case "$marker" in
-          "🤖"|"💬") continue ;;
+          "🤖") continue ;;
         esac
 
         printf '%s\n' "$branch"

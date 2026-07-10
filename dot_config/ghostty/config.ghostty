@@ -1,0 +1,25 @@
+# The font families to use.
+# 
+# You can generate the list of valid values using the CLI:
+# 
+#     ghostty +list-fonts
+# 
+
+font-family = "Google Sans Code NF"
+font-size = 18
+
+copy-on-select = clipboard
+
+window-width = 110
+window-height = 30
+
+# Valid values:
+# 
+#  * `official` - Use the official Ghostty icon.
+#  * `blueprint`, `chalkboard`, `microchip`, `glass`, `holographic`,
+#    `paper`, `retro`, `xray` - Official variants of the Ghostty icon
+#    hand-created by artists (no AI).
+macos-icon = glass
+
+auto-update = check
+auto-update-channel = tip

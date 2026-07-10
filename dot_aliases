@@ -459,7 +459,10 @@ man() {
 ###############################################################################
 
 alias m=make
-alias j=just
+
+alias J=just
+alias Jt=J  --time --timestamp
+alias Jl=J --list
 
 alias hyf="hyperfine -m 3"
 

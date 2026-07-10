@@ -51,7 +51,7 @@ zz() {
 }
 
 # Select and jump with zoxide interactively.
-ZZ() {
+zx() {
     __zoxide_zi "$@"
 }
 
@@ -455,20 +455,13 @@ man() {
 
 
 ###############################################################################
-# MAKE
-###############################################################################
-
-alias J=just
-alias Jl=J -l
-alias Jt=J --time --timestamp
-
-###############################################################################
 # BUILD TOOLS & BENCHMARKS
 ###############################################################################
 
-alias hyf="hyperfine -m 3"
 alias m=make
+alias j=just
 
+alias hyf="hyperfine -m 3"
 
 
 ###############################################################################
@@ -1327,7 +1320,7 @@ alias Wsm='Ws main'
 alias Wsc='Ws --create'
 alias WT='shell-in-worktree'
 
-# List removable clean worktree branches excluding active agent start markers.
+# List removable clean worktree branches excluding active agent markers.
 Wc() {
     wt list --format json |
       jq -r '
@@ -1345,7 +1338,7 @@ Wc() {
           jq -r '.. | objects | .marker? // empty' 2>/dev/null)
 
         case "$marker" in
-          "🤖") continue ;;
+          "🤖"|"💬") continue ;;
         esac
 
         printf '%s\n' "$branch"

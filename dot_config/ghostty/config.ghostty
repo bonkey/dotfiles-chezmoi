@@ -5,13 +5,19 @@
 #     ghostty +list-fonts
 # 
 
-font-family = "Google Sans Code NF"
+font-family = "CodeNewRoman Nerd Font Mono"
 font-size = 18
+# adjust-cell-height = 3
+
+theme = Idle Toes
+background-opacity = 0.85
+background-blur=16
 
 copy-on-select = clipboard
+mouse-hide-while-typing = true
 
-window-width = 110
-window-height = 30
+window-width = 130
+window-height = 40
 
 # Valid values:
 # 
@@ -20,6 +26,7 @@ window-height = 30
 #    `paper`, `retro`, `xray` - Official variants of the Ghostty icon
 #    hand-created by artists (no AI).
 macos-icon = glass
+macos-titlebar-style = tabs
 
 auto-update = check
 auto-update-channel = tip

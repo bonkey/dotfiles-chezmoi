@@ -27,5 +27,6 @@ xcodebuild*.log
 .opencode/plans
 .claude/settings.local.json
 .claude/worktrees
+.claude/commands
 
 DerivedData

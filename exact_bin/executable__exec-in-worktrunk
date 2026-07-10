@@ -436,13 +436,10 @@ launch_in_tmux() {
     if [[ -n "${TMUX:-}" ]]; then
         tmux switch-client -t "=$tsess"
     else
-        # Attach directly, NOT through _exec: _exec runs `eval "$*"`, which
-        # re-parses the already-expanded words and strips the quotes around
-        # "=$tsess". The now-unquoted leading `=` then triggers zsh's EQUALS
-        # filename expansion (=word -> path of command `word`), so tmux never
-        # runs and the just-created session is left unattached. attach is a
-        # blocking, terminal-owning call anyway — the _exec timing wrapper adds
-        # nothing. (switch-client above already runs direct for the same reason.)
+        # Not via _exec: it evals its args as one string, and zsh then treats
+        # the bare `=<session>` word as EQUALS expansion (path lookup of a
+        # command named after the session), which errors out and the attach
+        # never runs — leaving the freshly created session detached.
         tmux attach-session -t "=$tsess"
     fi
 }

@@ -258,7 +258,7 @@ md() {
 ###############################################################################
 
 alias '??'="llm cmd -m gemini-flash-latest"
-alias gy="gemini --yolo"
+alias Gy="gemini --yolo"
 
 # Run Claude with permission checks skipped.
 CC() {
@@ -287,9 +287,15 @@ CCR() {
 }
 
 # Start Claude inside a worktrunk, in its own cmux workspace.
-CCW() {
+CCC() {
     claude-in-worktrunk --cmux "$@"
 }
+
+# Start Claude inside a worktrunk, in its own tmux workspace.
+CCT() {
+    claude-in-worktrunk --tmux "$@"
+}
+
 
 # Forward arguments to opencode.
 OC() {

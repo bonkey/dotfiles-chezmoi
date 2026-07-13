@@ -113,7 +113,6 @@ alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"
 
 alias duh="du -csh"
-alias du="du -h"
 
 # Search running processes case-insensitively.
 psg() {
@@ -342,12 +341,12 @@ cmi() {
 # NETWORK & HTTP
 ###############################################################################
 
-alias h="http"
-alias hv="h -v"
-alias hf="h --follow"
-alias hvf="hv --follow"
+alias H="http"
+alias Hv="H -v"
+alias Hf="H --follow"
+alias Hvf="Hv --follow"
 
-alias curl="curlie"
+alias Cu="curlie"
 
 alias mtr="sudo mtr"
 alias p1="ping 1.1.1.1"
@@ -363,9 +362,6 @@ ping() {
     /sbin/ping "$@"
   fi
 }
-
-alias host=doggo
-alias dig=doggo
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 
@@ -455,7 +451,7 @@ dm() {
 }
 
 # Prefer tldr pages and fall back to Dash/system manpages.
-man() {
+M() {
     tldr "$@" || dm "$@"
 }
 

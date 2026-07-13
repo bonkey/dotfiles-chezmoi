@@ -113,6 +113,7 @@ alias lsg="lsof | grep -i"
 alias lsig="lsof -i | grep -i"
 
 alias duh="du -csh"
+alias du="du -h"
 
 # Search running processes case-insensitively.
 psg() {
@@ -257,7 +258,7 @@ md() {
 ###############################################################################
 
 alias '??'="llm cmd -m gemini-flash-latest"
-alias Gy="gemini --yolo"
+alias gy="gemini --yolo"
 
 # Run Claude with permission checks skipped.
 CC() {
@@ -286,15 +287,9 @@ CCR() {
 }
 
 # Start Claude inside a worktrunk, in its own cmux workspace.
-CCC() {
+CCW() {
     claude-in-worktrunk --cmux "$@"
 }
-
-# Start Claude inside a worktrunk, in its own tmux workspace.
-CCT() {
-    claude-in-worktrunk --tmux "$@"
-}
-
 
 # Forward arguments to opencode.
 OC() {
@@ -341,12 +336,12 @@ cmi() {
 # NETWORK & HTTP
 ###############################################################################
 
-alias H="http"
-alias Hv="H -v"
-alias Hf="H --follow"
-alias Hvf="Hv --follow"
+alias h="http"
+alias hv="h -v"
+alias hf="h --follow"
+alias hvf="hv --follow"
 
-alias Cu="curlie"
+alias curl="curlie"
 
 alias mtr="sudo mtr"
 alias p1="ping 1.1.1.1"
@@ -362,6 +357,9 @@ ping() {
     /sbin/ping "$@"
   fi
 }
+
+alias host=doggo
+alias dig=doggo
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 
@@ -451,7 +449,7 @@ dm() {
 }
 
 # Prefer tldr pages and fall back to Dash/system manpages.
-M() {
+man() {
     tldr "$@" || dm "$@"
 }
 
@@ -461,10 +459,7 @@ M() {
 ###############################################################################
 
 alias m=make
-
-alias J=just
-alias Jl=J --list
-alias Jt=J --time --timestamp
+alias j=just
 
 alias hyf="hyperfine -m 3"
 

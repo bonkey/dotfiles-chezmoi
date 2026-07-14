@@ -12,6 +12,7 @@ sim_pids() {
     pgrep -f 'CoreSimulator/Volumes'
     pgrep -f 'SimulatorRuntime-'
     pgrep -x lldb-rpc-server
+    pgrep -x SimulatorTrampoline
     pgrep -f com.apple.CoreSimulator.CoreSimulatorService
   } 2>/dev/null | sort -un
 }
@@ -38,6 +39,7 @@ pkill -9 -x launchd_sim
 pkill -9 -f 'CoreSimulator/Volumes'
 pkill -9 -f 'SimulatorRuntime-'
 pkill -9 -x lldb-rpc-server
+pkill -9 -x SimulatorTrampoline
 killall -9 com.apple.CoreSimulator.CoreSimulatorService 2>/dev/null
 
 sleep 5

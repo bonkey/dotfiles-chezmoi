@@ -10,10 +10,17 @@ skills=(
     wisdom-in-a-nutshell/agents
     bonkey/skills
     bonkey/skills-private
+    mattpocock/skills@grill-me
 )
 
 for skill in "${skills[@]}"; do
-    exec_unless_recently_modified $file "npx -y skills add $skill --global --yes"
+    if [[ "$skill" == *@* ]]; then
+        package="${skill%@*}"
+        skill_name="${skill##*@}"
+        exec_unless_recently_modified $file "npx -y skills add $package --skill $skill_name --global --yes"
+    else
+        exec_unless_recently_modified $file "npx -y skills add $skill --global --yes"
+    fi
 done
 
 exec_unless_recently_modified $file "npx -y skills update --global"

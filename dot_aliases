@@ -131,24 +131,78 @@ alias cal="gcal -s 1"
 ###############################################################################
 
 # Forward arguments to chezmoi.
-cz() {
+Cz() {
     chezmoi "$@"
 }
 
-alias ced="cz edit --apply"
-alias cap="cz apply"
-alias cad="cz add"
-alias cra="cz re-add"
+alias Ced="Cz edit --apply"
+alias Cap="Cz apply"
+alias Cad="Cz add"
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.
-cup() {
+Cup() {
   if [[ -d /Applications/Ghostty.app || -d "$HOME/Applications/Ghostty.app" ]]; then
     open -na Ghostty --args -e ~/bin/update_chezmoi.sh
   else
     open ~/bin/update_chezmoi.terminal
   fi
 }
-alias cma="cz merge-all"
-alias cfo="cz forget"
+alias Cma="Cz merge-all"
+alias Cfo="Cz forget"
+
+# Two-way chezmoi sync that loses neither local nor remote changes:
+# re-add local edits FIRST (so the commit holds only this machine's changes),
+# then rebase onto the remote, push, and apply the merged result.
+# Overlapping edits stop the rebase; fix them and run `Cs --continue`.
+Cs() {
+    local src
+    src=$(chezmoi source-path) || return 1
+
+    if [[ -d "$src/.git/rebase-merge" || -d "$src/.git/rebase-apply" ]]; then
+        if [[ "$1" != "--continue" ]]; then
+            log_error "Rebase in progress in $src — resolve conflicts, git add, then run: Cs --continue"
+            return 1
+        fi
+        GIT_EDITOR=true git -C "$src" rebase --continue || return 1
+    elif [[ "$1" == "--continue" ]]; then
+        log_message "No rebase in progress; running full sync"
+    fi
+
+    if [[ "$1" != "--continue" ]]; then
+        # Capture target edits while HEAD is still local. autoPush may fail
+        # when the remote is ahead — the commit still lands; we push below.
+        chezmoi re-add || log_message "re-add push rejected — will push after rebase"
+
+        # Safety net in case autoCommit is off or something was left behind.
+        if [[ -n "$(git -C "$src" status --porcelain)" ]]; then
+            git -C "$src" add -A
+            git -C "$src" commit -m "Update from $(hostname -s)"
+        fi
+
+        if ! git -C "$src" pull --rebase --autostash; then
+            log_error "Conflict — resolve in $src (git add ...), then run: Cs --continue"
+            return 1
+        fi
+    fi
+
+    # Tolerate a push race with the other machine.
+    if ! git -C "$src" push; then
+        git -C "$src" pull --rebase --autostash && git -C "$src" push || {
+            log_error "Push failed"
+            return 1
+        }
+    fi
+
+    # Everything is committed, so overwriting targets here is lossless.
+    # A prompt means the target changed since chezmoi last wrote it — for
+    # re-added files answering overwrite is safe; for templates (re-add
+    # skips those) answer diff/skip and port the edit via chezmoi edit.
+    chezmoi apply --exclude scripts
+
+    if [[ -n "$(chezmoi status --exclude scripts 2>/dev/null)" ]]; then
+        log_message "Still differing after sync (templates need chezmoi edit):"
+        chezmoi status --exclude scripts
+    fi
+}
 
 # Forward arguments to Homebrew.
 br() {
@@ -190,31 +244,31 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 
 # Edit shell initialization files through chezmoi.
 Cvz() {
-    ced $(eval "echo $_shell_init_files")
+    Ced $(eval "echo $_shell_init_files")
     exit
 }
 
 # Edit mise config through chezmoi and update mise.
 Cem() {
-    ced $HOME/.config/mise/config.toml
+    Ced $HOME/.config/mise/config.toml
     mise up
 }
 
 # Edit Brewfile through chezmoi and apply bundle changes.
 Ceb() {
-    ced $HOME/.config/Brewfile
+    Ced $HOME/.config/Brewfile
     brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
 }
 
 # Edit aliases through chezmoi.
 Cea() {
-    ced $HOME/.aliases
+    Ced $HOME/.aliases
     exit
 }
 
 # Edit opencode config through chezmoi.
 Ceo() {
-    ced $HOME/.config/opencode.json
+    Ced $HOME/.config/opencode.json
 }
 
 

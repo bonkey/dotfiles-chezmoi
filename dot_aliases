@@ -302,7 +302,7 @@ OCT() {
 }
 
 # Run Kimi with yolo mode enabled.
-KM() {
+KK() {
     kimi --yolo "$@"
 }
 

@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch make_slug compose_branch branch_exists sanitize retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux 2>/dev/null' EXIT
+     unfunction default_branch make_slug compose_branch branch_exists sanitize fetch_url_context resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux 2>/dev/null' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -42,12 +42,14 @@ trap '(( saved_nounset ))  || set +u
 #   .         branch off the current branch
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
-#   <url|KEY> a Jira/Linear ticket URL or key (e.g. ABC-123) to slug from
+#   <url|KEY> a ticket URL or key (e.g. ABC-123), or any other URL, to slug from
 #
 # A Jira/Linear ticket URL or key passed as an argument supplies the branch
-# slug: its title is shortened via the `llm` CLI. With no ticket argument you're
-# asked for a purpose and the slug is generated from that. The clipboard is
-# never scanned on its own.
+# slug: its title (and description excerpt) is fetched — Jira via the `jira`
+# CLI or JIRA_* REST, GitHub issues/PRs via `gh`, any other URL via curl —
+# and shortened via the `llm` CLI. With no ticket argument you're asked for a
+# purpose; a single URL inside that answer is resolved the same way. The
+# clipboard is never scanned on its own.
 
 source "${HOME}/bin/_common.zsh"
 
@@ -135,58 +137,151 @@ if [[ -z "$base" ]]; then
     exit 1
 fi
 
-# --- find a ticket in the URL the user passed ------------------------------
-# Detection runs only against an explicitly-supplied ticket URL/key, so an
-# unrelated clipboard never silently steers the branch name.
-clip="$ticket_input"
-ticket_id=""
-ticket_ctx=""
-ticket_title=""
+# --- ticket / URL context ---------------------------------------------------
+# Detection runs only against an explicitly-supplied ticket URL/key or a URL
+# the user types into the purpose prompt, so an unrelated clipboard never
+# silently steers the branch name.
 
-# A passed URL holding several tickets is not a request to branch off any one of
-# them, so detection is skipped unless exactly one is found.
-if grep -qE 'linear\.app/.+/issue/' <<<"$clip"; then
-    # Linear: ID and title come straight from the URL, no API needed.
-    ids=("${(@f)$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+' <<<"$clip" | sort -u)}")
-    if (( ${#ids} > 1 )); then
-        print -ru2 -- "▲ ${#ids} tickets in the URL — ignoring (pass a single ticket to use it)"
-    else
-        seg="$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+(/[A-Za-z0-9-]+)?' <<<"$clip" | head -1)"
-        seg="${seg#issue/}"
-        id="${seg%%/*}"
-        ticket_id="${(U)id}"
-        title="${seg#*/}"
-        [[ "$title" == "$seg" ]] && title=""
-        ticket_title="${title//-/ }"
-        ticket_ctx="Linear ${ticket_id}: ${ticket_title}"
-    fi
-else
-    raw_ids="$(grep -oE '[A-Z]{2,}-[0-9]+' <<<"$clip" | sort -u)"
-    if [[ -n "$raw_ids" ]]; then
-        ids=("${(@f)raw_ids}")
+# fetch_url_context <url> — best-effort fetch of an arbitrary URL. Prints the
+# page <title> on the first line and a plain-text rendering of the body after
+# it (via textutil, a macOS built-in); any failure is silent so callers can
+# fall back to the raw text. Only reaches public pages — auth-walled Jira goes
+# through the jira CLI / REST and GitHub through the gh fast-path in
+# resolve_ticket_source.
+fetch_url_context() {
+    local html title
+    # `command` dodges interactive aliases: this file is sourced into the
+    # user's shell in shell mode, where curl is aliased to curlie and would
+    # be baked into the function at parse time.
+    html="$(command curl -fsSL --max-time 15 "$1" 2>/dev/null)" || return 1
+    [[ -n "$html" ]] || return 1
+    title="$(grep -oE '<title[^>]*>[^<]+' <<<"$html" | head -1)"
+    print -r -- "${title#*>}"
+    textutil -stdin -stdout -convert txt -format html <<<"$html" 2>/dev/null
+}
+
+# resolve_ticket_source <text> — find a ticket or context URL in <text> and
+# populate ticket_id / ticket_title / ticket_ctx. Known hosts resolve fast:
+# Linear from the URL slug (or the linear CLI where installed), Jira via the
+# jira CLI with a JIRA_* REST fallback, GitHub issues/PRs via gh. Any other
+# URL goes through fetch_url_context. Failures leave the variables as they
+# were, so callers keep the plain raw-text behavior.
+resolve_ticket_source() {
+    local text="$1"
+    # <text> holding several tickets is not a request to branch off any one of
+    # them, so detection is skipped unless exactly one is found.
+    if grep -qE 'linear\.app/.+/issue/' <<<"$text"; then
+        # Linear: ID and title come straight from the URL, no API needed.
+        local -a ids
+        ids=("${(@f)$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+' <<<"$text" | sort -u)}")
         if (( ${#ids} > 1 )); then
             print -ru2 -- "▲ ${#ids} tickets in the URL — ignoring (pass a single ticket to use it)"
         else
-            ticket_id="${ids[1]}"
-            summary=""
-            if [[ -n "${JIRA_SERVER:-}" && -n "${JIRA_USER:-}" && -n "${JIRA_API_TOKEN:-}" ]]; then
-                summary="$(http --verify=no GET "${JIRA_SERVER}/rest/api/3/issue/${ticket_id}" \
-                    --auth "${JIRA_USER}:${JIRA_API_TOKEN}" 2>/dev/null \
-                    | jq -r '.fields.summary // empty' 2>/dev/null || true)"
+            local seg id title
+            seg="$(grep -oE 'issue/[A-Za-z0-9]+-[0-9]+(/[A-Za-z0-9-]+)?' <<<"$text" | head -1)"
+            seg="${seg#issue/}"
+            id="${seg%%/*}"
+            ticket_id="${(U)id}"
+            title="${seg#*/}"
+            [[ "$title" == "$seg" ]] && title=""
+            ticket_title="${title//-/ }"
+            ticket_ctx="Linear ${ticket_id}: ${ticket_title}"
+            # A linear CLI, where installed, upgrades the URL-slug title (often
+            # truncated or missing) to the real title plus description excerpt.
+            if command -v linear >/dev/null; then
+                local lout
+                lout="$(linear issue view "$ticket_id" 2>/dev/null || true)"
+                if [[ -n "$lout" ]]; then
+                    ticket_title="${lout%%$'\n'*}"
+                    ticket_ctx="Linear ${ticket_id}: ${ticket_title}"$'\n'"${lout[1,500]}"
+                fi
             fi
-            # Only call it Jira when a Jira summary actually came back; a bare ID
-            # (e.g. a Linear key) stays generic with no title to slug from.
-            if [[ -n "$summary" ]]; then
-                ticket_title="$summary"
-                ticket_ctx="Jira ${ticket_id}: ${summary}"
+        fi
+    else
+        local raw_ids
+        raw_ids="$(grep -oE '[A-Z]{2,}-[0-9]+' <<<"$text" | sort -u)"
+        if [[ -n "$raw_ids" ]]; then
+            local -a ids
+            ids=("${(@f)raw_ids}")
+            if (( ${#ids} > 1 )); then
+                print -ru2 -- "▲ ${#ids} tickets in the URL — ignoring (pass a single ticket to use it)"
             else
-                ticket_ctx="ticket ${ticket_id}"
+                local summary="" desc="" raw
+                ticket_id="${ids[1]}"
+                # The jira CLI carries its own auth config, so it works where
+                # the JIRA_* env vars for the REST fallback aren't set. The
+                # description is ADF JSON; flatten its text nodes for the llm.
+                if command -v jira >/dev/null; then
+                    raw="$(jira issue view "$ticket_id" --raw 2>/dev/null || true)"
+                    if [[ -n "$raw" ]]; then
+                        summary="$(jq -r '.fields.summary // empty' <<<"$raw" 2>/dev/null || true)"
+                        desc="$(jq -r '[.fields.description | .. | .text? // empty] | join(" ")' <<<"$raw" 2>/dev/null || true)"
+                    fi
+                fi
+                if [[ -z "$summary" && -n "${JIRA_SERVER:-}" && -n "${JIRA_USER:-}" && -n "${JIRA_API_TOKEN:-}" ]]; then
+                    summary="$(http --verify=no GET "${JIRA_SERVER}/rest/api/3/issue/${ticket_id}" \
+                        --auth "${JIRA_USER}:${JIRA_API_TOKEN}" 2>/dev/null \
+                        | jq -r '.fields.summary // empty' 2>/dev/null || true)"
+                fi
+                # Only call it Jira when a Jira summary actually came back; a bare ID
+                # (e.g. a Linear key) stays generic with no title to slug from.
+                if [[ -n "$summary" ]]; then
+                    ticket_title="$summary"
+                    ticket_ctx="Jira ${ticket_id}: ${summary}"
+                    [[ -n "$desc" ]] && ticket_ctx+=$'\n'"${desc[1,500]}"
+                else
+                    ticket_ctx="ticket ${ticket_id}"
+                fi
+            fi
+        elif [[ "$text" == *://* ]]; then
+            # Not a ticket system resolvable locally: fetch the page itself.
+            # GitHub issues/PRs go through gh (instant, authenticated, clean
+            # title/body); any other URL is fetched with curl and rendered to
+            # text, and the excerpt is handed to the llm as slugging context.
+            local url json title="" body=""
+            url="$(grep -oE 'https?://[^[:space:]]+' <<<"$text" | head -1)"
+            # Trim punctuation that prose drags along ("see <url>.").
+            while [[ "$url" == *[.,\;:\)\"\'] ]]; do url="${url%?}"; done
+            if [[ "$url" =~ 'github\.com/[^/]+/[^/]+/(issues|pull)/[0-9]+' ]] && command -v gh >/dev/null; then
+                case "$url" in
+                    */pull/*) json="$(gh pr view "$url" --json title,body 2>/dev/null || true)" ;;
+                    *)        json="$(gh issue view "$url" --json title,body 2>/dev/null || true)" ;;
+                esac
+                if [[ -n "$json" ]]; then
+                    title="$(jq -r '.title // empty' <<<"$json" 2>/dev/null || true)"
+                    body="$(jq -r '.body // empty' <<<"$json" 2>/dev/null || true)"
+                fi
+            fi
+            if [[ -z "$title" ]]; then
+                local page
+                print -r -- "fetching ${url} ..."
+                page="$(fetch_url_context "$url" || true)"
+                if [[ -n "$page" ]]; then
+                    title="${page%%$'\n'*}"
+                    body="${page#*$'\n'}"
+                    [[ "$body" == "$page" ]] && body=""
+                    # Pages without a <title> still contribute their text; the
+                    # URL itself stands in as the headline.
+                    [[ -z "$title" ]] && title="$url"
+                fi
+            fi
+            if [[ -n "$title" ]]; then
+                ticket_title="$title"
+                ticket_ctx="$title"
+                [[ -n "$body" ]] && ticket_ctx+=$'\n'"${body[1,500]}"
             fi
         fi
     fi
-fi
+    # Only the headline reaches the terminal; fetched bodies stay in the
+    # context handed to the llm.
+    [[ -n "$ticket_ctx" ]] && print -r -- "ticket: ${ticket_ctx%%$'\n'*}"
+    return 0
+}
 
-[[ -n "$ticket_ctx" ]] && print -r -- "ticket: ${ticket_ctx}"
+ticket_id=""
+ticket_ctx=""
+ticket_title=""
+[[ -n "$ticket_input" ]] && resolve_ticket_source "$ticket_input"
 
 # --- helpers ---------------------------------------------------------------
 system_prompt='Generate a git branch slug for the described work. Output ONLY the slug inside a single fenced code block. Rules: lowercase, 2-5 words, hyphen-separated, ASCII letters/digits/hyphens only, no spaces, no ticket IDs, no quotes, max ~40 chars.'
@@ -248,6 +343,19 @@ else
         slug="$(make_slug "$ticket_title")"
     else
         read -r "purpose?Purpose of this worktree: "
+        # A single URL inside the purpose is resolved like a passed ticket
+        # URL: it can supply ticket_id (the branch prefix) and feeds
+        # ticket_ctx into the slug prompt. Several URLs are ambiguous and
+        # ignored, mirroring the multi-ticket guard above.
+        purpose_urls="$(grep -oE 'https?://[^[:space:]]+' <<<"$purpose" | sort -u)"
+        if [[ -n "$purpose_urls" ]]; then
+            urls=("${(@f)purpose_urls}")
+            if (( ${#urls} > 1 )); then
+                print -ru2 -- "▲ ${#urls} URLs in the purpose — ignoring (include a single URL to fetch it)"
+            else
+                resolve_ticket_source "${urls[1]}"
+            fi
+        fi
         slug="$(make_slug "$purpose")"
     fi
     if [[ -z "$slug" ]]; then

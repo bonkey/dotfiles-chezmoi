@@ -199,7 +199,9 @@ resolve_ticket_source() {
         fi
     else
         local raw_ids
-        raw_ids="$(grep -oE '[A-Z]{2,}-[0-9]+' <<<"$text" | sort -u)"
+        # Project keys may carry digits after the leading letter (MSP7-67),
+        # so the key part is [A-Z][A-Z0-9]+ rather than letters-only.
+        raw_ids="$(grep -oE '[A-Z][A-Z0-9]+-[0-9]+' <<<"$text" | sort -u)"
         if [[ -n "$raw_ids" ]]; then
             local -a ids
             ids=("${(@f)raw_ids}")
@@ -286,6 +288,13 @@ ticket_title=""
 # --- helpers ---------------------------------------------------------------
 system_prompt='Generate a git branch slug for the described work. Output ONLY the slug inside a single fenced code block. Rules: lowercase, 2-5 words, hyphen-separated, ASCII letters/digits/hyphens only, no spaces, no ticket IDs, no quotes, max ~40 chars.'
 
+# Ticket titles are often cryptic — tracker shorthand, component tags
+# ("[iOS] FE:"), abbreviations, codenames — so slugging one verbatim just
+# transliterates the noise. This variant tells the llm to decode the title
+# (the description excerpt travels along in ticket_ctx) and restate the
+# actual work; a title that is already clear passes through condensed.
+ticket_system_prompt='You are given a ticket title, possibly with a description excerpt as context. Generate a git branch slug for it. If the title is already clear, condense it into the slug. If it is cryptic (abbreviations, component tags, codenames, tracker shorthand), use the context to restate the actual work in plain words — expand or drop the cryptic fragments rather than copying them. Output ONLY the slug inside a single fenced code block. Rules: lowercase, 2-5 words, hyphen-separated, ASCII letters/digits/hyphens only, no spaces, no ticket IDs, no quotes, max ~40 chars.'
+
 sanitize() {
     local s="${(L)1}"
     s="${s//[^a-z0-9-]/-}"
@@ -295,17 +304,23 @@ sanitize() {
     print -r -- "${s%%-}"
 }
 
-# make_slug <description> -> slug from the llm, falling back to the raw text.
-# A second arg of "continue" keeps the prior conversation (llm -c), so refined
-# descriptions build on the former prompt and avoid repeating taken names.
+# make_slug <description> [continue|ticket] -> slug from the llm, falling
+# back to the raw text. "continue" keeps the prior conversation (llm -c), so
+# refined descriptions build on the former prompt and avoid repeating taken
+# names. "ticket" marks <description> as a ticket title and swaps in the
+# polish prompt above.
 make_slug() {
     local raw s
     if [[ "${2-}" == continue ]]; then
         raw="$(llm -x -c -- "That branch name is taken. More context: $1. Propose a different slug." 2>/dev/null || true)"
     else
-        local input="Purpose: $1"
+        local sys="$system_prompt" input="Purpose: $1"
+        if [[ "${2-}" == ticket ]]; then
+            sys="$ticket_system_prompt"
+            input="Ticket title: $1"
+        fi
         [[ -n "$ticket_ctx" ]] && input+=$'\n'"Context: ${ticket_ctx}"
-        raw="$(llm -x -m "$model" -s "$system_prompt" -- "$input" 2>/dev/null || true)"
+        raw="$(llm -x -m "$model" -s "$sys" -- "$input" 2>/dev/null || true)"
     fi
     s="$(sanitize "$raw")"
     [[ -z "$s" ]] && s="$(sanitize "$1")"
@@ -337,10 +352,10 @@ if [[ -n "$existing" ]]; then
     create_args=()
     print -r -- "resuming existing branch ${branch}"
 else
-    # With a ticket title from the passed URL, shorten it into a slug
+    # With a ticket title from the passed URL, polish it into a slug
     # automatically; otherwise ask for a purpose to describe the work.
     if [[ -n "$ticket_title" ]]; then
-        slug="$(make_slug "$ticket_title")"
+        slug="$(make_slug "$ticket_title" ticket)"
     else
         read -r "purpose?Purpose of this worktree: "
         # A single URL inside the purpose is resolved like a passed ticket

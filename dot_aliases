@@ -2,10 +2,10 @@
 # GLOBAL PATH ALIASES
 ###############################################################################
 
-alias -g ddw='"$HOME/Downloads"'
-alias -g ddc='"$HOME/Documents"'
-alias -g dpr='"$HOME/Projects"'
-alias -g ddd='"$HOME/Library/Developer/Xcode/DerivedData/"'
+alias -g /dow='"$HOME/Downloads"'
+alias -g /doc='"$HOME/Documents"'
+alias -g /pro='"$HOME/Projects"'
+alias -g /dd='"$HOME/Library/Developer/Xcode/DerivedData/"'
 
 
 ###############################################################################

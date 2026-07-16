@@ -341,7 +341,7 @@ CCR() {
 }
 
 # Start Claude inside a worktrunk, in its own cmux workspace.
-CCW() {
+CCC() {
     claude-in-worktrunk --cmux "$@"
 }
 
@@ -356,7 +356,7 @@ OCT() {
 }
 
 # Run Kimi with yolo mode enabled.
-KM() {
+KK() {
     kimi --yolo "$@"
 }
 

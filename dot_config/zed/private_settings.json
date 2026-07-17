@@ -73,6 +73,9 @@
   // AI AGENT CONFIGURATION
   // ================================
   "agent": {
+    "sandbox_permissions": {
+      "allow_unsandboxed": true
+    },
     "tool_permissions": {
       "default": "allow",
       "tools": {},

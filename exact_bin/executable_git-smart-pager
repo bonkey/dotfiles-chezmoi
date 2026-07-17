@@ -1,0 +1,42 @@
+#!/bin/sh
+
+is_human_interactive_git() {
+    parent_pid=$PPID
+
+    while [ -n "$parent_pid" ] && [ "$parent_pid" -gt 1 ] 2>/dev/null; do
+        process_info=$(ps -p "$parent_pid" -o ppid= -o command= 2>/dev/null) || return 1
+        [ -n "$process_info" ] || return 1
+
+        next_parent=$(printf '%s\n' "$process_info" | awk '{print $1}')
+        command_line=$(printf '%s\n' "$process_info" | cut -d' ' -f2-)
+
+        case "$command_line" in
+            *' -c '*|*' --command '*|*'command '*|*codex*|*claude*|*kimi*|*zed-agent*)
+                return 1
+                ;;
+            *zsh*|*bash*|*fish*)
+                return 0
+                ;;
+        esac
+
+        parent_pid=$next_parent
+    done
+
+    return 1
+}
+
+if ! is_human_interactive_git; then
+    exec cat
+fi
+
+case "$(basename "$0")" in
+    git-hunk-pager)
+        if command -v hunk >/dev/null 2>&1; then
+            exec hunk pager
+        fi
+        exec less -FRX
+        ;;
+    *)
+        exec less -FRX
+        ;;
+esac

@@ -544,16 +544,33 @@ rename_cmux_workspace() {
 # switch-client, since an attach can't nest. A session of this name is reused
 # rather than duplicated, so --tmux pairs with --resume to return to earlier work.
 # The `=` target prefix forces an exact-name match instead of a prefix match.
+#
+# Pane cwd needs two defenses. Panes are forked from the tmux *server*, which
+# lives as long as any session does and keeps the cwd it was started with; the
+# first --tmux run of the day starts it implicitly from inside the just-created
+# worktree, and when a later `wt` cleanup trashes that worktree the server is
+# left sitting in a deleted directory. tmux (3.7b) then fails to apply `-c` to
+# new panes at all: every pane starts with the dead cwd, and a Bun-based CLI
+# like claude aborts on launch with a cryptic "ENOENT: Bun could not find a
+# file" — the session dies the moment it is created and the attach below
+# returns into a tab that closes before the error can be read. So (1) the pane
+# command re-cds itself, which holds up even on a poisoned server, and (2) the
+# client that may auto-start the server runs from /, so a fresh server never
+# sits in a directory that can be deleted out from under it.
 launch_in_tmux() {
     local tsess="${session_name//[.:]/-}"
     local -a launch=("${cli[@]}" "${cli_args[@]}")
+    local wdir="$PWD"
+    local -a panecmd
+    if (( ${#launch[@]} )); then
+        panecmd=(sh -c 'cd -- "$1" && shift && exec "$@"' - "$wdir" "${launch[@]}")
+    else
+        panecmd=(sh -c 'cd -- "$1" && exec "${SHELL:-/bin/zsh}" -l' - "$wdir")
+    fi
     if tmux has-session -t "=$tsess" 2>/dev/null; then
         print -r -- "tmux session: ${tsess} (existing)"
-    elif (( ${#launch[@]} )); then
-        tmux new-session -d -s "$tsess" -c "$PWD" -e "PATH=${PATH}" -- "${launch[@]}"
-        print -r -- "tmux session: ${tsess}"
     else
-        tmux new-session -d -s "$tsess" -c "$PWD" -e "PATH=${PATH}"
+        (builtin cd / && tmux new-session -d -s "$tsess" -c "$wdir" -e "PATH=${PATH}" -- "${panecmd[@]}")
         print -r -- "tmux session: ${tsess}"
     fi
     if [[ -n "${TMUX:-}" ]]; then
@@ -563,7 +580,16 @@ launch_in_tmux() {
         # the bare `=<session>` word as EQUALS expansion (path lookup of a
         # command named after the session), which errors out and the attach
         # never runs — leaving the freshly created session detached.
+        local attach_start=$SECONDS
         tmux attach-session -t "=$tsess"
+        # A return within seconds with the session gone means the CLI crashed
+        # on launch. A profile-spawned tab ("Close Sessions On End") vanishes
+        # the moment this script exits, so hold it open until a key is pressed
+        # to keep the evidence readable.
+        if (( SECONDS - attach_start < 5 )) && ! tmux has-session -t "=$tsess" 2>/dev/null; then
+            print -ru2 -- "▲ tmux session ${tsess} died right after launch — the CLI likely crashed on start"
+            [[ -t 0 ]] && read -rsk1 '?  press any key to close '
+        fi
     fi
 }
 

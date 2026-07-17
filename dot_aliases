@@ -3,6 +3,7 @@
 ###############################################################################
 
 alias -g /dow='"$HOME/Downloads"'
+alias -g /des='"$HOME/Desktop"'
 alias -g /doc='"$HOME/Documents"'
 alias -g /pro='"$HOME/Projects"'
 alias -g /dd='"$HOME/Library/Developer/Xcode/DerivedData/"'

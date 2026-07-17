@@ -73,6 +73,7 @@ _eval_for_cmd wt "wt config shell init zsh"
 _eval_for_cmd oh-my-posh "oh-my-posh init zsh --config ~/.config/bonkey.omp.json"
 
 _eval_for_cmd zsh-patina "zsh-patina activate"
+_eval_for_cmd entire "entire completion zsh"
 
 shell-in-worktrunk() {
     source "$HOME/bin/_exec-in-worktrunk" shell "$@"
@@ -87,3 +88,5 @@ if [[ $ZSH_DEBUGRC == true ]]; then
 fi
 
 # vim:set ft=zsh:
+
+# Entire CLI shell completion

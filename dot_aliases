@@ -149,13 +149,11 @@ Cup() {
 alias Cma="Cz merge-all"
 alias Cfo="Cz forget"
 
-# Two-way chezmoi sync that loses neither local nor remote changes:
-# re-add local edits FIRST (so the commit holds only this machine's changes),
-# then rebase onto the remote, push, and apply the merged result.
-# Overlapping edits stop the rebase; fix them and run `Cs --continue`.
 Cs() {
-    local src
+    local src status line target source_file
+    local -a targets
     src=$(chezmoi source-path) || return 1
+    targets=()
 
     if [[ -d "$src/.git/rebase-merge" || -d "$src/.git/rebase-apply" ]]; then
         if [[ "$1" != "--continue" ]]; then
@@ -168,11 +166,19 @@ Cs() {
     fi
 
     if [[ "$1" != "--continue" ]]; then
-        # Capture target edits while HEAD is still local. autoPush may fail
-        # when the remote is ahead — the commit still lands; we push below.
-        chezmoi re-add || log_message "re-add push rejected — will push after rebase"
+        status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
+        while IFS= read -r line; do
+            [[ -z "$line" ]] && continue
+            target=${line:3}
+            source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null) || continue
+            [[ "$source_file" == *.tmpl ]] && continue
+            targets+=("$HOME/$target")
+        done <<< "$status"
 
-        # Safety net in case autoCommit is off or something was left behind.
+        if (( ${#targets[@]} )); then
+            chezmoi re-add "${targets[@]}" || log_message "re-add push rejected — will push after rebase"
+        fi
+
         if [[ -n "$(git -C "$src" status --porcelain)" ]]; then
             git -C "$src" add -A
             git -C "$src" commit -m "Update from $(hostname -s)"
@@ -184,7 +190,6 @@ Cs() {
         fi
     fi
 
-    # Tolerate a push race with the other machine.
     if ! git -C "$src" push; then
         git -C "$src" pull --rebase --autostash && git -C "$src" push || {
             log_error "Push failed"
@@ -192,15 +197,12 @@ Cs() {
         }
     fi
 
-    # Everything is committed, so overwriting targets here is lossless.
-    # A prompt means the target changed since chezmoi last wrote it — for
-    # re-added files answering overwrite is safe; for templates (re-add
-    # skips those) answer diff/skip and port the edit via chezmoi edit.
     chezmoi apply --exclude scripts
 
-    if [[ -n "$(chezmoi status --exclude scripts 2>/dev/null)" ]]; then
+    status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
+    if [[ -n "$status" ]]; then
         log_message "Still differing after sync (templates need chezmoi edit):"
-        chezmoi status --exclude scripts
+        print -r -- "$status"
     fi
 }
 

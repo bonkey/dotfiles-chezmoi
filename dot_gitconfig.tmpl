@@ -9,14 +9,11 @@ ignorecase = true
 quotepath = false
 fsmonitor = false
 untrackedcache = true
-pager = less -FRX
-
-; [interactive]
-; diffFilter = delta --color-only
+pager = git-default-pager
 
 [pager]
-diff = hunk pager
-show = hunk pager
+diff = git-hunk-pager
+show = git-hunk-pager
 
 [diff]
 algorithm = histogram

@@ -37,7 +37,7 @@
 			<key>github.com/urfave/cli/v3</key>
 			<dict>
 				<key>date</key>
-				<date>2025-04-27T20:27:29Z</date>
+				<date>2026-07-17T19:00:02Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -51,7 +51,7 @@
 			<key>google.golang.org/genai</key>
 			<dict>
 				<key>date</key>
-				<date>2025-05-31T18:00:45Z</date>
+				<date>2026-07-17T19:00:02Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -101,7 +101,7 @@
 			<key>fastlane-plugin-appicon</key>
 			<dict>
 				<key>date</key>
-				<date>2024-05-15T17:24:16Z</date>
+				<date>2026-07-17T19:14:14Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -115,7 +115,7 @@
 			<key>fastlane-plugin-aws_s3</key>
 			<dict>
 				<key>date</key>
-				<date>2024-05-15T17:32:15Z</date>
+				<date>2026-07-17T19:14:17Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -129,7 +129,7 @@
 			<key>fastlane-plugin-bugsnag</key>
 			<dict>
 				<key>date</key>
-				<date>2024-05-15T17:24:18Z</date>
+				<date>2026-07-17T19:14:18Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -143,7 +143,7 @@
 			<key>fastlane-plugin-bundletool</key>
 			<dict>
 				<key>date</key>
-				<date>2025-02-01T21:05:36Z</date>
+				<date>2026-07-17T19:14:14Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -157,7 +157,7 @@
 			<key>fastlane-plugin-emerge</key>
 			<dict>
 				<key>date</key>
-				<date>2025-05-15T18:37:48Z</date>
+				<date>2026-07-17T19:14:15Z</date>
 				<key>entry</key>
 				<dict>
 					<key>name</key>
@@ -186,7 +186,7 @@
 			<key>Swift_Online</key>
 			<dict>
 				<key>date</key>
-				<date>2025-04-15T19:59:35Z</date>
+				<date>2026-07-17T18:59:52Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -224,7 +224,7 @@
 			<key>iOS_Online</key>
 			<dict>
 				<key>date</key>
-				<date>2025-04-15T19:59:36Z</date>
+				<date>2026-07-17T18:59:58Z</date>
 				<key>entry</key>
 				<dict>
 					<key>aliases</key>
@@ -299,27 +299,22 @@
 			<key>http://kapeli.com/feeds/Apple_API_Reference.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2022-06-03T09:28:55Z</date>
+				<date>2026-07-17T19:00:03Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Go.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2025-04-21T10:24:25Z</date>
+				<date>2026-07-17T18:59:57Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Man_Pages.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2024-03-14T00:20:48Z</date>
+				<date>2026-07-17T18:59:54Z</date>
 			</dict>
 			<key>http://kapeli.com/feeds/Markdown.xml</key>
 			<dict>
 				<key>date</key>
-				<date>2024-03-14T00:20:48Z</date>
-			</dict>
-			<key>http://kapeli.com/feeds/Ruby_3.xml</key>
-			<dict>
-				<key>date</key>
-				<date>2024-03-14T00:20:54Z</date>
+				<date>2026-07-17T18:59:54Z</date>
 			</dict>
 		</dict>
 		<key>uninstalled</key>

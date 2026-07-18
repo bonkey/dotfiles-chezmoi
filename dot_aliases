@@ -199,12 +199,6 @@ Cs() {
     fi
 
     chezmoi apply --exclude scripts
-
-    chezmoi_status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
-    if [[ -n "$chezmoi_status" ]]; then
-        log_message "Still differing after sync (templates need chezmoi edit):"
-        print -r -- "$chezmoi_status"
-    fi
 }
 
 # Forward arguments to Homebrew.

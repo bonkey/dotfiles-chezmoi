@@ -1280,19 +1280,25 @@ def discover_unknown_senders(
         print(f"  Discover query: {query}")
     messages = gws_triage(query)
 
-    def _seen(msg_from: str) -> bool:
+    # Match on sender *and* subject: several vendors bill through the same
+    # payment provider (e.g. every Stripe merchant sends from stripe.com), so a
+    # sender-only check would treat each new vendor as already covered by the
+    # first subject-scoped rule for that provider and never offer it here.
+    def _seen(msg_from: str, msg_subject: str) -> bool:
         return _is_ignored(msg_from, ignore_senders) or any(
-            _from_matches(r, msg_from) for r in rules
+            matches_rule(r, msg_from, msg_subject) for r in rules
         )
 
-    # Cheap pre-filter on the (possibly truncated) triage `from`. Triage may
-    # truncate long senders with "…", so keep those for a definitive recheck
-    # against the full From header after fetching the message.
+    # Cheap pre-filter on the (possibly truncated) triage `from`/`subject`.
+    # Triage may truncate long values with "…", so keep those for a definitive
+    # recheck against the full headers after fetching the message. Truncation
+    # can only make a rule *fail* to match, so this over-fetches rather than
+    # silently dropping a message.
     candidates = [
         m
         for m in messages
         if m["id"] not in state["processed_ids"]
-        and ("…" in m["from"] or not _seen(m["from"]))
+        and ("…" in m["from"] or not _seen(m["from"], m["subject"]))
     ]
     if not candidates:
         return 0
@@ -1310,8 +1316,8 @@ def discover_unknown_senders(
             full_from = get_header(full_msg, "From")
             subject = get_header(full_msg, "Subject")
 
-            # Definitive recheck with the full (untruncated) From header.
-            if _seen(full_from):
+            # Definitive recheck with the full (untruncated) headers.
+            if _seen(full_from, subject):
                 continue
 
             atts = [

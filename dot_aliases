@@ -151,7 +151,7 @@ alias Cma="Cz merge-all"
 alias Cfo="Cz forget"
 
 Cs() {
-    local src status line target source_file
+    local src chezmoi_status line target source_file
     local -a targets
     src=$(chezmoi source-path) || return 1
     targets=()
@@ -167,14 +167,14 @@ Cs() {
     fi
 
     if [[ "$1" != "--continue" ]]; then
-        status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
+        chezmoi_status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
         while IFS= read -r line; do
             [[ -z "$line" ]] && continue
             target=${line:3}
             source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null) || continue
             [[ "$source_file" == *.tmpl ]] && continue
             targets+=("$HOME/$target")
-        done <<< "$status"
+        done <<< "$chezmoi_status"
 
         if (( ${#targets[@]} )); then
             chezmoi re-add "${targets[@]}" || log_message "re-add push rejected — will push after rebase"
@@ -200,10 +200,10 @@ Cs() {
 
     chezmoi apply --exclude scripts
 
-    status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
-    if [[ -n "$status" ]]; then
+    chezmoi_status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
+    if [[ -n "$chezmoi_status" ]]; then
         log_message "Still differing after sync (templates need chezmoi edit):"
-        print -r -- "$status"
+        print -r -- "$chezmoi_status"
     fi
 }
 

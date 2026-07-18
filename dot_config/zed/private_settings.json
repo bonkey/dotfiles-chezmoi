@@ -50,14 +50,6 @@
       "enabled": true,
       "url": "https://sosumi.ai/mcp"
     },
-    "Ref": {
-      "enabled": true,
-      "command": "npx",
-      "args": ["ref-tools-mcp@latest"],
-      "env": {
-        "REF_API_KEY": "<REF_API_KEY_REDACTED>",
-      },
-    },
     "tavily": {
       "enabled": true,
       "command": "npx",

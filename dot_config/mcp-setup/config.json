@@ -16,17 +16,10 @@
 
     "code-search": ["morph"],
 
-    "docs": ["ref", "tavily", "deepwiki"],
+    "docs": ["tavily", "deepwiki"],
     "research": ["exa", "tavily", "firecrawl"]
   },
   "mcps": {
-    "ref": {
-      "type": "local",
-      "command": ["npx", "ref-tools-mcp@latest"],
-      "environment": {
-        "REF_API_KEY": "<REF_API_KEY_REDACTED>"
-      }
-    },
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp"

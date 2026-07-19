@@ -1355,6 +1355,17 @@ _gb_merged_prune() {
 alias Gbm='_gb_merged_prune'
 alias GbM='_gb_merged_prune --force --no-confirm'
 
+###############################################################################
+# GIT: PRUNE
+###############################################################################
+
+git-prune() {
+    git gc --prune=now --aggressive
+
+    git lfs prune --verify-remote --recent \
+      -c lfs.fetchrecentrefsdays=0 -c lfs.fetchrecentcommitsdays=0 -c lfs.pruneoffsetdays=0
+    rm -rf .git/lfs/incomplete
+}
 
 ###############################################################################
 # GIT: WORKTREE

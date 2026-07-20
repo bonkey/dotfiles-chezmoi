@@ -396,25 +396,14 @@ alias hv="h -v"
 alias hf="h --follow"
 alias hvf="hv --follow"
 
-alias curl="curlie"
+alias C="curlie"
+alias D=doggo
 
 alias mtr="sudo mtr"
 alias p1="ping 1.1.1.1"
 alias m1="mtr 1.1.1.1"
 alias m8="mtr 8.8.8.8"
 alias mg="mtr google.com"
-
-# Use gping when available, otherwise fall back to system ping.
-ping() {
-  if type gping 2>&1 > /dev/null ; then
-    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 "$@"
-  else
-    /sbin/ping "$@"
-  fi
-}
-
-alias host=doggo
-alias dig=doggo
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 

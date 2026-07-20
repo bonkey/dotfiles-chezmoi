@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 # Full iOS Simulator reset: kills every sim process tree (including orphans that
-# killed `xcodebuild test` runs leave behind) + leaked lldb-rpc-server, and
-# restarts CoreSimulatorService. Reclaims the RAM/swap those orphans wire down.
+# killed `xcodebuild test` runs leave behind, and Xcode Previews devices) +
+# leaked lldb-rpc-server, and restarts CoreSimulatorService. Reclaims the
+# RAM/swap those orphans wire down.
 # --check: list what would be killed and estimate reclaimable memory, no cleanup.
 
 swap() { sysctl -n vm.swapusage | sed -E 's/.*used = ([0-9.]+M).*/\1/'; }
+
+# Previews devices live in their own device set, invisible to a plain `simctl`.
+previews_set="$HOME/Library/Developer/Xcode/UserData/Previews/Simulator Devices"
 
 # keep in sync with the pkill/killall lines below
 sim_pids() {
   { pgrep -x launchd_sim
     pgrep -f 'CoreSimulator/Volumes'
     pgrep -f 'SimulatorRuntime-'
+    pgrep -f SimRenderingServices
     pgrep -x lldb-rpc-server
     pgrep -f com.apple.CoreSimulator.CoreSimulatorService
   } 2>/dev/null | sort -un
@@ -34,9 +39,11 @@ fi
 echo "swap before: $(swap)"
 
 xcrun simctl shutdown all >/dev/null 2>&1
+xcrun simctl --set "$previews_set" shutdown all >/dev/null 2>&1
 pkill -9 -x launchd_sim
 pkill -9 -f 'CoreSimulator/Volumes'
 pkill -9 -f 'SimulatorRuntime-'
+pkill -9 -f SimRenderingServices
 pkill -9 -x lldb-rpc-server
 killall -9 com.apple.CoreSimulator.CoreSimulatorService 2>/dev/null
 

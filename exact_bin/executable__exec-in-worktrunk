@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch make_slug compose_branch branch_exists sanitize fetch_url_context resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux 2>/dev/null' EXIT
+     unfunction default_branch make_slug compose_branch branch_exists sanitize fetch_url_context resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -43,6 +43,9 @@ trap '(( saved_nounset ))  || set +u
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
 #   <url|KEY> a ticket URL or key (e.g. ABC-123), or any other URL, to slug from
+#
+# When the tool exits, a clean worktree is offered for removal (the branch is
+# kept, so `wt switch <branch>` brings it back). See offer_worktree_cleanup.
 #
 # A Jira/Linear ticket URL or key passed as an argument supplies the branch
 # slug: its title (and description excerpt) is fetched — Jira via the `jira`
@@ -406,8 +409,11 @@ else
     create_args=(--create --base "$base")
 fi
 
-# Session name: the branch without its <whoami>/ prefix.
+# Session name: the branch without its <whoami>/ prefix. tmux rejects `.` and
+# `:` in session names, so it gets its own sanitized spelling — the cleanup
+# check below has to address the same session launch_in_tmux created.
 session_name="${branch#${user}/}"
+tmux_session="${session_name//[.:]/-}"
 
 # --- where does the tool run? ----------------------------------------------
 # --tmux wins everywhere (run in tmux regardless of terminal). Otherwise, if we
@@ -558,7 +564,7 @@ rename_cmux_workspace() {
 # client that may auto-start the server runs from /, so a fresh server never
 # sits in a directory that can be deleted out from under it.
 launch_in_tmux() {
-    local tsess="${session_name//[.:]/-}"
+    local tsess="$tmux_session"
     local -a launch=("${cli[@]}" "${cli_args[@]}")
     local wdir="$PWD"
     local -a panecmd
@@ -591,6 +597,58 @@ launch_in_tmux() {
             [[ -t 0 ]] && read -rsk1 '?  press any key to close '
         fi
     fi
+}
+
+# --- post-run worktree cleanup ----------------------------------------------
+# The branch outlives the worktree, so once the tool exits a clean worktree is
+# pure disk cost — `wt switch <branch>` recreates it on demand. Offer to drop
+# it, keeping the branch so the work stays reachable.
+#
+# `wt remove --no-delete-branch` is the safe spelling: it keeps the branch and,
+# without --force, refuses outright on a dirty tree, so disk space is never
+# traded for uncommitted work. The dirty check here runs first anyway, to say
+# so in one line instead of surfacing wt's failure.
+#
+# Only the paths that actually block on the tool call this. A --cmux launch
+# returns while the CLI still runs in its own window, a detached tmux session
+# is still alive, and shell mode leaves the caller's own shell inside the
+# worktree — removing any of those pulls the directory out from under a live
+# process (and a tmux server left in a deleted cwd poisons every later pane).
+offer_worktree_cleanup() {
+    local wt_path="$1"
+    [[ -n "$wt_path" && -d "$wt_path" ]] || return 0
+    [[ -t 0 ]] || return 0   # non-interactive: nothing to ask, so leave it alone
+
+    # Untracked files count as uncommitted for wt's purposes, so `--porcelain`
+    # (which lists them) is the same bar wt itself applies.
+    if [[ -n "$(git -C "$wt_path" status --porcelain 2>/dev/null)" ]]; then
+        print -r -- "worktree '${wt_path}' has uncommitted changes — keeping it"
+        return 0
+    fi
+
+    # Gitignored files — node_modules, .env, build output — live only in the
+    # worktree and are the one thing the branch cannot bring back. Reclaiming
+    # them is usually the whole point, so this counts rather than blocks;
+    # `--ignored` collapses whole directories, keeping the count meaningful.
+    local ignored_count note=""
+    ignored_count="$(git -C "$wt_path" status --porcelain --ignored 2>/dev/null \
+        | grep -c '^!!' || true)"
+    (( ignored_count )) && note=" (drops ${ignored_count} gitignored path(s))"
+
+    local answer
+    read -r "answer?remove worktree '${wt_path}'${note}, keep branch ${branch}? [Y/n] "
+    [[ -z "$answer" || "$answer" == [Yy]* ]] || return 0
+
+    # git refuses to delete the directory it is being run from, so step out to
+    # the main worktree first and name the branch explicitly rather than
+    # relying on wt's "current worktree" default. --foreground keeps the
+    # removal (and its diagnostics) inside this script's lifetime; a
+    # backgrounded one would be racing the shell's exit.
+    local main_wt
+    main_wt="$(git -C "$wt_path" worktree list --porcelain 2>/dev/null \
+        | head -1 | cut -d' ' -f2-)"
+    builtin cd -- "${main_wt:-/}" 2>/dev/null || builtin cd /
+    _exec wt remove "$branch" --no-delete-branch --foreground -y
 }
 
 # --- dispatch --------------------------------------------------------------
@@ -631,18 +689,26 @@ esac
 # replaces the wt process with the CLI, so the worktree path would never be
 # observable from here.
 _exec wt switch "$branch" "${create_args[@]}"
+worktree_path="$PWD"
 
 case "$launch_target" in
     tmux)
         # tmux owns the terminal once attached; the iTerm2 machinery doesn't
         # apply. Session creation already pointed at the worktree via -c "$PWD".
         launch_in_tmux
+        # attach also returns on a plain detach, which leaves the CLI running
+        # in the session — only a session that is gone means the work is over.
+        tmux has-session -t "=$tmux_session" 2>/dev/null \
+            || offer_worktree_cleanup "$worktree_path"
         ;;
     cmux-inplace)
         # Already inside cmux: retitle this workspace after the branch and run
         # the tool right here — no new workspace, --cmux (if given) is a no-op.
         rename_cmux_workspace
-        (( ${#cli[@]} )) && _exec "${cli[@]}" "${cli_args[@]}"
+        if (( ${#cli[@]} )); then
+            _exec "${cli[@]}" "${cli_args[@]}"
+            offer_worktree_cleanup "$worktree_path"
+        fi
         ;;
     cmux-create)
         # cmux owns its own window and cwd (--cwd), so the iTerm2 title/cwd
@@ -656,6 +722,7 @@ case "$launch_target" in
             # returns and iTerm2's auto-naming would legitimately take over.
             retitle_iterm_tab "$session_name"
             _exec "${cli[@]}" "${cli_args[@]}"
+            offer_worktree_cleanup "$worktree_path"
         fi
         ;;
 esac

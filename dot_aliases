@@ -224,10 +224,13 @@ alias brun="br uninstall"
 alias brunc="br uninstall --cask"
 
 # Run mise up with the GitHub token exported.
-Mup() {
+M() {
     export GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN
-    mise up
+    mise "$@"
 }
+
+Mu="M up"
+Ml="M ls"
 
 
 ###############################################################################

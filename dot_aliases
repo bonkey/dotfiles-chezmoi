@@ -161,38 +161,38 @@ Cs() {
             log_error "Rebase in progress in $src — resolve conflicts, git add, then run: Cs --continue"
             return 1
         fi
-        GIT_EDITOR=true git -C "$src" rebase --continue || return 1
+        GIT_EDITOR=true git --no-pager -C "$src" rebase --continue || return 1
     elif [[ "$1" == "--continue" ]]; then
         log_message "No rebase in progress; running full sync"
     fi
 
     if [[ "$1" != "--continue" ]]; then
-        chezmoi_status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
+        chezmoi_status=$(chezmoi status --exclude scripts --path-style absolute 2>/dev/null) || return 1
         while IFS= read -r line; do
-            [[ -z "$line" ]] && continue
+            [[ -z "$line" || ${line:0:1} == " " ]] && continue
             target=${line:3}
-            source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null) || continue
+            source_file=$(chezmoi source-path "$target" 2>/dev/null) || continue
             [[ "$source_file" == *.tmpl ]] && continue
-            targets+=("$HOME/$target")
+            targets+=("$target")
         done <<< "$chezmoi_status"
 
         if (( ${#targets[@]} )); then
             chezmoi re-add "${targets[@]}" || log_message "re-add push rejected — will push after rebase"
         fi
 
-        if [[ -n "$(git -C "$src" status --porcelain)" ]]; then
-            git -C "$src" add -A
-            git -C "$src" commit -m "Update from $(hostname -s)"
+        if [[ -n "$(git --no-pager -C "$src" status --porcelain)" ]]; then
+            git --no-pager -C "$src" add -A
+            git --no-pager -C "$src" commit -m "Update from $(hostname -s)"
         fi
 
-        if ! git -C "$src" pull --rebase --autostash; then
+        if ! git --no-pager -C "$src" pull --rebase --autostash; then
             log_error "Conflict — resolve in $src (git add ...), then run: Cs --continue"
             return 1
         fi
     fi
 
-    if ! git -C "$src" push; then
-        git -C "$src" pull --rebase --autostash && git -C "$src" push || {
+    if ! git --no-pager -C "$src" push; then
+        git --no-pager -C "$src" pull --rebase --autostash && git --no-pager -C "$src" push || {
             log_error "Push failed"
             return 1
         }

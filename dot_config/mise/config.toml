@@ -51,7 +51,6 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 # AI model CLIs
 "npm:@openai/codex" = "latest"            # OpenAI Codex CLI
 "npm:@google/gemini-cli" = "latest"       # Google Gemini CLI
-"pipx:kimi-cli" = "latest"                # Kimi CLI
 "npm:@qwen-code/qwen-code" = "latest"     # Qwen coding assistant CLI
 "npm:@kilocode/cli" = "latest"            # AI coding assistant CLI
 "npm:@mariozechner/pi-coding-agent" = "latest" # Coding agent CLI

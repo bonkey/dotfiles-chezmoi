@@ -161,38 +161,38 @@ Cs() {
             log_error "Rebase in progress in $src — resolve conflicts, git add, then run: Cs --continue"
             return 1
         fi
-        GIT_EDITOR=true git --no-pager -C "$src" rebase --continue || return 1
+        GIT_EDITOR=true git -C "$src" rebase --continue || return 1
     elif [[ "$1" == "--continue" ]]; then
         log_message "No rebase in progress; running full sync"
     fi
 
     if [[ "$1" != "--continue" ]]; then
-        chezmoi_status=$(chezmoi status --exclude scripts --path-style absolute 2>/dev/null) || return 1
+        chezmoi_status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
         while IFS= read -r line; do
-            [[ -z "$line" || ${line:0:1} == " " ]] && continue
+            [[ -z "$line" ]] && continue
             target=${line:3}
-            source_file=$(chezmoi source-path "$target" 2>/dev/null) || continue
+            source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null) || continue
             [[ "$source_file" == *.tmpl ]] && continue
-            targets+=("$target")
+            targets+=("$HOME/$target")
         done <<< "$chezmoi_status"
 
         if (( ${#targets[@]} )); then
             chezmoi re-add "${targets[@]}" || log_message "re-add push rejected — will push after rebase"
         fi
 
-        if [[ -n "$(git --no-pager -C "$src" status --porcelain)" ]]; then
-            git --no-pager -C "$src" add -A
-            git --no-pager -C "$src" commit -m "Update from $(hostname -s)"
+        if [[ -n "$(git -C "$src" status --porcelain)" ]]; then
+            git -C "$src" add -A
+            git -C "$src" commit -m "Update from $(hostname -s)"
         fi
 
-        if ! git --no-pager -C "$src" pull --rebase --autostash; then
+        if ! git -C "$src" pull --rebase --autostash; then
             log_error "Conflict — resolve in $src (git add ...), then run: Cs --continue"
             return 1
         fi
     fi
 
-    if ! git --no-pager -C "$src" push; then
-        git --no-pager -C "$src" pull --rebase --autostash && git --no-pager -C "$src" push || {
+    if ! git -C "$src" push; then
+        git -C "$src" pull --rebase --autostash && git -C "$src" push || {
             log_error "Push failed"
             return 1
         }
@@ -396,14 +396,25 @@ alias hv="h -v"
 alias hf="h --follow"
 alias hvf="hv --follow"
 
-alias C="curlie"
-alias D=doggo
+alias curl="curlie"
 
 alias mtr="sudo mtr"
 alias p1="ping 1.1.1.1"
 alias m1="mtr 1.1.1.1"
 alias m8="mtr 8.8.8.8"
 alias mg="mtr google.com"
+
+# Use gping when available, otherwise fall back to system ping.
+ping() {
+  if type gping 2>&1 > /dev/null ; then
+    gping -s -b 10 --vertical-margin 5 --horizontal-margin 10 "$@"
+  else
+    /sbin/ping "$@"
+  fi
+}
+
+alias host=doggo
+alias dig=doggo
 
 alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 

@@ -129,7 +129,7 @@ def resolve_profile(base, minus, cat_ids):
 
 def profile_label(mode, keep):
     if mode == "stock":
-        return "none (stock)"
+        return "stock (nothing off)"
     if not keep:
         return "all"
     if keep == EXTRAS_KEEP:
@@ -167,11 +167,14 @@ def preserve_supported():
 def apply_profile(devices, mode, keep, args, preserve):
     failures = 0
     for d in devices:
-        cmd = [SIMSLIM, "off" if mode == "stock" else "on", d.udid]
+        # Flags must precede the UDID: simslim 0.1.0 stops flag parsing at the
+        # first positional argument.
+        cmd = [SIMSLIM, "off" if mode == "stock" else "on"]
         if mode == "slim" and keep:
             cmd += ["--except", ",".join(sorted(keep))]
         if preserve:
             cmd += ["--preserve-boot-state"]
+        cmd.append(d.udid)
         if args.dry_run:
             print(" ".join(cmd))
             continue
@@ -252,27 +255,39 @@ def _pick_devices(scr, devices, selected):
 
 
 def _pick_profile(scr, cats):
-    mode, keep = "slim", set()
+    ids = {c[0] for c in cats}
+    on = set()  # categories that stay enabled; empty = profile "all"
     cur = off = 0
+    on_attr = curses.A_BOLD
+    if curses.has_colors():
+        on_attr |= curses.color_pair(1)
     while True:
+        stock = on == ids
+        mode = "stock" if stock else "slim"
+        keep = set() if stock else set(on)
         scr.erase()
         h, _ = scr.getmaxyx()
-        _put(scr, 0, 0, f"profile: {profile_label(mode, keep)}", curses.A_BOLD)
-        _put(scr, 1, 0, "a all · e extras · s none/stock · space keep on · enter apply · q back",
+        _put(scr, 0, 0,
+             f"profile: {profile_label(mode, keep)} — {len(ids) - len(on)} off / {len(on)} on",
+             curses.A_BOLD)
+        _put(scr, 1, 0, "a all off · e extras · s stock (everything on) · space toggle · enter apply · q back",
              curses.A_DIM)
-        _put(scr, 2, 0, "checked categories stay ON; the rest are turned off", curses.A_DIM)
+        _put(scr, 2, 0, "ON = service keeps running; everything else is turned off", curses.A_DIM)
         rows = h - 4
         if cur < off:
             off = cur
         if cur >= off + rows:
             off = cur - rows + 1
-        dim = curses.A_DIM if mode == "stock" else 0
         for i, (cid, cname) in enumerate(cats[off:off + rows]):
             idx = off + i
-            mark = "x" if cid in keep else " "
-            line = f"[{mark}] {cid:<14} {cname}"
-            _put(scr, 4 + i, 0, ("> " if idx == cur else "  ") + line,
-                 curses.A_REVERSE if idx == cur else dim)
+            y = 4 + i
+            sel = curses.A_REVERSE if idx == cur else 0
+            _put(scr, y, 0, "> " if idx == cur else "  ", sel)
+            if cid in on:
+                _put(scr, y, 2, "ON ", on_attr | sel)
+            else:
+                _put(scr, y, 2, "off", curses.A_DIM | sel)
+            _put(scr, y, 6, f"{cid:<14} {cname}", sel)
         scr.refresh()
         k = scr.getch()
         if k in (ord("q"), 27):
@@ -282,14 +297,13 @@ def _pick_profile(scr, cats):
         elif k in (curses.KEY_DOWN, ord("j")):
             cur = min(len(cats) - 1, cur + 1)
         elif k == ord("a"):
-            mode, keep = "slim", set()
+            on.clear()
         elif k == ord("e"):
-            mode, keep = "slim", EXTRAS_KEEP & {c[0] for c in cats}
-        elif k == ord("s"):
-            mode, keep = "stock", set()
+            on = EXTRAS_KEEP & ids
+        elif k in (ord("n"), ord("s")):
+            on = set(ids)
         elif k == ord(" "):
-            mode = "slim"
-            keep.symmetric_difference_update({cats[cur][0]})
+            on.symmetric_difference_update({cats[cur][0]})
         elif k in ENTER_KEYS:
             return mode, keep
 
@@ -300,6 +314,12 @@ def tui(devices, cats):
     def main(scr):
         curses.curs_set(0)
         scr.keypad(True)
+        try:
+            curses.start_color()
+            curses.use_default_colors()
+            curses.init_pair(1, curses.COLOR_GREEN, -1)
+        except curses.error:
+            pass
         selected = {d.udid for d in devices}
         while True:
             if _pick_devices(scr, devices, selected) is None:

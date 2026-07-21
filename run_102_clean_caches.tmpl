@@ -1,3 +1,19 @@
 #!/usr/bin/env zsh
 
 rm -rf "$HOME/.cache/opencode"
+
+# purge cache dirs only when they outgrow threshold (GB)
+clean_if_over() {
+  local dir="$1" limit_gb="$2" size_gb
+  [[ -d "$dir" ]] || return 0
+  size_gb=$(du -sg "$dir" 2>/dev/null | cut -f1)
+  if (( size_gb > limit_gb )); then
+    echo "cleaning $dir (${size_gb}G > ${limit_gb}G)"
+    rm -rf "${dir:?}"/*(DN)
+  fi
+}
+
+clean_if_over "$HOME/.bun/install/cache" 5
+
+command -v uv >/dev/null && uv cache prune --quiet
+command -v xcrun >/dev/null && xcrun simctl --set testing delete all >/dev/null 2>&1

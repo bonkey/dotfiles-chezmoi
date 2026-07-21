@@ -166,7 +166,8 @@ def preserve_supported():
 
 def apply_profile(devices, mode, keep, args, preserve):
     failures = 0
-    for d in devices:
+    total = len(devices)
+    for i, d in enumerate(devices, 1):
         # Flags must precede the UDID: simslim 0.1.0 stops flag parsing at the
         # first positional argument.
         cmd = [SIMSLIM, "off" if mode == "stock" else "on"]
@@ -178,19 +179,21 @@ def apply_profile(devices, mode, keep, args, preserve):
         if args.dry_run:
             print(" ".join(cmd))
             continue
-        label = f"{d.name} (iOS {d.os})"
+        label = f"[{i}/{total}] {d.name} (iOS {d.os})"
         if args.verbose:
             print(f"— {label}")
             rc = subprocess.run(cmd).returncode
         else:
+            verb = "restoring" if mode == "stock" else "slimming"
+            print(f"{label}: {verb}… ", end="", flush=True)
             out = subprocess.run(cmd, capture_output=True, text=True)
             rc = out.returncode
             if rc == 0:
                 tail = (out.stdout.strip().splitlines() or ["done"])[-1]
-                print(f"{label}: {tail}")
+                print(tail)
             else:
                 err = (out.stderr.strip().splitlines() or ["failed"])[-1]
-                print(f"{label}: FAILED — {err}", file=sys.stderr)
+                print(f"FAILED — {err}")
         # Older simslim leaves an originally-shutdown simulator booted.
         if rc == 0 and not preserve and d.state == "Shutdown":
             subprocess.run(["xcrun", "simctl", "shutdown", d.udid], capture_output=True)

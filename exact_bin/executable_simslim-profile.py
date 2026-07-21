@@ -22,6 +22,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 
 SIMSLIM = "simslim"
@@ -180,19 +181,34 @@ def apply_profile(devices, mode, keep, args, preserve):
             print(" ".join(cmd))
             continue
         label = f"[{i}/{total}] {d.name} (iOS {d.os})"
+        # A wedged launchctl call can starve simslim's shared timeout and fail
+        # the remaining transitions; simslim only re-applies the missing delta,
+        # so retrying converges.
         if args.verbose:
             print(f"— {label}")
-            rc = subprocess.run(cmd).returncode
+            for attempt in range(args.retries + 1):
+                if attempt:
+                    print(f"  retry {attempt}/{args.retries}")
+                    time.sleep(5)
+                rc = subprocess.run(cmd).returncode
+                if rc == 0:
+                    break
         else:
             verb = "restoring" if mode == "stock" else "slimming"
             print(f"{label}: {verb}… ", end="", flush=True)
-            out = subprocess.run(cmd, capture_output=True, text=True)
-            rc = out.returncode
-            if rc == 0:
-                tail = (out.stdout.strip().splitlines() or ["done"])[-1]
-                print(tail)
+            for attempt in range(args.retries + 1):
+                if attempt:
+                    print(f"retry {attempt}… ", end="", flush=True)
+                    time.sleep(5)
+                out = subprocess.run(cmd, capture_output=True, text=True)
+                rc = out.returncode
+                if rc == 0:
+                    print((out.stdout.strip().splitlines() or ["done"])[-1])
+                    break
             else:
                 err = (out.stderr.strip().splitlines() or ["failed"])[-1]
+                if len(err) > 160:
+                    err = err[:157] + "…"
                 print(f"FAILED — {err}")
         # Older simslim leaves an originally-shutdown simulator booted.
         if rc == 0 and not preserve and d.state == "Shutdown":
@@ -361,6 +377,8 @@ def main():
     ap.add_argument("--booted", action="store_true", help="only booted simulators")
     ap.add_argument("-t", "--tui", action="store_true", help="interactive selection")
     ap.add_argument("--dry-run", action="store_true", help="print simslim commands, don't run")
+    ap.add_argument("--retries", type=int, default=2, metavar="N",
+                    help="retry a failed simulator N times (default 2)")
     ap.add_argument("-y", "--yes", action="store_true", help="skip confirmation")
     ap.add_argument("-v", "--verbose", action="store_true", help="stream simslim output")
     args = ap.parse_args(argv)

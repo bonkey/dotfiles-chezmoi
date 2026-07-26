@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
-"""Archive documents from Gmail, link downloads, portals, and local inbox.
+"""Archive documents from Gmail, link downloads, portals, and source folders.
+
+One `all` run does both passes: Gmail first, then every source folder given on
+the command line. Negative flags opt out of the parts you don't want.
 
 Sources:
   - Gmail attachments (rules match sender/subject)
   - Link-based PDF downloads (extract URL from email body)
   - Manual portal downloads (prompt user, scan ~/Downloads)
   - Unknown senders (prompt to save + auto-add a rule, or ignore the sender)
-  - Local inbox scanning (classify files by PDF text content)
+  - Source folders (classify files by PDF text content, then move)
 
 Usage:
-    python3 archive_inbox.py gmail                     # download & archive
-    python3 archive_inbox.py gmail --rule "Office Club" # one rule only
-    python3 archive_inbox.py gmail --since 2026-03-01   # override start date
-    python3 archive_inbox.py gmail --folder ~/my/archive # custom working folder
-    python3 archive_inbox.py gmail --force              # ignore stored state
-    python3 archive_inbox.py gmail --no-discover        # skip unknown-sender prompts
-    python3 archive_inbox.py list-rules                 # show all rules
-    python3 archive_inbox.py folder                     # classify inbox files
-    python3 archive_inbox.py folder --move              # classify and move
-    python3 archive_inbox.py folder ~/path              # custom inbox folder
+    python3 archive_inbox.py all --destination DIR SRC [SRC ...]
+    python3 archive_inbox.py all --destination DIR             # Gmail only
+    python3 archive_inbox.py all --destination DIR SRC --no-gmail  # sources only
+    python3 archive_inbox.py all --destination DIR SRC --no-move   # classify only
+    python3 archive_inbox.py all --destination DIR --no-discover   # no sender prompts
+    python3 archive_inbox.py all --destination DIR --rule "Office Club"
+    python3 archive_inbox.py all --destination DIR --since 2026-03-01
+    python3 archive_inbox.py all --destination DIR --force     # ignore stored state
+    python3 archive_inbox.py list-rules                        # show all rules
 """
 
 import argparse
@@ -44,7 +46,6 @@ from pathlib import Path
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_FOLDER = Path.home() / "Documents" / "Archiwum"
 ARCHIVE_LABEL_NAME = "Stored"  # Gmail label applied after archiving
 DEFAULT_SINCE_DAYS = 45  # look back ~6 weeks on first run
 
@@ -1025,10 +1026,9 @@ def cmd_list_rules():
 
 
 # ---------------------------------------------------------------------------
-# Inbox scanner — classify files by PDF text content
+# Source folder scanner — classify files by PDF text content
 # ---------------------------------------------------------------------------
 
-INBOX_DEFAULT = Path.home() / "Documents" / "Archiwum dokumentów" / "### Inbox"
 SUPPORTED_EXTENSIONS = {".pdf", ".csv"}
 
 
@@ -1132,48 +1132,45 @@ def classify_path(
     return classify_file(path, keyword_index)
 
 
-def cmd_scan_inbox(args):
-    """Scan inbox folder and classify files by content."""
-    inbox = Path(args.inbox).expanduser().resolve() if args.inbox else INBOX_DEFAULT
+def scan_source(
+    source: Path,
+    base_dir: Path,
+    filename_rules: list[dict],
+    keyword_index: list[tuple[str, list[str]]],
+    move: bool,
+) -> dict:
+    """Classify one source folder by content, optionally moving each file.
 
-    if args.folder:
-        base_dir = Path(args.folder).expanduser().resolve() / "Deutschland"
-    else:
-        base_dir = DEFAULT_FOLDER / "Deutschland"
+    Returns ``{"moved": n, "skipped": n, "unmatched": n}``. A missing source is
+    a warning, not a fatal error — one bad path in a multi-source run must not
+    abort work that already succeeded.
+    """
+    counts = {"moved": 0, "skipped": 0, "unmatched": 0}
+    print(f"\n── {source}")
 
-    if not inbox.exists():
-        print(f"ERROR: Inbox folder does not exist: {inbox}")
-        sys.exit(1)
-
-    print(f"Inbox Scanner")
-    print(f"Inbox: {inbox}")
-    print(f"Base:  {base_dir}")
-
-    filename_rules = _get_filename_rules()
-    keyword_index = _build_keyword_index()
-    print(
-        f"Loaded {len(filename_rules)} filename rules, {len(keyword_index)} keyword targets\n"
-    )
+    if not source.exists():
+        print(f"    WARNING: source folder does not exist")
+        return counts
 
     # Collect files (skip directories)
     files = sorted(
         f
-        for f in inbox.iterdir()
+        for f in source.iterdir()
         if f.is_file() and f.suffix.lower() in SUPPORTED_EXTENSIONS
     )
     other_files = sorted(
         f
-        for f in inbox.iterdir()
+        for f in source.iterdir()
         if f.is_file() and f.suffix.lower() not in SUPPORTED_EXTENSIONS
     )
 
     if not files:
-        print("No supported files found in inbox.")
+        print("    No supported files.")
         if other_files:
-            print(f"\nSkipped {len(other_files)} unsupported file(s):")
+            print(f"    {len(other_files)} unsupported file(s) left in place:")
             for f in other_files:
-                print(f"  {f.name}")
-        return
+                print(f"      {f.name}")
+        return counts
 
     matched_files = []
     unmatched_files = []
@@ -1185,11 +1182,11 @@ def cmd_scan_inbox(args):
         else:
             unmatched_files.append(f)
 
+    counts["unmatched"] = len(unmatched_files)
+
     # Show matched files
     if matched_files:
-        print(f"{'=' * 60}")
-        print(f"MATCHED ({len(matched_files)} files)")
-        print(f"{'=' * 60}")
+        print(f"\n  ── matched ({len(matched_files)})")
 
         for f, results in matched_files:
             best_dest, best_score, best_kws = results[0]
@@ -1203,7 +1200,7 @@ def cmd_scan_inbox(args):
                 for dest, score, kws in results[1:3]:
                     print(f"      also: {dest}  [{score}: {', '.join(kws)}]")
 
-            if args.move:
+            if move:
                 dest_dir = base_dir / best_dest
                 dest_path = dest_dir / f.name
 
@@ -1234,14 +1231,14 @@ def cmd_scan_inbox(args):
                     dest_dir.mkdir(parents=True, exist_ok=True)
                     shutil.move(str(f), str(dest_path))
                     print(f"    MOVED → {dest_path}")
+                    counts["moved"] += 1
                 else:
                     print(f"    Skipped")
+                    counts["skipped"] += 1
 
     # Show unmatched files
     if unmatched_files:
-        print(f"\n{'=' * 60}")
-        print(f"UNMATCHED ({len(unmatched_files)} files)")
-        print(f"{'=' * 60}")
+        print(f"\n  ── unmatched ({len(unmatched_files)})")
         for f in unmatched_files:
             text = extract_pdf_text(f)
             first_lines = [l.strip() for l in text.split("\n") if l.strip()][:3]
@@ -1253,6 +1250,8 @@ def cmd_scan_inbox(args):
                 print(f"    (no text extracted)")
 
             # Unmatched files are left in place — add keywords to config to match them
+
+    return counts
 
 
 def discover_unknown_senders(
@@ -1443,30 +1442,12 @@ def discover_unknown_senders(
     return saved
 
 
-def cmd_run(args):
-    """Run the archiver."""
-    # Determine working folder
-    if args.folder:
-        working_folder = Path(args.folder).expanduser().resolve()
-    else:
-        default = str(DEFAULT_FOLDER)
-        sys.stdout.write(f"Working folder [{default}]: ")
-        sys.stdout.flush()
-        user_input = input().strip()
-        if user_input:
-            working_folder = Path(user_input).expanduser().resolve()
-        else:
-            working_folder = DEFAULT_FOLDER
+def run_gmail(args, base_dir: Path, state_file: Path, state: dict) -> dict:
+    """Download Gmail attachments and archive the messages they came from.
 
-    base_dir = working_folder / "Deutschland"
-    state_file = working_folder / ".archiver-state.json"
-
-    if not working_folder.exists():
-        print(f"ERROR: Working folder does not exist: {working_folder}")
-        sys.exit(1)
-
+    Returns ``{"saved": n, "pending": n, "discovered": n}``.
+    """
     # Determine since date
-    state = load_state(state_file)
     if args.since:
         since = args.since.replace("-", "/")
     elif state.get("last_run"):
@@ -1485,19 +1466,17 @@ def cmd_run(args):
         )
         since = pending_since
 
-    print(f"Gmail Attachment Archiver")
     print(f"Since: {since}")
-    print(f"Base:  {base_dir}")
 
     # Verify gws is authenticated before doing any work
     gws_check_auth()
 
     # Get or create archive label
     archive_label_id = gws_find_label_id(ARCHIVE_LABEL_NAME)
-    if archive_label_id:
-        print(f"Archive label: {ARCHIVE_LABEL_NAME} (id: {archive_label_id})")
-    else:
+    if not archive_label_id:
         print(f"WARNING: Could not find/create label '{ARCHIVE_LABEL_NAME}'")
+    elif VERBOSE:
+        print(f"Archive label: {ARCHIVE_LABEL_NAME} (id: {archive_label_id})")
 
     # Filter rules if --rule specified
     all_rules = _get_rules()
@@ -1553,11 +1532,8 @@ def cmd_run(args):
 
     # Save state
     save_state(state, state_file)
-    print(f"\nState saved to {state_file}")
-
-    print(f"\n{'=' * 60}")
-    print(f"Total attachments processed: {total}")
-    print(f"{'=' * 60}")
+    if VERBOSE:
+        print(f"State saved to {state_file}")
 
     # Manual portal summary
     if manual_pending:
@@ -1573,9 +1549,7 @@ def cmd_run(args):
             key = item["rule_name"]
             portals.setdefault(key, []).append(item)
 
-        print(f"\n{'=' * 60}")
-        print(f"MANUAL DOWNLOADS NEEDED")
-        print(f"{'=' * 60}")
+        print(f"\n── manual downloads needed ({len(portals)})")
 
         for portal_name, items in portals.items():
             url = items[0]["portal_url"]
@@ -1658,14 +1632,73 @@ def cmd_run(args):
 
     # Discover attachments from senders that no rule covers (interactive):
     # save (auto-adding a rule) or add the sender to the ignore list.
+    discovered = 0
     if not args.rule and not args.no_discover:
         config = _load_config()
-        n = discover_unknown_senders(
+        discovered = discover_unknown_senders(
             config, since, state, archive_label_id, base_dir, state_file
         )
-        if n:
+        if discovered:
             save_state(state, state_file)
-            print(f"\nDiscovered and saved {n} new sender(s)")
+
+    return {
+        "saved": total,
+        "pending": len(state.get("pending", [])),
+        "discovered": discovered,
+    }
+
+
+def _summary_line(gmail: dict | None, folder: dict | None) -> str:
+    """One-line run summary. Skipped passes and zero counts are left out."""
+    parts = []
+    if gmail is not None:
+        bits = [f"{gmail['saved']} saved"]
+        if gmail["pending"]:
+            bits.append(f"{gmail['pending']} pending")
+        if gmail["discovered"]:
+            bits.append(f"{gmail['discovered']} new sender(s)")
+        parts.append("gmail: " + ", ".join(bits))
+    if folder is not None:
+        bits = [f"{folder['moved']} moved"]
+        if folder["skipped"]:
+            bits.append(f"{folder['skipped']} skipped")
+        if folder["unmatched"]:
+            bits.append(f"{folder['unmatched']} unmatched")
+        parts.append("folder: " + ", ".join(bits))
+    return " | ".join(parts) if parts else "nothing to do"
+
+
+def cmd_all(args):
+    """Run the Gmail pass, then classify every source folder given."""
+    dest_root = Path(args.destination).expanduser().resolve()
+    if not dest_root.exists():
+        print(f"ERROR: Destination folder does not exist: {dest_root}")
+        sys.exit(1)
+
+    base_dir = dest_root / "Deutschland"
+    state_file = dest_root / ".archiver-state.json"
+    print(f"Base: {base_dir}")
+
+    gmail_stats = None
+    if not args.no_gmail:
+        state = load_state(state_file)
+        gmail_stats = run_gmail(args, base_dir, state_file, state)
+
+    folder_stats = None
+    sources = [Path(s).expanduser().resolve() for s in args.sources]
+    if sources:
+        # Built once: each config getter re-reads and re-parses rules.json.
+        filename_rules = _get_filename_rules()
+        keyword_index = _build_keyword_index()
+        folder_stats = {"moved": 0, "skipped": 0, "unmatched": 0}
+        for source in sources:
+            counts = scan_source(
+                source, base_dir, filename_rules, keyword_index, not args.no_move
+            )
+            for key, value in counts.items():
+                folder_stats[key] += value
+
+    print(f"\n{_summary_line(gmail_stats, folder_stats)}")
 
 
 def main():
@@ -1705,9 +1738,21 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    # gmail
+    # all — Gmail pass, then each source folder
     run_parser = subparsers.add_parser(
-        "gmail", parents=[common], help="Download attachments and archive emails"
+        "all",
+        parents=[common],
+        help="Archive Gmail attachments, then classify source folders",
+    )
+    run_parser.add_argument(
+        "sources",
+        nargs="*",
+        help="Folders to classify and move (omit to skip the folder pass)",
+    )
+    run_parser.add_argument(
+        "--destination",
+        required=True,
+        help="Archive root — holds Deutschland/ and .archiver-state.json",
     )
     run_parser.add_argument(
         "--since",
@@ -1718,13 +1763,19 @@ def main():
         help="Run only this rule (by name)",
     )
     run_parser.add_argument(
-        "--folder",
-        help=f"Working folder (default: {DEFAULT_FOLDER})",
-    )
-    run_parser.add_argument(
         "--force",
         action="store_true",
         help="Ignore stored state — reprocess all matching messages",
+    )
+    run_parser.add_argument(
+        "--no-gmail",
+        action="store_true",
+        help="Skip the Gmail pass (no gws authentication needed)",
+    )
+    run_parser.add_argument(
+        "--no-move",
+        action="store_true",
+        help="Classify source folders without moving anything",
     )
     run_parser.add_argument(
         "--no-discover",
@@ -1735,38 +1786,16 @@ def main():
     # list-rules
     subparsers.add_parser("list-rules", parents=[common], help="List all rules")
 
-    # folder
-    scan_parser = subparsers.add_parser(
-        "folder", parents=[common], help="Classify inbox files by content"
-    )
-    scan_parser.add_argument(
-        "inbox",
-        nargs="?",
-        default=None,
-        help=f"Inbox folder to scan (default: {INBOX_DEFAULT})",
-    )
-    scan_parser.add_argument(
-        "--folder",
-        help=f"Archive working folder (default: {DEFAULT_FOLDER})",
-    )
-    scan_parser.add_argument(
-        "--move",
-        action="store_true",
-        help="Interactively move matched files to destinations",
-    )
-
     args = parser.parse_args()
 
     global VERBOSE, DEBUG
     VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
     DEBUG = args.debug or getattr(args, "debug_sub", False)
 
-    if args.command == "gmail":
-        cmd_run(args)
+    if args.command == "all":
+        cmd_all(args)
     elif args.command == "list-rules":
         cmd_list_rules()
-    elif args.command == "folder":
-        cmd_scan_inbox(args)
     else:
         parser.print_help()
 

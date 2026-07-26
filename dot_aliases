@@ -273,7 +273,10 @@ Ceo() {
 }
 
 AA() {
-    archive_inbox.py all "$@" "$@"
+    archive_inbox.py all \
+        --destination "$HOME/Documents/Archiwum/Deutschland" \
+        "$HOME/Documents/Archiwum/### Inbox" \
+        "$HOME/Downloads"
 }
 
 

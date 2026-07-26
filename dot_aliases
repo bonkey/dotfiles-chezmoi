@@ -272,6 +272,10 @@ Ceo() {
     Ced $HOME/.config/opencode.json
 }
 
+AA() {
+    archive_inbox.py all "$@" "$@"
+}
+
 
 ###############################################################################
 # EDITORS

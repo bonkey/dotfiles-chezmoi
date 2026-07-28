@@ -1366,14 +1366,14 @@ _gb_merged_prune() {
   done
 }
 
-alias Gbm='_gb_merged_prune'
-alias GbM='_gb_merged_prune --force --no-confirm'
+alias Gb-prune-merged='_gb_merged_prune'
+alias Gb-prune-merged-force='_gb_merged_prune --force --no-confirm'
 
 ###############################################################################
 # GIT: PRUNE
 ###############################################################################
 
-git-prune() {
+G-prune() {
     git gc --prune=now --aggressive
 
     git lfs prune --verify-remote --recent \

@@ -12,6 +12,9 @@ bun = "latest"
 uv = "latest"
 pipx = "latest"
 
+# Web
+"npm:pnpm" = "latest"
+
 # Apple development
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
 swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }

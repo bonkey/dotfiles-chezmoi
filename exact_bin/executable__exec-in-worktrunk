@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch make_slug compose_branch branch_exists sanitize fetch_url_context resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
+     unfunction default_branch in_linked_worktree make_slug compose_branch branch_exists sanitize fetch_url_context resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -43,6 +43,11 @@ trap '(( saved_nounset ))  || set +u
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
 #   <url|KEY> a ticket URL or key (e.g. ABC-123), or any other URL, to slug from
+#
+# Run from inside a linked worktree, the script first asks whether to stay on
+# the branch already checked out there instead of carving out another worktree.
+# Answering yes skips branch naming (and its ticket lookup) entirely and runs
+# the tool right here. See the "already in a worktree" section.
 #
 # When the tool exits, a clean worktree is offered for removal (the branch is
 # kept, so `wt switch <branch>` brings it back). See offer_worktree_cleanup.
@@ -79,6 +84,16 @@ default_branch() {
         done
     fi
     print -r -- "$b"
+}
+
+# True when the cwd sits in a linked worktree rather than the repo's main
+# checkout: there $GIT_DIR is .git/worktrees/<name> while the common dir stays
+# the shared .git, and in the main worktree the two are the same path.
+in_linked_worktree() {
+    local gd common
+    gd="$(git rev-parse --absolute-git-dir 2>/dev/null)" || return 1
+    common="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 1
+    [[ -n "$gd" && -n "$common" && "$gd" != "$common" ]]
 }
 
 # --- determine mode ----------------------------------------------------------
@@ -128,16 +143,35 @@ if (( use_tmux )) && ! command -v tmux >/dev/null; then
     exit 1
 fi
 
+# --- already in a worktree? -------------------------------------------------
+# Launched from inside a linked worktree, carving out another one is often not
+# what's wanted — the work frequently belongs to the branch already checked out
+# here. Ask, and on yes run the tool in place: no ticket lookup, no slug, no
+# `wt switch`. Enter keeps the old behavior (a fresh worktree). The question is
+# skipped when the answer is already implied (--resume names the ticket's own
+# worktree) or there is no one to ask (non-interactive).
+stay=0
+current_branch=""
+if (( ! resume )) && [[ -t 0 ]] && in_linked_worktree; then
+    current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    read -r "stay_answer?in worktree '$(git rev-parse --show-toplevel)' on ${current_branch} — stay here? [y/N] "
+    [[ "$stay_answer" == [Yy]* ]] && stay=1
+fi
+
 # --- resolve base branch ---------------------------------------------------
-arg="${positional[1]-}"
-case "$arg" in
-    .)  base="$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -1)" ;;
-    "") base="$(default_branch)" ;;
-    *)  base="$arg" ;;
-esac
-if [[ -z "$base" ]]; then
-    print -ru2 -- "could not resolve base branch"
-    exit 1
+# Only a new worktree needs a base to branch from; staying put uses the branch
+# that is already here, so the lookup (and its failure mode) is skipped.
+if (( ! stay )); then
+    arg="${positional[1]-}"
+    case "$arg" in
+        .)  base="$(git rev-parse --abbrev-ref HEAD 2>/dev/null | head -1)" ;;
+        "") base="$(default_branch)" ;;
+        *)  base="$arg" ;;
+    esac
+    if [[ -z "$base" ]]; then
+        print -ru2 -- "could not resolve base branch"
+        exit 1
+    fi
 fi
 
 # --- ticket / URL context ---------------------------------------------------
@@ -286,7 +320,10 @@ resolve_ticket_source() {
 ticket_id=""
 ticket_ctx=""
 ticket_title=""
-[[ -n "$ticket_input" ]] && resolve_ticket_source "$ticket_input"
+# Nothing to slug when staying put, so the fetch is skipped along with it.
+if (( ! stay )) && [[ -n "$ticket_input" ]]; then
+    resolve_ticket_source "$ticket_input"
+fi
 
 # --- helpers ---------------------------------------------------------------
 system_prompt='Generate a git branch slug for the described work. Output ONLY the slug inside a single fenced code block. Rules: lowercase, 2-5 words, hyphen-separated, ASCII letters/digits/hyphens only, no spaces, no ticket IDs, no quotes, max ~40 chars.'
@@ -350,7 +387,12 @@ if (( resume )) && [[ -n "$ticket_id" ]]; then
         | grep -m1 "^${user}/${ticket_id}-" || true)"
 fi
 
-if [[ -n "$existing" ]]; then
+if (( stay )); then
+    # Staying in this worktree: its checked-out branch is the branch, and there
+    # is nothing to create.
+    branch="$current_branch"
+    create_args=()
+elif [[ -n "$existing" ]]; then
     branch="$existing"
     create_args=()
     print -r -- "resuming existing branch ${branch}"
@@ -616,6 +658,9 @@ launch_in_tmux() {
 # process (and a tmux server left in a deleted cwd poisons every later pane).
 offer_worktree_cleanup() {
     local wt_path="$1"
+    # The worktree was the user's, entered before this script ran, so it is not
+    # ours to reclaim — only ones we switched into are offered for removal.
+    (( stay )) && return 0
     [[ -n "$wt_path" && -d "$wt_path" ]] || return 0
     [[ -t 0 ]] || return 0   # non-interactive: nothing to ask, so leave it alone
 
@@ -688,7 +733,13 @@ esac
 # launch are separate steps rather than one `wt switch --execute`: --execute
 # replaces the wt process with the CLI, so the worktree path would never be
 # observable from here.
-_exec wt switch "$branch" "${create_args[@]}"
+if (( stay )); then
+    # Already in the right place — and in whichever subdirectory the user ran
+    # this from, which is left alone rather than being reset to the worktree root.
+    print -r -- "staying in '${PWD}' on ${branch}"
+else
+    _exec wt switch "$branch" "${create_args[@]}"
+fi
 worktree_path="$PWD"
 
 case "$launch_target" in

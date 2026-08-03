@@ -1383,6 +1383,7 @@ G-prune() {
 ###############################################################################
 
 alias Wl='wt list'
+alias Wlf='Wl --full'
 
 alias Wr='wt remove'
 alias WR='Wr --force'

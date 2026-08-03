@@ -4,29 +4,17 @@
 
     "cli-dev": ["shellwright"],
     "web-dev": ["shadcn", "vibium"],
-    "ios-dev": [
-      "sosumi",
-      "mobile-mcp",
-      "simctl",
-      "swiftlens",
-      "xcstrings-crud",
-      "xcode-instruments",
-      "xcode-mcpbridge"
-    ],
+    "ios-dev": ["sosumi", "mobile-mcp", "simctl", "xcstrings-crud", "xcode-instruments", "xcode-mcpbridge"],
 
     "code-search": ["morph"],
 
-    "docs": ["tavily", "deepwiki"],
+    "docs": ["deepwiki"],
     "research": ["exa", "tavily", "firecrawl"]
   },
   "mcps": {
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp"
-    },
-    "swiftlens": {
-      "type": "local",
-      "command": ["uvx", "swiftlens"]
     },
     "shadcn": {
       "type": "local",
@@ -81,7 +69,7 @@
     },
     "morph": {
       "type": "local",
-      "command": ["npx", "-y", "@morphllm/morphmcp"],
+      "command": ["npx", "--prefer-offline", "-y", "@morphllm/morphmcp"],
       "environment": {
         "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       }

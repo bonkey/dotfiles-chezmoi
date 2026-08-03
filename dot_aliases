@@ -74,6 +74,14 @@ alias l=e ll=el la=ea
 alias lt="l -s modified -r"
 alias llt="ll -m -s modified -r"
 
+Sdr() {
+  sudo shutdown -r now
+}
+
+Sdh() {
+  sudo shutdown -h now
+}
+
 # Show a compact duf disk-usage table for a filesystem.
 dfh() {
     fs=${1:/}

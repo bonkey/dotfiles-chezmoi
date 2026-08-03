@@ -493,9 +493,10 @@ cata() {
 }
 
 # Strip ANSI escape sequences from command output.
-clear_ascii() {
+clear-ascii() {
     cat "$@" | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g"
 }
+alias de-ascii=clear-ascii
 
 # Open manpages in Dash when installed, otherwise use system man.
 dm() {

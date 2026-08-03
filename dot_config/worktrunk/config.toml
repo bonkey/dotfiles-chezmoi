@@ -1,0 +1,12 @@
+[list]
+summary = true
+json-schema = 2
+
+[commit.generation]
+command = "CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=sonnet --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
+
+[post-start]
+copy = "wt step copy-ignored"
+
+[step.copy-ignored]
+exclude = ["SourcePackages", ".build", ".DS_Store"]

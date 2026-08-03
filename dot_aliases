@@ -1399,27 +1399,27 @@ alias WT='shell-in-worktree'
 
 # List removable clean worktree branches excluding active agent start markers.
 Wc() {
-    wt list --format json |
-      jq -r '
-        .[]
-        | select(.is_main | not)
-        | select(.is_current | not)
-        | select(.worktree.state != "locked")
-        | select(.working_tree.staged | not)
-        | select(.working_tree.modified | not)
-        | select(.working_tree.untracked | not)
+    local agents
+
+    # Every branch's marker in one read, rather than one wt call per branch.
+    agents=$(wt config state get --format json 2>/dev/null |
+      jq -c '[.markers[]? | select(.marker == "🤖") | .branch]' 2>/dev/null)
+    : ${agents:='[]'}
+
+    wt list --config-set list.json-schema=2 --format json |
+      jq -r --argjson agents "$agents" '
+        .items[]
+        | select(.branch)
+        | select(.worktree)
+        | select(.worktree.main | not)
+        | select(.worktree.current | not)
+        | select(.worktree.locked | not)
+        | select(.worktree.changes.staged | not)
+        | select(.worktree.changes.modified | not)
+        | select(.worktree.changes.untracked | not)
         | .branch
-      ' |
-      while IFS= read -r branch; do
-        marker=$(wt config state marker get --branch "$branch" --format json 2>/dev/null |
-          jq -r '.. | objects | .marker? // empty' 2>/dev/null)
-
-        case "$marker" in
-          "🤖") continue ;;
-        esac
-
-        printf '%s\n' "$branch"
-      done
+        | select(IN($agents[]) | not)
+      '
 }
 
 # Remove clean worktrees listed by Wc.

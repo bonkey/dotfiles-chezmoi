@@ -357,6 +357,11 @@ CCR() {
     CC --resume "$@"
 }
 
+# Start Claude inside a worktrunk, in its own tmux workspace.
+CCT() {
+    claude-in-worktrunk --tmux "$@"
+}
+
 # Start Claude inside a worktrunk, in its own cmux workspace.
 CCC() {
     claude-in-worktrunk --cmux "$@"

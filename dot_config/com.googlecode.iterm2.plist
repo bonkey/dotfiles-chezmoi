@@ -4772,6 +4772,12 @@
 	<true/>
 	<key>Log Smart Selection Debug Info</key>
 	<integer>0</integer>
+	<key>MinCompactTabWidth</key>
+	<integer>50</integer>
+	<key>MinTabWidth</key>
+	<integer>100</integer>
+	<key>MinimumTabLabelWidth</key>
+	<real>150</real>
 	<key>NeverWarnAboutShortLivedSessions_3B825298-6BBB-4FF8-8030-95A43DEF752F</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_3B825298-6BBB-4FF8-8030-95A43DEF752F_selection</key>
@@ -6106,7 +6112,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Title Components</key>
-			<integer>3</integer>
+			<integer>1</integer>
 			<key>Transparency</key>
 			<real>0.14999999999999999</real>
 			<key>Treat Option as Alt</key>
@@ -15477,6 +15483,8 @@
 	<false/>
 	<key>OpenTmuxWindowsIn</key>
 	<integer>2</integer>
+	<key>OptimumTabWidth</key>
+	<integer>200</integer>
 	<key>OptionClickMovesCursor</key>
 	<true/>
 	<key>PMPrintingExpandedStateForPrint2</key>
@@ -15572,6 +15580,8 @@
 	<false/>
 	<key>UseCustomTabBarFontSize</key>
 	<false/>
+	<key>UseUnevenTabs</key>
+	<true/>
 	<key>VisualIndicatorForEsc</key>
 	<true/>
 	<key>WindowNumber</key>

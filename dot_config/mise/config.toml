@@ -35,6 +35,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 # Mobile development / automation
 "npm:appium" = "latest"                   # Mobile UI automation framework
 "npm:@mobilenext/mobilecli" = "latest"    # Mobile development tooling
+"npm:@sentry/ai" = "latest"
 
 # Diagramming / visualization
 "npm:@mermaid-js/mermaid-cli" = "latest"  # Render Mermaid diagrams from CLI

@@ -184,6 +184,7 @@ cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 # Fonts
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-commit-mono-nerd-font'
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fira-code-nerd-font' # Developer targeted fonts with a high number of glyphs

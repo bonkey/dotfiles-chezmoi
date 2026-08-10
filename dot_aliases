@@ -186,12 +186,23 @@ Cs() {
             [[ -z "$line" ]] && continue
             target=${line:3}
             [[ -e "$HOME/$target" || -L "$HOME/$target" ]] || continue
-            source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null) || continue
-            [[ "$source_file" == *.tmpl ]] && continue
+
+            if source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null); then
+                # Re-adding a template replaces it with its own rendered output.
+                [[ "$source_file" == *.tmpl ]] && continue
+            elif [[ "${line:0:1}" != "A" ]]; then
+                # Absent from the source state, and chezmoi wrote it at some point:
+                # the source dropped it deliberately, so let apply remove it.
+                continue
+            fi
+            # Column 1 "A" means chezmoi never wrote this file — it is local-only
+            # work that an exact_ directory would otherwise sweep away on apply.
+
             targets+=("$HOME/$target")
         done <<< "$chezmoi_status"
 
         if (( ${#targets[@]} )); then
+            log_message "Adding to source: ${targets[*]#$HOME/}"
             chezmoi add "${targets[@]}" || log_message "add failed — will continue with existing source state"
         fi
 

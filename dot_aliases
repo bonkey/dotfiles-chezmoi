@@ -179,6 +179,7 @@ Cs() {
         while IFS= read -r line; do
             [[ -z "$line" ]] && continue
             target=${line:3}
+            [[ -e "$HOME/$target" || -L "$HOME/$target" ]] || continue
             source_file=$(chezmoi source-path "$HOME/$target" 2>/dev/null) || continue
             [[ "$source_file" == *.tmpl ]] && continue
             targets+=("$HOME/$target")

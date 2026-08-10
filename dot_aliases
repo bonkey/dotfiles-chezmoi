@@ -159,22 +159,28 @@ alias Cma="Cz merge-all"
 alias Cfo="Cz forget"
 
 Cs() {
-    local src chezmoi_status line target source_file deleted_file
+    local src chezmoi_status line target source_file
     local -a targets
+
     src=$(chezmoi source-path) || return 1
-    targets=()
 
     if [[ -d "$src/.git/rebase-merge" || -d "$src/.git/rebase-apply" ]]; then
         if [[ "$1" != "--continue" ]]; then
             log_error "Rebase in progress in $src — resolve conflicts, git add, then run: Cs --continue"
             return 1
         fi
-        GIT_EDITOR=true git -C "$src" rebase --continue || return 1
+        GIT_EDITOR=true git --no-pager -C "$src" rebase --continue || return 1
     elif [[ "$1" == "--continue" ]]; then
         log_message "No rebase in progress; running full sync"
     fi
 
     if [[ "$1" != "--continue" ]]; then
+        if ! git --no-pager -C "$src" pull --rebase --autostash; then
+            log_error "Conflict — resolve in $src (git add ...), then run: Cs --continue"
+            return 1
+        fi
+
+        targets=()
         chezmoi_status=$(chezmoi status --exclude scripts 2>/dev/null) || return 1
         while IFS= read -r line; do
             [[ -z "$line" ]] && continue
@@ -186,30 +192,17 @@ Cs() {
         done <<< "$chezmoi_status"
 
         if (( ${#targets[@]} )); then
-            chezmoi re-add "${targets[@]}" || log_message "re-add push rejected — will push after rebase"
+            chezmoi add "${targets[@]}" || log_message "add failed — will continue with existing source state"
         fi
 
-        while IFS= read -r -d '' deleted_file; do
-            git -C "$src" restore --source=HEAD --staged --worktree -- "$deleted_file"
-        done < <(git -C "$src" diff --cached --name-only --diff-filter=D -z)
-
-        while IFS= read -r -d '' deleted_file; do
-            git -C "$src" restore --source=HEAD --staged --worktree -- "$deleted_file"
-        done < <(git -C "$src" ls-files --deleted -z)
-
-        if [[ -n "$(git -C "$src" status --porcelain)" ]]; then
-            git -C "$src" add --ignore-removal .
-            git -C "$src" commit -m "Update from $(hostname -s)"
-        fi
-
-        if ! git -C "$src" pull --rebase --autostash; then
-            log_error "Conflict — resolve in $src (git add ...), then run: Cs --continue"
-            return 1
+        if [[ -n "$(git --no-pager -C "$src" status --porcelain)" ]]; then
+            git --no-pager -C "$src" add --ignore-removal .
+            git --no-pager -C "$src" commit -m "Update from $(hostname -s)"
         fi
     fi
 
-    if ! git -C "$src" push; then
-        git -C "$src" pull --rebase --autostash && git -C "$src" push || {
+    if ! git --no-pager -C "$src" push; then
+        git --no-pager -C "$src" pull --rebase --autostash && git --no-pager -C "$src" push || {
             log_error "Push failed"
             return 1
         }

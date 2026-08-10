@@ -159,7 +159,7 @@ alias Cma="Cz merge-all"
 alias Cfo="Cz forget"
 
 Cs() {
-    local src chezmoi_status line target source_file
+    local src chezmoi_status line target source_file deleted_file
     local -a targets
     src=$(chezmoi source-path) || return 1
     targets=()
@@ -189,8 +189,16 @@ Cs() {
             chezmoi re-add "${targets[@]}" || log_message "re-add push rejected — will push after rebase"
         fi
 
+        while IFS= read -r -d '' deleted_file; do
+            git -C "$src" restore --source=HEAD --staged --worktree -- "$deleted_file"
+        done < <(git -C "$src" diff --cached --name-only --diff-filter=D -z)
+
+        while IFS= read -r -d '' deleted_file; do
+            git -C "$src" restore --source=HEAD --staged --worktree -- "$deleted_file"
+        done < <(git -C "$src" ls-files --deleted -z)
+
         if [[ -n "$(git -C "$src" status --porcelain)" ]]; then
-            git -C "$src" add -A
+            git -C "$src" add --ignore-removal .
             git -C "$src" commit -m "Update from $(hostname -s)"
         fi
 

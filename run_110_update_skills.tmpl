@@ -7,12 +7,17 @@ source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
 skills=(
+    superwall/skills@wwdc
     wisdom-in-a-nutshell/agents
+
     bonkey/skills
     bonkey/skills-private
+    
     mattpocock/skills@grill-me
+    mattpocock/skills@wayfinder
+
 		ayghri/i-have-adhd
-    superwall/skills@wwdc
+    dietrichgebert/ponytail
 )
 
 for skill in "${skills[@]}"; do

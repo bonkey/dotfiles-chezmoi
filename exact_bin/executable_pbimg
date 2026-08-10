@@ -1,0 +1,464 @@
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#   "pyobjc-framework-Cocoa>=10.3",
+#   "pyobjc-framework-Vision>=10.3",
+# ]
+# ///
+"""Watch the macOS pasteboard for images and save them under a title read off the image.
+
+Every image copied to the pasteboard is run through Vision OCR. Status bars,
+clocks, battery readouts and button chrome are thrown away, and the most
+prominent heading near the top of the image becomes the name. When nothing
+title-worthy survives, a vision model names the image instead. The result lands
+in the target folder as `NNN-the-title.png`, the counter continuing from the
+highest `NNN-` prefix already there, so restarting never overwrites anything.
+
+Usage:
+    pbimg                                  # watch, save into the current folder
+    pbimg --dir ~/Desktop/shots            # watch, save elsewhere
+    pbimg --once                           # save what is on the pasteboard now
+    pbimg --once --dry-run                 # show the name it would pick
+    pbimg --llm-always                     # let the vision model name every image
+    pbimg --no-llm                         # OCR only, "untitled" when it finds nothing
+    pbimg --llm-model llama3.2-vision      # name images with a local ollama model
+                                           # (needs llm-ollama and `ollama serve`)
+    pbimg --lang de-DE en-US               # OCR language hints
+"""
+
+import argparse
+import hashlib
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+import unicodedata
+from pathlib import Path
+
+import AppKit
+import Vision
+from Foundation import NSData
+
+COUNTER_RE = re.compile(r"^(\d+)[-_ ]")
+PNG_TYPE = "public.png"
+TIFF_TYPE = "public.tiff"
+
+# The llm CLI's own default is a text model here, so name a vision one. Override
+# with --llm-model or PBIMG_LLM_MODEL; an ollama model keeps images on-device.
+DEFAULT_LLM_MODEL = os.environ.get("PBIMG_LLM_MODEL", "gemini-2.5-flash")
+
+
+# --- pasteboard ------------------------------------------------------------
+
+
+def pasteboard_png(pasteboard):
+    """Return the pasteboard image as PNG bytes, or None if it holds no image."""
+    types = set(pasteboard.types() or [])
+
+    if PNG_TYPE in types:
+        data = pasteboard.dataForType_(PNG_TYPE)
+        if data:
+            return bytes(data)
+
+    if TIFF_TYPE in types:
+        data = pasteboard.dataForType_(TIFF_TYPE)
+        rep = AppKit.NSBitmapImageRep.imageRepWithData_(data) if data else None
+        if rep:
+            png_type = getattr(AppKit, "NSBitmapImageFileTypePNG", 4)
+            png = rep.representationUsingType_properties_(png_type, {})
+            if png:
+                return bytes(png)
+
+    return None
+
+
+def read_pasteboard_image(pasteboard, attempts=4, delay=0.15):
+    """Read an image, retrying while the pasteboard is still being written.
+
+    Apps clear the pasteboard before putting the new contents on it, so a poll
+    landing in that window sees an empty pasteboard for an image that is on its
+    way. Anything non-image means the pasteboard has settled: give up at once
+    rather than stall the loop on every copied line of text.
+    """
+    for attempt in range(attempts):
+        types = set(pasteboard.types() or [])
+        png_bytes = pasteboard_png(pasteboard)
+        if png_bytes:
+            return png_bytes
+        if types and not types & {PNG_TYPE, TIFF_TYPE}:
+            return None
+        if attempt < attempts - 1:
+            time.sleep(delay)
+    return None
+
+
+# --- OCR -------------------------------------------------------------------
+
+
+def ocr_lines(png_bytes, languages):
+    """Return OCR'd text lines top-to-bottom as [{"text", "height", "top"}]."""
+    data = NSData.dataWithBytes_length_(png_bytes, len(png_bytes))
+    handler = Vision.VNImageRequestHandler.alloc().initWithData_options_(data, {})
+
+    request = Vision.VNRecognizeTextRequest.alloc().init()
+    request.setRecognitionLevel_(Vision.VNRequestTextRecognitionLevelAccurate)
+    request.setUsesLanguageCorrection_(True)
+    if languages:
+        request.setRecognitionLanguages_(languages)
+
+    ok, error = handler.performRequests_error_([request], None)
+    if not ok:
+        print(f"OCR failed: {error}", file=sys.stderr)
+        return []
+
+    # Vision returns fragments, not lines. Collect them with their position
+    # (normalised, origin bottom-left) so they can be merged back into rows.
+    fragments = []
+    for observation in request.results() or []:
+        candidates = observation.topCandidates_(1)
+        if not candidates:
+            continue
+        text = (candidates[0].string() or "").strip()
+        if not text:
+            continue
+        box = observation.boundingBox()
+        fragments.append(
+            {
+                "text": text,
+                "x": box.origin.x,
+                "top": box.origin.y + box.size.height,
+                "height": box.size.height,
+            }
+        )
+
+    fragments.sort(key=lambda f: (-f["top"], f["x"]))
+
+    rows = []
+    for fragment in fragments:
+        tolerance = max(0.01, 0.6 * fragment["height"])
+        if rows and abs(rows[-1]["top"] - fragment["top"]) <= tolerance:
+            rows[-1]["parts"].append(fragment)
+            rows[-1]["top"] = max(rows[-1]["top"], fragment["top"])
+        else:
+            rows.append({"top": fragment["top"], "parts": [fragment]})
+
+    lines = []
+    for row in rows:
+        parts = sorted(row["parts"], key=lambda p: p["x"])
+        lines.append(
+            {
+                "text": " ".join(p["text"] for p in parts),
+                "height": max(p["height"] for p in parts),
+                "top": row["top"],
+            }
+        )
+    return lines
+
+
+# --- title selection -------------------------------------------------------
+
+# A status bar row reads as one line once fragments are merged, so a whole-line
+# match is not enough: any clock, battery or radio marker near the top wins.
+STATUS_BAR_HINT_RE = re.compile(
+    r"\d{1,2}\s*[:.]\s*\d{2}|\d{1,3}\s?%|\bLTE\b|\b[45]G\b|Wi-?Fi|\bSOS\b", re.IGNORECASE
+)
+STATUS_BAR_LINE_RE = re.compile(
+    r"^(\d{1,2}[:.]\d{2}(\s*[ap]\.?m\.?)?|\d{1,3}\s*%|no service|searching\.*)$",
+    re.IGNORECASE,
+)
+# Buttons and tab labels that sit where a title would. "Settings", "Photos" and
+# friends stay out of this list: they are real screen titles on iOS.
+CHROME_WORDS = {
+    "back", "cancel", "done", "edit", "save", "next", "skip", "close", "ok",
+    "more", "share", "add", "menu", "select", "filter", "sort",
+}
+STATUS_BAR_BAND = 0.90  # normalised y above which a line may be status bar
+MAX_TITLE_LENGTH = 80  # longer lines read as body copy, not a heading
+
+
+def is_chrome(line):
+    text = line["text"].strip()
+    if len(re.findall(r"[^\W\d_]", text)) < 3:  # needs 3+ letters to be a title
+        return True
+    if text.lower().strip(".:") in CHROME_WORDS:
+        return True
+    if STATUS_BAR_LINE_RE.match(text):
+        return True
+    if line["top"] >= STATUS_BAR_BAND and STATUS_BAR_HINT_RE.search(text):
+        return True
+    return False
+
+
+def pick_title(lines, mode):
+    """Pick the title line, or "" when the image holds nothing title-worthy."""
+    if mode == "first":
+        usable = [ln for ln in lines if len(re.findall(r"\w", ln["text"])) >= 2]
+        return usable[0]["text"] if usable else ""
+
+    candidates = [ln for ln in lines if not is_chrome(ln)]
+    if not candidates:
+        return ""
+
+    if mode == "largest":
+        return max(candidates, key=lambda ln: ln["height"])["text"]
+
+    # auto: the most prominent heading, weighted towards the top of the image.
+    headings = [ln for ln in candidates if len(ln["text"]) <= MAX_TITLE_LENGTH]
+    headings = headings or candidates
+    best = max(headings, key=lambda ln: ln["height"] * (0.6 + 0.4 * ln["top"]))
+    return best["text"]
+
+
+def llm_title(png_bytes, model, timeout=90):
+    """Ask a vision model to name the image. Returns "" if that does not work out."""
+    if not shutil.which("llm"):
+        print("no llm CLI on PATH, skipping the model fallback", file=sys.stderr)
+        return ""
+
+    command = ["llm"]
+    if model:
+        command += ["-m", model]
+
+    with tempfile.NamedTemporaryFile(suffix=".png") as handle:
+        handle.write(png_bytes)
+        handle.flush()
+        command += [
+            "-a", handle.name,
+            "Name this screenshot. Reply with 3 to 6 words describing what it shows, "
+            "as a plain title. No punctuation, no quotes, no file extension.",
+        ]
+        try:
+            # Without a closed stdin the llm CLI waits for piped input forever.
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                stdin=subprocess.DEVNULL,
+            )
+        except subprocess.TimeoutExpired:
+            print("llm timed out", file=sys.stderr)
+            return ""
+
+    if result.returncode != 0:
+        print(f"llm failed: {result.stderr.strip()}", file=sys.stderr)
+        return ""
+    return result.stdout.strip().splitlines()[0].strip() if result.stdout.strip() else ""
+
+
+# --- naming ----------------------------------------------------------------
+
+
+def slugify(text, max_length=60):
+    ascii_text = (
+        unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    )
+    slug = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_text).strip("-").lower()
+    if len(slug) > max_length:
+        slug = slug[:max_length].rsplit("-", 1)[0] or slug[:max_length]
+    return slug.strip("-") or "untitled"
+
+
+def next_counter(directory):
+    highest = 0
+    for entry in directory.iterdir():
+        match = COUNTER_RE.match(entry.name)
+        if match:
+            highest = max(highest, int(match.group(1)))
+    return highest + 1
+
+
+def free_path(directory, counter, slug, pad):
+    base = f"{counter:0{pad}d}-{slug}"
+    candidate = directory / f"{base}.png"
+    suffix = 2
+    while candidate.exists():
+        candidate = directory / f"{base}-{suffix}.png"
+        suffix += 1
+    return candidate
+
+
+# --- notification ----------------------------------------------------------
+
+
+def notify(title, message, image_path):
+    notifier = shutil.which("terminal-notifier")
+    if notifier:
+        subprocess.run(
+            [
+                notifier,
+                "-title", "pbimg",
+                "-subtitle", title,
+                "-message", message,
+                "-group", "pbimg",
+                "-contentImage", str(image_path),
+                "-execute", f"open -R {_shell_quote(str(image_path))}",
+            ],
+            check=False,
+            capture_output=True,
+        )
+        return
+
+    script = (
+        f"display notification {_applescript_string(message)} "
+        f'with title "pbimg" subtitle {_applescript_string(title)}'
+    )
+    subprocess.run(["osascript", "-e", script], check=False, capture_output=True)
+
+
+def _applescript_string(text):
+    return '"' + text.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def _shell_quote(text):
+    return "'" + text.replace("'", "'\\''") + "'"
+
+
+# --- main ------------------------------------------------------------------
+
+
+def image_title(png_bytes, args):
+    """Return (title, source) where source names what produced the title."""
+    if args.llm_always:
+        title = llm_title(png_bytes, args.llm_model)
+        if title:
+            return title, "llm"
+
+    title = pick_title(ocr_lines(png_bytes, args.lang), args.title_mode)
+    if title:
+        return title, "ocr"
+
+    if not args.no_llm:
+        title = llm_title(png_bytes, args.llm_model)
+        if title:
+            return title, "llm"
+
+    return "", "none"
+
+
+def save_image(png_bytes, args):
+    title, source = image_title(png_bytes, args)
+    slug = slugify(title) if title else "untitled"
+    path = free_path(args.dir, next_counter(args.dir), slug, args.pad)
+    label = f"{title} [{source}]" if title else "-"
+
+    if args.dry_run:
+        print(f"would save {path}  (title: {label})", flush=True)
+        return path
+
+    path.write_bytes(png_bytes)
+    print(f"saved {path}  ({len(png_bytes) / 1024:.0f} KB, title: {label})", flush=True)
+    if not args.no_notify:
+        notify(title or "no title found", path.name, path)
+    return path
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(
+        description="Save pasteboard images named after their OCR'd title.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=__doc__.split("Usage:", 1)[1].rstrip() if "Usage:" in __doc__ else None,
+    )
+    parser.add_argument(
+        "--dir", type=Path, default=Path.cwd(), help="target folder (default: cwd)"
+    )
+    parser.add_argument(
+        "--once",
+        action="store_true",
+        help="save whatever image is on the pasteboard now, then exit",
+    )
+    parser.add_argument(
+        "--interval", type=float, default=1.0, help="poll interval in seconds"
+    )
+    parser.add_argument(
+        "--pad", type=int, default=3, help="zero-padding width for the counter"
+    )
+    parser.add_argument(
+        "--title-mode",
+        choices=("auto", "first", "largest"),
+        default="auto",
+        help="auto: skip chrome, take the most prominent heading near the top "
+        "(default); first: the topmost line; largest: the biggest text",
+    )
+    parser.add_argument(
+        "--lang", nargs="+", metavar="TAG", help="OCR language hints, e.g. de-DE en-US"
+    )
+    parser.add_argument(
+        "--no-llm",
+        action="store_true",
+        help="do not fall back to a vision model when OCR finds no title",
+    )
+    parser.add_argument(
+        "--llm-always",
+        action="store_true",
+        help="name every image with the vision model, skipping the OCR heuristic",
+    )
+    parser.add_argument(
+        "--llm-model",
+        metavar="MODEL",
+        default=DEFAULT_LLM_MODEL,
+        help=f"vision model for the llm CLI (default: {DEFAULT_LLM_MODEL})",
+    )
+    parser.add_argument(
+        "--allow-duplicates",
+        action="store_true",
+        help="save an image again when it is copied twice in a row",
+    )
+    parser.add_argument("--no-notify", action="store_true", help="skip notifications")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="print the filename without writing"
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+
+    args.dir = args.dir.expanduser().resolve()
+    if not args.dir.is_dir():
+        sys.exit(f"not a folder: {args.dir}")
+
+    pasteboard = AppKit.NSPasteboard.generalPasteboard()
+
+    if args.once:
+        png_bytes = pasteboard_png(pasteboard)
+        if not png_bytes:
+            sys.exit("no image on the pasteboard")
+        save_image(png_bytes, args)
+        return 0
+
+    change_count = pasteboard.changeCount()
+    last_digest = None
+    print(f"watching the pasteboard, saving into {args.dir} (ctrl-c to stop)", flush=True)
+
+    while True:
+        try:
+            time.sleep(args.interval)
+            current = pasteboard.changeCount()
+            if current == change_count:
+                continue
+            change_count = current
+
+            png_bytes = read_pasteboard_image(pasteboard)
+            if not png_bytes:
+                continue
+
+            digest = hashlib.sha256(png_bytes).hexdigest()
+            if digest == last_digest and not args.allow_duplicates:
+                continue
+            last_digest = digest
+
+            save_image(png_bytes, args)
+        except KeyboardInterrupt:
+            print()
+            return 0
+        except Exception as error:  # keep the watcher alive on a single bad image
+            print(f"skipped an image: {error}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

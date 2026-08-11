@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch in_linked_worktree make_slug compose_branch branch_exists sanitize fetch_url_context resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
+     unfunction default_branch in_linked_worktree make_slug compose_branch branch_exists sanitize fetch_url_context sentry_auth_token resolve_sentry_issue resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -52,12 +52,12 @@ trap '(( saved_nounset ))  || set +u
 # When the tool exits, a clean worktree is offered for removal (the branch is
 # kept, so `wt switch <branch>` brings it back). See offer_worktree_cleanup.
 #
-# A Jira/Linear ticket URL or key passed as an argument supplies the branch
-# slug: its title (and description excerpt) is fetched — Jira via the `jira`
-# CLI or JIRA_* REST, GitHub issues/PRs via `gh`, any other URL via curl —
-# and shortened via the `llm` CLI. With no ticket argument you're asked for a
-# purpose; a single URL inside that answer is resolved the same way. The
-# clipboard is never scanned on its own.
+# A Jira/Linear/Sentry ticket URL or key passed as an argument supplies the
+# branch slug: its title (and description excerpt) is fetched — Jira via the
+# `jira` CLI or JIRA_* REST, GitHub issues/PRs via `gh`, Sentry issues via its
+# REST API, any other URL via curl — and shortened via the `llm` CLI. With no
+# ticket argument you're asked for a purpose; a single URL inside that answer
+# is resolved the same way. The clipboard is never scanned on its own.
 
 source "${HOME}/bin/_common.zsh"
 
@@ -197,12 +197,85 @@ fetch_url_context() {
     textutil -stdin -stdout -convert txt -format html <<<"$html" 2>/dev/null
 }
 
+# sentry_auth_token — bearer token for the Sentry API: $SENTRY_AUTH_TOKEN
+# first, else the `[auth] token` line in ~/.sentryclirc that `sentry-cli login`
+# writes. Prints nothing and fails when neither is present.
+sentry_auth_token() {
+    if [[ -n "${SENTRY_AUTH_TOKEN:-}" ]]; then
+        print -r -- "$SENTRY_AUTH_TOKEN"
+        return 0
+    fi
+    [[ -r "${HOME}/.sentryclirc" ]] || return 1
+    local t
+    t="$(awk -F= '/^[[:space:]]*token[[:space:]]*=/{print $2; exit}' "${HOME}/.sentryclirc")"
+    t="${t//[[:space:]\'\"]/}"
+    [[ -n "$t" ]] || return 1
+    print -r -- "$t"
+}
+
+# resolve_sentry_issue <text> — a Sentry issue names the work the same way a
+# ticket does, so its title becomes the branch slug. The web URL is
+# org-scoped (https://<org>.sentry.io/issues/<id>/) while the API is not, so
+# the org is recovered from the subdomain or from an /organizations/<org>/
+# path segment and spliced into /api/0/organizations/<org>/issues/<id>/, which
+# both sentry.io and self-hosted installs serve on their own host. Auth is
+# required: the issue page renders client-side, so fetch_url_context would come
+# back with nothing to slug from.
+#
+# ticket_id is set to Sentry's short ID (LESGARDIENS-IOS-3), which doubles as
+# the token Sentry looks for in commit messages ("Fixes LESGARDIENS-IOS-3") to
+# resolve the issue on deploy.
+resolve_sentry_issue() {
+    local url host org id tok json title culprit project level count
+    url="$(grep -oE 'https?://[^[:space:]]+' <<<"$1" | head -1)"
+    while [[ "$url" == *[.,\;:\)\"\'] ]]; do url="${url%?}"; done
+    host="${${url#*://}%%/*}"
+    id="$(grep -oE 'issues/[0-9]+' <<<"$url" | head -1)"; id="${id#issues/}"
+    org="$(grep -oE 'organizations/[^/?#]+' <<<"$url" | head -1)"; org="${org#organizations/}"
+    if [[ -z "$org" ]]; then
+        [[ "$host" == *.sentry.io ]] && org="${host%.sentry.io}"
+        [[ -z "$org" ]] && org="${SENTRY_ORG:-}"
+    fi
+    if [[ -z "$id" || -z "$org" ]]; then
+        print -ru2 -- "▲ could not read org/issue id out of the Sentry URL"
+        return 1
+    fi
+
+    tok="$(sentry_auth_token)" || {
+        print -ru2 -- "▲ no Sentry token (set SENTRY_AUTH_TOKEN or run: sentry-cli login)"
+        return 1
+    }
+    print -r -- "fetching Sentry issue ${id} ..."
+    json="$(command curl -fsSL --max-time 15 \
+        -H "Authorization: Bearer ${tok}" \
+        "https://${host}/api/0/organizations/${org}/issues/${id}/" 2>/dev/null)" || {
+        print -ru2 -- "▲ Sentry API did not return issue ${id} (org ${org})"
+        return 1
+    }
+
+    title="$(jq -r '.title // empty' <<<"$json" 2>/dev/null || true)"
+    [[ -n "$title" ]] || return 1
+    ticket_id="$(jq -r '.shortId // empty' <<<"$json" 2>/dev/null || true)"
+    culprit="$(jq -r '.culprit // empty' <<<"$json" 2>/dev/null || true)"
+    project="$(jq -r '.project.slug // empty' <<<"$json" 2>/dev/null || true)"
+    level="$(jq -r '.level // empty' <<<"$json" 2>/dev/null || true)"
+    count="$(jq -r '.count // empty' <<<"$json" 2>/dev/null || true)"
+    ticket_title="$title"
+    ticket_ctx="Sentry ${ticket_id:-$id}: ${title}"
+    # The trailer lines only reach the llm — the headline above is all that is
+    # printed — so they carry whatever else narrows down what broke.
+    [[ -n "$project" ]] && ticket_ctx+=$'\n'"project: ${project} (${level:-error}, ${count:-?} events)"
+    [[ -n "$culprit" ]] && ticket_ctx+=$'\n'"culprit: ${culprit}"
+    return 0
+}
+
 # resolve_ticket_source <text> — find a ticket or context URL in <text> and
 # populate ticket_id / ticket_title / ticket_ctx. Known hosts resolve fast:
-# Linear from the URL slug (or the linear CLI where installed), Jira via the
-# jira CLI with a JIRA_* REST fallback, GitHub issues/PRs via gh. Any other
-# URL goes through fetch_url_context. Failures leave the variables as they
-# were, so callers keep the plain raw-text behavior.
+# Linear from the URL slug (or the linear CLI where installed), Sentry issues
+# via its REST API, Jira via the jira CLI with a JIRA_* REST fallback, GitHub
+# issues/PRs via gh. Any other URL goes through fetch_url_context. Failures
+# leave the variables as they were, so callers keep the plain raw-text
+# behavior.
 resolve_ticket_source() {
     local text="$1"
     # <text> holding several tickets is not a request to branch off any one of
@@ -234,6 +307,12 @@ resolve_ticket_source() {
                 fi
             fi
         fi
+    elif grep -qE 'https?://[^/[:space:]]*sentry[^/[:space:]]*/[^[:space:]]*issues/[0-9]+' <<<"$text"; then
+        # "sentry" has to sit in the host, not just anywhere in the URL, or
+        # github.com/getsentry/sentry/issues/123 would be sent to the Sentry
+        # API instead of gh. A self-hosted install on a host without "sentry"
+        # in its name falls through to the generic URL fetch below.
+        resolve_sentry_issue "$text" || true
     else
         local raw_ids
         # Project keys may carry digits after the leading letter (MSP7-67),

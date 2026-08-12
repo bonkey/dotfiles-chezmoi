@@ -136,7 +136,13 @@
         "provider": "openai-subscribed",
         "model": "gpt-5.6-terra",
         "enable_thinking": true,
-        "effort": "medium"
+        "effort": "high"
+      },
+      {
+        "provider": "openai-subscribed",
+        "model": "gpt-5.6-sol",
+        "enable_thinking": true,
+        "effort": "xhigh"
       }
     ],
     "inline_assistant_model": {
@@ -148,10 +154,10 @@
     "default_width": 500,
     "dock": "right",
     "default_model": {
-      "effort": "medium",
+      "effort": "xhigh",
       "enable_thinking": true,
       "provider": "openai-subscribed",
-      "model": "gpt-5.6-terra",
+      "model": "gpt-5.6-sol",
     },
     "commit_message_model": {
       "provider": "google",

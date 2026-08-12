@@ -131,6 +131,12 @@
         "provider": "opencode",
         "model": "go/glm-5.2",
         "enable_thinking": false
+      },
+      {
+        "provider": "openai-subscribed",
+        "model": "gpt-5.6-terra",
+        "enable_thinking": true,
+        "effort": "medium"
       }
     ],
     "inline_assistant_model": {
@@ -145,7 +151,7 @@
       "effort": "medium",
       "enable_thinking": true,
       "provider": "openai-subscribed",
-      "model": "gpt-5.5",
+      "model": "gpt-5.6-terra",
     },
     "commit_message_model": {
       "provider": "google",

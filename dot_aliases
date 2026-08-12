@@ -918,7 +918,14 @@ xco() {
 }
 
 xc1() {
-  xc $(fd -t d '.xcodeproj$' -1)
+  local project
+
+  project=$(fd -t d '\.xcworkspace$' -1)
+  [[ -z "$project" ]] && project=$(fd -t d '\.xcodeproj$' -1)
+  [[ -z "$project" ]] && echo "No xcworkspace or xcodeproj found." && return 1
+
+  cd "${project:h}" || return
+  xc "${project:t}"
 }
 
 ###############################################################################

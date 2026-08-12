@@ -150,8 +150,7 @@ alias Cad="Cz add"
 
 Cs() {
   Cz re-add || return
-  Cz git -- add -u || return
-  Cz git -- diff --cached --quiet || Cz git -- commit -m "Save local changes" || return
+  Cz update --exclude scripts
 }
 
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.

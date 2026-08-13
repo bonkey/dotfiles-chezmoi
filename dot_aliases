@@ -327,6 +327,11 @@ CCC() {
     claude-in-worktrunk --cmux "$@"
 }
 
+# Start Claude inside a worktrunk, in herdr
+CCH() {
+    claude-in-worktrunk --herdr "$@"
+}
+
 # Forward arguments to opencode.
 OC() {
     opencode "$@"

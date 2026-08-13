@@ -144,12 +144,15 @@ Cz() {
     chezmoi "$@"
 }
 
-alias Ced="Cz edit --apply"
+Ced() {
+    chezmoi git -- pull --rebase --autostash && chezmoi edit --apply "$@"
+}
+
 alias Cap="Cz apply"
 alias Cad="Cz add"
 
 Cs() {
-  Cz re-add || return
+    Cz re-add "$@" || return
   Cz update --exclude scripts
 }
 

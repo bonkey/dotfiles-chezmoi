@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+set +o pipefail
+
+source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+
+file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+
+plugins=(
+    nicosuave/memex
+    rjyo/herdr-window-title-sync
+    iurysza/termscope
+    devashish2203/herdr-worktrunk
+    cloudmanic/herdr-plus
+    smarzban/herdr-file-viewer
+    persiyanov/herdr-reviewr
+    zenbu-labs/terminal-browser/herdr-plugin
+)
+
+for plugin in "${plugins[@]}"; do
+    exec_unless_recently_modified $file "herdr plugin install '$plugin' --yes"
+done

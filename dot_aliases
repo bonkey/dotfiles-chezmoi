@@ -486,7 +486,7 @@ man() {
 alias m=make
 alias J=just
 alias Jt="J --time --timestamp"
-alias Jl="J -l"
+alias Jl="J -l --list-submodules
 
 alias hyf="hyperfine -m 3"
 

@@ -54,6 +54,7 @@ brew 'tlrc'
 
 brew 'tmux' # Terminal multiplexer
 brew 'herdr'
+brew 'dicklesworthstone/tap/cass'
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting

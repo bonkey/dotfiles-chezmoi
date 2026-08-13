@@ -9,7 +9,7 @@
 [[ -o pipefail ]] && saved_pipefail=1 || saved_pipefail=0
 trap '(( saved_nounset ))  || set +u
      (( saved_pipefail )) || set +o pipefail
-     unfunction default_branch in_linked_worktree make_slug compose_branch branch_exists sanitize fetch_url_context sentry_auth_token resolve_sentry_issue resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
+     unfunction default_branch in_linked_worktree make_slug compose_branch branch_exists sanitize fetch_url_context sentry_auth_token resolve_sentry_issue resolve_ticket_source retitle_iterm_tab report_iterm_cwd launch_in_cmux rename_cmux_workspace launch_in_herdr rename_herdr_workspace launch_in_tmux offer_worktree_cleanup 2>/dev/null' EXIT
 
 # _exec-in-worktrunk
 # Create a worktree off a base branch and launch a configured CLI in it.
@@ -23,8 +23,8 @@ trap '(( saved_nounset ))  || set +u
 #
 # Branch name: <whoami>/<TICKET-ID>-<llm-slug>  (or <whoami>/<llm-slug>)
 #
-# Usage: <symlink> [--resume] [--cmux|--tmux] [base] [ticket-url-or-key]
-#        source _exec-in-worktrunk <mode> [--resume] [--cmux|--tmux] [base] [ticket-url-or-key]
+# Usage: <symlink> [--resume] [--cmux|--tmux|--herdr] [base] [ticket-url-or-key]
+#        source _exec-in-worktrunk <mode> [--resume] [--cmux|--tmux|--herdr] [base] [ticket-url-or-key]
 #   --resume  reuse this ticket's existing worktree instead of creating a new one
 #   --cmux    run inside a cmux workspace named after the branch. cmux is a
 #             persistent GUI multiplexer (a separate app driven over a Unix
@@ -38,7 +38,20 @@ trap '(( saved_nounset ))  || set +u
 #   --tmux    run inside a tmux session named after the branch, regardless of the
 #             host terminal. Like cmux the session is persistent — detach and
 #             `--resume --tmux` (or just re-running with the same branch) returns
-#             to it. Mutually exclusive with --cmux.
+#             to it.
+#   --herdr   run inside a herdr workspace named after the branch. herdr is a
+#             client/server terminal multiplexer (tmux-like, driven over a
+#             Unix socket) whose workspaces can be git-worktree-aware: the
+#             worktree is registered via `herdr worktree open`, so the
+#             workspace shows its branch and repo in the UI, tracks the agent's
+#             idle/working/blocked state, and `herdr worktree remove` can
+#             reclaim the checkout later. The server outlives this terminal,
+#             and opening is idempotent per checkout path — re-running on the
+#             same branch (with or without --resume) returns to the existing
+#             workspace instead of spawning a twin. Inside a herdr pane the
+#             flag is a no-op like --cmux inside cmux: the current workspace is
+#             renamed after the branch and the tool runs in place.
+#             --cmux / --tmux / --herdr are mutually exclusive.
 #   .         branch off the current branch
 #   <name>    branch off <name>
 #   (empty)   branch off the repo's default branch
@@ -117,6 +130,7 @@ fi
 resume=0
 use_cmux=0
 use_tmux=0
+use_herdr=0
 positional=()
 ticket_input=""
 for a in "$@"; do
@@ -124,14 +138,15 @@ for a in "$@"; do
         --resume)               resume=1 ;;
         --cmux)                 use_cmux=1 ;;
         --tmux)                 use_tmux=1 ;;
+        --herdr)                use_herdr=1 ;;
         *://*|*linear.app*)     ticket_input="$a" ;;
         [A-Z][A-Z]*-[0-9]*)     ticket_input="$a" ;;
         *)                      positional+=("$a") ;;
     esac
 done
 
-if (( use_cmux && use_tmux )); then
-    print -ru2 -- "choose one of --cmux / --tmux, not both"
+if (( use_cmux + use_tmux + use_herdr > 1 )); then
+    print -ru2 -- "choose one of --cmux / --tmux / --herdr"
     exit 1
 fi
 if (( use_cmux )) && ! command -v cmux >/dev/null; then
@@ -140,6 +155,10 @@ if (( use_cmux )) && ! command -v cmux >/dev/null; then
 fi
 if (( use_tmux )) && ! command -v tmux >/dev/null; then
     print -ru2 -- "--tmux requires tmux (brew install tmux)"
+    exit 1
+fi
+if (( use_herdr )) && ! command -v herdr >/dev/null; then
+    print -ru2 -- "--herdr requires herdr (brew install herdr)"
     exit 1
 fi
 
@@ -537,16 +556,23 @@ session_name="${branch#${user}/}"
 tmux_session="${session_name//[.:]/-}"
 
 # --- where does the tool run? ----------------------------------------------
-# --tmux wins everywhere (run in tmux regardless of terminal). Otherwise, if we
-# are already inside a cmux surface, rename that workspace and run the tool in
-# place — spawning a new one would be a pointless twin, so --cmux is a no-op
-# there. A --cmux from any other terminal creates a fresh cmux workspace; with
-# no flag we just run in the current terminal.
-in_cmux=0; [[ -n "${CMUX_WORKSPACE_ID:-}" ]] && in_cmux=1
-if   (( use_tmux )); then launch_target=tmux
-elif (( in_cmux  )); then launch_target=cmux-inplace
-elif (( use_cmux )); then launch_target=cmux-create
-else                      launch_target=plain
+# --tmux wins everywhere (run in tmux regardless of terminal). Otherwise a
+# multiplexer we are already inside claims the run: in a herdr pane or a cmux
+# surface, the current workspace is renamed after the branch and the tool runs
+# in place — spawning a new one would be a pointless twin, so --herdr/--cmux
+# are no-ops there. herdr is checked first: its client runs inside a terminal,
+# so a herdr pane hosted in a cmux surface carries both IDs and herdr is the
+# innermost. A --cmux or --herdr from any other terminal creates a fresh
+# workspace in that multiplexer; with no flag we just run in the current
+# terminal.
+in_cmux=0;  [[ -n "${CMUX_WORKSPACE_ID:-}" ]]  && in_cmux=1
+in_herdr=0; [[ -n "${HERDR_WORKSPACE_ID:-}" ]] && in_herdr=1
+if   (( use_tmux  )); then launch_target=tmux
+elif (( in_herdr  )); then launch_target=herdr-inplace
+elif (( in_cmux   )); then launch_target=cmux-inplace
+elif (( use_cmux  )); then launch_target=cmux-create
+elif (( use_herdr )); then launch_target=herdr-create
+else                       launch_target=plain
 fi
 
 # --- iTerm2 tab title -------------------------------------------------------
@@ -662,6 +688,87 @@ rename_cmux_workspace() {
     print -r -- "cmux workspace: ${session_name} (in place)"
 }
 
+# --- herdr launch ------------------------------------------------------------
+# With --herdr the CLI runs in a herdr workspace named after the branch. herdr
+# is a client/server terminal multiplexer (tmux-like, driven over a Unix
+# socket) whose workspaces can be git-worktree-aware: `worktree open`
+# registers the checkout with herdr, so the workspace shows its branch and
+# repo in the UI, herdr tracks the agent's idle/working/blocked state in the
+# workspace list, and `herdr worktree remove` can reclaim the checkout later.
+# Opening is idempotent per checkout path — reopening returns the existing
+# workspace (already_open) instead of a twin — so --resume --herdr and a plain
+# re-run on the same branch both land in the earlier workspace, with no name
+# matching needed. Like the cmux path this returns immediately rather than
+# blocking on the CLI: an attached herdr client shows the focused workspace,
+# and without one the workspace waits in the server until `herdr` attaches.
+launch_in_herdr() {
+    # The socket API only answers while the server runs. There is no app to
+    # open — clients attach to a headless server — so a missing server is
+    # started detached here, from /, so a fresh server never sits in a
+    # directory a later worktree cleanup deletes out from under it (the same
+    # poisoned-cwd failure the tmux notes below describe).
+    local started_server=0
+    if ! herdr workspace list >/dev/null 2>&1; then
+        (builtin cd / && herdr server &>/dev/null &!)
+        local i
+        for i in {1..50}; do
+            herdr workspace list >/dev/null 2>&1 && break
+            sleep 0.2
+        done
+        herdr workspace list >/dev/null 2>&1 \
+            || { print -ru2 -- "herdr server did not come up in time"; return 1; }
+        started_server=1
+    fi
+
+    # --path wants the worktree root (not whatever subdirectory we sit in) and
+    # --cwd the repo's main checkout: herdr resolves the repo from the caller's
+    # cwd, and a cwd inside the linked worktree itself makes the open fail with
+    # worktree_not_found ("worktree actions start from the repo parent
+    # workspace").
+    local wt_root main_wt out
+    wt_root="$(git rev-parse --show-toplevel 2>/dev/null)" || wt_root="$PWD"
+    main_wt="$(git worktree list --porcelain 2>/dev/null | head -1 | cut -d' ' -f2-)"
+    out="$(herdr worktree open --cwd "${main_wt:-$wt_root}" --path "$wt_root" \
+        --label "$session_name" --focus 2>/dev/null)"
+    if [[ -z "$out" ]] || jq -e '.error' <<<"$out" >/dev/null 2>&1; then
+        print -ru2 -- "herdr worktree open failed: $(jq -r '.error.message // "no output"' <<<"$out" 2>/dev/null)"
+        return 1
+    fi
+    if [[ "$(jq -r '.result.already_open' <<<"$out")" == true ]]; then
+        print -r -- "herdr workspace: ${session_name} (existing)"
+        return 0
+    fi
+    print -r -- "herdr workspace: ${session_name}"
+
+    # The CLI is typed into the new workspace's shell (worktree open has no
+    # --command). `pane run` joins its argv with spaces into one shell line,
+    # so the words are (q)-quoted into a single argument, and PATH is
+    # re-exported for the same reason cmux gets --env: a server started
+    # outside this shell predates the version managers eval'd above. In shell
+    # mode (empty cli) there is nothing to run and the workspace opens a
+    # plain shell in the worktree.
+    local -a launch=("${cli[@]}" "${cli_args[@]}")
+    if (( ${#launch[@]} )); then
+        local pane runout
+        pane="$(jq -r '.result.root_pane.pane_id // empty' <<<"$out")"
+        local -a runwords=(env "PATH=${PATH}" "${launch[@]}")
+        runout="$(herdr pane run "$pane" "${(j: :)${(@q)runwords}}" 2>&1)"
+        jq -e '.error' <<<"$runout" >/dev/null 2>&1 \
+            && print -ru2 -- "▲ could not start the CLI in ${pane}: $(jq -r '.error.message' <<<"$runout")"
+    fi
+    (( started_server )) && print -r -- "  (server was started headless — run \`herdr\` to attach)"
+    return 0
+}
+
+# --- herdr in-place ----------------------------------------------------------
+# Already inside a herdr pane ($HERDR_WORKSPACE_ID set), spawning a workspace
+# from within would just make a twin — retitle the one we're in and run the
+# tool in place, exactly like the cmux analogue above.
+rename_herdr_workspace() {
+    herdr workspace rename "$HERDR_WORKSPACE_ID" "$session_name" >/dev/null 2>&1
+    print -r -- "herdr workspace: ${session_name} (in place)"
+}
+
 # --- tmux launch -------------------------------------------------------------
 # With --tmux the CLI runs inside a tmux session named after the branch,
 # regardless of the host terminal. The session is created detached first so PATH
@@ -730,11 +837,12 @@ launch_in_tmux() {
 # traded for uncommitted work. The dirty check here runs first anyway, to say
 # so in one line instead of surfacing wt's failure.
 #
-# Only the paths that actually block on the tool call this. A --cmux launch
-# returns while the CLI still runs in its own window, a detached tmux session
-# is still alive, and shell mode leaves the caller's own shell inside the
-# worktree — removing any of those pulls the directory out from under a live
-# process (and a tmux server left in a deleted cwd poisons every later pane).
+# Only the paths that actually block on the tool call this. A --cmux or
+# --herdr launch returns while the CLI still runs in its own workspace, a
+# detached tmux session is still alive, and shell mode leaves the caller's own
+# shell inside the worktree — removing any of those pulls the directory out
+# from under a live process (and a tmux server left in a deleted cwd poisons
+# every later pane).
 offer_worktree_cleanup() {
     local wt_path="$1"
     # The worktree was the user's, entered before this script ran, so it is not
@@ -844,6 +952,21 @@ case "$launch_target" in
         # cmux owns its own window and cwd (--cwd), so the iTerm2 title/cwd
         # re-asserters below don't apply — hand the worktree straight to cmux.
         launch_in_cmux
+        ;;
+    herdr-inplace)
+        # Already inside herdr: retitle this workspace after the branch and run
+        # the tool right here — no new workspace, --herdr (if given) is a no-op.
+        rename_herdr_workspace
+        if (( ${#cli[@]} )); then
+            _exec "${cli[@]}" "${cli_args[@]}"
+            offer_worktree_cleanup "$worktree_path"
+        fi
+        ;;
+    herdr-create)
+        # herdr owns the workspace's pane and cwd, so the iTerm2 title/cwd
+        # machinery doesn't apply — register the worktree and return while the
+        # CLI runs on in the server.
+        launch_in_herdr
         ;;
     plain)
         report_iterm_cwd

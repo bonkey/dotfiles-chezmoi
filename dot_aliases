@@ -164,6 +164,38 @@ Cup() {
 alias Cma="Cz merge-all"
 alias Cfo="Cz forget"
 
+_shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
+
+# Edit shell initialization files through chezmoi.
+Cvz() {
+    Ced $(eval "echo $_shell_init_files")
+    exit
+}
+
+# Edit mise config through chezmoi and update mise.
+Cem() {
+    Ced $HOME/.config/mise/config.toml
+    mise up
+}
+
+# Edit Brewfile through chezmoi and apply bundle changes.
+Ceb() {
+    Ced $HOME/.config/Brewfile
+    brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
+}
+
+# Edit aliases through chezmoi.
+Cea() {
+    Ced $HOME/.aliases
+    exit
+}
+
+# Edit opencode config through chezmoi.
+Ceo() {
+    Ced $HOME/.config/opencode.json
+}
+
+
 ###############################################################################
 # BREW
 ###############################################################################
@@ -209,36 +241,6 @@ alias Mp="M prune"
 alias src='source ~/.zshrc'
 alias alg='alias | grep'
 
-_shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
-
-# Edit shell initialization files through chezmoi.
-Cvz() {
-    Ced $(eval "echo $_shell_init_files")
-    exit
-}
-
-# Edit mise config through chezmoi and update mise.
-Cem() {
-    Ced $HOME/.config/mise/config.toml
-    mise up
-}
-
-# Edit Brewfile through chezmoi and apply bundle changes.
-Ceb() {
-    Ced $HOME/.config/Brewfile
-    brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
-}
-
-# Edit aliases through chezmoi.
-Cea() {
-    Ced $HOME/.aliases
-    exit
-}
-
-# Edit opencode config through chezmoi.
-Ceo() {
-    Ced $HOME/.config/opencode.json
-}
 
 AA() {
     archive_inbox.py all \

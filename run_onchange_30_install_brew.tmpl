@@ -3,7 +3,7 @@
 {{- $brewfile:= joinPath .chezmoi.sourceDir "/dot_config/private_Brewfile" -}}
 
 # hash: {{ include $brewfile | sha256sum }}
-source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 brewfile="{{- .chezmoi.sourceDir}}/dot_config/Brewfile"
 

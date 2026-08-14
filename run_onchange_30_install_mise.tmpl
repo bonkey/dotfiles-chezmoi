@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 
-{{- $mise_dir:= joinPath .chezmoi.sourceDir "/dot_config/mise" -}}
+{{- $mise_dir:= joinPath .chezmoi.sourceDir "/dot_config/private_mise" -}}
 {{- $mise_config:= joinPath $mise_dir "/config.toml" -}}
 
 # hash: {{ include $mise_config | sha256sum }}
-source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 _exec "mise -C '{{- $mise_dir -}}' --yes install"
 

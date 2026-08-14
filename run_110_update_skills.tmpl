@@ -2,7 +2,7 @@
 
 set +o pipefail
 
-source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
@@ -16,7 +16,9 @@ skills=(
     mattpocock/skills@grill-me
     mattpocock/skills@wayfinder
 
-	ayghri/i-have-adhd
+    humanlayer/skills@show-me        
+
+    ayghri/i-have-adhd
     dietrichgebert/ponytail
     dicklesworthstone/agent_flywheel_clawdbot_skills_and_integrations@cass
 )

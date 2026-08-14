@@ -2,7 +2,7 @@
 
 set +o pipefail
 
-source "{{- .chezmoi.sourceDir}}/exact_bin/_common.zsh"
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
 
@@ -15,8 +15,21 @@ plugins=(
     smarzban/herdr-file-viewer
     persiyanov/herdr-reviewr
     zenbu-labs/terminal-browser/herdr-plugin
+    bcihanc/herdr-claude-session-title
+)
+
+actions=(
+  bcihanc.claude-session-title.install
+  rjyo.window-title-sync.refresh
 )
 
 for plugin in "${plugins[@]}"; do
     exec_unless_recently_modified $file "herdr plugin install '$plugin' --yes"
 done
+
+
+for action in "${actions[@]}"; do
+  exec_unless_recently_modified $file "herdr plugin action invoke '$action'"
+done
+
+exec_unless_recently_modified $file "herdr server reload-config"

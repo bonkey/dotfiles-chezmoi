@@ -5,8 +5,6 @@
 # hash: {{ include $brewfile | sha256sum }}
 source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
-brewfile="{{- .chezmoi.sourceDir}}/dot_config/Brewfile"
-
 if ! /usr/bin/which -s brew; then
   log_message "Brew is missing. Installing"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-{{- $mise_dir:= joinPath .chezmoi.sourceDir "/dot_config/private_mise" -}}
+{{- $mise_dir:= joinPath .chezmoi.sourceDir "/private_dot_config/private_mise" -}}
 {{- $mise_config:= joinPath $mise_dir "/config.toml" -}}
 
 # hash: {{ include $mise_config | sha256sum }}

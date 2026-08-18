@@ -2,7 +2,7 @@
 #
 # ~/bin/brewfile-describe.rb Brewfile
 # or
-# ruby $HOME/.local/share/chezmoi/exact_bin/executable_brewfile-describe.rb $HOME/.local/share/chezmoi/dot_config/Brewfile
+# ruby $HOME/.local/share/chezmoi/exact_bin/executable_brewfile-describe.rb $HOME/.local/share/chezmoi/private_dot_config/private_Brewfile
 
 tap '1password/tap'
 tap 'abhimanyu003/sttr'

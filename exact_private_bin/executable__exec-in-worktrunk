@@ -48,9 +48,11 @@ trap '(( saved_nounset ))  || set +u
 #             reclaim the checkout later. The server outlives this terminal,
 #             and opening is idempotent per checkout path — re-running on the
 #             same branch (with or without --resume) returns to the existing
-#             workspace instead of spawning a twin. Inside a herdr pane the
-#             flag is a no-op like --cmux inside cmux: the current workspace is
-#             renamed after the branch and the tool runs in place.
+#             workspace instead of spawning a twin. When the CLI exits, the
+#             worktree-cleanup offer (below) runs in the workspace's shell, and
+#             the workspace closes once the worktree is removed. Inside a herdr
+#             pane the flag is a no-op like --cmux inside cmux: the current
+#             workspace is renamed after the branch and the tool runs in place.
 #             --cmux / --tmux / --herdr are mutually exclusive.
 #   .         branch off the current branch
 #   <name>    branch off <name>
@@ -63,7 +65,8 @@ trap '(( saved_nounset ))  || set +u
 # the tool right here. See the "already in a worktree" section.
 #
 # When the tool exits, a clean worktree is offered for removal (the branch is
-# kept, so `wt switch <branch>` brings it back). See offer_worktree_cleanup.
+# kept, so `wt switch <branch>` brings it back). See offer_worktree_cleanup
+# and the standalone _offer-worktree-cleanup it wraps.
 #
 # A Jira/Linear/Sentry ticket URL or key passed as an argument supplies the
 # branch slug: its title (and description excerpt) is fetched — Jira via the
@@ -707,10 +710,9 @@ launch_in_herdr() {
     # started detached here, from /, so a fresh server never sits in a
     # directory a later worktree cleanup deletes out from under it (the same
     # poisoned-cwd failure the tmux notes below describe).
-    local started_server=0
+    local started_server=0 i
     if ! herdr workspace list >/dev/null 2>&1; then
         (builtin cd / && herdr server &>/dev/null &!)
-        local i
         for i in {1..50}; do
             herdr workspace list >/dev/null 2>&1 && break
             sleep 0.2
@@ -742,17 +744,34 @@ launch_in_herdr() {
 
     # The CLI is typed into the new workspace's shell (worktree open has no
     # --command). `pane run` joins its argv with spaces into one shell line,
-    # so the words are (q)-quoted into a single argument, and PATH is
-    # re-exported for the same reason cmux gets --env: a server started
-    # outside this shell predates the version managers eval'd above. In shell
-    # mode (empty cli) there is nothing to run and the workspace opens a
-    # plain shell in the worktree.
+    # so the words are (q)-quoted into a single argument. No PATH re-export
+    # here, unlike cmux/tmux: the pane hosts an interactive login zsh whose
+    # rc files rebuild PATH (mise & co.) before the line is read, and the
+    # ~1 KB PATH pushed the line past the tty's cooked-mode limit (MAX_CANON,
+    # 1024 bytes on macOS) — everything beyond it, Enter included, was dropped
+    # and the truncated command sat unexecuted in the shell's edit buffer.
+    # The line is typed only once the prompt is up: before zsh has switched
+    # the tty to raw mode, keys land in the cooked buffer, are echoed raw and
+    # show up a second time at the prompt. In shell mode (empty cli) there is
+    # nothing to run and the workspace opens a plain shell in the worktree.
+    #
+    # The worktree-cleanup offer is chained after the CLI on the same line:
+    # this script has long returned by the time the CLI exits, so the offer
+    # has to run where the CLI ran. On removal the workspace is closed too —
+    # its shell would otherwise sit in a deleted directory, and herdr keeps
+    # showing a worktree that no longer exists.
     local -a launch=("${cli[@]}" "${cli_args[@]}")
     if (( ${#launch[@]} )); then
-        local pane runout
+        local pane runout line
         pane="$(jq -r '.result.root_pane.pane_id // empty' <<<"$out")"
-        local -a runwords=(env "PATH=${PATH}" "${launch[@]}")
-        runout="$(herdr pane run "$pane" "${(j: :)${(@q)runwords}}" 2>&1)"
+        for i in {1..50}; do
+            [[ -n "${$(herdr pane read "$pane" --source visible 2>/dev/null)//[[:space:]]/}" ]] && break
+            sleep 0.2
+        done
+        line="${(j: :)${(@q)launch}}"
+        line+="; _offer-worktree-cleanup ${(q)wt_root} ${(q)branch}"
+        line+=' && herdr workspace close "$HERDR_WORKSPACE_ID"'
+        runout="$(herdr pane run "$pane" "$line" 2>&1)"
         jq -e '.error' <<<"$runout" >/dev/null 2>&1 \
             && print -ru2 -- "▲ could not start the CLI in ${pane}: $(jq -r '.error.message' <<<"$runout")"
     fi
@@ -830,57 +849,24 @@ launch_in_tmux() {
 # --- post-run worktree cleanup ----------------------------------------------
 # The branch outlives the worktree, so once the tool exits a clean worktree is
 # pure disk cost — `wt switch <branch>` recreates it on demand. Offer to drop
-# it, keeping the branch so the work stays reachable.
+# it, keeping the branch so the work stays reachable. The offer itself lives
+# in _offer-worktree-cleanup (dirty check, gitignored-count note, `wt remove
+# --no-delete-branch`), a standalone script so the herdr launch can chain it
+# onto the CLI's command line inside the workspace's own shell.
 #
-# `wt remove --no-delete-branch` is the safe spelling: it keeps the branch and,
-# without --force, refuses outright on a dirty tree, so disk space is never
-# traded for uncommitted work. The dirty check here runs first anyway, to say
-# so in one line instead of surfacing wt's failure.
-#
-# Only the paths that actually block on the tool call this. A --cmux or
-# --herdr launch returns while the CLI still runs in its own workspace, a
-# detached tmux session is still alive, and shell mode leaves the caller's own
-# shell inside the worktree — removing any of those pulls the directory out
-# from under a live process (and a tmux server left in a deleted cwd poisons
-# every later pane).
+# Only the paths that block on the tool call this. A --cmux launch returns
+# while the CLI still runs in its own workspace, a detached tmux session is
+# still alive, and shell mode leaves the caller's own shell inside the
+# worktree — removing any of those pulls the directory out from under a live
+# process (and a tmux server left in a deleted cwd poisons every later pane).
+# --herdr returns early too, but its pane runs the offer after the CLI on its
+# own (see launch_in_herdr).
 offer_worktree_cleanup() {
-    local wt_path="$1"
     # The worktree was the user's, entered before this script ran, so it is not
     # ours to reclaim — only ones we switched into are offered for removal.
     (( stay )) && return 0
-    [[ -n "$wt_path" && -d "$wt_path" ]] || return 0
-    [[ -t 0 ]] || return 0   # non-interactive: nothing to ask, so leave it alone
-
-    # Untracked files count as uncommitted for wt's purposes, so `--porcelain`
-    # (which lists them) is the same bar wt itself applies.
-    if [[ -n "$(git -C "$wt_path" status --porcelain 2>/dev/null)" ]]; then
-        print -r -- "worktree '${wt_path}' has uncommitted changes — keeping it"
-        return 0
-    fi
-
-    # Gitignored files — node_modules, .env, build output — live only in the
-    # worktree and are the one thing the branch cannot bring back. Reclaiming
-    # them is usually the whole point, so this counts rather than blocks;
-    # `--ignored` collapses whole directories, keeping the count meaningful.
-    local ignored_count note=""
-    ignored_count="$(git -C "$wt_path" status --porcelain --ignored 2>/dev/null \
-        | grep -c '^!!' || true)"
-    (( ignored_count )) && note=" (drops ${ignored_count} gitignored path(s))"
-
-    local answer
-    read -r "answer?remove worktree '${wt_path}'${note}, keep branch ${branch}? [Y/n] "
-    [[ -z "$answer" || "$answer" == [Yy]* ]] || return 0
-
-    # git refuses to delete the directory it is being run from, so step out to
-    # the main worktree first and name the branch explicitly rather than
-    # relying on wt's "current worktree" default. --foreground keeps the
-    # removal (and its diagnostics) inside this script's lifetime; a
-    # backgrounded one would be racing the shell's exit.
-    local main_wt
-    main_wt="$(git -C "$wt_path" worktree list --porcelain 2>/dev/null \
-        | head -1 | cut -d' ' -f2-)"
-    builtin cd -- "${main_wt:-/}" 2>/dev/null || builtin cd /
-    _exec wt remove "$branch" --no-delete-branch --foreground -y
+    _offer-worktree-cleanup "$1" "$branch"
+    return 0
 }
 
 # --- dispatch --------------------------------------------------------------

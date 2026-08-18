@@ -1,0 +1,67 @@
+#!/usr/bin/env zsh
+
+# _offer-worktree-cleanup <worktree-path> <branch>
+# Offer to remove a finished worktree, keeping its branch.
+#
+# The branch outlives the worktree, so once the tool that ran in it exits a
+# clean worktree is pure disk cost — `wt switch <branch>` recreates it on
+# demand. Ask before dropping it; the branch stays so the work is reachable.
+#
+# Standalone (rather than a function of _exec-in-worktrunk) so it can be
+# tacked onto a command line that runs somewhere _exec-in-worktrunk itself
+# does not block: the herdr launch types `<cli>; _offer-worktree-cleanup ...`
+# into the workspace's own shell, so the offer follows the CLI there.
+#
+# Exit status: 0 when the worktree was removed, 1 otherwise (dirty, declined,
+# non-interactive, already gone) — so callers can chain a follow-up on removal.
+#
+# `wt remove --no-delete-branch` is the safe spelling: it keeps the branch
+# and, without --force, refuses outright on a dirty tree, so disk space is
+# never traded for uncommitted work. The dirty check here runs first anyway,
+# to say so in one line instead of surfacing wt's failure.
+
+source "${HOME}/bin/_common.zsh"
+_eval_for_cmd wt "wt config shell init zsh"
+
+set -uo pipefail
+
+if (( $# != 2 )); then
+    print -ru2 -- "usage: ${0##*/} <worktree-path> <branch>"
+    exit 2
+fi
+wt_path="$1"
+branch="$2"
+
+[[ -n "$wt_path" && -d "$wt_path" ]] || exit 1
+[[ -t 0 ]] || exit 1   # non-interactive: nothing to ask, so leave it alone
+
+# Untracked files count as uncommitted for wt's purposes, so `--porcelain`
+# (which lists them) is the same bar wt itself applies.
+if [[ -n "$(git -C "$wt_path" status --porcelain 2>/dev/null)" ]]; then
+    print -r -- "worktree '${wt_path}' has uncommitted changes — keeping it"
+    exit 1
+fi
+
+# Gitignored files — node_modules, .env, build output — live only in the
+# worktree and are the one thing the branch cannot bring back. Reclaiming
+# them is usually the whole point, so this counts rather than blocks;
+# `--ignored` collapses whole directories, keeping the count meaningful.
+ignored_count="$(git -C "$wt_path" status --porcelain --ignored 2>/dev/null \
+    | grep -c '^!!' || true)"
+note=""
+(( ignored_count )) && note=" (drops ${ignored_count} gitignored path(s))"
+
+read -r "answer?remove worktree '${wt_path}'${note}, keep branch ${branch}? [Y/n] "
+[[ -z "$answer" || "$answer" == [Yy]* ]] || exit 1
+
+# git refuses to delete the directory it is being run from, so step out to
+# the main worktree first and name the branch explicitly rather than
+# relying on wt's "current worktree" default. --foreground keeps the
+# removal (and its diagnostics) inside this script's lifetime; a
+# backgrounded one would be racing the shell's exit.
+main_wt="$(git -C "$wt_path" worktree list --porcelain 2>/dev/null \
+    | head -1 | cut -d' ' -f2-)"
+builtin cd -- "${main_wt:-/}" 2>/dev/null || builtin cd /
+_exec wt remove "$branch" --no-delete-branch --foreground -y
+[[ -d "$wt_path" ]] && exit 1
+exit 0

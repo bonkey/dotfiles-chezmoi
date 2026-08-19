@@ -450,6 +450,14 @@ alias DD="hunk diff"
 
 alias xf="xmllint --format"
 
+Gld() {
+    glow -s dark "$@"
+}
+
+Gll() {
+    glow -s dark "$@"
+}
+
 # Render Markdown with glow when possible, otherwise use bat.
 cat() {
   type glow >/dev/null 2>&1

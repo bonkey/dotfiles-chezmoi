@@ -9,8 +9,9 @@
 #
 # Standalone (rather than a function of _exec-in-worktrunk) so it can be
 # tacked onto a command line that runs somewhere _exec-in-worktrunk itself
-# does not block: the herdr launch types `<cli>; _offer-worktree-cleanup ...`
-# into the workspace's own shell, so the offer follows the CLI there.
+# does not block: the cmux and herdr launches type `<cli>;
+# _offer-worktree-cleanup ...` into the workspace's own shell, so the offer
+# follows the CLI there.
 #
 # Exit status: 0 when the worktree was removed, 1 otherwise (dirty, declined,
 # non-interactive, already gone) — so callers can chain a follow-up on removal.

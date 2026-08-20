@@ -34,7 +34,10 @@ trap '(( saved_nounset ))  || set +u
 #             are listed with `cmux workspace list`. When the script is already
 #             running inside a cmux surface, --cmux is a no-op: rather than spawn
 #             a twin, it renames the current workspace after the branch and runs
-#             the tool in place (this happens with or without the flag).
+#             the tool in place (this happens with or without the flag). When
+#             the CLI exits, the worktree-cleanup offer (below) runs in the
+#             workspace's shell, and the workspace closes once the worktree is
+#             removed.
 #   --tmux    run inside a tmux session named after the branch, regardless of the
 #             host terminal. Like cmux the session is persistent — detach and
 #             `--resume --tmux` (or just re-running with the same branch) returns
@@ -674,10 +677,20 @@ launch_in_cmux() {
     # Command line cmux types into the new workspace's shell. In shell mode
     # (empty cli) there is no --command: the workspace opens a plain shell in
     # the worktree, so --cmux works from the symlinks and sourced alike.
+    #
+    # As in the herdr launch, the worktree-cleanup offer is chained after the
+    # CLI on the same line — this script has long returned by the time the
+    # CLI exits — and on removal the workspace closes, so no shell is left
+    # sitting in a deleted directory.
     local -a launch=("${cli[@]}" "${cli_args[@]}")
     local -a nw=(--name "$session_name" --cwd "$PWD"
                  --env "PATH=${PATH}" --focus true)
-    (( ${#launch[@]} )) && nw+=(--command "${(j: :)${(@q)launch}}")
+    if (( ${#launch[@]} )); then
+        local line="${(j: :)${(@q)launch}}"
+        line+="; _offer-worktree-cleanup ${(q)PWD} ${(q)branch}"
+        line+=' && cmux workspace close "$CMUX_WORKSPACE_ID"'
+        nw+=(--command "$line")
+    fi
     print -r -- "cmux workspace: ${session_name}"
     cmux workspace create "${nw[@]}"
 }
@@ -851,16 +864,16 @@ launch_in_tmux() {
 # pure disk cost — `wt switch <branch>` recreates it on demand. Offer to drop
 # it, keeping the branch so the work stays reachable. The offer itself lives
 # in _offer-worktree-cleanup (dirty check, gitignored-count note, `wt remove
-# --no-delete-branch`), a standalone script so the herdr launch can chain it
-# onto the CLI's command line inside the workspace's own shell.
+# --no-delete-branch`), a standalone script so the cmux and herdr launches can
+# chain it onto the CLI's command line inside the workspace's own shell.
 #
-# Only the paths that block on the tool call this. A --cmux launch returns
-# while the CLI still runs in its own workspace, a detached tmux session is
+# Only the paths that block on the tool call this. A detached tmux session is
 # still alive, and shell mode leaves the caller's own shell inside the
-# worktree — removing any of those pulls the directory out from under a live
+# worktree — removing either pulls the directory out from under a live
 # process (and a tmux server left in a deleted cwd poisons every later pane).
-# --herdr returns early too, but its pane runs the offer after the CLI on its
-# own (see launch_in_herdr).
+# --cmux and --herdr return while the CLI still runs, but their workspace
+# shells run the offer after the CLI on their own (see launch_in_cmux and
+# launch_in_herdr).
 offer_worktree_cleanup() {
     # The worktree was the user's, entered before this script ran, so it is not
     # ours to reclaim — only ones we switched into are offered for removal.

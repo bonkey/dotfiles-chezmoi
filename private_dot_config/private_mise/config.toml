@@ -18,6 +18,7 @@ pipx = "latest"
 # Apple development
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
 swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
+"pipx:git+https://github.com/bonkey/mobile-broom" = "latest"
 
 # Python CLI tools
 "pipx:black" = "latest"                   # Python code formatter

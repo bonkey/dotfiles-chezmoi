@@ -147,7 +147,7 @@ alias .cha=".ch add"
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
 
 # Edit shell initialization files through chezmoi.
-.cvz() {
+.ces() {
     .che $(eval "echo $_shell_init_files")
     exit
 }
@@ -305,11 +305,6 @@ alias gy="gemini --yolo"
 # Start Claude inside a worktrunk, in its own tmux workspace.
 .cct() {
     claude-in-worktrunk --tmux "$@"
-}
-
-# Start Claude inside a worktrunk, in its own cmux workspace.
-.ccc() {
-    claude-in-worktrunk --cmux "$@"
 }
 
 # Start Claude inside a worktrunk, in herdr

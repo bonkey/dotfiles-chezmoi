@@ -6,7 +6,6 @@ zmodule git
 zmodule fzf
 
 zmodule ellie/atuin
-zmodule wfxr/forgit
 zmodule jeffreytse/zsh-vi-mode
 
 zmodule zsh-users/zsh-completions

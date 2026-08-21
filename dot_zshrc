@@ -32,9 +32,6 @@ source ${ZIM_HOME}/init.zsh
 
 #### ZIM END
 
-# For zmodule wfxr/forgit
-export PATH="$FORGIT_INSTALL_DIR/bin:$PATH"
-
 export ZSH_AI_CMD_PROVIDER='gemini'
 export ZSH_AI_CMD_KEY='^z'
 export ZSH_AI_CMD_HIGHLIGHT='fg=8'

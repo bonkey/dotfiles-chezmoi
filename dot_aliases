@@ -239,14 +239,14 @@ alias alg='alias | grep'
 # EDITORS
 ###############################################################################
 
-alias .g=gvim
+alias g=gvim
 # Open files in vimer using a tab.
 gvim() {
     vimer -t "$@"
 }
 
 # Open the current directory or provided paths in VS Code Insiders.
-.c() {
+c() {
   if [[ -z "$1" ]]; then
     code-insiders .
   else
@@ -255,7 +255,7 @@ gvim() {
 }
 
 # Open the current directory or provided paths in Zed.
-.z() {
+z() {
   if [[ -z "$1" ]]; then
     zed .
   else

@@ -2,9 +2,10 @@
 
 set +o pipefail
 
-source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
+source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
+file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
 
-file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+source "$source_dir/exact_private_bin/_common.zsh"
 
 if command -v atuin &> /dev/null; then
   exec_unless_recently_modified $file "atuin update || true"

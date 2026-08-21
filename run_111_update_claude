@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
-source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
+source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
+file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
+
+source "$source_dir/exact_private_bin/_common.zsh"
 
 set +o pipefail
-
-file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
-
 
 if unless_recently_modified $file ; then
     claude update

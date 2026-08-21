@@ -53,7 +53,6 @@ args = ["restore"]
 
 import argparse
 import json
-import os
 import re
 import shutil
 import subprocess
@@ -80,9 +79,6 @@ def log(message, verbose):
 
 def run_command(cmd, capture_output=True, check=True, verbose=False):
     log(f"Running command: {cmd}", verbose)
-    # A service-account token in the environment makes `op` ignore the user
-    # session and require --vault; this script always uses the user account.
-    env = {k: v for k, v in os.environ.items() if k != "OP_SERVICE_ACCOUNT_TOKEN"}
     try:
         result = subprocess.run(
             cmd,
@@ -90,7 +86,6 @@ def run_command(cmd, capture_output=True, check=True, verbose=False):
             capture_output=capture_output,
             text=True,
             check=check,
-            env=env,
         )
         return result.stdout.strip() if capture_output else None
     except subprocess.CalledProcessError as error:

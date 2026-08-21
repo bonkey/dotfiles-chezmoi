@@ -341,6 +341,7 @@ alias .ska=".sk add"
 alias .ski=.ska
 alias .skr=".sk remove"
 alias .skl=".sk list"
+alias .sku=".sk update"
 
 # Run the MCP setup helper.
 cm() {

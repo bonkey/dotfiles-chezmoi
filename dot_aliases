@@ -838,7 +838,7 @@ find_xcode_proj() {
 alias bef=".be fastlane"
 
 # Run CocoaPods directly or through Bundler when a Gemfile exists.
-_pod() {
+.p() {
   if [[ -f "Gemfile" || -f "../Gemfile" ]]; then
     _exec "bundle check || bundle install"
     _exec "bundle exec pod $@"
@@ -847,10 +847,10 @@ _pod() {
   fi
 }
 
-alias .pi="_pod install"
-alias .pu="_pod update"
-alias .po="_pod outdated"
-alias .ps="_pod search"
+alias .pi=".p install"
+alias .pu=".p update"
+alias .po=".p outdated"
+alias .ps=".p search"
 
 
 ###############################################################################
@@ -859,7 +859,7 @@ alias .ps="_pod search"
 
 alias .fork > /dev/null && unalias .fork
 # Open the current repository in Fork.
-.fork() {
+.fk() {
   fork .
 }
 

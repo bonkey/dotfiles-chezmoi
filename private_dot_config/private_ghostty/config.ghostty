@@ -9,7 +9,8 @@ font-family = "CodeNewRoman Nerd Font Mono"
 font-size = 18
 # adjust-cell-height = 3
 
-theme = Idle Toes
+# theme = Idle Toes
+theme = Atom One Light
 background-opacity = 0.85
 background-blur=16
 

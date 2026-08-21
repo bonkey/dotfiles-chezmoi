@@ -24,13 +24,114 @@ actions=(
   rjyo.window-title-sync.refresh
 )
 
-for plugin in "${plugins[@]}"; do
-    exec_unless_recently_modified $file "herdr plugin install '$plugin' --yes"
+stopped_server=0
+outdated_plugins=()
+
+server_running() {
+    herdr status server 2>/dev/null | grep -q '^status: running'
+}
+
+# A plugin is outdated when it is not installed or its resolved commit differs
+# from the remote HEAD. Unreachable remotes count as up to date so a flaky
+# network never triggers a server stop.
+find_outdated_plugins() {
+    local installed_json spec parts owner repo installed remote
+    installed_json=$(herdr plugin list --json 2>/dev/null)
+
+    for spec in "${plugins[@]}"; do
+        parts=(${(s:/:)spec})
+        owner=$parts[1]
+        repo=$parts[2]
+
+        installed=$(jq -r --arg o "$owner" --arg r "$repo" \
+            '.result.plugins[].source | select(.owner==$o and .repo==$r) | .resolved_commit' \
+            <<<"$installed_json")
+
+        if [[ -z "$installed" ]]; then
+            outdated_plugins+=("$spec")
+            continue
+        fi
+
+        remote=$(git ls-remote "https://github.com/$owner/$repo" HEAD 2>/dev/null | awk '{print $1}')
+        if [[ -z "$remote" ]]; then
+            log_message "Cannot reach github.com/$owner/$repo, assuming up to date"
+        elif [[ "$remote" != "$installed" ]]; then
+            outdated_plugins+=("$spec")
+        fi
+    done
+}
+
+stop_server_with_consent() {
+    server_running || return 0
+
+    if [[ "${HERDR_ENV-}" == "1" || -n "${HERDR_PANE_ID-}" ]]; then
+        log_message "Running inside a herdr pane - stopping the server would kill this terminal. Run 'chezmoi apply' outside herdr to update plugins, skipping"
+        exit 0
+    fi
+
+    log_message "Plugin update needs the herdr server stopped. Current sessions"
+    herdr session list
+
+    if [[ ! -t 0 ]]; then
+        log_message "Non-interactive run - leaving herdr server and its sessions alone, skipping plugin update"
+        exit 0
+    fi
+
+    local reply
+    if ! read -q "reply?Stop herdr server and kill the sessions above? [y/N] "; then
+        print
+        log_message "Keeping herdr server running, skipping plugin update"
+        exit 0
+    fi
+    print
+
+    _exec "herdr server stop"
+    stopped_server=1
+}
+
+start_server_back() {
+    [[ $stopped_server -eq 1 ]] || return 0
+
+    log_message "Starting herdr server back in the background"
+    herdr server < /dev/null &> /dev/null &!
+
+    local i
+    for i in {1..20}; do
+        server_running && return 0
+        sleep 0.5
+    done
+    log_error "herdr server did not come back up, start it manually with 'herdr'"
+}
+
+if ! is_outdated "$file"; then
+    log_message "herdr plugins checked recently, skipping (based on $file)"
+    exit 0
+fi
+
+find_outdated_plugins
+
+if (( ${#outdated_plugins} == 0 )); then
+    log_message "All herdr plugins are up to date"
+    touch "$file"
+    exit 0
+fi
+
+log_message "Outdated plugins: ${outdated_plugins[*]}"
+
+stop_server_with_consent
+
+for plugin in "${outdated_plugins[@]}"; do
+    _exec "herdr plugin install '$plugin' --yes"
 done
 
+start_server_back
 
 for action in "${actions[@]}"; do
-  exec_unless_recently_modified $file "herdr plugin action invoke '$action'"
+    _exec "herdr plugin action invoke '$action'"
 done
 
-exec_unless_recently_modified $file "herdr server reload-config"
+if [[ $stopped_server -eq 0 ]]; then
+    _exec "herdr server reload-config"
+fi
+
+touch "$file"

@@ -9,13 +9,15 @@ font-family = "CodeNewRoman Nerd Font Mono"
 font-size = 18
 # adjust-cell-height = 3
 
-# theme = Idle Toes
-theme = Atom One Light
+config-file = ?auto/theme.ghostty
+
 background-opacity = 0.85
 background-blur=16
 
 copy-on-select = clipboard
 mouse-hide-while-typing = true
+
+link-url = true
 
 window-width = 130
 window-height = 40

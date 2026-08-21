@@ -790,7 +790,6 @@ find_xcode_proj() {
   echo $xcode_proj
 }
 
-alias .xc > /dev/null && unalias .xc
 # Open the detected Xcode project with the selected Xcode version.
 .xc() {
   local xcode_proj xcode resolve=false proj_arg

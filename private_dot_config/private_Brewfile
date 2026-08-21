@@ -98,24 +98,26 @@ brew 'wget' # Internet file retriever
 cask 'firefox' # Web browser
 
 # Archives, documents, and data formats
-brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
-brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
-brew 'fastgron' # High-performance JSON to GRON converter
-brew 'fx' # Terminal JSON viewer
 brew 'ghostscript' # Interpreter for PostScript and PDF
 brew 'graphicsmagick' # Image processing tools collection
 brew 'imagemagick' # Tools and libraries to manipulate images in select formats
-brew 'jless' # Command-line pager for JSON data
-brew 'jo' # JSON output from a shell
-brew 'jq' # Lightweight and flexible command-line JSON processor
-brew 'libyaml' # YAML Parser
 brew 'p7zip' # 7-Zip (high compression file archiver) implementation
 brew 'poppler' # PDF rendering library (based on the xpdf-3.0 code base)
 brew 'resvg' # SVG rendering tool and library
 brew 'sevenzip' # 7-Zip is a file archiver with a high compression ratio
-brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew 'fx'
 
+# JSON + YAML
+brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
+brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
+brew 'fastgron' # High-performance JSON to GRON converter
+brew 'fx' # Terminal JSON viewer
+brew 'jless' # Command-line pager for JSON data
+brew 'jo' # JSON output from a shell
+brew 'jq' # Lightweight and flexible command-line JSON processor
+brew 'libyaml' # YAML Parser
+brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
+#
 # Version control and code review
 brew 'colordiff' # Color-highlighted diff(1) output
 brew 'ctags' # Reimplementation of ctags(1)

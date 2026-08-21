@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
+file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
+
+source "$source_dir/exact_private_bin/_common.zsh"
+
+exec_unless_recently_modified $file "mise upgrade --bump --yes ; mise prune --yes"

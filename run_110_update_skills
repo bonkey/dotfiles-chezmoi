@@ -2,9 +2,10 @@
 
 set +o pipefail
 
-source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
+source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
+file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
 
-file="{{- .chezmoi.sourceDir}}/{{- .chezmoi.sourceFile}}"
+source "$source_dir/exact_private_bin/_common.zsh"
 
 skills=(
     superwall/skills@wwdc
@@ -14,10 +15,12 @@ skills=(
     bonkey/skills
     bonkey/skills-private
 
+    herdrdev/herdr@herdr
+
     mattpocock/skills@grill-me
     mattpocock/skills@wayfinder
 
-    humanlayer/skills@show-me        
+    humanlayer/skills@show-me
 
     ayghri/i-have-adhd
     dietrichgebert/ponytail

@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
-source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
+source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
+
+source "$source_dir/exact_private_bin/_common.zsh"
 
 log_message "Setting defaults for Xcode"
 

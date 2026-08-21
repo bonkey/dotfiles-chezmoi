@@ -119,7 +119,7 @@ alias cal="gcal -s 1"
 ###############################################################################
 
 # Forward arguments to chezmoi.
-.cz() {
+.ch() {
     chezmoi "$@"
 }
 
@@ -127,12 +127,12 @@ alias cal="gcal -s 1"
     chezmoi git -- pull --rebase --autostash && chezmoi edit --apply "$@"
 }
 
-alias .cap=".cz apply"
-alias .cad=".cz add"
+alias .cap=".ch apply"
+alias .cad=".ch add"
 
 .cs() {
-    .cz re-add "$@" || return
-  .cz update --exclude scripts
+    .ch re-add "$@" || return
+  .ch update --exclude scripts
 }
 
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.
@@ -143,8 +143,8 @@ alias .cad=".cz add"
     open ~/bin/update_chezmoi.terminal
   fi
 }
-alias .cma=".cz merge-all"
-alias .cfo=".cz forget"
+alias .cma=".ch merge-all"
+alias .cfo=".ch forget"
 
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
 

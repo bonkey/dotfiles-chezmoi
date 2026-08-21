@@ -136,7 +136,7 @@ alias .cha=".ch add"
 }
 
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.
-.chup() {
+.chu() {
   if [[ -d /Applications/Ghostty.app || -d "$HOME/Applications/Ghostty.app" ]]; then
     open -na Ghostty --args -e ~/bin/update_chezmoi.sh
   else

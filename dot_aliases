@@ -123,58 +123,56 @@ alias cal="gcal -s 1"
     chezmoi "$@"
 }
 
-.ced() {
+.che() {
     chezmoi git -- pull --rebase --autostash && chezmoi edit --apply "$@"
 }
 
-alias .cap=".ch apply"
-alias .cad=".ch add"
+alias .chc=".ch cd"
+alias .cha=".ch add"
 
-.cs() {
-    .ch re-add "$@" || return
+.chs() {
+  .ch re-add "$@" || return
   .ch update --exclude scripts
 }
 
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.
-.cup() {
+.chup() {
   if [[ -d /Applications/Ghostty.app || -d "$HOME/Applications/Ghostty.app" ]]; then
     open -na Ghostty --args -e ~/bin/update_chezmoi.sh
   else
     open ~/bin/update_chezmoi.terminal
   fi
 }
-alias .cma=".ch merge-all"
-alias .cfo=".ch forget"
 
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
 
 # Edit shell initialization files through chezmoi.
 .cvz() {
-    .ced $(eval "echo $_shell_init_files")
+    .che $(eval "echo $_shell_init_files")
     exit
 }
 
 # Edit mise config through chezmoi and update mise.
 .cem() {
-    .ced $HOME/.config/mise/config.toml
+    .che $HOME/.config/mise/config.toml
     mise up
 }
 
 # Edit Brewfile through chezmoi and apply bundle changes.
 .ceb() {
-    .ced $HOME/.config/Brewfile
+    .che $HOME/.config/Brewfile
     brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
 }
 
 # Edit aliases through chezmoi.
 .cea() {
-    .ced $HOME/.aliases
+    .che $HOME/.aliases
     exit
 }
 
 # Edit opencode config through chezmoi.
 .ceo() {
-    .ced $HOME/.config/opencode.json
+    .che $HOME/.config/opencode.json
 }
 
 

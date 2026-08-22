@@ -7,6 +7,8 @@ file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
 
 source "$source_dir/exact_private_bin/_common.zsh"
 
+# Plugin catalog
+
 plugins=(
     nicosuave/memex
     rjyo/herdr-window-title-sync
@@ -17,12 +19,49 @@ plugins=(
     persiyanov/herdr-reviewr
     zenbu-labs/terminal-browser/herdr-plugin
     bcihanc/herdr-claude-session-title
+    JonasBaeumer/herdr-file-annotator
+    jhochenbaum/herdr-hunk-diff
+    ogulcancelik/herdr-browser
+    plannotator/herdr-plannotator
 )
 
-actions=(
-  bcihanc.claude-session-title.install
-  rjyo.window-title-sync.refresh
+post_update_actions=(
+    bcihanc.claude-session-title.install
+    rjyo.window-title-sync.refresh
 )
+
+# Plugin-specific integrations
+
+configure_file_annotator() {
+    local plugin_root executable
+    plugin_root=$(herdr plugin list --plugin jonasbaeumer.file-annotator --json 2>/dev/null | jq -r '.result.plugins[0].plugin_root // empty')
+    executable=$plugin_root/bin/herdr-annotator
+
+    if [[ ! -x "$executable" ]]; then
+        log_error "Cannot register annotator MCP server: executable not found at $executable"
+        return 1
+    fi
+
+    (( $+commands[claude] )) && _exec "claude mcp add --scope user annotator -- '$executable' mcp"
+    (( $+commands[codex] )) && _exec "codex mcp add annotator -- '$executable' mcp"
+    (( $+commands[gemini] )) && _exec "gemini mcp add --scope user annotator '$executable' mcp"
+}
+
+configure_hunk_keybindings() {
+    _exec "herdr plugin action invoke setup-keys --plugin jhochenbaum.hunkdiff"
+}
+
+configure_plannotator() {
+    _exec "herdr plugin action invoke configure --plugin official.plannotator"
+}
+
+configure_plugin_integrations() {
+    configure_file_annotator
+    configure_hunk_keybindings
+    configure_plannotator
+}
+
+# Core update lifecycle
 
 stopped_server=0
 outdated_plugins=()
@@ -103,6 +142,13 @@ start_server_back() {
     log_error "herdr server did not come back up, start it manually with 'herdr'"
 }
 
+reload_server_config() {
+    server_running || return 0
+    _exec "herdr server reload-config"
+}
+
+# Main
+
 if ! is_outdated "$file"; then
     log_message "herdr plugins checked recently, skipping (based on $file)"
     exit 0
@@ -112,6 +158,8 @@ find_outdated_plugins
 
 if (( ${#outdated_plugins} == 0 )); then
     log_message "All herdr plugins are up to date"
+    configure_plugin_integrations
+    reload_server_config
     touch "$file"
     exit 0
 fi
@@ -126,12 +174,11 @@ done
 
 start_server_back
 
-for action in "${actions[@]}"; do
+for action in "${post_update_actions[@]}"; do
     _exec "herdr plugin action invoke '$action'"
 done
 
-if [[ $stopped_server -eq 0 ]]; then
-    _exec "herdr server reload-config"
-fi
+configure_plugin_integrations
+reload_server_config
 
 touch "$file"

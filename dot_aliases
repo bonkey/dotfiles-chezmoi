@@ -899,15 +899,16 @@ alias .gcm=".gco main"
 
 alias .gcl="git clone --recurse-submodules --progress"
 
-unalias .gpu 2> /dev/null
 # Push the current branch to a named remote and set upstream.
 .gpu() {
   test -z "$1" && echo "$0 <remote_name>" && return
-  git push -u $1 $(git branch --show-current)
+  local remote=$1
+  shift
+  git push -u $remote $(git branch --show-current) "$@"
 }
 
 alias .gpo=".gpu origin"
-
+alias .gpf=".gpo --force-with-lease"
 
 ###############################################################################
 # GIT: COMMIT & PUSH

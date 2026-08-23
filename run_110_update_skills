@@ -11,6 +11,7 @@ skills=(
     superwall/skills@wwdc
     wisdom-in-a-nutshell/agents
     nonameplum/agent-skills@swift-docc
+    FloWritesCode/fwc-swiftui-skills@swiftui-liquid-glass
 
     bonkey/skills
     bonkey/skills-private

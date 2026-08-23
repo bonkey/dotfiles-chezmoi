@@ -90,7 +90,7 @@ o() {
 ###############################################################################
 
 # Flush macOS DNS caches.
-flush_dns() {
+flush-dns() {
   sudo killall -HUP mDNSResponder
   sudo killall mDNSResponderHelper
   sudo dscacheutil -flushcache
@@ -538,7 +538,7 @@ alias .bi=".b install"
 unalias gm 2> /dev/null
 
 # Generate an ImageMagick visual diff for two images.
-img_diff() {
+img-diff() {
   img1=$1
   img2=$2
   dst="diff_${img1}-${img2}.png"
@@ -567,7 +567,7 @@ yt-subs() {
 }
 
 # Print ffmpeg commands that add silent audio tracks to videos.
-ff_silent_sound() {
+ff-silent-sound() {
   for i in "$@" ; do
     dst=${i:r}-nosound.${i:e}
     echo ffmpeg -i "$i" -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -shortest -c:v copy -c:a aac $dst
@@ -575,17 +575,17 @@ ff_silent_sound() {
 }
 
 # Convert videos to m4v format.
-ff_m4v() {
-  ff_format m4v "$@"
+ff-m4v() {
+  ff-format m4v "$@"
 }
 
 # Convert videos to webm format.
-ff_webm() {
-  ff_format webm "$@"
+ff-webm() {
+  ff-format webm "$@"
 }
 
 # Convert videos to a requested format and remove originals on success.
-ff_format() {
+ff-format() {
   local i
   emulate -L zsh
   format=$1
@@ -602,7 +602,7 @@ ff_format() {
 }
 
 # Re-encode videos at a requested frame rate.
-ff_fps() {
+ff-fps() {
   local i
   fps=$1 ; shift
   for i in "$@" ; do
@@ -612,7 +612,7 @@ ff_fps() {
 }
 
 # Trim a video to a start time and duration.
-ff_trim() {
+ff-trim() {
   emulate -L zsh
 
   help="Help: $0 <input_movie> <output_movie> <start> <length>"
@@ -633,7 +633,7 @@ ff_trim() {
 }
 
 # Convert a video to an optimized GIF.
-ff_gif() {
+ff-gif() {
   input=$1
   output="${input:r}.gif"
 
@@ -775,7 +775,7 @@ alias .xrl=".xrs spawn booted log stream --color always --debug --style compact"
 ###############################################################################
 
 # Find an Xcode project, workspace, or Package.swift to open.
-find_xcode_proj() {
+find-xcode-proj() {
   local xcode_proj
 
   if [[ -e "$1" ]]; then
@@ -808,7 +808,7 @@ find_xcode_proj() {
     esac
   done
 
-  xcode_proj=$(find_xcode_proj "$proj_arg")
+  xcode_proj=$(find-xcode-proj "$proj_arg")
   [ $? -ne 0 ] && echo "$xcode_proj" && return
 
   if [[ -f .xcode-version ]]; then
@@ -1177,7 +1177,7 @@ _git-pull-and-back() {
 ###############################################################################
 
 # Determine the repository's default branch.
-_git_default_branch() {
+_git-default-branch() {
   local remote_head default_branch
 
   remote_head=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
@@ -1230,7 +1230,7 @@ _gb-merged-prune() {
     return 1
   fi
 
-  default_branch=$(_git_default_branch)
+  default_branch=$(_git-default-branch)
   if [[ -z "$default_branch" ]]; then
     log_error "Could not determine default branch"
     return 1
@@ -1350,7 +1350,7 @@ jira-ticket-in-branch() {
 }
 
 # Extract a Jira-style ticket key from the current branch name.
-ticket_from_branch() {
+ticket-from-branch() {
   local BRANCH TICKET
   BRANCH=$(git symbolic-ref --short HEAD)
   (echo $BRANCH | grep -q "/") || return
@@ -1388,7 +1388,7 @@ jira-extract-tickets() {
 
 # Publish shell-derived values to iTerm2 user variables.
 # shellcheck disable=SC1035,SC1072,SC1009,SC1073
-iterm2_print_user_vars() {
+iterm2-print-user-vars() {
     {
       iterm2_set_user_var jira_ticket_summary "$(jira-ticket-summary)"
     } &!

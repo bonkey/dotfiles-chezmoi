@@ -52,7 +52,6 @@ stop_apps() {
 
 open_apps() {
     open -a 'Keyboard Maestro Engine'
-    open -a iTerm
 }
 
 notify() {

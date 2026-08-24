@@ -398,7 +398,7 @@ fhi() { f --no-ignore --hidden "$@"; }
 fh() { f --hidden "$@"; }
 
 # Search all ignored paths with fd.
-fi() { f --no-ignore "$@"; }
+fni() { f --no-ignore "$@"; }
 
 # Search regular files with fd.
 ftf() { f -t f "$@"; }

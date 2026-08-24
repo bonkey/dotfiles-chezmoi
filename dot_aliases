@@ -864,7 +864,7 @@ alias .ps=".p search"
 
 alias .fork > /dev/null && unalias .fork
 # Open the current repository in Fork.
-.fk() {
+.f() {
   fork .
 }
 

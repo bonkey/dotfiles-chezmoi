@@ -5,6 +5,9 @@ set +o pipefail
 source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
 file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
 
+# hash: {{ include .chezmoi.sourceFile | sha256sum }} - forces a run when the skill list changes
+source_hash="{{ include .chezmoi.sourceFile | sha256sum }}"
+
 source "$source_dir/exact_private_bin/_common.zsh"
 
 skills_to_remove=(
@@ -37,17 +40,17 @@ skills=(
 )
 
 for skill in "${skills_to_remove[@]}"; do
-    exec_unless_recently_modified $file "npx -y skills remove $skill --global --yes"
+    exec_unless_recently_modified $file "npx -y skills remove $skill --global --yes" $source_hash
 done
 
 for skill in "${skills[@]}"; do
     if [[ "$skill" == *@* ]]; then
         package="${skill%@*}"
         skill_name="${skill##*@}"
-        exec_unless_recently_modified $file "npx -y skills add $package --skill $skill_name --global --yes"
+        exec_unless_recently_modified $file "npx -y skills add $package --skill $skill_name --global --yes" $source_hash
     else
-        exec_unless_recently_modified $file "npx -y skills add $skill --global --yes"
+        exec_unless_recently_modified $file "npx -y skills add $skill --global --yes" $source_hash
     fi
 done
 
-exec_unless_recently_modified $file "npx -y skills update --global"
+exec_unless_recently_modified $file "npx -y skills update --global" $source_hash

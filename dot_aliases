@@ -140,11 +140,7 @@ alias .cha=".ch add"
 
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.
 .chu() {
-  if [[ -d /Applications/Ghostty.app || -d "$HOME/Applications/Ghostty.app" ]]; then
-    open -na Ghostty --args -e ~/bin/update_chezmoi.sh
-  else
-    open ~/bin/update_chezmoi.terminal
-  fi
+    ~/bin/update_chezmoi.sh "$@"
 }
 
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}

@@ -2,6 +2,7 @@
   // ================================
   // CONTEXT SERVERS
   // ================================
+  "seed_search_query_from_cursor": "selection",
   "language_models": {
     "opencode": {
       "show_free_models": false,

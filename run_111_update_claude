@@ -19,6 +19,7 @@ if unless_recently_modified $file ; then
     )
 
     plugins=(
+        claude-code-setup@claude-plugins-official
         motioneyes@motioneyes
         preview-build@preview-build
         axiom@axiom-marketplace

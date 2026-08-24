@@ -89,6 +89,9 @@ o() {
 # SYSTEM & MACOS
 ###############################################################################
 
+alias .ss=sudo
+alias .si="sudo -i"
+
 # Flush macOS DNS caches.
 flush-dns() {
   sudo killall -HUP mDNSResponder

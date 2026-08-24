@@ -384,27 +384,33 @@ alias proxyman-cli=/Applications/Setapp/Proxyman.app/Contents/MacOS/proxyman-cli
 ###############################################################################
 
 # Search paths with fd while following symlinks.
-.f() { fd --follow "$@"; }
+f() { fd --follow "$@"; }
 # Search paths with fd and print null-separated results.
-.f0() { .f "$@" --print0; }
+f0() { f "$@" --print0; }
 
 # Search files with fd.
-.ff() { .f --type f "$@"; }
+ff() { f --type f "$@"; }
 
 # Search all hidden and ignored paths with fd.
-.fda() { .f --no-ignore --hidden "$@"; }
+fhi() { f --no-ignore --hidden "$@"; }
+
+# Search all ignored paths with fd.
+fh() { f --hidden "$@"; }
+
+# Search all ignored paths with fd.
+fi() { f --no-ignore "$@"; }
 
 # Search regular files with fd.
-.fdf() { .f -t f "$@"; }
+ftf() { f -t f "$@"; }
 # Search directories with fd.
-.fdd() { .f -t d "$@"; }
+ftd() { f -t d "$@"; }
 
-alias .rs="rg -t ios"
-alias .rw="rg -w"
-alias .rh="rg -u"
-alias .ra="rg -uu --hidden"
-alias .rl="rg -l"
-alias .rsw=".rs -w"
+alias rgs="rg -t ios"
+alias rgw="rg -w"
+alias rgh="rg -u"
+alias rga="rg -uu --hidden"
+alias rgl="rg -l"
+alias rgsw=".rs -w"
 
 # Search Swift-like type declarations by name.
 .rst() {

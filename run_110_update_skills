@@ -7,26 +7,38 @@ file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
 
 source "$source_dir/exact_private_bin/_common.zsh"
 
+skills_to_remove=(
+    cass
+)
+
 skills=(
+    # ios
     superwall/skills@wwdc
     wisdom-in-a-nutshell/agents
     nonameplum/agent-skills@swift-docc
     FloWritesCode/fwc-swiftui-skills@swiftui-liquid-glass
 
+    # personal
     bonkey/skills
     bonkey/skills-private
 
+    # control
     herdrdev/herdr@herdr
+
+    rebelytics/one-skill-to-rule-them-all@task-observer
 
     mattpocock/skills@grill-me
     mattpocock/skills@wayfinder
+    dietrichgebert/ponytail
 
     humanlayer/skills@show-me
 
     ayghri/i-have-adhd
-    dietrichgebert/ponytail
-    dicklesworthstone/agent_flywheel_clawdbot_skills_and_integrations@cass
 )
+
+for skill in "${skills_to_remove[@]}"; do
+    exec_unless_recently_modified $file "npx -y skills remove $skill --global --yes"
+done
 
 for skill in "${skills[@]}"; do
     if [[ "$skill" == *@* ]]; then

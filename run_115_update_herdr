@@ -21,7 +21,6 @@ plugins=(
     bcihanc/herdr-claude-session-title
     JonasBaeumer/herdr-file-annotator
     jhochenbaum/herdr-hunk-diff
-    ogulcancelik/herdr-browser
     plannotator/herdr-plannotator
 )
 

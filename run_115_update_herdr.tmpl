@@ -5,6 +5,9 @@ set +o pipefail
 source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
 file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
 
+# hash: {{ include .chezmoi.sourceFile | sha256sum }} - forces a run when the plugin list changes
+source_hash="{{ include .chezmoi.sourceFile | sha256sum }}"
+
 source "$source_dir/exact_private_bin/_common.zsh"
 
 # Plugin catalog
@@ -41,9 +44,21 @@ configure_file_annotator() {
         return 1
     fi
 
-    (( $+commands[claude] )) && _exec "claude mcp add --scope user annotator -- '$executable' mcp"
-    (( $+commands[codex] )) && _exec "codex mcp add annotator -- '$executable' mcp"
-    (( $+commands[gemini] )) && _exec "gemini mcp add --scope user annotator '$executable' mcp"
+    # add fails when the server is already registered, so drop any existing
+    # entry first - this also refreshes the path when a plugin update moves
+    # the hashed install dir
+    if (( $+commands[claude] )); then
+        claude mcp remove --scope user annotator &> /dev/null
+        _exec "claude mcp add --scope user annotator -- '$executable' mcp"
+    fi
+    if (( $+commands[codex] )); then
+        codex mcp remove annotator &> /dev/null
+        _exec "codex mcp add annotator -- '$executable' mcp"
+    fi
+    if (( $+commands[gemini] )); then
+        gemini mcp remove --scope user annotator &> /dev/null
+        _exec "gemini mcp add --scope user annotator '$executable' mcp"
+    fi
 }
 
 configure_hunk_keybindings() {
@@ -148,7 +163,7 @@ reload_server_config() {
 
 # Main
 
-if ! is_outdated "$file"; then
+if ! is_outdated "$file" "$source_hash"; then
     log_message "herdr plugins checked recently, skipping (based on $file)"
     exit 0
 fi
@@ -160,6 +175,7 @@ if (( ${#outdated_plugins} == 0 )); then
     configure_plugin_integrations
     reload_server_config
     touch "$file"
+    save_hash "$file" "$source_hash"
     exit 0
 fi
 
@@ -181,3 +197,4 @@ configure_plugin_integrations
 reload_server_config
 
 touch "$file"
+save_hash "$file" "$source_hash"

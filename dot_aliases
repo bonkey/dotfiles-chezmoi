@@ -412,12 +412,12 @@ alias rgl="rg -l"
 alias rgsw=".rs -w"
 
 # Search Swift-like type declarations by name.
-.rst() {
-    .rs " *(protocol|actor|struct|typealias|class) +$1"
+rgst() {
+    rgs " *(protocol|actor|struct|typealias|class) +$1"
 }
 
 # Count total ripgrep matches across files.
-.rc() {
+rgc() {
     rg -c "$@" | awk -F: 'BEGIN { c = 0 } { c += $2 } END { print "found:", c }'
 }
 

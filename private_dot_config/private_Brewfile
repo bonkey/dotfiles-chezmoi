@@ -233,6 +233,8 @@ cask 'macvim-app' # Text editor
 cask 'notepadexe' # Lightweight code editor
 cask 'spokenly' # Dictation and transcription app with AI-powered editing
 cask 'zed@preview' # Multiplayer code editor
+brew 'nvim'
+brew 'neovide'
 
 # Audio, video, and streaming
 cask 'elgato-control-center' # Control your Elgato key lights

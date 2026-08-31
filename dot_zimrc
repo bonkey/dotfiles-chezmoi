@@ -13,6 +13,6 @@ zmodule Giammarco-Ferranti/deja
 zmodule zsh-users/zsh-completions
 zmodule completion
 
-zmodule zsh-users/zsh-autosuggestions
+# zmodule zsh-users/zsh-autosuggestions
 
 zmodule kylesnowschwartz/zsh-ai-cmd

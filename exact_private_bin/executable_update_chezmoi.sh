@@ -61,15 +61,10 @@ notify() {
     fi
 }
 
-close_session() {
-    printf 'close session? [Y/n] '
-    local answer
-    read -k1 answer
+wait_for_key() {
+    printf 'press any key to finish '
+    read -k1 -s
     print
-    [[ $answer == [nN] ]] && return
-    if [[ -n ${HERDR_WORKSPACE_ID:-} ]]; then
-        herdr workspace close "$HERDR_WORKSPACE_ID" &>/dev/null
-    fi
 }
 
 handle_result() {
@@ -81,7 +76,7 @@ handle_result() {
         notify 'successful'
         figlet 'chezmoi updated!'
     fi
-    close_session
+    wait_for_key
 }
 
 run_update() {

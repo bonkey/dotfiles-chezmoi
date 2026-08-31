@@ -183,7 +183,7 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
     .che $HOME/.config/opencode.json
 }
 
-.cek() {
+.cesk() {
     $EDITOR "$(chezmoi source-path)/run_110_update_skills.tmpl"
 }
 

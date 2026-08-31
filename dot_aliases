@@ -192,7 +192,7 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 }
 
 .cesk() {
-    ${=EDITOR} "$(chezmoi source-path)/run_110_update_skills.tmpl"
+    ${=EDITOR} "/Users/bonkey/.local/share/chezmoi/run_110_update_skills.tmpl"
     echo -n "Run ~/bin/update_chezmoi.sh? [Y/n]: "
     read -k 1 response
     echo
@@ -200,7 +200,7 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 }
 
 .ceh() {
-    ${=EDITOR} "$(chezmoi source-path)/run_115_update_herdr.tmpl"
+    ${=EDITOR} "/Users/bonkey/.local/share/chezmoi/run_115_update_herdr.tmpl"
     echo -n "Run ~/bin/update_chezmoi.sh? [Y/n]: "
     read -k 1 response
     echo

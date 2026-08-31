@@ -13,24 +13,39 @@ source "$source_dir/exact_private_bin/_common.zsh"
 # Plugin catalog
 
 plugins=(
+    # session desk: search and resume past Claude/Codex/Cursor sessions into a herdr tab
     nicosuave/memex
+    # mirrors the focused workspace/tab/agent into the outer terminal window title
     rjyo/herdr-window-title-sync
+    # picks files/URLs visible on screen (ctrl+shift+a / ctrl+e) and opens them beside the pane
     iurysza/termscope
+    # wt-backed worktree switch/create/remove pickers with lifecycle hooks (prefix+shift+g/c/d)
     devashish2203/herdr-worktrunk
+    # Projects (workspace templates), Quick Actions fuzzy launcher, worktree auto-layouts
     cloudmanic/herdr-plus
+    # read-only git-aware file/diff/markdown viewer in a split (prefix+f)
     smarzban/herdr-file-viewer
+    # persistent diff-review pane beside the chat; line comments sent to the agent input (cmd+r)
     persiyanov/herdr-reviewr
+    # real Chromium rendered inside a pane via kitty graphics
     zenbu-labs/terminal-browser/herdr-plugin
+    # Claude Code hook reporting the session title (/rename or auto summary) as pane metadata
     bcihanc/herdr-claude-session-title
+    # agent-summoned blocking diff review via the "annotator" MCP server registered below
     JonasBaeumer/herdr-file-annotator
+    # hunk-based diff review with inline comments round-tripped to the agent (prefix+shift+h/s)
     jhochenbaum/herdr-hunk-diff
-    plannotator/herdr-plannotator
+    # annotate terminal text, review markdown docs and the agent's replies (plannotator-tui)
+    plannotator/herdr-annotate
+    # daemon + sidebar cards with live agent state, model, context %, and cost
     winoooops/herdr-agent-watcher
 )
 
 post_update_actions=(
     bcihanc.claude-session-title.install
     rjyo.window-title-sync.refresh
+    # installing into a running herdr does not start the watcher daemon - (re)start it
+    herdr-agent-watcher.restart-daemon
 )
 
 # Plugin-specific integrations
@@ -66,14 +81,9 @@ configure_hunk_keybindings() {
     _exec "herdr plugin action invoke setup-keys --plugin jhochenbaum.hunkdiff"
 }
 
-configure_plannotator() {
-    _exec "herdr plugin action invoke configure --plugin official.plannotator"
-}
-
 configure_plugin_integrations() {
     configure_file_annotator
     configure_hunk_keybindings
-    configure_plannotator
 }
 
 # Core update lifecycle

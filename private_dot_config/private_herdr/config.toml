@@ -86,7 +86,7 @@ description = "Worktree: remove"
 # settings = "prefix+s"
 # detach = "prefix+q"
 # reload_config = "prefix+shift+r"
-# open_notification_target = "prefix+o"
+open_notification_target = "prefix+u"  # prefix+o now opens annotate doc review
 # workspace_picker = "prefix+w"
 # goto = "prefix+g"
 # new_workspace = "prefix+shift+n"
@@ -152,3 +152,41 @@ type = "plugin_action"
 command = "jhochenbaum.hunkdiff.review:staged"
 description = "hunk: review staged changes"
 # END jhochenbaum.hunkdiff
+
+# Agent Watcher sidebar (live agent state, cost, context %)
+[[keys.command]]
+key = "prefix+d"
+type = "plugin_action"
+command = "herdr-agent-watcher.open-sidebar"
+description = "Agent Watcher sidebar"
+
+# herdr-annotate (plannotator) - terminal annotations + doc/agent-reply review
+[[keys.command]]
+key = "prefix+a"
+type = "plugin_action"
+command = "annotate.capture"
+description = "annotate selected text"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "plugin_action"
+command = "annotate.copy-context"
+description = "copy annotations as context"
+
+[[keys.command]]
+key = "prefix+m"
+type = "plugin_action"
+command = "annotate.manage"
+description = "manage annotations"
+
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "annotate.open"
+description = "review documents in this folder"
+
+[[keys.command]]
+key = "prefix+shift+o"
+type = "plugin_action"
+command = "annotate.last"
+description = "review the agent last reply"

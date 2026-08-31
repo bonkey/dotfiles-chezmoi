@@ -61,6 +61,10 @@ alias l=e ll=el la=ea
 alias lt="l -s modified -r"
 alias llt="ll -m -s modified -r"
 
+pwdc() {
+    pwd | pbcopy
+}
+
 .shr() {
   sudo shutdown -r now
 }

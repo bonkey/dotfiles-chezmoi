@@ -12,14 +12,34 @@ source "$source_dir/exact_private_bin/_common.zsh"
 
 skills_to_remove=(
     cass
+    i-have-adhd
+
+    # covered by the axiom plugin (see run_111); from wondelai/skills
+    ios-hig-design
+
+    # renamed upstream in bonkey/skills (captains-log, plugin-forge)
+    decision-log
+    claude-plugin-creator
+)
+
+# whole repos to purge: every skill they installed is looked up in the
+# skill->source map (~/.agents/.skill-lock.json) and removed; the skills
+# CLI itself has no source-level remove
+sources_to_remove=(
+    # WIN org internal toolkit; its ios skills are covered by axiom
+    wisdom-in-a-nutshell/agents
+
+    # covered by axiom
+    twostraws/swiftui-agent-skill
+    twostraws/swift-concurrency-agent-skill
+    twostraws/swift-testing-agent-skill
+
+    subsy/ralph-tui
 )
 
 skills=(
     # ios
-    superwall/skills@wwdc
-    wisdom-in-a-nutshell/agents
     nonameplum/agent-skills@swift-docc
-    FloWritesCode/fwc-swiftui-skills@swiftui-liquid-glass
 
     # personal
     bonkey/skills
@@ -34,15 +54,12 @@ skills=(
     mattpocock/skills@wayfinder
 
     dietrichgebert/ponytail
-    ayghri/i-have-adhd
     wondelai/skills
+
+    elevenlabs/skills
 
     humanlayer/skills@show-me
 )
-
-for skill in "${skills_to_remove[@]}"; do
-    exec_unless_recently_modified $file "npx -y skills remove $skill --global --yes" $source_hash
-done
 
 for skill in "${skills[@]}"; do
     if [[ "$skill" == *@* ]]; then
@@ -52,6 +69,15 @@ for skill in "${skills[@]}"; do
     else
         exec_unless_recently_modified $file "npx -y skills add $skill --global --yes" $source_hash
     fi
+done
+
+# removals run after adds so bundle installs can't resurrect removed skills
+for skill in "${skills_to_remove[@]}"; do
+    exec_unless_recently_modified $file "npx -y skills remove $skill --global --yes" $source_hash
+done
+
+for src in "${sources_to_remove[@]}"; do
+    exec_unless_recently_modified $file "jq -r --arg src $src '.skills | to_entries[] | select(.value.source == \$src) | .key' ~/.agents/.skill-lock.json | xargs -I{} npx -y skills remove {} --global --yes" $source_hash
 done
 
 exec_unless_recently_modified $file "npx -y skills update --global" $source_hash

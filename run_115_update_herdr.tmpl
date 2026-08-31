@@ -81,9 +81,17 @@ configure_hunk_keybindings() {
     _exec "herdr plugin action invoke setup-keys --plugin jhochenbaum.hunkdiff"
 }
 
+# Lets agents request plannotator-tui reviews themselves. Installs once into
+# ~/.agents/skills (symlinked into Claude Code and friends); skipped when present.
+install_plannotator_tui_skill() {
+    [[ -d ~/.agents/skills/plannotator-tui ]] && return 0
+    _exec "npx -y skills add plannotator/herdr-annotate --skill plannotator-tui -g < /dev/null"
+}
+
 configure_plugin_integrations() {
     configure_file_annotator
     configure_hunk_keybindings
+    install_plannotator_tui_skill
 }
 
 # Core update lifecycle

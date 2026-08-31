@@ -177,6 +177,8 @@ brew 'ruby-completion' # Bash completion for Ruby
 brew 'yarn-completion' # Bash completion for Yarn
 brew 'zsh-completion' # Additional completion definitions for zsh
 
+brew 'giammarco-ferranti/deja'
+
 # Security and credentials
 brew 'gpg' # GNU Pretty Good Privacy (PGP) package
 brew 'gpg2' # GNU Pretty Good Privacy (PGP) package

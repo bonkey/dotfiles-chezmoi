@@ -184,11 +184,11 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 }
 
 .cek() {
-    $EDITOR "$(chezmoi source-dir)/run_110_update_skills.tmpl)"
+    $EDITOR "$(chezmoi source-path)/run_110_update_skills.tmpl"
 }
 
 .ceh() {
-    $EDITOR "$(chezmoi source-dir/run_115_update_herdr.tmpl)"
+    $EDITOR "$(chezmoi source-path)/run_115_update_herdr.tmpl"
 }
 
 

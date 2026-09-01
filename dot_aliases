@@ -182,6 +182,10 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
     if [[ -n ${ITERM_SESSION_ID:-} ]] ; then
         exit
     else
+        echo -n "Close this shell? [Y/n]: "
+        read -k 1 response
+        echo
+        [[ "$response" =~ ^[Nn]$ ]] || exit
         echo "Don't forget to reload config"
     fi
 }

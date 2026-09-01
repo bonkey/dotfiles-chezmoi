@@ -1037,7 +1037,7 @@ alias .gcan=".gc -a -np"
 
     while true; do
         commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
-        printf "Generated commit message: \033[42m\033[97m %s \033[0m\n" "$commit_msg"
+        log_message "Generated commit message: $commit_msg"
 
         if [[ "$dry_run" = true ]]; then
             break
@@ -1073,6 +1073,18 @@ alias .gcan=".gc -a -np"
         log_message "Skipping push"
     fi
 }
+
+_dot_gc() {
+  _arguments \
+    '(-a --add)'{-a,--add}'[stage all changes before generating the commit]' \
+    '(-np --no-push-pull)'{-np,--no-push-pull}'[skip pull and push]' \
+    '(-d --dry-run)'{-d,--dry-run}'[generate a commit message without committing]' \
+    '(-c --check)'{-c,--check}'[confirm, abort, or regenerate the commit message]' \
+    '(-m --model)'{-m,--model}'[use a specific LLM model]:model' \
+    '*:git diff argument:_files'
+}
+
+(( $+functions[compdef] )) && compdef _dot_gc .gc .gca .gcn .gcan
 
 # Push an empty commit to retrigger CI checks.
 .g-empty-commit() {

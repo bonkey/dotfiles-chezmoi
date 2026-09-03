@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+set +o pipefail
+
+# date: {{ now.Format "2006-01-02" }} - changes daily, so this runs daily as well as on every edit
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
+
+if command -v atuin &> /dev/null; then
+  _exec "atuin update || true"
+else
+  curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh -s -- --non-interactive
+fi

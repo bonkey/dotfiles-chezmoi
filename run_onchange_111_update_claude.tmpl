@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+
+# date: {{ now.Format "2006-01-02" }} - changes daily, so this runs daily as well as on every edit
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
+
+set +o pipefail
+
+claude update
+
+marketplaces=(
+    CharlesWiltgen/Axiom
+    max-sixty/worktrunk
+    ayghri/i-have-adhd
+)
+
+plugins=(
+    axiom@axiom-marketplace
+    worktrunk@worktrunk
+    i-have-adhd@i-have-adhd
+)
+
+for marketplace in "${marketplaces[@]}"; do
+    claude plugin marketplace add "$marketplace"
+done
+
+for plugin in "${plugins[@]}"; do
+    claude plugin install "$plugin"
+done

@@ -132,27 +132,6 @@ open_notification_target = "prefix+u"  # prefix+o now opens annotate doc review
 # navigate_pane_down = "j"
 # navigate_pane_up = "k"
 # navigate_pane_right = "l"     # right arrow always focuses the pane to the right
-
-# BEGIN jhochenbaum.hunkdiff — managed by `setup-keys`; edit via the plugin, not by hand
-[[keys.command]]
-key = "prefix+shift+h"
-type = "plugin_action"
-command = "jhochenbaum.hunkdiff.review"
-description = "hunk: review changes"
-
-[[keys.command]]
-key = "prefix+shift+s"
-type = "plugin_action"
-command = "jhochenbaum.hunkdiff.send-review"
-description = "hunk: send review to agent"
-
-[[keys.command]]
-key = "prefix+shift+a"
-type = "plugin_action"
-command = "jhochenbaum.hunkdiff.review:staged"
-description = "hunk: review staged changes"
-# END jhochenbaum.hunkdiff
-
 # Agent Watcher sidebar (live agent state, cost, context %)
 [[keys.command]]
 key = "prefix+d"
@@ -190,3 +169,23 @@ key = "prefix+shift+o"
 type = "plugin_action"
 command = "annotate.last"
 description = "review the agent last reply"
+
+# BEGIN jhochenbaum.hunkdiff — managed by `setup-keys`; edit via the plugin, not by hand
+[[keys.command]]
+key = "prefix+shift+h"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.review"
+description = "hunk: review changes"
+
+[[keys.command]]
+key = "prefix+shift+s"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.send-review"
+description = "hunk: send review to agent"
+
+[[keys.command]]
+key = "prefix+shift+a"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.review:staged"
+description = "hunk: review staged changes"
+# END jhochenbaum.hunkdiff

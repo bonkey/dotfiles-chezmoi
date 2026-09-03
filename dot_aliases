@@ -915,8 +915,9 @@ alias .ggl="git grep --files-with-matches"
 alias .ggL="git grep --files-without-match"
 
 alias .gd="git diff"
-alias .gdn=".gd --name-only --diff-filter=AMCR"
+alias .gdn=".gd --name-only"
 alias .gdnm=".gdn main"
+alias .gdne=".gdn --diff-filter=AMCR"
 
 alias .gds=".gd --stat"
 
@@ -1146,12 +1147,12 @@ _dot_gc_variants() {
 # GIT: HISTORY
 ###############################################################################
 
-alias .g1="git lg --no-merges"
+alias .g1="git l1 --no-merges"
 alias .g10=".g1 -10"
-alias .g1="git lg --no-merges"
+
+alias .g1t="git l1t --no-merges"
 
 alias .glc="git shortlog --summary --numbered --no-merges"
-
 
 ###############################################################################
 # GIT: STASH & RESET

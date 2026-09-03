@@ -7,6 +7,7 @@
     "ios-dev": ["sosumi", "mobile-mcp", "simctl", "xcstrings-crud", "xcode-instruments", "xcode-mcpbridge"],
 
     "code-search": ["morph"],
+    "agentsview": ["agentsview"],
 
     "docs": ["deepwiki"],
     "research": ["exa", "tavily", "firecrawl"]
@@ -81,6 +82,10 @@
     "exa": {
       "type": "remote",
       "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
+    },
+    "agentsview": {
+      "type": "local",
+      "command": ["agentsview", "mcp"]
     }
   }
 }

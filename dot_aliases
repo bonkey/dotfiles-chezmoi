@@ -906,10 +906,11 @@ alias .fork > /dev/null && unalias .fork
 # GIT: STATUS & DIFF
 ###############################################################################
 
-alias .gs="git status -s"
+alias .gst="git status -s"
 
 alias .gd="git diff"
 alias .gdn=".gd --names-only"
+
 alias .gds=".gd --stat"
 
 alias .gdt="git difftool"
@@ -1088,6 +1089,26 @@ _dot_gc() {
 }
 
 (( $+functions[compdef] )) && compdef _dot_gc .gc .gca .gcn .gcan
+
+# Describe the .gc* commands when completing a command name starting with .gc;
+# every other command position falls through to zsh's default (_autocd).
+_dot_gc_variants() {
+  if [[ $PREFIX == .gc* ]]; then
+    local -a variants=(
+      '.gc:pull, commit staged with LLM message, push'
+      '.gca:pull, stage all, commit, push'
+      '.gcn:commit staged only, no pull/push'
+      '.gcan:stage all, commit, no pull/push'
+      '.gco:git checkout'
+      '.gcm:git checkout main'
+      '.gcl:git clone with submodules'
+    )
+    _describe -t commands 'gc command' variants && return
+  fi
+  _autocd "$@"
+}
+
+(( $+functions[compdef] )) && compdef _dot_gc_variants -command-
 
 # Push an empty commit to retrigger CI checks.
 .g-empty-commit() {

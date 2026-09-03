@@ -2,7 +2,6 @@ zmodule environment
 zmodule input
 zmodule utility
 
-zmodule git
 zmodule fzf
 
 zmodule ellie/atuin

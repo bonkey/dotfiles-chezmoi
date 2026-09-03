@@ -933,7 +933,7 @@ alias .gcm=".gco main"
 alias .gcl="git clone --recurse-submodules --progress"
 
 # Push the current branch to a named remote and set upstream.
-.gpu() {
+.gp() {
   test -z "$1" && echo "$0 <remote_name>" && return
   local remote=$1
   shift

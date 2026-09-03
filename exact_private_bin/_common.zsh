@@ -82,47 +82,6 @@ round() {
     printf "%.${1}f" $2
 }
 
-is_outdated() {
-    local max_mtime min_mtime file is_modified
-
-    file=$1
-    max_mtime=-12h
-    min_mtime=\+5m
-
-    test -n "$(find $file -mtime ${max_mtime} -mtime ${min_mtime})"
-    is_modified=$?
-
-    if [[ $is_modified -eq 0 ]]; then
-        return 1
-    else
-        return 0
-    fi
-}
-
-unless_recently_modified() {
-    local file
-    file=$1
-
-    if is_outdated "$file" ; then
-        touch "$file"
-        return 0
-    else
-        return 1
-    fi
-}
-
-exec_unless_recently_modified() {
-    local file cmd
-    file=$1
-    cmd=$2
-
-    if unless_recently_modified "$file" ; then
-        _exec $cmd
-    else
-        print -P "$(msg_prefix)Command '$cmd' recently run, skipping (based on $file)."
-    fi
-}
-
 realpath() { for f in "$@"; do echo ${f}(:A); done }
 
 eval_managers() {

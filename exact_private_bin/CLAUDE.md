@@ -5,7 +5,7 @@ A personal `~/bin` directory of standalone CLI utilities, shell scripts, and aut
 ### Shell Scripts (zsh)
 
 - All shell scripts use zsh and source `_common.zsh` for shared utilities
-- Common functions available: `_exec` (logged execution with timing), `log_message`/`log_error`, `eval_managers` (brew/mise/xcenv), `exec_unless_recently_modified` (skip-if-recent pattern)
+- Common functions available: `_exec` (logged execution with timing), `log_message`/`log_error`, `eval_managers` (brew/mise/xcenv)
 - Scripts are executable with shebangs — run directly from `~/bin` (should be in PATH)
 
 ### Python Scripts

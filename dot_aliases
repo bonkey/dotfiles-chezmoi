@@ -271,6 +271,7 @@ alias alg='alias | grep'
 # EDITORS
 ###############################################################################
 
+alias v=nvim
 alias g=gvim
 # Open files in vimer using a tab.
 gvim() {

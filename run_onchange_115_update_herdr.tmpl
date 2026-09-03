@@ -2,13 +2,8 @@
 
 set +o pipefail
 
-source_dir=${CHEZMOI_SOURCE_DIR:-${0:A:h}}
-file=$source_dir/${CHEZMOI_SOURCE_FILE:-${0:t}}
-
-# hash: {{ include .chezmoi.sourceFile | sha256sum }} - forces a run when the plugin list changes
-source_hash="{{ include .chezmoi.sourceFile | sha256sum }}"
-
-source "$source_dir/exact_private_bin/_common.zsh"
+# date: {{ now.Format "2006-01-02" }} - changes daily, so this runs daily as well as on every edit
+source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 # Plugin catalog
 
@@ -137,7 +132,7 @@ stop_server_with_consent() {
     server_running || return 0
 
     if [[ "${HERDR_ENV-}" == "1" || -n "${HERDR_PANE_ID-}" ]]; then
-        log_message "Running inside a herdr pane - stopping the server would kill this terminal. Run 'chezmoi apply' outside herdr to update plugins, skipping"
+        log_message "Running inside a herdr pane - stopping the server would kill this terminal. Outside herdr, run: chezmoi state delete --bucket=entryState --key=$HOME/115_update_herdr && chezmoi apply"
         exit 0
     fi
 
@@ -182,19 +177,12 @@ reload_server_config() {
 
 # Main
 
-if ! is_outdated "$file" "$source_hash"; then
-    log_message "herdr plugins checked recently, skipping (based on $file)"
-    exit 0
-fi
-
 find_outdated_plugins
 
 if (( ${#outdated_plugins} == 0 )); then
     log_message "All herdr plugins are up to date"
     configure_plugin_integrations
     reload_server_config
-    touch "$file"
-    save_hash "$file" "$source_hash"
     exit 0
 fi
 
@@ -214,6 +202,3 @@ done
 
 configure_plugin_integrations
 reload_server_config
-
-touch "$file"
-save_hash "$file" "$source_hash"

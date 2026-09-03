@@ -906,11 +906,10 @@ alias .fork > /dev/null && unalias .fork
 # GIT: STATUS & DIFF
 ###############################################################################
 
-alias .gst="git status -s"
+alias .gs="git status -s"
 
 alias .gd="git diff"
 alias .gdn=".gd --names-only"
-
 alias .gds=".gd --stat"
 
 alias .gdt="git difftool"

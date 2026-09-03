@@ -123,20 +123,9 @@ cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$RE
 ; insteadOf = https://github.com/
 
 [alias]
-c = commit -am
-a = add
-co = checkout
-wc = whatchanged -p --abbrev-commit --pretty=medium
 amend = commit -a --amend
-out = log origin..HEAD
-lo = log --oneline --graph
 l1 = log --pretty=format:'%C(160)%h%Creset %s %C(150)(%cr) %C(bold 117)<%an>%Creset%C(auto)%d%Creset' --abbrev-commit --date=relative
-lg = l1 --graph
-dcn = diff --name-only --diff-filter=AMCR
-dcnm = dcn main
-fg = forgit
-ru = remote get-url
-ruo = ru origin
+l1t = log --pretty=format:'%C(160)%h%Creset %<(60,trunc)%s %C(150)(%cr) %C(bold 117)<%an>%Creset%C(auto)%d%Creset' --abbrev-commit --date=relative
 
 append = town append
 compress = town compress

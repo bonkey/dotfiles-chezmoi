@@ -903,13 +903,20 @@ alias .fork > /dev/null && unalias .fork
 
 
 ###############################################################################
-# GIT: STATUS & DIFF
+# GIT: STATUS, DIFF & SEARCH
 ###############################################################################
 
-alias .gst="git status -s"
+alias .gst="git status --short --branch"
+
+alias .gls="git ls-files"
+
+alias .gg="git grep"
+alias .ggl="git grep --files-with-matches"
+alias .ggL="git grep --files-without-match"
 
 alias .gd="git diff"
-alias .gdn=".gd --names-only"
+alias .gdn=".gd --name-only --diff-filter=AMCR"
+alias .gdnm=".gdn main"
 
 alias .gds=".gd --stat"
 
@@ -927,8 +934,14 @@ alias .gdt="git difftool"
 # GIT: BRANCH & CHECKOUT
 ###############################################################################
 
-alias .gco="git checkout"
-alias .gcm=".gco main"
+alias .gb="git branch"
+alias .gbc="git checkout -b"
+
+alias .gbl="git branch --list -vv"
+alias .gbL="git branch --list -vv --all"
+alias .gbu="git branch --unset-upstream"
+
+alias .gcm="git checkout main"
 
 alias .gcl="git clone --recurse-submodules --progress"
 
@@ -1099,7 +1112,6 @@ _dot_gc_variants() {
       '.gca:pull, stage all, commit, push'
       '.gcn:commit staged only, no pull/push'
       '.gcan:stage all, commit, no pull/push'
-      '.gco:git checkout'
       '.gcm:git checkout main'
       '.gcl:git clone with submodules'
     )
@@ -1131,13 +1143,36 @@ _dot_gc_variants() {
 
 
 ###############################################################################
-# GIT: SYNC & MERGE
+# GIT: HISTORY
 ###############################################################################
-
-alias .gl="git pull --autostash"
 
 alias .g1="git lg --no-merges"
 alias .g10=".g1 -10"
+alias .g1="git lg --no-merges"
+
+alias .glc="git shortlog --summary --numbered --no-merges"
+
+
+###############################################################################
+# GIT: STASH & RESET
+###############################################################################
+
+alias .gs="git stash"
+alias .gsa="git stash apply"
+alias .gsl="git stash list"
+alias .gsp="git stash pop"
+
+alias .gwR="git reset --hard"
+alias .gwr="git reset --soft"
+
+
+###############################################################################
+# GIT: REMOTE, SYNC & MERGE
+###############################################################################
+
+alias .gR="git remote"
+
+alias .gl="git pull --autostash"
 
 # Temporarily update another branch, run a command, then restore the current branch.
 _git-pull-and-back() {
@@ -1238,8 +1273,12 @@ _git-pull-and-back() {
 
 
 ###############################################################################
-# GIT: MAINTENANCE
+# GIT: TAGS & MAINTENANCE
 ###############################################################################
+
+alias .gt="git tag"
+alias .gtl="git tag --list --sort=-committerdate"
+alias .gtx="git tag --delete"
 
 # Determine the repository's default branch.
 _git-default-branch() {

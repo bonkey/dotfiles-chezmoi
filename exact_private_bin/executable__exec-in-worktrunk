@@ -49,8 +49,10 @@ trap '(( saved_nounset ))  || set +u
 #             and opening is idempotent per checkout path — re-running on the
 #             same branch (with or without --resume) returns to the existing
 #             workspace instead of spawning a twin. Inside a herdr pane the
-#             flag is a no-op like --cmux inside cmux: the current workspace is
-#             renamed after the branch and the tool runs in place.
+#             flag is redundant rather than a no-op: a workspace belongs to one
+#             checkout, so switching into a worktree always goes through
+#             `herdr worktree open`, and only staying on the branch already
+#             checked out here runs in the current workspace.
 #             --cmux / --tmux / --herdr are mutually exclusive.
 #   .         branch off the current branch
 #   <name>    branch off <name>
@@ -557,22 +559,32 @@ tmux_session="${session_name//[.:]/-}"
 
 # --- where does the tool run? ----------------------------------------------
 # --tmux wins everywhere (run in tmux regardless of terminal). Otherwise a
-# multiplexer we are already inside claims the run: in a herdr pane or a cmux
-# surface, the current workspace is renamed after the branch and the tool runs
-# in place — spawning a new one would be a pointless twin, so --herdr/--cmux
-# are no-ops there. herdr is checked first: its client runs inside a terminal,
-# so a herdr pane hosted in a cmux surface carries both IDs and herdr is the
-# innermost. A --cmux or --herdr from any other terminal creates a fresh
-# workspace in that multiplexer; with no flag we just run in the current
-# terminal.
+# multiplexer we are already inside claims the run: in a cmux surface the
+# current workspace is renamed after the branch and the tool runs in place —
+# spawning a new one would be a pointless twin, so --cmux is a no-op there.
+# herdr is checked first: its client runs inside a terminal, so a herdr pane
+# hosted in a cmux surface carries both IDs and herdr is the innermost. A
+# --cmux or --herdr from any other terminal creates a fresh workspace in that
+# multiplexer; with no flag we just run in the current terminal.
+#
+# herdr binds a workspace to one checkout: the branch and repo it shows, and
+# the checkout `herdr worktree remove` can reclaim, both come from `herdr
+# worktree open`, and a workspace cannot be re-pointed afterwards. Switching
+# into a worktree therefore has to go through that call, or the workspace keeps
+# reporting the checkout it was opened on. Opening is idempotent per path, so
+# this still lands in the existing workspace rather than a twin — including the
+# one we are in, which launch_in_herdr reports back so the tool runs here.
+# Staying put is the one case that leaves the checkout unchanged, and the only
+# one where renaming the current workspace is enough.
 in_cmux=0;  [[ -n "${CMUX_WORKSPACE_ID:-}" ]]  && in_cmux=1
 in_herdr=0; [[ -n "${HERDR_WORKSPACE_ID:-}" ]] && in_herdr=1
-if   (( use_tmux  )); then launch_target=tmux
-elif (( in_herdr  )); then launch_target=herdr-inplace
-elif (( in_cmux   )); then launch_target=cmux-inplace
-elif (( use_cmux  )); then launch_target=cmux-create
-elif (( use_herdr )); then launch_target=herdr-create
-else                       launch_target=plain
+if   (( use_tmux ));         then launch_target=tmux
+elif (( in_herdr && stay )); then launch_target=herdr-inplace
+elif (( in_herdr ));         then launch_target=herdr-create
+elif (( in_cmux ));          then launch_target=cmux-inplace
+elif (( use_cmux ));         then launch_target=cmux-create
+elif (( use_herdr ));        then launch_target=herdr-create
+else                              launch_target=plain
 fi
 
 # --- iTerm2 tab title -------------------------------------------------------
@@ -735,6 +747,15 @@ launch_in_herdr() {
         return 1
     fi
     if [[ "$(jq -r '.result.already_open' <<<"$out")" == true ]]; then
+        # The checkout can already be open as the workspace we are calling
+        # from — resuming a branch from inside its own worktree. There is no
+        # second pane to type the CLI into then, so report that back with
+        # status 2 and let the caller run it here.
+        local open_ws
+        open_ws="$(jq -r '.result.workspace.workspace_id // empty' <<<"$out")"
+        if [[ -n "$open_ws" && "$open_ws" == "${HERDR_WORKSPACE_ID:-}" ]]; then
+            return 2
+        fi
         print -r -- "herdr workspace: ${session_name} (existing)"
         return 0
     fi
@@ -761,9 +782,10 @@ launch_in_herdr() {
 }
 
 # --- herdr in-place ----------------------------------------------------------
-# Already inside a herdr pane ($HERDR_WORKSPACE_ID set), spawning a workspace
-# from within would just make a twin — retitle the one we're in and run the
-# tool in place, exactly like the cmux analogue above.
+# For the runs that stay in the checkout this workspace is already registered
+# for: staying on the branch checked out here, and reopening a worktree that is
+# open as this very workspace. The registration is already right, so the
+# workspace only needs the branch's name.
 rename_herdr_workspace() {
     herdr workspace rename "$HERDR_WORKSPACE_ID" "$session_name" >/dev/null 2>&1
     print -r -- "herdr workspace: ${session_name} (in place)"
@@ -954,8 +976,9 @@ case "$launch_target" in
         launch_in_cmux
         ;;
     herdr-inplace)
-        # Already inside herdr: retitle this workspace after the branch and run
-        # the tool right here — no new workspace, --herdr (if given) is a no-op.
+        # Staying on the branch checked out here, so this workspace already
+        # carries the right checkout — retitle it after the branch and run the
+        # tool right here, no new workspace.
         rename_herdr_workspace
         if (( ${#cli[@]} )); then
             _exec "${cli[@]}" "${cli_args[@]}"
@@ -965,8 +988,17 @@ case "$launch_target" in
     herdr-create)
         # herdr owns the workspace's pane and cwd, so the iTerm2 title/cwd
         # machinery doesn't apply — register the worktree and return while the
-        # CLI runs on in the server.
+        # CLI runs on in the server. Status 2 says the checkout was already
+        # open as the workspace we are in, which has no second pane to run in,
+        # so the tool runs here and this worktree is ours to clean up.
         launch_in_herdr
+        if (( $? == 2 )); then
+            rename_herdr_workspace
+            if (( ${#cli[@]} )); then
+                _exec "${cli[@]}" "${cli_args[@]}"
+                offer_worktree_cleanup "$worktree_path"
+            fi
+        fi
         ;;
     plain)
         report_iterm_cwd

@@ -2,7 +2,7 @@
 
 set +o pipefail
 
-# date: {{ now.Format "2006-01-02" }} - changes daily, so this runs daily as well as on every edit
+# hour: {{ now.Format "2006-01-02T15" }} - changes hourly, so this runs hourly as well as on every edit
 source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 # Plugin catalog

@@ -139,6 +139,7 @@ alias .cha=".ch add"
 
 .chs() {
   .ch re-add "$@" || return
+  git -C "$(chezmoi source-path)" pull || return
   .ch update --exclude scripts
 }
 

@@ -23,14 +23,17 @@ rows = [
 
 [ui.sidebar.spaces]
 rows = [
-  ["state_icon", "workspace", { token = "$pr_count", fg = "#00828c", bold = true }],
+  ["state_icon", "workspace"],
   ["branch", "git_status"],
   [{ token = "$pr_1_bad_title", fg = "#cc455e" }, { token = "$pr_1_bad_status", fg = "#cc455e", bold = true }, { token = "$pr_1_wait_title", fg = "#917100" }, { token = "$pr_1_wait_status", fg = "#917100", bold = true }, { token = "$pr_1_good_title", fg = "#438349" }, { token = "$pr_1_good_status", fg = "#438349", bold = true }, { token = "$pr_1_open_title", fg = "#767676" }, { token = "$pr_1_open_status", fg = "#767676" }],
-  [{ token = "$pr_2_bad_title", fg = "#cc455e" }, { token = "$pr_2_bad_status", fg = "#cc455e", bold = true }, { token = "$pr_2_wait_title", fg = "#917100" }, { token = "$pr_2_wait_status", fg = "#917100", bold = true }, { token = "$pr_2_good_title", fg = "#438349" }, { token = "$pr_2_good_status", fg = "#438349", bold = true }, { token = "$pr_2_open_title", fg = "#767676" }, { token = "$pr_2_open_status", fg = "#767676" }],
-  [{ token = "$pr_3_bad_title", fg = "#cc455e" }, { token = "$pr_3_bad_status", fg = "#cc455e", bold = true }, { token = "$pr_3_wait_title", fg = "#917100" }, { token = "$pr_3_wait_status", fg = "#917100", bold = true }, { token = "$pr_3_good_title", fg = "#438349" }, { token = "$pr_3_good_status", fg = "#438349", bold = true }, { token = "$pr_3_open_title", fg = "#767676" }, { token = "$pr_3_open_status", fg = "#767676" }],
-  [{ token = "$pr_4_bad_title", fg = "#cc455e" }, { token = "$pr_4_bad_status", fg = "#cc455e", bold = true }, { token = "$pr_4_wait_title", fg = "#917100" }, { token = "$pr_4_wait_status", fg = "#917100", bold = true }, { token = "$pr_4_good_title", fg = "#438349" }, { token = "$pr_4_good_status", fg = "#438349", bold = true }, { token = "$pr_4_open_title", fg = "#767676" }, { token = "$pr_4_open_status", fg = "#767676" }],
-  [{ token = "$pr_5_bad_title", fg = "#cc455e" }, { token = "$pr_5_bad_status", fg = "#cc455e", bold = true }, { token = "$pr_5_wait_title", fg = "#917100" }, { token = "$pr_5_wait_status", fg = "#917100", bold = true }, { token = "$pr_5_good_title", fg = "#438349" }, { token = "$pr_5_good_status", fg = "#438349", bold = true }, { token = "$pr_5_open_title", fg = "#767676" }, { token = "$pr_5_open_status", fg = "#767676" }],
 ]
+
+[[keys.command]]
+key = "prefix+shift+u"
+type = "plugin_action"
+command = "mergr.open-pr"
+description = "open PR for current Space"
+
 
 [[keys.command]]
 key = "ctrl+shift+a"

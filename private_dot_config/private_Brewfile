@@ -31,6 +31,7 @@ cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
 cask 'vibe-island'
 cask 'jazzyalex/agent-sessions/agent-sessions'
 cask 'agentsview'
+brew 'wilbeibi/tap/catchup'
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely

@@ -38,6 +38,10 @@ plugins=(
     jsmenzies/mergr
     # shows the focused agent pane's branch GitHub PR status in the sidebar
     wyattjoh/herdr-plugin-gh-pr
+    # searchable workspace picker combining active workspaces and zoxide directory history (prefix+t)
+    fullerzz/herdr-plugin-sesh
+    # searchable guide to built-in and custom Herdr keybindings (prefix+space)
+    ramarivera/herdr-pretty-which
 )
 
 post_update_actions=(
@@ -80,6 +84,28 @@ configure_hunk_keybindings() {
     _exec "herdr plugin action invoke setup-keys --plugin jhochenbaum.hunkdiff"
 }
 
+# Pretty Which 0.1.5 uses a relative pane executable that Herdr cannot resolve.
+# Reapply after updates; leave any different upstream launcher untouched.
+configure_pretty_which() {
+    local manifest
+    manifest=$(herdr plugin list --plugin ramarivera.pretty-which --json 2>/dev/null | jq -r '.result.plugins[0].manifest_path // empty')
+    [[ -f "$manifest" ]] || return 0
+
+    python3 - "$manifest" <<'PY'
+from pathlib import Path
+import sys
+
+manifest = Path(sys.argv[1])
+original = manifest.read_text()
+fixed = original.replace(
+    'command = ["target/release/herdr-pretty-which"]',
+    '''command = ["sh", "-c", 'exec "$HERDR_PLUGIN_ROOT/target/release/herdr-pretty-which"']''',
+)
+if fixed != original:
+    manifest.write_text(fixed)
+PY
+}
+
 # Lets agents request plannotator-tui reviews themselves. Installs once into
 # ~/.agents/skills (symlinked into Claude Code and friends); skipped when present.
 install_plannotator_tui_skill() {
@@ -88,6 +114,7 @@ install_plannotator_tui_skill() {
 }
 
 configure_plugin_integrations() {
+    configure_pretty_which
     configure_file_annotator
     configure_hunk_keybindings
     install_plannotator_tui_skill

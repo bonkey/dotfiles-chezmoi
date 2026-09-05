@@ -191,6 +191,19 @@ type = "plugin_action"
 command = "annotate.last"
 description = "review the agent last reply"
 
+# Workspace navigation and shortcut discovery
+[[keys.command]]
+key = "prefix+t"
+type = "plugin_action"
+command = "fullerzz.sesh.open-picker"
+description = "find workspace or zoxide directory"
+
+[[keys.command]]
+key = "prefix+space"
+type = "plugin_action"
+command = "ramarivera.pretty-which.open"
+description = "search Herdr shortcuts"
+
 # BEGIN jhochenbaum.hunkdiff — managed by `setup-keys`; edit via the plugin, not by hand
 [[keys.command]]
 key = "prefix+shift+h"

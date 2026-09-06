@@ -75,6 +75,15 @@ type = "plugin_action"
 command = "worktrunk.remove"
 description = "Worktree: remove"
 
+# Worktree from a purpose / ticket URL, named by Apple's on-device model, scaffolded in the
+# background (local plugin: local-plugins/wt-purpose). prefix+shift+n is free: new_workspace
+# moved to ctrl+alt+w below.
+[[keys.command]]
+key = "prefix+shift+n"
+type = "plugin_action"
+command = "bonkey.wt-purpose.create"
+description = "Worktree from purpose / ticket URL (on-device slug)"
+
 [keys]
 # Prefix key to enter prefix mode (default: "ctrl+b")
 # Examples: "ctrl+b", "f12", "esc", "-"
@@ -120,7 +129,7 @@ previous_workspace = "ctrl+alt+shift+up"
 new_tab = "ctrl+alt+t"
 new_workspace = "ctrl+alt+w"
 # switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
-# close_tab = "prefix+shift+x"
+close_tab = "ctrl+shift+x"
 # rename_pane = "prefix+shift+p"
 # edit_scrollback = "prefix+e"
 # focus_pane_left = "prefix+h"

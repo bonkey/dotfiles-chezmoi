@@ -125,12 +125,6 @@ notify() {
     fi
 }
 
-wait_for_key() {
-    printf 'press any key to finish '
-    read -k1 -s
-    print
-}
-
 handle_result() {
     local exit_code=$1
     if [ $exit_code -ne 0 ]; then
@@ -140,7 +134,6 @@ handle_result() {
         notify 'successful'
         figlet 'chezmoi updated!'
     fi
-    wait_for_key
 }
 
 run_update() {

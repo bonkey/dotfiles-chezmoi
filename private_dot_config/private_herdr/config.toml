@@ -11,6 +11,7 @@ show_agent_labels_on_pane_borders = true
 sidebar_max_width = 60
 # right_click_passthrough_modifier = "option"
 agent_panel_sort = "spaces"
+prompt_new_tab_name = false
 
 [ui.toast]
 delivery = "system"
@@ -104,7 +105,14 @@ open_notification_target = "prefix+U"  # prefix+o now opens annotate doc review
 # previous_tab = "prefix+p"
 # next_tab = "prefix+n"
 # switch_tab = "prefix+1..9"
-previous_tab = "prefix+ctrl+shift+p"
+previous_tab = "ctrl+alt+left"
+next_tab = "ctrl+alt+right"
+next_agent = "ctrl+alt+down"
+previous_agent = "ctrl+alt+up"
+next_workspace = "ctrl+alt+shift+down"
+previous_workspace = "ctrl+alt+shift+up"
+new_tab = "ctrl+alt+t"
+new_workspace = "ctrl+alt+w"
 # switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
 # close_tab = "prefix+shift+x"
 # rename_pane = "prefix+shift+p"
@@ -202,3 +210,10 @@ key = "prefix+P"
 type = "plugin_action"
 command = "mergr.open-pr"
 description = "open PR for current Space"
+
+# Duplicate the focused pane's running command into a new tab (local plugin: local-plugins/dup-tab)
+[[keys.command]]
+key = "prefix+d"
+type = "plugin_action"
+command = "bonkey.dup-tab.duplicate"
+description = "duplicate running command in new tab"

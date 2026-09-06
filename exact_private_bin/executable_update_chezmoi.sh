@@ -18,6 +18,33 @@ ensure_herdr_server() {
     return 1
 }
 
+# Prints the ID of the workspace labelled WORKSPACE_LABEL, if one exists.
+find_workspace() {
+    herdr workspace list | jq -r --arg label "$WORKSPACE_LABEL" \
+        '[.result.workspaces[] | select(.label == $label) | .workspace_id] | first // empty'
+}
+
+# A pane is busy when something other than its own shell owns the foreground.
+# An unreadable pane counts as busy so the update never types into it blindly.
+pane_is_busy() {
+    local info
+    info=$(herdr pane process-info --pane "$1" 2>/dev/null) || return 0
+    print -r -- "$info" \
+        | jq -e '.result.process_info | .foreground_process_group_id != .shell_pid' &>/dev/null
+}
+
+# Prints the first pane of the workspace, but only when every pane is idle.
+idle_pane_in_workspace() {
+    local -a panes
+    panes=(${(f)"$(herdr pane list --workspace "$1" | jq -r '.result.panes[].pane_id')"})
+    (( $#panes )) || return 1
+    local pane
+    for pane in $panes; do
+        pane_is_busy "$pane" && return 1
+    done
+    print -r -- "$panes[1]"
+}
+
 launch_in_herdr() {
     if ! command -v herdr &>/dev/null; then
         print -u2 'herdr is not installed.'
@@ -30,11 +57,21 @@ launch_in_herdr() {
     fi
 
     local workspace pane
-    workspace=$(herdr workspace create --label "$WORKSPACE_LABEL" --cwd "$HOME" --focus) || return 1
-    pane=$(print -r -- "$workspace" | jq -r '.result.root_pane.pane_id')
+    workspace=$(find_workspace)
+    if [[ -n $workspace ]]; then
+        if ! pane=$(idle_pane_in_workspace "$workspace"); then
+            print "Herdr workspace '$WORKSPACE_LABEL' ($workspace) is busy. Skipping."
+            return 0
+        fi
+        herdr workspace focus "$workspace" &>/dev/null
+    else
+        local created
+        created=$(herdr workspace create --label "$WORKSPACE_LABEL" --cwd "$HOME" --focus) || return 1
+        pane=$(print -r -- "$created" | jq -r '.result.root_pane.pane_id')
+        # A fresh pane shell needs a moment before it reads typed input.
+        sleep 1
+    fi
 
-    # The pane shell needs a moment before it reads typed input.
-    sleep 1
     herdr pane run "$pane" "$WORKER_ENV=1 ${(q-)SCRIPT_PATH}" || return 1
 
     # The worker prints BANNER first, which confirms the pane received the command.

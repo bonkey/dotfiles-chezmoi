@@ -62,6 +62,7 @@ from pathlib import Path
 
 ITEM_ID = "lk3cxlvcjdbti27r7ivrcj646y"
 ACCOUNT = "bonkey.1password.com"
+VAULT = "nt6ulfcinsq7lcobqjhb2cdx5i"  # Private
 
 FILES_TO_SCRUB = [
     Path.home() / ".codex" / "config.toml",
@@ -106,7 +107,7 @@ def check_dependencies():
 def get_1password_fields(verbose):
     log(f"Fetching 1Password item: {ITEM_ID}", verbose)
     item_json = run_command(
-        f'op item get "{ITEM_ID}" --account {ACCOUNT} --format=json', verbose=verbose
+        f'op item get "{ITEM_ID}" --account {ACCOUNT} --vault {VAULT} --format=json', verbose=verbose
     )
     if not item_json:
         print(

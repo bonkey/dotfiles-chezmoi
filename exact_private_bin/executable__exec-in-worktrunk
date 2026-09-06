@@ -763,17 +763,20 @@ launch_in_herdr() {
 
     # The CLI is typed into the new workspace's shell (worktree open has no
     # --command). `pane run` joins its argv with spaces into one shell line,
-    # so the words are (q)-quoted into a single argument, and PATH is
-    # re-exported for the same reason cmux gets --env: a server started
-    # outside this shell predates the version managers eval'd above. In shell
+    # so the words are (q)-quoted into a single argument. Unlike the cmux and
+    # tmux paths, PATH is NOT re-exported here: the line is typed through the
+    # pane's pty, which drops everything past MAX_INPUT (1024 bytes on macOS)
+    # while the shell is still starting, so a ~5 KB `env PATH=...` prefix
+    # arrived cut off with no newline and sat half-typed at the prompt
+    # instead of running. The pane's shell is a fresh interactive zsh whose
+    # .zshenv runs eval_managers, so the CLI resolves without it. In shell
     # mode (empty cli) there is nothing to run and the workspace opens a
     # plain shell in the worktree.
     local -a launch=("${cli[@]}" "${cli_args[@]}")
     if (( ${#launch[@]} )); then
         local pane runout
         pane="$(jq -r '.result.root_pane.pane_id // empty' <<<"$out")"
-        local -a runwords=(env "PATH=${PATH}" "${launch[@]}")
-        runout="$(herdr pane run "$pane" "${(j: :)${(@q)runwords}}" 2>&1)"
+        runout="$(herdr pane run "$pane" "${(j: :)${(@q)launch}}" 2>&1)"
         jq -e '.error' <<<"$runout" >/dev/null 2>&1 \
             && print -ru2 -- "▲ could not start the CLI in ${pane}: $(jq -r '.error.message' <<<"$runout")"
     fi

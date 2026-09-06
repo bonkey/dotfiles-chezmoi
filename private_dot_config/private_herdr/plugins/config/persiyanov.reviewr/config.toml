@@ -1,0 +1,4 @@
+# Match herdr's rose-pine-dawn (light) theme; reviewr defaults to catppuccin (dark).
+theme = "rose-pine-dawn"
+
+auto_open = false

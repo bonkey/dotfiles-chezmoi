@@ -29,39 +29,16 @@ rows = [
 ]
 
 [[keys.command]]
-key = "prefix+shift+u"
-type = "plugin_action"
-command = "mergr.open-pr"
-description = "open PR for current Space"
-
-
-[[keys.command]]
 key = "ctrl+shift+a"
 type = "plugin_action"
 command = "termscope.open"
 description = "visible-screen file picker"
 
 [[keys.command]]
-key = "ctrl+e"
+key = "prefix+u"
 type = "plugin_action"
 command = "termscope.open-links"
-description = "visible-screen link picker"
-
-# ----------------------------------
-
-[[keys.command]]
-key = "prefix+f"
-type = "plugin_action"
-command = "herdr-file-viewer.open-file-viewer"
-description = "open file viewer in split"
-
-[[keys.command]]
-key = "prefix+shift+f"
-type = "plugin_action"
-command = "herdr-file-viewer.open-file-viewer-tab"
-description = "open file viewer in tab"
-
-# ----------------------------------
+description = "visible-screen links in Terminal Browser"
 
 [[keys.command]]
 key = "cmd+r"
@@ -107,7 +84,7 @@ description = "Worktree: remove"
 # settings = "prefix+s"
 # detach = "prefix+q"
 # reload_config = "prefix+shift+r"
-open_notification_target = "prefix+u"  # prefix+o now opens annotate doc review
+open_notification_target = "prefix+U"  # prefix+o now opens annotate doc review
 # workspace_picker = "prefix+w"
 # goto = "prefix+g"
 # new_workspace = "prefix+shift+n"
@@ -127,6 +104,7 @@ open_notification_target = "prefix+u"  # prefix+o now opens annotate doc review
 # previous_tab = "prefix+p"
 # next_tab = "prefix+n"
 # switch_tab = "prefix+1..9"
+previous_tab = "prefix+ctrl+shift+p"
 # switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
 # close_tab = "prefix+shift+x"
 # rename_pane = "prefix+shift+p"
@@ -153,13 +131,6 @@ open_notification_target = "prefix+u"  # prefix+o now opens annotate doc review
 # navigate_pane_down = "j"
 # navigate_pane_up = "k"
 # navigate_pane_right = "l"     # right arrow always focuses the pane to the right
-# Agent Watcher sidebar (live agent state, cost, context %)
-[[keys.command]]
-key = "prefix+d"
-type = "plugin_action"
-command = "herdr-agent-watcher.open-sidebar"
-description = "Agent Watcher sidebar"
-
 # herdr-annotate (plannotator) - terminal annotations + doc/agent-reply review
 [[keys.command]]
 key = "prefix+a"
@@ -168,13 +139,13 @@ command = "annotate.capture"
 description = "annotate selected text"
 
 [[keys.command]]
-key = "prefix+shift+m"
+key = "prefix+Y"
 type = "plugin_action"
 command = "annotate.copy-context"
 description = "copy annotations as context"
 
 [[keys.command]]
-key = "prefix+m"
+key = "ctrl+shift+m"
 type = "plugin_action"
 command = "annotate.manage"
 description = "manage annotations"
@@ -200,26 +171,34 @@ description = "find workspace or zoxide directory"
 
 [[keys.command]]
 key = "prefix+space"
-type = "plugin_action"
-command = "ramarivera.pretty-which.open"
+type = "popup"
+command = "root=$(herdr plugin list --plugin ramarivera.pretty-which --json | jq -r '.result.plugins[0].plugin_root'); exec \"$root/target/release/herdr-pretty-which\""
+width = "95%"
+height = "85%"
 description = "search Herdr shortcuts"
 
-# BEGIN jhochenbaum.hunkdiff — managed by `setup-keys`; edit via the plugin, not by hand
+[[keys.command]]
+key = "prefix+backtick"
+type = "plugin_action"
+command = "third774.last-workspace.toggle"
+description = "last workspace"
+
 [[keys.command]]
 key = "prefix+shift+h"
 type = "plugin_action"
-command = "jhochenbaum.hunkdiff.review"
-description = "hunk: review changes"
+command = "wilbeibi.catchup.handoff"
+description = "handoff session to a new agent"
 
+# Session history
 [[keys.command]]
-key = "prefix+shift+s"
+key = "prefix+M"
 type = "plugin_action"
-command = "jhochenbaum.hunkdiff.send-review"
-description = "hunk: send review to agent"
+command = "nicosuave.memex.desk"
+description = "search past agent sessions"
 
+# Mergr's Space PR view
 [[keys.command]]
-key = "prefix+shift+a"
+key = "prefix+P"
 type = "plugin_action"
-command = "jhochenbaum.hunkdiff.review:staged"
-description = "hunk: review staged changes"
-# END jhochenbaum.hunkdiff
+command = "mergr.open-pr"
+description = "open PR for current Space"

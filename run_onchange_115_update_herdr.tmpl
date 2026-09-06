@@ -8,32 +8,18 @@ source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 # Plugin catalog
 
 plugins=(
-    # session desk: search and resume past Claude/Codex/Cursor sessions into a herdr tab
+    # session desk: search and resume past Claude/Codex/Cursor sessions into a Herdr tab
     nicosuave/memex
-    # mirrors the focused workspace/tab/agent into the outer terminal window title
-    rjyo/herdr-window-title-sync
     # picks files/URLs visible on screen (ctrl+shift+a / ctrl+e) and opens them beside the pane
     iurysza/termscope
     # wt-backed worktree switch/create/remove pickers with lifecycle hooks (prefix+shift+g/c/d)
     devashish2203/herdr-worktrunk
-    # Projects (workspace templates), Quick Actions fuzzy launcher, worktree auto-layouts
-    cloudmanic/herdr-plus
-    # read-only git-aware file/diff/markdown viewer in a split (prefix+f)
-    smarzban/herdr-file-viewer
     # persistent diff-review pane beside the chat; line comments sent to the agent input (cmd+r)
     persiyanov/herdr-reviewr
     # real Chromium rendered inside a pane via kitty graphics
     zenbu-labs/terminal-browser/herdr-plugin
-    # Claude Code hook reporting the session title (/rename or auto summary) as pane metadata
-    bcihanc/herdr-claude-session-title
-    # agent-summoned blocking diff review via the "annotator" MCP server registered below
-    JonasBaeumer/herdr-file-annotator
-    # hunk-based diff review with inline comments round-tripped to the agent (prefix+shift+h/s)
-    jhochenbaum/herdr-hunk-diff
     # annotate terminal text, review markdown docs and the agent's replies (plannotator-tui)
     plannotator/herdr-annotate
-    # daemon + sidebar cards with live agent state, model, context %, and cost
-    winoooops/herdr-agent-watcher
     # GitHub pull request status for Herdr Space sidebar rows.
     jsmenzies/mergr
     # shows the focused agent pane's branch GitHub PR status in the sidebar
@@ -42,69 +28,15 @@ plugins=(
     fullerzz/herdr-plugin-sesh
     # searchable guide to built-in and custom Herdr keybindings (prefix+space)
     ramarivera/herdr-pretty-which
+    # summarize/fork/hand the focused pane's session to another agent, or ask one to attack it (catchup binary)
+    wilbeibi/herdr-catchup
+    # jump back to the previously focused workspace (prefix+backtick)
+    third774/herdr-last-workspace
 )
 
-post_update_actions=(
-    bcihanc.claude-session-title.install
-    rjyo.window-title-sync.refresh
-    # installing into a running herdr does not start the watcher daemon - (re)start it
-    herdr-agent-watcher.restart-daemon
-)
+post_update_actions=()
 
 # Plugin-specific integrations
-
-configure_file_annotator() {
-    local plugin_root executable
-    plugin_root=$(herdr plugin list --plugin jonasbaeumer.file-annotator --json 2>/dev/null | jq -r '.result.plugins[0].plugin_root // empty')
-    executable=$plugin_root/bin/herdr-annotator
-
-    if [[ ! -x "$executable" ]]; then
-        log_error "Cannot register annotator MCP server: executable not found at $executable"
-        return 1
-    fi
-
-    # add fails when the server is already registered, so drop any existing
-    # entry first - this also refreshes the path when a plugin update moves
-    # the hashed install dir
-    if (( $+commands[claude] )); then
-        claude mcp remove --scope user annotator &> /dev/null
-        _exec "claude mcp add --scope user annotator -- '$executable' mcp"
-    fi
-    if (( $+commands[codex] )); then
-        codex mcp remove annotator &> /dev/null
-        _exec "codex mcp add annotator -- '$executable' mcp"
-    fi
-    if (( $+commands[gemini] )); then
-        gemini mcp remove --scope user annotator &> /dev/null
-        _exec "gemini mcp add --scope user annotator '$executable' mcp"
-    fi
-}
-
-configure_hunk_keybindings() {
-    _exec "herdr plugin action invoke setup-keys --plugin jhochenbaum.hunkdiff"
-}
-
-# Pretty Which 0.1.5 uses a relative pane executable that Herdr cannot resolve.
-# Reapply after updates; leave any different upstream launcher untouched.
-configure_pretty_which() {
-    local manifest
-    manifest=$(herdr plugin list --plugin ramarivera.pretty-which --json 2>/dev/null | jq -r '.result.plugins[0].manifest_path // empty')
-    [[ -f "$manifest" ]] || return 0
-
-    python3 - "$manifest" <<'PY'
-from pathlib import Path
-import sys
-
-manifest = Path(sys.argv[1])
-original = manifest.read_text()
-fixed = original.replace(
-    'command = ["target/release/herdr-pretty-which"]',
-    '''command = ["sh", "-c", 'exec "$HERDR_PLUGIN_ROOT/target/release/herdr-pretty-which"']''',
-)
-if fixed != original:
-    manifest.write_text(fixed)
-PY
-}
 
 # Lets agents request plannotator-tui reviews themselves. Installs once into
 # ~/.agents/skills (symlinked into Claude Code and friends); skipped when present.
@@ -114,9 +46,6 @@ install_plannotator_tui_skill() {
 }
 
 configure_plugin_integrations() {
-    configure_pretty_which
-    configure_file_annotator
-    configure_hunk_keybindings
     install_plannotator_tui_skill
 }
 

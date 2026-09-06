@@ -34,15 +34,29 @@ pane_is_busy() {
 }
 
 # Prints the first pane of the workspace, but only when every pane is idle.
+# A second argument names a pane to leave out of the check.
 idle_pane_in_workspace() {
+    local workspace=$1 ignored=${2:-}
     local -a panes
-    panes=(${(f)"$(herdr pane list --workspace "$1" | jq -r '.result.panes[].pane_id')"})
+    panes=(${(f)"$(herdr pane list --workspace "$workspace" | jq -r '.result.panes[].pane_id')"})
     (( $#panes )) || return 1
     local pane
     for pane in $panes; do
+        [[ $pane == $ignored ]] && continue
         pane_is_busy "$pane" && return 1
     done
     print -r -- "$panes[1]"
+}
+
+# Prints "<workspace_id> <pane_id>" of the pane this script runs in, if any.
+caller_location() {
+    [[ ${HERDR_ENV:-} == 1 ]] || return 1
+    herdr pane current --current 2>/dev/null \
+        | jq -er '.result.pane | "\(.workspace_id) \(.pane_id)"'
+}
+
+skip_busy() {
+    print "Herdr workspace '$WORKSPACE_LABEL' ($1) is busy. Skipping."
 }
 
 launch_in_herdr() {
@@ -56,11 +70,24 @@ launch_in_herdr() {
         return 1
     fi
 
-    local workspace pane
+    local workspace pane caller_workspace caller_pane
     workspace=$(find_workspace)
+    read -r caller_workspace caller_pane <<< "$(caller_location)"
+
+    if [[ -n $workspace && $workspace == $caller_workspace ]]; then
+        # This shell already sits in the workspace and is busy with this very
+        # script, so leave it out of the check and run the update right here.
+        if ! idle_pane_in_workspace "$workspace" "$caller_pane" >/dev/null; then
+            skip_busy "$workspace"
+            return 0
+        fi
+        run_update
+        return
+    fi
+
     if [[ -n $workspace ]]; then
         if ! pane=$(idle_pane_in_workspace "$workspace"); then
-            print "Herdr workspace '$WORKSPACE_LABEL' ($workspace) is busy. Skipping."
+            skip_busy "$workspace"
             return 0
         fi
         herdr workspace focus "$workspace" &>/dev/null

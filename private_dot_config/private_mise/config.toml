@@ -66,7 +66,6 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:ccusage" = "latest"                  # AI token/cost/usage tracking
 "npm:codeburn" = "latest"
 "pipx:bonkey/mobile-broom" = "latest"
-swiftlint = "0.65.1"
 
 [settings]
 experimental = true

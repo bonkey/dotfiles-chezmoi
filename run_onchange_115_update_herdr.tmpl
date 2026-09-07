@@ -40,6 +40,13 @@ plugins=(
     bonkey/herdr-wt-purpose
 )
 
+# ramarivera/herdr-pretty-which needs cargo to build. Dropping it from the
+# catalog keeps a missing Rust toolchain from aborting the whole script.
+if (( ! $+commands[cargo] )); then
+    plugins=(${plugins:#ramarivera/herdr-pretty-which})
+    log_message "cargo not found - skipping ramarivera/herdr-pretty-which, it needs a Rust toolchain"
+fi
+
 post_update_actions=()
 
 # Plugin-specific integrations

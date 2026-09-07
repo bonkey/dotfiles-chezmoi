@@ -591,6 +591,50 @@ def _oldest_pending_date(state: dict) -> str | None:
     return min(dates).replace("-", "/")
 
 
+def _pending_is_stale(msg_id: str, archive_label_id: str | None) -> bool | None:
+    """Return True if the message is already Stored or no longer exists,
+    False if it still needs a retry, None if Gmail could not be queried."""
+    cmd = [
+        "gws",
+        "gmail",
+        "users",
+        "messages",
+        "get",
+        "--params",
+        json.dumps({"userId": "me", "id": msg_id, "format": "minimal"}),
+        "--format",
+        "json",
+    ]
+    result = _run(cmd, timeout=60)
+    if result.returncode != 0:
+        try:
+            code = json.loads(result.stdout).get("error", {}).get("code")
+        except (ValueError, AttributeError):
+            code = None
+        if code == 404 or "not found" in result.stderr.lower():
+            return True
+        return None
+    labels = json.loads(result.stdout).get("labelIds", [])
+    return bool(archive_label_id) and archive_label_id in labels
+
+
+def _prune_stale_pending(state: dict, archive_label_id: str | None) -> int:
+    """Drop pending retries whose message is already Stored or deleted.
+
+    The triage query excludes Stored messages, so the processing loop can
+    never reach such entries to clear them — left alone they would roll
+    `since` back forever. Returns the number of entries dropped.
+    """
+    pending = state.get("pending") or []
+    if not pending:
+        return 0
+    keep = [
+        p for p in pending if _pending_is_stale(p["msg_id"], archive_label_id) is not True
+    ]
+    state["pending"] = keep
+    return len(pending) - len(keep)
+
+
 def save_state(state: dict, state_file: Path):
     """Save state to file."""
     state["last_run"] = datetime.now().strftime("%Y-%m-%d")
@@ -1457,6 +1501,22 @@ def run_gmail(args, base_dir: Path, state_file: Path, state: dict) -> dict:
             "%Y/%m/%d"
         )
 
+    # Verify gws is authenticated before doing any work
+    gws_check_auth()
+
+    # Get or create archive label
+    archive_label_id = gws_find_label_id(ARCHIVE_LABEL_NAME)
+    if not archive_label_id:
+        print(f"WARNING: Could not find/create label '{ARCHIVE_LABEL_NAME}'")
+    elif VERBOSE:
+        print(f"Archive label: {ARCHIVE_LABEL_NAME} (id: {archive_label_id})")
+
+    # Drop pending retries that are already Stored (or deleted) — the
+    # triage query excludes them, so they could never be cleared below.
+    dropped = _prune_stale_pending(state, archive_label_id)
+    if dropped:
+        print(f"Dropped {dropped} stale pending retry(s) already Stored")
+
     # Roll `since` back if there are older pending retries — ensures the
     # Gmail triage query still covers any message left over from last run.
     pending_since = _oldest_pending_date(state)
@@ -1467,16 +1527,6 @@ def run_gmail(args, base_dir: Path, state_file: Path, state: dict) -> dict:
         since = pending_since
 
     print(f"Since: {since}")
-
-    # Verify gws is authenticated before doing any work
-    gws_check_auth()
-
-    # Get or create archive label
-    archive_label_id = gws_find_label_id(ARCHIVE_LABEL_NAME)
-    if not archive_label_id:
-        print(f"WARNING: Could not find/create label '{ARCHIVE_LABEL_NAME}'")
-    elif VERBOSE:
-        print(f"Archive label: {ARCHIVE_LABEL_NAME} (id: {archive_label_id})")
 
     # Filter rules if --rule specified
     all_rules = _get_rules()

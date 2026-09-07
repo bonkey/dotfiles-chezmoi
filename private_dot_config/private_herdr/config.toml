@@ -19,14 +19,13 @@ delivery = "herdr"
 [ui.sidebar.agents]
 rows = [
   ["state_icon", { token = "$stack" }, "workspace", "tab"],
-  ["agent", { token = "$pr", bold = true }],
+  ["agent", { token = "$pr_emoji" }],
 ]
 
 [ui.sidebar.spaces]
 rows = [
   ["state_icon", { token = "$stack" }, "workspace"],
-  ["branch", "git_status"],
-  [{ token = "$pr_1_bad_title", fg = "#cc455e" }, { token = "$pr_1_bad_status", fg = "#cc455e", bold = true }, { token = "$pr_1_wait_title", fg = "#917100" }, { token = "$pr_1_wait_status", fg = "#917100", bold = true }, { token = "$pr_1_good_title", fg = "#438349" }, { token = "$pr_1_good_status", fg = "#438349", bold = true }, { token = "$pr_1_open_title", fg = "#767676" }, { token = "$pr_1_open_status", fg = "#767676" }],
+  ["branch", "git_status", { token = "$pr_emoji" }],
 ]
 
 [[keys.command]]
@@ -219,12 +218,12 @@ type = "plugin_action"
 command = "nicosuave.memex.desk"
 description = "search past agent sessions"
 
-# Mergr's Space PR view
+# Query GitHub now for every workspace's PR emoji (bonkey/herdr-pr-emoji)
 [[keys.command]]
 key = "prefix+P"
 type = "plugin_action"
-command = "mergr.open-pr"
-description = "open PR for current Space"
+command = "bonkey.pr-emoji.refresh"
+description = "refresh PR emoji"
 
 # Duplicate the focused pane's running command into a new tab (local plugin: local-plugins/dup-tab)
 [[keys.command]]

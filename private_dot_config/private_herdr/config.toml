@@ -18,14 +18,13 @@ delivery = "herdr"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", { token = "$stack" }, "workspace", "tab"],
-  ["agent", { token = "$pr_emoji" }],
+  ["state_icon", { token = "$pr_emoji" }, "workspace", "tab", { token = "$stack" }],
 ]
 
 [ui.sidebar.spaces]
 rows = [
-  ["state_icon", { token = "$stack" }, "workspace"],
-  ["branch", "git_status", { token = "$pr_emoji" }],
+  ["state_icon", { token = "$pr_emoji" }, "workspace", { token = "$stack" }],
+  ["branch", "git_status"],
 ]
 
 [[keys.command]]

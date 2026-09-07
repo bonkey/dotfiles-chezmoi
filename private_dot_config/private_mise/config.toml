@@ -7,7 +7,6 @@ python = "3.14"
 ruby = "4.0"
 node = "latest"
 bun = "latest"
-rust = "latest"
 
 # Tool/package managers
 uv = "latest"

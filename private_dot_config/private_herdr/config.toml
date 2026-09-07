@@ -18,7 +18,7 @@ delivery = "herdr"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "workspace"],
+  ["state_icon", "workspace", "tab"],
   ["agent", { token = "$pr", bold = true }],
 ]
 

@@ -926,6 +926,9 @@ alias .gds=".gd --stat"
 
 alias .gdt="git difftool"
 
+alias .gs="git show"
+alias .hs="hunk show"
+
 .g-peek() {
   if git rev-parse --is-inside-work-tree &>/dev/null; then
     echo
@@ -1161,10 +1164,10 @@ alias .glc="git shortlog --summary --numbered --no-merges"
 # GIT: STASH & RESET
 ###############################################################################
 
-alias .gs="git stash"
-alias .gsa="git stash apply"
-alias .gsl="git stash list"
-alias .gsp="git stash pop"
+alias .gst="git stash"
+alias .gsha=".gst apply"
+alias .gshl=".gst list"
+alias .gshp=".gst pop"
 
 alias .gwR="git reset --hard"
 alias .gwr="git reset --soft"

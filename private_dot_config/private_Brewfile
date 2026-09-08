@@ -32,6 +32,7 @@ cask 'vibe-island'
 cask 'jazzyalex/agent-sessions/agent-sessions'
 cask 'agentsview'
 brew 'wilbeibi/tap/catchup'
+brew 'agent-browser'
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely

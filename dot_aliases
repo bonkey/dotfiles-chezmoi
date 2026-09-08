@@ -1162,10 +1162,10 @@ alias .glc="git shortlog --summary --numbered --no-merges"
 # GIT: STASH & RESET
 ###############################################################################
 
-alias .gst="git stash"
-alias .gsha=".gst apply"
-alias .gshl=".gst list"
-alias .gshp=".gst pop"
+alias .gsh="git stash"
+alias .gsha=".gsh apply"
+alias .gshl=".gsh list"
+alias .gshp=".gsh pop"
 
 alias .gwR="git reset --hard"
 alias .gwr="git reset --soft"

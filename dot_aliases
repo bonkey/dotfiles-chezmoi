@@ -213,7 +213,7 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 }
 
 .cehc() {
-    ${=EDITOR} "${HOME}/.local/share/chezmoi/run_onchange_115_update_herdr.tmpl"
+    ${=EDITOR} "${HOME}/.config/herdr/config.toml"
     herdr server reload-config
 }
 

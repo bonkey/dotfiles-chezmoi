@@ -930,7 +930,7 @@ alias .gs="git show"
 .g-peek() {
   if git rev-parse --is-inside-work-tree &>/dev/null; then
     echo
-    git lg --no-merges -20
+    git l1 --no-merges -20
   fi
   zle reset-prompt
 }

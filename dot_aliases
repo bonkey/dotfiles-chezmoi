@@ -219,10 +219,10 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 ###############################################################################
 
 alias .h=herdr
-alias .hsr=herdr server reload-config
-alias .hss=herdr server stop
-alias .hsst=herdr server status
-alias .hpl=herdr plugins list
+alias .hsr="herdr server reload-config"
+alias .hss="herdr server stop"
+alias .hsst="herdr server status"
+alias .hpl="herdr plugins list"
 
 
 ###############################################################################

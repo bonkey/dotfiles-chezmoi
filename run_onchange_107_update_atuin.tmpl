@@ -7,6 +7,16 @@ source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 if command -v atuin &> /dev/null; then
   _exec "atuin update || true"
+
+  # An update replaces the client but leaves a running daemon on the old build,
+  # which the client then rejects for a version or protocol mismatch. An empty
+  # daemon version means no daemon is running, so leave it alone.
+  client_version="$(atuin --version 2>/dev/null | awk '{print $2}')"
+  daemon_version="$(atuin daemon status 2>/dev/null | awk '/Version:/{print $2}')"
+
+  if [[ -n "$daemon_version" && -n "$client_version" && "$daemon_version" != "$client_version" ]]; then
+    _exec "atuin daemon restart || true"
+  fi
 else
   curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh -s -- --non-interactive
 fi

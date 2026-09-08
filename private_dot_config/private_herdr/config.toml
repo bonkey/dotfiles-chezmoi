@@ -224,6 +224,15 @@ type = "plugin_action"
 command = "bonkey.pr-emoji.refresh"
 description = "refresh PR emoji"
 
+# Open the PR of the branch checked out in the focused pane. Shell commands run
+# from that pane's working directory, so plain `gh pr view -w` hits the right
+# repo and branch. prefix+p is free: previous_tab is bound to ctrl+alt+left.
+[[keys.command]]
+key = "prefix+p"
+type = "shell"
+command = "gh pr view -w"
+description = "open PR in browser"
+
 # Duplicate the focused pane's running command into a new tab (local plugin: local-plugins/dup-tab)
 [[keys.command]]
 key = "prefix+d"

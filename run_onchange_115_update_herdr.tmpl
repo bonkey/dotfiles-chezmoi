@@ -38,6 +38,8 @@ plugins=(
     bonkey/herdr-stack-icon
     # one emoji per sidebar row with the branch's PR state; optional-check failures still read as mergeable (prefix+P refreshes)
     bonkey/herdr-pr-emoji
+    # keeps a repository's main-checkout workspace open while any of its worktree workspaces is open
+    bonkey/herdr-keep-root
 )
 
 # ramarivera/herdr-pretty-which needs cargo to build. Dropping it from the

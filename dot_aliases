@@ -715,15 +715,10 @@ alias .xrs="xcrun simctl"
 alias .xrsl=".xrs list"
 alias .xrl=".xrs spawn booted log stream --color always --debug --style compact"
 
-# Force-quit Xcode.
-.xk() {
-  _exec "pkill -9 Xcode"
-}
-
-# Force-kill xcodebuild processes.
-.xkb() {
-  _exec "pkill -9 xcodebuild"
-}
+# Force-quit Xcode / xcodebuild / both (see `xcode-proj --help`).
+alias .xk="xcode-proj kill --xcode"
+alias .xkb="xcode-proj kill --xcodebuild"
+alias .xkk="xcode-proj kill"
 
 
 ###############################################################################
@@ -740,9 +735,8 @@ alias .xrb="xcode-proj build"
 ###############################################################################
 
 # Implemented in ~/bin/xcode-proj (see `xcode-proj --help`).
-alias find-xcode-proj="xcode-proj find"
 alias .xc="xcode-proj open"
-alias .x="xcode-proj open --search"
+alias .x=".xc"
 
 ###############################################################################
 # IOS DEPENDENCIES

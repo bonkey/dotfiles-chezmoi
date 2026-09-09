@@ -735,8 +735,7 @@ alias .xrb="xcode-proj build"
 ###############################################################################
 
 # Implemented in ~/bin/xcode-proj (see `xcode-proj --help`).
-alias .xc="xcode-proj open"
-alias .x=".xc"
+alias .x="xcode-proj open"
 
 ###############################################################################
 # IOS DEPENDENCIES

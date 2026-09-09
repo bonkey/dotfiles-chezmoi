@@ -211,10 +211,17 @@ description = "search past agent sessions"
 
 # Query GitHub now for every workspace's PR emoji (bonkey/herdr-pr-emoji)
 [[keys.command]]
-key = "prefix+P"
+key = "prefix+E"
 type = "plugin_action"
 command = "bonkey.pr-emoji.refresh"
 description = "refresh PR emoji"
+
+# Copy the URL of the PR for the branch checked out in the focused pane.
+[[keys.command]]
+key = "prefix+P"
+type = "shell"
+command = "url=$(gh pr view --json url --jq .url) && printf %s \"$url\" | pbcopy && herdr notification show 'PR URL copied' --body \"$url\" || herdr notification show 'No PR for this branch'"
+description = "copy PR URL"
 
 # Open the PR of the branch checked out in the focused pane. Shell commands run
 # from that pane's working directory, so plain `gh pr view -w` hits the right

@@ -823,62 +823,10 @@ alias .xrl=".xrs spawn booted log stream --color always --debug --style compact"
 # XCODE: OPEN PROJECT
 ###############################################################################
 
-# Find an Xcode project, workspace, or Package.swift to open.
-find-xcode-proj() {
-  local xcode_proj
-
-  if [[ -e "$1" ]]; then
-    xcode_proj=$1
-  else
-    # shellcheck disable=SC1036
-    projects=(*.{xcworkspace,xcodeproj}(N) Package.swift(N))
-    xcode_proj=$projects[1]
-  fi
-
-  test -z "$xcode_proj" && echo "No xcworkspace/xcodeproj file provider, nor found in the current directory." && return 1
-  echo $xcode_proj
-}
-
-# Open the detected Xcode project with the selected Xcode version.
-.xc() {
-  local xcode_proj xcode resolve=false proj_arg
-
-  # Parse arguments for -r/--resolve flag and optional project argument
-  for arg in "$@"; do
-    case "$arg" in
-      -r|--resolve)
-        resolve=true
-        ;;
-      *)
-        if [[ -z "$proj_arg" ]]; then
-          proj_arg="$arg"
-        fi
-        ;;
-    esac
-  done
-
-  xcode_proj=$(find-xcode-proj "$proj_arg")
-  [ $? -ne 0 ] && echo "$xcode_proj" && return
-
-  if [[ -f .xcode-version ]]; then
-    xcode_version=$(cat .xcode-version)
-    (xcrun xcodebuild -version | head -1 | grep -q ${xcode_version}) || \
-      (echo "Selecting Xcode ${xcode_version}..." && xcversion select $xcode_version)
-  fi
-  xcode="$(xcode-select -p)"
-  xcode="${xcode:s/\/Contents\/Developer/}"
-  echo "Opening ${xcode_proj} with ${xcode} ($fg_bold[green]$(xcsv)${reset_color})"
-
-  if [[ "$resolve" == true ]]; then
-    .xcr "$xcode_proj"
-  fi
-
-  open -a "$xcode" "${xcode_proj}"
-}
-
-.x() {
-  .xc $(fd -t d '.xcodeproj$' -1)
-}
+# Implemented in ~/bin/open-xcode.sh (see `open-xcode.sh --help`).
+alias find-xcode-proj="open-xcode.sh --print"
+alias .xc="open-xcode.sh"
+alias .x="open-xcode.sh --search"
 
 ###############################################################################
 # IOS DEPENDENCIES

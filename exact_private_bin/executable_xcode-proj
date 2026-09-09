@@ -3,7 +3,7 @@
 
 Subcommands (with the ~/.aliases one-liners that call them):
 
-  open    [PROJ] [-r]                    open with the selected Xcode              .xc / .x
+  open    [PROJ] [-r]                    open with the selected Xcode              .x
   resolve [PROJ] [SCHEME] [-l] [--remove-package-resolved]
                                          clean + resolve package dependencies      .xcr
   build   [PROJ] [SCHEME] [-r] [xcodebuild args...]

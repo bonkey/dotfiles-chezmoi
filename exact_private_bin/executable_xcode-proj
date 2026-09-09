@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
-"""Find, open, resolve, and build Xcode projects from the shell.
+"""Open, resolve, build, and kill Xcode projects from the shell.
 
 Subcommands (with the ~/.aliases one-liners that call them):
 
-  find    [PROJ] [-s]                  print the project that would be opened   find-xcode-proj
-  open    [PROJ] [-s] [-r]             open it with the selected Xcode           .xc / .x (-s)
+  open    [PROJ] [-r]                    open with the selected Xcode              .xc / .x
   resolve [PROJ] [SCHEME] [-l] [--remove-package-resolved]
-                                       clean + resolve package dependencies      .xcr
-  build   [PROJ] [SCHEME] [xcodebuild args...]
-                                       build for the iOS Simulator               .xrb
+                                         clean + resolve package dependencies      .xcr
+  build   [PROJ] [SCHEME] [-r] [xcodebuild args...]
+                                         build for the iOS Simulator               .xrb
+  kill    [--xcode] [--xcodebuild]       pkill -9 Xcode and/or xcodebuild          .xk / .xkb / .xkk
 
-PROJ defaults to the first *.xcworkspace, *.xcodeproj, or Package.swift in the
-current directory. -s/--search walks subdirectories instead and picks the
-shallowest match, preferring a workspace over a project. SCHEME defaults to the
-project name. `open` honors a .xcode-version file by running `xcodes select`.
+PROJ defaults to the nearest *.xcworkspace or *.xcodeproj below the current
+directory, walking breadth-first: the shallowest match wins, a workspace beats a
+project, and Package.swift is accepted in the current directory only. SCHEME
+defaults to the project name. `open` honors a .xcode-version file by running
+`xcodes select`. -r/--resolve runs `resolve` first. --kill-xcode and
+--kill-xcodebuild run `kill` first; `resolve` always kills Xcode because it
+deletes workspace-state.json files that a running Xcode would rewrite.
 """
 
 import argparse
-import os
 import shlex
 import shutil
 import subprocess
@@ -72,23 +74,16 @@ def run(cmd: list, check: bool = True, pipe_to: list | None = None) -> int:
 # --- project discovery ---------------------------------------------------------
 
 
-def find_here(given: str | None) -> Path:
+def locate(given: str | None) -> Path:
+    """Explicit path, else breadth-first search below cwd."""
     if given:
         path = Path(given)
         if not path.exists():
             fail(f"'{given}' not found")
         return path
-    cwd = Path.cwd()
-    for pattern in ("*.xcworkspace", "*.xcodeproj", "Package.swift"):
-        hits = sorted(cwd.glob(pattern))
-        if hits:
-            return hits[0].relative_to(cwd)
-    fail(f"No xcworkspace/xcodeproj/Package.swift found in {cwd}")
 
-
-def find_recursive() -> Path:
-    """Breadth-first: the shallowest match wins, a workspace beats a project."""
     cwd = Path.cwd()
+    package = cwd / "Package.swift"
     level = [cwd]
     for _ in range(SEARCH_MAX_DEPTH):
         next_level, hits = [], []
@@ -107,12 +102,10 @@ def find_recursive() -> Path:
         if hits:
             best = min(hits, key=lambda p: p.suffix != ".xcworkspace")
             return best.relative_to(cwd)
+        if package.is_file():
+            return package.relative_to(cwd)
         level = next_level
-    return find_here(None)
-
-
-def locate(given: str | None, search: bool) -> Path:
-    return find_recursive() if search else find_here(given)
+    fail(f"No xcworkspace/xcodeproj below {cwd}, nor Package.swift in it")
 
 
 def build_target(proj: Path, scheme: str | None) -> tuple[str, str, str]:
@@ -151,25 +144,25 @@ def xcode_app() -> str:
     return dev.removesuffix("/Contents/Developer")
 
 
-# --- subcommands ------------------------------------------------------------------
+# --- actions ----------------------------------------------------------------------
 
 
-def cmd_find(args: argparse.Namespace) -> None:
-    print(locate(args.project, args.search))
+def kill(xcode: bool, xcodebuild: bool) -> None:
+    """pkill -9 the requested processes; nothing running is not an error."""
+    for enabled, name in ((xcode, "Xcode"), (xcodebuild, "xcodebuild")):
+        if enabled:
+            run(["pkill", "-9", "-x", name], check=False)
 
 
-def cmd_open(args: argparse.Namespace) -> None:
-    proj = locate(args.project, args.search)
-    select_xcode_from_file()
-    app = xcode_app()
-    log(f"Opening {proj} with {app} ({paint('1;32', xcode_version())})")
-    if args.resolve:
-        resolve(proj, scheme=None, list_schemes=False, remove_package_resolved=False)
-    run(["open", "-a", app, str(proj)])
+def kill_from_flags(args: argparse.Namespace) -> None:
+    kill(getattr(args, "kill_xcode", False), getattr(args, "kill_xcodebuild", False))
 
 
 def resolve(
-    proj: Path, scheme: str | None, list_schemes: bool, remove_package_resolved: bool
+    proj: Path,
+    scheme: str | None = None,
+    list_schemes: bool = False,
+    remove_package_resolved: bool = False,
 ) -> None:
     flag, path, scheme = build_target(proj, scheme)
     xcodebuild = ["xcrun", "xcodebuild", "-destination", DESTINATION]
@@ -179,7 +172,7 @@ def resolve(
         run(xcodebuild + ["-list", flag, path])
         return
 
-    run(["pkill", "-9", "Xcode"], check=False)
+    kill(xcode=True, xcodebuild=False)
     time.sleep(0.5)
 
     log("Removing workspace state files")
@@ -196,20 +189,36 @@ def resolve(
     run(xcodebuild + ["-resolvePackageDependencies", flag, path, "-scheme", scheme])
 
 
+def cmd_open(args: argparse.Namespace) -> None:
+    kill_from_flags(args)
+    proj = locate(args.project)
+    select_xcode_from_file()
+    app = xcode_app()
+    log(f"Opening {proj} with {app} ({paint('1;32', xcode_version())})")
+    if args.resolve:
+        resolve(proj)
+    run(["open", "-a", app, str(proj)])
+
+
 def cmd_resolve(args: argparse.Namespace) -> None:
-    resolve(
-        locate(args.project, args.search),
-        args.scheme,
-        args.list,
-        args.remove_package_resolved,
-    )
+    kill_from_flags(args)
+    resolve(locate(args.project), args.scheme, args.list, args.remove_package_resolved)
 
 
 def cmd_build(args: argparse.Namespace, extra: list[str]) -> None:
-    flag, path, scheme = build_target(locate(args.project, args.search), args.scheme)
+    kill_from_flags(args)
+    proj = locate(args.project)
+    if args.resolve:
+        resolve(proj, args.scheme)
+    flag, path, scheme = build_target(proj, args.scheme)
     cmd = ["xcrun", "xcodebuild", flag, path, "-scheme", scheme, "-destination", DESTINATION]
     beautify = ["xcbeautify", "-q", "--disable-logging"] if shutil.which("xcbeautify") else None
     run(cmd + extra, pipe_to=beautify)
+
+
+def cmd_kill(args: argparse.Namespace) -> None:
+    both = not (args.xcode or args.xcodebuild)
+    kill(args.xcode or both, args.xcodebuild or both)
 
 
 # --- cli --------------------------------------------------------------------------
@@ -223,36 +232,41 @@ def main(argv: list[str]) -> None:
     )
     sub = parser.add_subparsers(dest="command", required=True, metavar="COMMAND")
 
-    def add(name: str, help_text: str, scheme: bool = False) -> argparse.ArgumentParser:
+    def add_project_command(
+        name: str, help_text: str, scheme: bool, resolve_flag: bool
+    ) -> argparse.ArgumentParser:
         p = sub.add_parser(name, help=help_text)
         p.add_argument("project", nargs="?", help="xcworkspace / xcodeproj / Package.swift")
         if scheme:
             p.add_argument("scheme", nargs="?", help="defaults to the project name")
-        p.add_argument("-s", "--search", action="store_true", help="search subdirectories")
+        if resolve_flag:
+            p.add_argument("-r", "--resolve", action="store_true", help="run `resolve` first")
+        p.add_argument("--kill-xcode", action="store_true", help="pkill -9 Xcode first")
+        p.add_argument("--kill-xcodebuild", action="store_true", help="pkill -9 xcodebuild first")
         return p
 
-    add("find", "print the project that would be opened")
-    p_open = add("open", "open the project with the selected Xcode")
-    p_open.add_argument("-r", "--resolve", action="store_true", help="run `resolve` first")
-    p_resolve = add("resolve", "clean and resolve package dependencies", scheme=True)
+    add_project_command("open", "open the project with the selected Xcode", False, True)
+    p_resolve = add_project_command(
+        "resolve", "clean and resolve package dependencies (kills Xcode)", True, False
+    )
     p_resolve.add_argument("-l", "--list", action="store_true", help="list schemes and exit")
     p_resolve.add_argument(
         "--remove-package-resolved", action="store_true", help="delete Package.resolved files first"
     )
-    add("build", "build for the iOS Simulator; extra args go to xcodebuild", scheme=True)
+    add_project_command(
+        "build", "build for the iOS Simulator; extra args go to xcodebuild", True, True
+    )
+    p_kill = sub.add_parser("kill", help="pkill -9 Xcode and/or xcodebuild (default: both)")
+    p_kill.add_argument("--xcode", action="store_true")
+    p_kill.add_argument("--xcodebuild", action="store_true")
 
     args, extra = parser.parse_known_args(argv)
     if extra and args.command != "build":
         parser.error(f"unrecognized arguments: {' '.join(extra)}")
 
-    if args.command == "find":
-        cmd_find(args)
-    elif args.command == "open":
-        cmd_open(args)
-    elif args.command == "resolve":
-        cmd_resolve(args)
-    elif args.command == "build":
-        cmd_build(args, extra)
+    {"open": cmd_open, "resolve": cmd_resolve, "kill": cmd_kill}.get(
+        args.command, lambda a: cmd_build(a, extra)
+    )(args)
 
 
 if __name__ == "__main__":

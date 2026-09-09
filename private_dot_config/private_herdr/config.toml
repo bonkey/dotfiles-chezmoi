@@ -28,18 +28,6 @@ rows = [
 ]
 
 [[keys.command]]
-key = "ctrl+shift+a"
-type = "plugin_action"
-command = "termscope.open"
-description = "visible-screen file picker"
-
-[[keys.command]]
-key = "prefix+u"
-type = "plugin_action"
-command = "termscope.open-links"
-description = "visible-screen links in Terminal Browser"
-
-[[keys.command]]
 key = "cmd+r"
 type = "plugin_action"
 command = "persiyanov.reviewr.toggle"   # <plugin_id>.<action_id> — note the id, not the name

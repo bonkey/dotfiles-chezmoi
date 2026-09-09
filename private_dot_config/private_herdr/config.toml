@@ -241,14 +241,27 @@ type = "plugin_action"
 command = "bonkey.dup-tab.duplicate"
 description = "duplicate running command in new tab"
 
-# Open Finder at the focused pane's working directory (shell commands run from that cwd)
+# Open the focused pane's working directory in an app (shell commands run from that cwd).
+# Uppercase letters = "open cwd in X".
 [[keys.command]]
-key = "prefix+f"
+key = "prefix+F"
 type = "shell"
 command = "open ."
 description = "open Finder in current folder"
 
-# Open the nearest Xcode project/workspace from the focused pane's cwd (~/bin/xcode-proj open, the .xc alias)
+[[keys.command]]
+key = "prefix+Z"
+type = "shell"
+command = "zed ."
+description = "open Zed in current folder"
+
+[[keys.command]]
+key = "prefix+X"
+type = "shell"
+command = "xed ."
+description = "open Xcode in current folder"
+
+# Open the nearest Xcode project/workspace from the focused pane's cwd (~/bin/xcode-proj open, the .x alias)
 [[keys.command]]
 key = "prefix+x"
 type = "shell"

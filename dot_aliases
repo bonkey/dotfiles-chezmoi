@@ -730,103 +730,19 @@ alias .xrl=".xrs spawn booted log stream --color always --debug --style compact"
 # XCODE: BUILD & RESOLVE
 ###############################################################################
 
-# Clean and resolve package dependencies for an Xcode project or workspace.
-.xcr() {
-  local proj scheme arg remove_package_resolved=false
-
-  # Parse arguments
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --remove-package-resolved)
-        remove_package_resolved=true
-        shift
-        ;;
-      *)
-        if [[ -z "$proj" ]]; then
-          proj="$1"
-        elif [[ -z "$scheme" ]]; then
-          scheme="$1"
-        fi
-        shift
-        ;;
-    esac
-  done
-
-  if [[ ! -d $proj ]]; then
-    echo "Xcode project/workspace '$proj' not found"
-    return
-  fi
-
-  if [[ "$proj" == *.xcworkspace ]]; then
-    arg="-workspace"
-    if [[ -z "$scheme" ]]; then
-      scheme=$(basename $proj .xcworkspace)
-    fi
-  else
-    arg="-project"
-    if [[ -z "$scheme" ]]; then
-      scheme=$(basename $proj .xcodeproj)
-    fi
-  fi
-
-  if [[ "$scheme" == "-l" || "$scheme" == "-list" || "$scheme" == "--list" ]]; then
-    log_message "Listing avilable schemes..."
-    _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' -list $arg $proj"
-    return
-  fi
-
-  _exec "pkill -9 Xcode || true ; sleep 0.5"
-
-  log_message "Removing workspace state files..."
-  # Get the absolute path of the project directory
-  local proj_dir=$(dirname "$(realpath "$proj")")
-  local proj_dirname=$(basename "$proj_dir")
-  _exec "fd workspace-state.json ~/Library/Developer/Xcode/DerivedData/${proj_dirname}* -X rm -v"
-
-  if [[ "$remove_package_resolved" == true ]]; then
-    _exec "fd Package.resolved $proj -x rm -v"
-  fi
-
-  _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' clean $arg $proj -scheme $scheme"
-  _exec "xcrun xcodebuild -destination 'generic/platform=iOS Simulator' -resolvePackageDependencies $arg $proj -scheme $scheme"
-}
-
-# Build an Xcode project or workspace for the iOS Simulator.
-.xrb() {
-  proj=$1
-  test -n "$proj" && shift
-  scheme=$1
-  test -n "$scheme" && shift
-
-  if [[ ! -d $proj ]]; then
-    echo "$proj not found"
-    return
-  fi
-
-  if [[ "$proj" == *.xcworkspace ]]; then
-    arg="-workspace"
-    if [[ -z "$scheme" ]]; then
-      scheme=$(basename $proj .xcworkspace)
-    fi
-  else
-    arg="-project"
-    if [[ -z "$scheme" ]]; then
-      scheme=$(basename $proj .xcodeproj)
-    fi
-  fi
-
-  _exec "xcrun xcodebuild $arg $proj -scheme $scheme -destination 'generic/platform=iOS Simulator' $@ XCB"
-}
+# Implemented in ~/bin/xcode-proj (see `xcode-proj --help`).
+alias .xcr="xcode-proj resolve"
+alias .xrb="xcode-proj build"
 
 
 ###############################################################################
 # XCODE: OPEN PROJECT
 ###############################################################################
 
-# Implemented in ~/bin/open-xcode.sh (see `open-xcode.sh --help`).
-alias find-xcode-proj="open-xcode.sh --print"
-alias .xc="open-xcode.sh"
-alias .x="open-xcode.sh --search"
+# Implemented in ~/bin/xcode-proj (see `xcode-proj --help`).
+alias find-xcode-proj="xcode-proj find"
+alias .xc="xcode-proj open"
+alias .x="xcode-proj open --search"
 
 ###############################################################################
 # IOS DEPENDENCIES

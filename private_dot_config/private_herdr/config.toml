@@ -118,6 +118,7 @@ open_notification_target = "prefix+U"  # prefix+o now opens annotate doc review
 # previous_tab = "prefix+p"
 # next_tab = "prefix+n"
 # switch_tab = "prefix+1..9"
+switch_tab = "ctrl+1..9"
 previous_tab = "ctrl+alt+left"
 next_tab = "ctrl+alt+right"
 next_agent = "ctrl+alt+down"
@@ -139,7 +140,7 @@ close_tab = "ctrl+shift+x"
 # last_pane = ""          # optional, unset by default; bind e.g. "prefix+tab" for global back-and-forth
 # split_vertical = "prefix+v"
 # split_horizontal = "prefix+minus"
-# close_pane = "prefix+x"
+close_pane = ""          # freed: prefix+x opens the Xcode project (keys.command below); close panes via shell exit / close_tab
 # zoom = "prefix+z"       # legacy alias: fullscreen
 # resize_mode = "prefix+r"
 # toggle_sidebar = "prefix+b"
@@ -239,3 +240,17 @@ key = "prefix+d"
 type = "plugin_action"
 command = "bonkey.dup-tab.duplicate"
 description = "duplicate running command in new tab"
+
+# Open Finder at the focused pane's working directory (shell commands run from that cwd)
+[[keys.command]]
+key = "prefix+f"
+type = "shell"
+command = "open ."
+description = "open Finder in current folder"
+
+# Open the nearest Xcode project/workspace from the focused pane's cwd (~/bin/xcode-proj open, the .xc alias)
+[[keys.command]]
+key = "prefix+x"
+type = "shell"
+command = "~/bin/xcode-proj open"
+description = "open Xcode project (.x)"

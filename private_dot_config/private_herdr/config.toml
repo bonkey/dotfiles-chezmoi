@@ -21,12 +21,65 @@ enabled = false
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", { token = "$pr_emoji" }, "workspace", "tab", { token = "$stack" }],
+  [ "state_icon", { token = "$pr_emoji", rules = [
+    { contains = "\uF4DD", fg = "#8b949e" },  # draft                       
+    { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge             
+    { contains = "\uF421", fg = "#db6d28" },  # conflict                    
+    { contains = "\uF52F", fg = "#f85149" },  # check failed, others running
+    { contains = "\uF530", fg = "#f85149" },  # check failed, settled       
+    { contains = "\uF46A", fg = "#d29922" },  # checks running              
+    { contains = "\uF441", fg = "#79c0ff" },  # review required             
+    { contains = "\uF426", fg = "#db61a2" },  # thrown out of the queue     
+    { contains = "\uF4F4", fg = "#ff7b72" },  # blocked                     
+    { contains = "\uF42E", fg = "#7ee787" },  # only optional failing       
+    { contains = "\uF4A4", fg = "#3fb950" },  # mergeable                   
+    { contains = "\uF419", fg = "#a371f7" },  # merged                      
+    { contains = "\uF4DC", fg = "#6e7681" },  # closed                      
+    { contains = "\uF420", fg = "#6e7681" },  # no pull request             
+    { contains = "\uF442", fg = "#39c5cf" },  # conversation open           
+  ] },
+  { token = "$bookmark" }, 
+  "workspace", "tab", { token = "$stack", rules = [
+    { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
+    { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
+    { equals = "\ue70e", fg = "#0d9152" },        # Android
+    { equals = "\ue7a8", fg = "#c2571a" },        # Rust
+    { equals = "\ue724", fg = "#0087a8" },        # Go
+    { equals = "\ue718", fg = "#4c8f3a" },        # Node
+    { equals = "\ue73c", fg = "#3d7fbf" },        # Python
+  ] }],
 ]
 
 [ui.sidebar.spaces]
 rows = [
-  ["state_icon", { token = "$pr_emoji" }, "workspace", { token = "$stack" }],
+  [ "state_icon", { token = "$pr_emoji", rules = [
+    { contains = "\uF4DD", fg = "#8b949e" },  # draft                       
+    { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge             
+    { contains = "\uF421", fg = "#db6d28" },  # conflict                    
+    { contains = "\uF52F", fg = "#f85149" },  # check failed, others running
+    { contains = "\uF530", fg = "#f85149" },  # check failed, settled       
+    { contains = "\uF46A", fg = "#d29922" },  # checks running              
+    { contains = "\uF441", fg = "#79c0ff" },  # review required             
+    { contains = "\uF426", fg = "#db61a2" },  # thrown out of the queue     
+    { contains = "\uF4F4", fg = "#ff7b72" },  # blocked                     
+    { contains = "\uF42E", fg = "#7ee787" },  # only optional failing       
+    { contains = "\uF4A4", fg = "#3fb950" },  # mergeable                   
+    { contains = "\uF419", fg = "#a371f7" },  # merged                      
+    { contains = "\uF4DC", fg = "#6e7681" },  # closed                      
+    { contains = "\uF420", fg = "#6e7681" },  # no pull request             
+    { contains = "\uF442", fg = "#39c5cf" },  # conversation open           
+  ] },
+  { token = "$bookmark" }, 
+  "workspace",
+  { token = "$stack", rules = [
+    { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
+    { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
+    { equals = "\ue70e", fg = "#0d9152" },        # Android
+    { equals = "\ue7a8", fg = "#c2571a" },        # Rust
+    { equals = "\ue724", fg = "#0087a8" },        # Go
+    { equals = "\ue718", fg = "#4c8f3a" },        # Node
+    { equals = "\ue73c", fg = "#3d7fbf" },        # Python
+  ] }],
   ["branch", "git_status"],
 ]
 
@@ -265,3 +318,30 @@ key = "prefix+x"
 type = "shell"
 command = "~/bin/xcode-proj open"
 description = "open Xcode project (.x)"
+
+# Bookmarks: three independent marks per workspace, shown as $bookmark at the
+# start of both sidebar rows (local plugin: bonkey/herdr-bookmark).
+# prefix+1..3 are free because switch_tab is bound to ctrl+1..9 above.
+[[keys.command]]
+key = "prefix+1"
+type = "plugin_action"
+command = "bonkey.bookmark.toggle-1"
+description = "toggle bookmark 1 (−)"
+
+[[keys.command]]
+key = "prefix+2"
+type = "plugin_action"
+command = "bonkey.bookmark.toggle-2"
+description = "toggle bookmark 2 (=)"
+
+[[keys.command]]
+key = "prefix+3"
+type = "plugin_action"
+command = "bonkey.bookmark.toggle-3"
+description = "toggle bookmark 3 (≡)"
+
+[[keys.command]]
+key = "prefix+0"
+type = "plugin_action"
+command = "bonkey.bookmark.clear"
+description = "clear bookmarks"

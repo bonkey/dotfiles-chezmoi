@@ -17,7 +17,7 @@ pipx = "latest"
 
 # Apple development
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
-"ubi:bonkey/xcodectl" = "latest"          # Install, switch and remove Xcode versions
+"github:bonkey/xcodectl" = "latest"       # Install, switch and remove Xcode versions
 swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
 
 # Python CLI tools

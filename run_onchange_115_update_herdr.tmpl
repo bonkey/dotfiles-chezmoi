@@ -40,8 +40,8 @@ plugins=(
     bonkey/herdr-pr-emoji
     # keeps a repository's main-checkout workspace open while any of its worktree workspaces is open
     bonkey/herdr-keep-root
-    # window title "workspace › tab" and tabs named after the running program or the Claude session title (/rename); config.hcl strips Claude's cwd/id
-    davidolrik/herdr-titles
+    # tabs and panes named "dir › activity" (program, ssh host, Claude session title); the window title mirrors the tab via ui.window_title = "{tab}". Needs Go.
+    kryptamine/herdr-auto-title
 )
 
 # ramarivera/herdr-pretty-which needs cargo to build. Dropping it from the

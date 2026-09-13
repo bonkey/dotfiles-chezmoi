@@ -1,4 +1,5 @@
 onboarding = false
+
 [theme]
 name = "rose-pine-dawn"
 auto_switch = false
@@ -17,72 +18,28 @@ prompt_new_tab_name = false
 [ui.toast]
 delivery = "herdr"
 
-[ui.sound]
-enabled = false
-
 [ui.sidebar.agents]
 rows = [
-  [ "state_icon", { token = "$pr_emoji", rules = [
-    { contains = "\uF4DD", fg = "#8b949e" },  # draft                       
-    { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge             
-    { contains = "\uF421", fg = "#db6d28" },  # conflict                    
-    { contains = "\uF52F", fg = "#f85149" },  # check failed, others running
-    { contains = "\uF530", fg = "#f85149" },  # check failed, settled       
-    { contains = "\uF46A", fg = "#d29922" },  # checks running              
-    { contains = "\uF441", fg = "#79c0ff" },  # review required             
-    { contains = "\uF426", fg = "#db61a2" },  # thrown out of the queue     
-    { contains = "\uF4F4", fg = "#ff7b72" },  # blocked                     
-    { contains = "\uF42E", fg = "#7ee787" },  # only optional failing       
-    { contains = "\uF4A4", fg = "#3fb950" },  # mergeable                   
-    { contains = "\uF419", fg = "#a371f7" },  # merged                      
-    { contains = "\uF4DC", fg = "#6e7681" },  # closed                      
-    { contains = "\uF420", fg = "#6e7681" },  # no pull request             
-    { contains = "\uF442", fg = "#39c5cf" },  # conversation open           
-  ] },
-  { token = "$bookmark" }, 
-  "workspace", "tab", { token = "$stack", rules = [
-    { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
-    { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
-    { equals = "\ue70e", fg = "#0d9152" },        # Android
-    { equals = "\ue7a8", fg = "#c2571a" },        # Rust
-    { equals = "\ue724", fg = "#0087a8" },        # Go
-    { equals = "\ue718", fg = "#4c8f3a" },        # Node
-    { equals = "\ue73c", fg = "#3d7fbf" },        # Python
-  ] }],
+  ["state_icon", { token = "$pr_emoji" }, "workspace", "tab", { token = "$stack" }],
 ]
 
 [ui.sidebar.spaces]
 rows = [
-  [ "state_icon", { token = "$pr_emoji", rules = [
-    { contains = "\uF4DD", fg = "#8b949e" },  # draft                       
-    { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge             
-    { contains = "\uF421", fg = "#db6d28" },  # conflict                    
-    { contains = "\uF52F", fg = "#f85149" },  # check failed, others running
-    { contains = "\uF530", fg = "#f85149" },  # check failed, settled       
-    { contains = "\uF46A", fg = "#d29922" },  # checks running              
-    { contains = "\uF441", fg = "#79c0ff" },  # review required             
-    { contains = "\uF426", fg = "#db61a2" },  # thrown out of the queue     
-    { contains = "\uF4F4", fg = "#ff7b72" },  # blocked                     
-    { contains = "\uF42E", fg = "#7ee787" },  # only optional failing       
-    { contains = "\uF4A4", fg = "#3fb950" },  # mergeable                   
-    { contains = "\uF419", fg = "#a371f7" },  # merged                      
-    { contains = "\uF4DC", fg = "#6e7681" },  # closed                      
-    { contains = "\uF420", fg = "#6e7681" },  # no pull request             
-    { contains = "\uF442", fg = "#39c5cf" },  # conversation open           
-  ] },
-  { token = "$bookmark" }, 
-  "workspace",
-  { token = "$stack", rules = [
-    { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
-    { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
-    { equals = "\ue70e", fg = "#0d9152" },        # Android
-    { equals = "\ue7a8", fg = "#c2571a" },        # Rust
-    { equals = "\ue724", fg = "#0087a8" },        # Go
-    { equals = "\ue718", fg = "#4c8f3a" },        # Node
-    { equals = "\ue73c", fg = "#3d7fbf" },        # Python
-  ] }],
+  ["state_icon", { token = "$pr_emoji" }, "workspace", { token = "$stack" }],
   ["branch", "git_status"],
 ]
+
+[[keys.command]]
+key = "ctrl+shift+a"
+type = "plugin_action"
+command = "termscope.open"
+description = "visible-screen file picker"
+
+[[keys.command]]
+key = "prefix+u"
+type = "plugin_action"
+command = "termscope.open-links"
+description = "visible-screen links in Terminal Browser"
 
 [[keys.command]]
 key = "cmd+r"
@@ -122,7 +79,7 @@ description = "Worktree: remove"
 # background (local plugin: local-plugins/wt-purpose). prefix+shift+n is free: new_workspace
 # moved to ctrl+alt+w below.
 [[keys.command]]
-key = "prefix+shift+n"
+key = "ctrl+alt+h"
 type = "plugin_action"
 command = "bonkey.wt-purpose.create"
 description = "Worktree from purpose / ticket URL (on-device slug)"
@@ -265,17 +222,10 @@ description = "search past agent sessions"
 
 # Query GitHub now for every workspace's PR emoji (bonkey/herdr-pr-emoji)
 [[keys.command]]
-key = "prefix+E"
+key = "prefix+P"
 type = "plugin_action"
 command = "bonkey.pr-emoji.refresh"
 description = "refresh PR emoji"
-
-# Copy the URL of the PR for the branch checked out in the focused pane.
-[[keys.command]]
-key = "prefix+P"
-type = "shell"
-command = "url=$(gh pr view --json url --jq .url) && printf %s \"$url\" | pbcopy && herdr notification show 'PR URL copied' --body \"$url\" || herdr notification show 'No PR for this branch'"
-description = "copy PR URL"
 
 # Open the PR of the branch checked out in the focused pane. Shell commands run
 # from that pane's working directory, so plain `gh pr view -w` hits the right
@@ -319,30 +269,3 @@ key = "prefix+x"
 type = "shell"
 command = "~/bin/xcode-proj open"
 description = "open Xcode project (.x)"
-
-# Bookmarks: three independent marks per workspace, shown as $bookmark at the
-# start of both sidebar rows (local plugin: bonkey/herdr-bookmark).
-# prefix+1..3 are free because switch_tab is bound to ctrl+1..9 above.
-[[keys.command]]
-key = "prefix+1"
-type = "plugin_action"
-command = "bonkey.bookmark.toggle-1"
-description = "toggle bookmark 1 (−)"
-
-[[keys.command]]
-key = "prefix+2"
-type = "plugin_action"
-command = "bonkey.bookmark.toggle-2"
-description = "toggle bookmark 2 (=)"
-
-[[keys.command]]
-key = "prefix+3"
-type = "plugin_action"
-command = "bonkey.bookmark.toggle-3"
-description = "toggle bookmark 3 (≡)"
-
-[[keys.command]]
-key = "prefix+0"
-type = "plugin_action"
-command = "bonkey.bookmark.clear"
-description = "clear bookmarks"

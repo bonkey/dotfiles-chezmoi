@@ -42,6 +42,8 @@ plugins=(
     bonkey/herdr-keep-root
     # tabs and panes named "dir › activity" (program, ssh host, Claude session title); the window title mirrors the tab via ui.window_title = "{tab}". Needs Go.
     kryptamine/herdr-auto-title
+    # Claude Code hook that reports the session title (/rename, else auto summary) as herdr pane metadata; auto-title prefers it over Claude's raw "cwd · title · id" terminal title
+    bcihanc/herdr-claude-session-title
 )
 
 # ramarivera/herdr-pretty-which needs cargo to build. Dropping it from the
@@ -51,7 +53,8 @@ if (( ! $+commands[cargo] )); then
     log_message "cargo not found - skipping ramarivera/herdr-pretty-which, it needs a Rust toolchain"
 fi
 
-post_update_actions=()
+# registers the Claude Code hook (idempotent; hooks are read at Claude session start)
+post_update_actions=(bcihanc.claude-session-title.install)
 
 # Plugin-specific integrations
 

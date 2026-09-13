@@ -20,12 +20,28 @@ delivery = "herdr"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", { token = "$pr_emoji" }, "workspace", "tab", { token = "$stack" }],
+  ["state_icon", { token = "$pr_emoji" }, "workspace", "tab", { token = "$stack", rules = [
+    { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
+    { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
+    { equals = "\ue70e", fg = "#0d9152" },        # Android
+    { equals = "\ue7a8", fg = "#c2571a" },        # Rust
+    { equals = "\ue724", fg = "#0087a8" },        # Go
+    { equals = "\ue718", fg = "#4c8f3a" },        # Node
+    { equals = "\ue73c", fg = "#3d7fbf" },        # Python
+  ] }],
 ]
 
 [ui.sidebar.spaces]
 rows = [
-  ["state_icon", { token = "$pr_emoji" }, "workspace", { token = "$stack" }],
+  ["state_icon", { token = "$pr_emoji" }, "workspace", { token = "$stack", rules = [
+    { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
+    { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
+    { equals = "\ue70e", fg = "#0d9152" },        # Android
+    { equals = "\ue7a8", fg = "#c2571a" },        # Rust
+    { equals = "\ue724", fg = "#0087a8" },        # Go
+    { equals = "\ue718", fg = "#4c8f3a" },        # Node
+    { equals = "\ue73c", fg = "#3d7fbf" },        # Python
+  ] }],
   ["branch", "git_status"],
 ]
 

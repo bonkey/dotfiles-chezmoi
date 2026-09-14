@@ -20,7 +20,23 @@ delivery = "herdr"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", { token = "$pr_emoji" }, "workspace", "tab", { token = "$stack", rules = [
+  ["state_icon", { token = "$pr_emoji", rules = [
+    { contains = "\uF4DD", fg = "#8b949e" },  # draft                                 oct-git_pull_request_draft
+    { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge                       oct-git_merge_queue
+    { contains = "\uF421", fg = "#db6d28" },  # conflict                              oct-alert
+    { contains = "\uF52F", fg = "#f85149" },  # required check failed, others running oct-x_circle
+    { contains = "\uF530", fg = "#f85149" },  # required check failed, settled        oct-x_circle_fill
+    { contains = "\uF46A", fg = "#d29922" },  # checks running                        oct-sync
+    { contains = "\uF441", fg = "#79c0ff" },  # review required                       oct-eye
+    { contains = "\uF426", fg = "#db61a2" },  # thrown out of the queue               oct-sign_out
+    { contains = "\uF4F4", fg = "#ff7b72" },  # blocked                               oct-no_entry
+    { contains = "\uF42E", fg = "#7ee787" },  # only optional checks failing          oct-check
+    { contains = "\uF4A4", fg = "#3fb950" },  # mergeable                             oct-check_circle_fill
+    { contains = "\uF419", fg = "#a371f7" },  # merged                                oct-git_merge
+    { contains = "\uF4DC", fg = "#6e7681" },  # closed                                oct-git_pull_request_closed
+    { contains = "\uF420", fg = "#6e7681" },  # no pull request                       oct-question
+    { contains = "\uF442", fg = "#39c5cf" },  # conversation open                     oct-comment_discussion
+  ] }, "workspace", "tab", { token = "$stack", rules = [
     { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
     { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
     { equals = "\ue70e", fg = "#0d9152" },        # Android
@@ -33,7 +49,23 @@ rows = [
 
 [ui.sidebar.spaces]
 rows = [
-  ["state_icon", { token = "$pr_emoji" }, "workspace", { token = "$stack", rules = [
+  ["state_icon", { token = "$pr_emoji", rules = [
+    { contains = "\uF4DD", fg = "#8b949e" },  # draft                                 oct-git_pull_request_draft
+    { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge                       oct-git_merge_queue
+    { contains = "\uF421", fg = "#db6d28" },  # conflict                              oct-alert
+    { contains = "\uF52F", fg = "#f85149" },  # required check failed, others running oct-x_circle
+    { contains = "\uF530", fg = "#f85149" },  # required check failed, settled        oct-x_circle_fill
+    { contains = "\uF46A", fg = "#d29922" },  # checks running                        oct-sync
+    { contains = "\uF441", fg = "#79c0ff" },  # review required                       oct-eye
+    { contains = "\uF426", fg = "#db61a2" },  # thrown out of the queue               oct-sign_out
+    { contains = "\uF4F4", fg = "#ff7b72" },  # blocked                               oct-no_entry
+    { contains = "\uF42E", fg = "#7ee787" },  # only optional checks failing          oct-check
+    { contains = "\uF4A4", fg = "#3fb950" },  # mergeable                             oct-check_circle_fill
+    { contains = "\uF419", fg = "#a371f7" },  # merged                                oct-git_merge
+    { contains = "\uF4DC", fg = "#6e7681" },  # closed                                oct-git_pull_request_closed
+    { contains = "\uF420", fg = "#6e7681" },  # no pull request                       oct-question
+    { contains = "\uF442", fg = "#39c5cf" },  # conversation open                     oct-comment_discussion
+  ] }, "workspace", { token = "$stack", rules = [
     { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
     { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
     { equals = "\ue70e", fg = "#0d9152" },        # Android
@@ -236,9 +268,10 @@ type = "plugin_action"
 command = "nicosuave.memex.desk"
 description = "search past agent sessions"
 
-# Query GitHub now for every workspace's PR emoji (bonkey/herdr-pr-emoji)
+# Query GitHub now for every workspace's PR emoji (bonkey/herdr-pr-emoji).
+# Case matters here: prefix+e opens edit_scrollback.
 [[keys.command]]
-key = "prefix+P"
+key = "prefix+E"
 type = "plugin_action"
 command = "bonkey.pr-emoji.refresh"
 description = "refresh PR emoji"
@@ -251,6 +284,14 @@ key = "prefix+p"
 type = "shell"
 command = "gh pr view -w"
 description = "open PR in browser"
+
+# Copy that PR's URL to the clipboard. tr strips the trailing newline that --jq
+# prints, so the clipboard holds the bare URL.
+[[keys.command]]
+key = "prefix+P"
+type = "shell"
+command = 'gh pr view --json url --jq .url | tr -d "\n" | pbcopy'
+description = "copy PR URL"
 
 # Duplicate the focused pane's running command into a new tab (local plugin: local-plugins/dup-tab)
 [[keys.command]]

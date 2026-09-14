@@ -23,8 +23,13 @@ aliases:
   psqa: pr squash --auto
   psqad: pr squash --auto --delete-branch
 
+  al: alias list
+
   d: dash
+
   rv: repo view
   rvw: repo view -w
-  al: alias list
+
+  rc: repo clone
+
 version: "1"

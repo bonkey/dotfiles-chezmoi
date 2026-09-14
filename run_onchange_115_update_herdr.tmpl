@@ -62,7 +62,7 @@ post_update_actions=(bcihanc.claude-session-title.install)
 # ~/.agents/skills (symlinked into Claude Code and friends); skipped when present.
 install_plannotator_tui_skill() {
     [[ -d ~/.agents/skills/plannotator-tui ]] && return 0
-    _exec "npx -y skills add plannotator/herdr-annotate --skill plannotator-tui -g < /dev/null"
+    _exec "npx -y skills add plannotator/herdr-annotate --skill plannotator-tui --global --yes"
 }
 
 configure_plugin_integrations() {

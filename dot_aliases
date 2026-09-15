@@ -226,7 +226,7 @@ alias .h=herdr
 alias .hsr="herdr server reload-config"
 alias .hss="herdr server stop"
 alias .hsst="herdr server status"
-alias .hpl="herdr plugins list"
+alias .hpl="herdr plugin list"
 
 
 ###############################################################################

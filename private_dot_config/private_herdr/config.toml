@@ -20,7 +20,7 @@ delivery = "herdr"
 
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", { token = "$pr_emoji", rules = [
+  [{ token = "$bookmark" }, "state_icon", { token = "$pr_emoji", rules = [
     { contains = "\uF4DD", fg = "#8b949e" },  # draft                                 oct-git_pull_request_draft
     { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge                       oct-git_merge_queue
     { contains = "\uF421", fg = "#db6d28" },  # conflict                              oct-alert
@@ -49,7 +49,7 @@ rows = [
 
 [ui.sidebar.spaces]
 rows = [
-  ["state_icon", { token = "$pr_emoji", rules = [
+  [{ token = "$bookmark" }, "state_icon", { token = "$pr_emoji", rules = [
     { contains = "\uF4DD", fg = "#8b949e" },  # draft                                 oct-git_pull_request_draft
     { contains = "\uF4DB", fg = "#1f6feb" },  # queued to merge                       oct-git_merge_queue
     { contains = "\uF421", fg = "#db6d28" },  # conflict                              oct-alert
@@ -326,3 +326,34 @@ key = "prefix+x"
 type = "shell"
 command = "~/bin/xcode-proj open"
 description = "open Xcode project (.x)"
+
+# Three per-workspace bookmarks, plus a reset and a sort (local plugin: bonkey.bookmark)
+[[keys.command]]
+key = "ctrl+alt+1"
+type = "plugin_action"
+command = "bonkey.bookmark.toggle-1"
+description = "toggle bookmark 1"
+
+[[keys.command]]
+key = "ctrl+alt+2"
+type = "plugin_action"
+command = "bonkey.bookmark.toggle-2"
+description = "toggle bookmark 2"
+
+[[keys.command]]
+key = "ctrl+alt+3"
+type = "plugin_action"
+command = "bonkey.bookmark.toggle-3"
+description = "toggle bookmark 3"
+
+[[keys.command]]
+key = "ctrl+alt+0"
+type = "plugin_action"
+command = "bonkey.bookmark.clear"
+description = "clear bookmarks"
+
+[[keys.command]]
+key = "ctrl+alt+shift+6"
+type = "plugin_action"
+command = "bonkey.bookmark.sort"
+description = "sort worktrees by bookmark"

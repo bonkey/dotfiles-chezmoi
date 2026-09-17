@@ -1,4 +1,4 @@
-###############################################################################
+b
 # GLOBAL PATH ALIASES
 ###############################################################################
 
@@ -507,14 +507,19 @@ alias xf="xmllint --format"
 
 # Render Markdown with glow when possible, otherwise use bat.
 cat() {
-  type glow >/dev/null 2>&1
-  has_glow=$?
+    type mdcat >/dev/null 2>&1
+    has_mdcat=$?
 
-  if [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
-    glow -w 0 -p $1
-  else
-    bat "$@"
-  fi
+    type glow >/dev/null 2>&1
+    has_glow=$?
+
+    if [[ $has_mdcat && -z "$2" && "$1:t:e" == "md" ]]; then
+        mdcat -p --toc --smart-punctation "$1"
+    elif [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
+        glow -w 0 -p "$1"
+    else
+        bat "$@"
+    fi
 }
 
 # Show files with cat using header styling.

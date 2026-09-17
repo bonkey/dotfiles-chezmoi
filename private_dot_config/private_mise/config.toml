@@ -64,6 +64,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:@mariozechner/pi-coding-agent" = "latest" # Coding agent CLI
 "npm:opencode-ai" = "latest"              # OpenCode AI CLI
 "npm:opencode-openai-codex-auth" = "latest" # Auth helper for Codex/OpenCode
+"npm:@caveman-ai/cli" = "latest"
 
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related

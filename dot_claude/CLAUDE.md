@@ -17,3 +17,7 @@ User requests may be dictated and can contain transcription mistakes. Infer the 
 # 1Password access
 
 Minimize repeated 1Password approval prompts. Before beginning work that needs multiple secrets, identify the secrets needed and retrieve them together when practical. Reuse secrets securely within the current session; do not request the same secret again unless it is unavailable, expired, or has changed.
+
+# Local Claude Code rules
+
+Claude Code also loads every `~/.claude/rules/*.md`. Rules that must stay on this machine only go in `~/.claude/rules/<name>.local.md`; chezmoi ignores that pattern, so they are never committed or pushed. Anything meant for every machine, or for other agents reading this file as `AGENTS.md`, belongs in this file.

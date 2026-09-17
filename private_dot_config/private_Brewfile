@@ -142,6 +142,7 @@ brew 'worktrunk'
 brew 'modem-dev/tap/hunk'
 
 # Developer tools and runtimes
+brew 'cargo-binstall' # Binary installation for rust projects
 brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 brew 'colima' # Container runtimes on MacOS (and Linux) with minimal setup
 brew 'direnv' # Load/unload environment variables based on $PWD
@@ -155,6 +156,7 @@ brew 'libusb', args: ['head'] # USB library
 brew 'mas' # Mac App Store command-line interface
 brew 'mise' # Multi-language runtime manager
 brew 'openssl' # Cryptography and SSL/TLS Toolkit
+brew 'rust' # Safe, concurrent, practical language
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
 brew 'tokei' # Program that allows you to count code, quickly
 brew 'uhubctl' # USB hub per-port power control

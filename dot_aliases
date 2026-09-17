@@ -506,17 +506,21 @@ alias xf="xmllint --format"
 }
 
 # Render Markdown with glow when possible, otherwise use bat.
+mdcat() {
+    if [[ "${HERDR_ENV:-}" != 1 ]] && (( $+commands[mlux] )); then
+        mlux --allow-remote-images --watch "$@"
+    elif (( $+commands[mdcat] )); then
+        command mdcat -p --toc --smart-punctuation --watch "$@"
+    elif (( $+commands[glow] )); then
+        glow -w 0 -p "$@"
+    else
+        bat "$@"
+    fi
+}
+
 cat() {
-    type mdcat >/dev/null 2>&1
-    has_mdcat=$?
-
-    type glow >/dev/null 2>&1
-    has_glow=$?
-
-    if [[ $has_mdcat && -z "$2" && "$1:t:e" == "md" ]]; then
-        mdcat -p --toc --smart-punctuation "$1"
-    elif [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
-        glow -w 0 -p "$1"
+    if [[ -z "$2" && "$1:t:e" == "md" ]]; then
+        mdcat "$1"
     else
         bat "$@"
     fi

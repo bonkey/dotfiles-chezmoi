@@ -3,3 +3,6 @@
 **/.ruff_cache
 **/.pytest_cache
 **/.mypy_cache
+
+# Claude Code rules kept on this machine only (shared ones live in dot_claude/rules).
+.claude/rules/*.local.md

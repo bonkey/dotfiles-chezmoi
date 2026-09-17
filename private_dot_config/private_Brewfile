@@ -71,6 +71,7 @@ brew 'fd' # Simple, fast and user-friendly alternative to find
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'fzf' # Command-line fuzzy finder written in Go
 brew 'glow' # Render markdown on the CLI
+brew 'mdcat' # Render markdown on the CLI
 brew 'html2markdown' # Convert HTML to Markdown
 brew 'liblockfile' # Library providing functions to lock standard mailboxes
 brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young

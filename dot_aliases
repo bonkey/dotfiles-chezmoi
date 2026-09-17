@@ -510,7 +510,7 @@ alias xf="xmllint --format"
     if [[ "${HERDR_ENV:-}" != 1 ]] && (( $+commands[mlux] )); then
         mlux --allow-remote-images --watch "$@"
     elif (( $+commands[mdcat] )); then
-        command mdcat -p --toc --smart-punctuation --watch "$@"
+        mdcat -p --toc --smart-punctuation "$@"
     elif (( $+commands[glow] )); then
         glow -w 0 -p "$@"
     else

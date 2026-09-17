@@ -506,7 +506,7 @@ alias xf="xmllint --format"
 }
 
 # Render Markdown with glow when possible, otherwise use bat.
-.mdcat() {
+.mdc() {
     if [[ "${HERDR_ENV:-}" != 1 ]] && (( $+commands[mlux] )); then
         mlux --allow-remote-images --watch "$@"
     elif (( $+commands[mdcat] )); then
@@ -520,7 +520,7 @@ alias xf="xmllint --format"
 
 cat() {
     if [[ -z "$2" && "$1:t:e" == "md" ]]; then
-        .mdcat "$1"
+        .mdc "$1"
     else
         bat "$@"
     fi

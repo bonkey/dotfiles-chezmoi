@@ -137,9 +137,17 @@ alias cal="gcal -s 1"
 alias .chc=".ch cd"
 alias .cha=".ch add"
 
+# Sync dotfiles: rebase onto remote first so autoPush never hits a rejected
+# push, then re-add, then push anything still local (autoPush skips when
+# re-add commits nothing, and can lose a race with a remote push), then apply.
 .chs() {
-  .ch re-add "$@" || return
-  git -C "$(chezmoi source-path)" pull || return
+  local src
+  src="$(chezmoi source-path)" || return
+  git -C "$src" pull --rebase --autostash || return
+  .ch re-add "$@"
+  git -C "$src" push 2>/dev/null \
+    || { git -C "$src" pull --rebase --autostash && git -C "$src" push; } \
+    || return
   .ch update --exclude scripts
 }
 

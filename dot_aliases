@@ -514,7 +514,7 @@ cat() {
     has_glow=$?
 
     if [[ $has_mdcat && -z "$2" && "$1:t:e" == "md" ]]; then
-        mdcat -p --toc --smart-punctation "$1"
+        mdcat -p --toc --smart-punctuation "$1"
     elif [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
         glow -w 0 -p "$1"
     else

@@ -18,9 +18,6 @@ prompt_new_tab_name = false
 [ui.toast]
 delivery = "herdr"
 
-[ui.sound]
-enabled = false
-
 [ui.sidebar.agents]
 rows = [
   [{ token = "$bookmark" }, "state_icon", { token = "$pr_emoji", rules = [

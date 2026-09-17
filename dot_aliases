@@ -508,7 +508,7 @@ alias xf="xmllint --format"
 # Render Markdown with glow when possible, otherwise use bat.
 .mdc() {
     if [[ "${HERDR_ENV:-}" != 1 ]] && (( $+commands[mlux] )); then
-        mlux --allow-remote-images --watch "$@"
+        mlux --theme catppuccin-latte-latin --allow-remote-images --exp-preset adaptive --watch "$@"
     elif (( $+commands[mdcat] )); then
         mdcat -p --toc --smart-punctuation "$@"
     elif (( $+commands[glow] )); then

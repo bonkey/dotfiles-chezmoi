@@ -1,0 +1,5 @@
+defaults.columns = 0
+defaults.full_width = true
+
+[theme]
+base = 'gruvbox-light'

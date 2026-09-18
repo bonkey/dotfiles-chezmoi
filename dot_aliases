@@ -866,7 +866,7 @@ alias .gcl="git clone --recurse-submodules --progress"
 }
 
 alias .gp=".gpu origin"
-alias .gpf=".gpo --force-with-lease"
+alias .gpf=".gp --force-with-lease"
 
 ###############################################################################
 # GIT: COMMIT & PUSH

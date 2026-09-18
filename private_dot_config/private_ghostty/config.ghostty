@@ -22,6 +22,7 @@ link-url = true
 
 window-width = 130
 window-height = 40
+window-theme = auto
 
 # Valid values:
 # 
@@ -29,8 +30,8 @@ window-height = 40
 #  * `blueprint`, `chalkboard`, `microchip`, `glass`, `holographic`,
 #    `paper`, `retro`, `xray` - Official variants of the Ghostty icon
 #    hand-created by artists (no AI).
-macos-icon = glass
+macos-icon = xray
 macos-titlebar-style = tabs
 
-auto-update = check
-auto-update-channel = tip
+auto-update = download
+auto-update-channel = stable

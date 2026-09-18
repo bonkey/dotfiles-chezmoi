@@ -16,10 +16,14 @@ project, and Package.swift is accepted in the current directory only. SCHEME
 defaults to the project name. `open` honors a .xcode-version file by running
 `xcodes select`. -r/--resolve runs `resolve` first. --kill-xcode and
 --kill-xcodebuild run `kill` first; `resolve` always kills Xcode because it
-deletes workspace-state.json files that a running Xcode would rewrite.
+deletes package state that a running Xcode would rewrite. `resolve` also points
+every branch pin in Package.resolved at its branch's current commit, which Xcode
+cannot do once a force push has orphaned the pinned one; the alternative,
+--remove-package-resolved, throws the whole file away.
 """
 
 import argparse
+import json
 import shlex
 import shutil
 import subprocess
@@ -30,6 +34,12 @@ from pathlib import Path
 DERIVED_DATA = Path.home() / "Library/Developer/Xcode/DerivedData"
 DESTINATION = "generic/platform=iOS Simulator"
 PROJECT_SUFFIXES = (".xcworkspace", ".xcodeproj")
+# SourcePackages entries that `resolve` deletes. workspace-state.json records
+# each binary artifact as already extracted, so it has to go together with the
+# artifacts themselves: keep the record and SwiftPM skips extraction into the
+# empty directories, then the build fails with "There is no XCFramework found
+# at .../SourcePackages/artifacts/...".
+SOURCE_PACKAGES_STATE = ("workspace-state.json", "artifacts")
 SKIP_DIRS = {"node_modules", "Pods", "Carthage", "DerivedData", "build", "vendor"}
 SEARCH_MAX_DEPTH = 8
 
@@ -158,6 +168,57 @@ def kill_from_flags(args: argparse.Namespace) -> None:
     kill(getattr(args, "kill_xcode", False), getattr(args, "kill_xcodebuild", False))
 
 
+def remote_branch_tip(location: str, branch: str) -> str | None:
+    """Commit that `branch` points at on the remote, or None if it is gone."""
+    result = subprocess.run(
+        ["git", "ls-remote", location, f"refs/heads/{branch}"],
+        capture_output=True,
+        text=True,
+    )
+    head = result.stdout.split(maxsplit=1)
+    return head[0] if result.returncode == 0 and head else None
+
+
+def retarget_branch_pins(proj: Path) -> None:
+    """Point every branch pin in Package.resolved at its branch's current commit.
+
+    A force push leaves the pinned commit unreachable from every ref, so no
+    fetch can deliver it: the checkout fails with "fatal: unable to read tree"
+    and Xcode reports it again on every resolve. Version and tag pins stay
+    untouched, because a tag keeps its commit reachable.
+    """
+    log("Retargeting branch pins")
+    for resolved in sorted(proj.rglob("Package.resolved")):
+        try:
+            document = json.loads(resolved.read_text())
+        except (OSError, ValueError) as error:
+            log(f"Skipping {resolved}: {error}")
+            continue
+
+        moved = []
+        for pin in document.get("pins", []):
+            identity = pin.get("identity", "?")
+            location = pin.get("location")
+            state = pin.get("state", {})
+            branch, revision = state.get("branch"), state.get("revision")
+            if not (branch and revision and location):
+                continue
+            tip = remote_branch_tip(location, branch)
+            if tip is None:
+                log(f"Branch '{branch}' is gone from {location}; {identity} left as it is")
+            elif tip != revision:
+                state["revision"] = tip
+                moved.append(f"{identity}: {revision[:7]} -> {tip[:7]} ({branch})")
+
+        if moved:
+            resolved.write_text(
+                json.dumps(document, indent=2, separators=(",", " : "), sort_keys=True) + "\n"
+            )
+            print(resolved)
+            for line in moved:
+                print(f"  {line}")
+
+
 def resolve(
     proj: Path,
     scheme: str | None = None,
@@ -175,15 +236,24 @@ def resolve(
     kill(xcode=True, xcodebuild=False)
     time.sleep(0.5)
 
-    log("Removing workspace state files")
-    for state in DERIVED_DATA.glob(f"{proj.stem}*/**/workspace-state.json"):
-        state.unlink()
-        print(state)
+    log("Removing package state")
+    for packages in DERIVED_DATA.glob(f"{proj.stem}*/**/SourcePackages"):
+        for name in SOURCE_PACKAGES_STATE:
+            entry = packages / name
+            if entry.is_dir():
+                shutil.rmtree(entry)
+            elif entry.exists():
+                entry.unlink()
+            else:
+                continue
+            print(entry)
 
     if remove_package_resolved:
         for resolved in proj.rglob("Package.resolved"):
             resolved.unlink()
             print(resolved)
+    else:
+        retarget_branch_pins(proj)
 
     run(xcodebuild + ["clean", flag, path, "-scheme", scheme])
     run(xcodebuild + ["-resolvePackageDependencies", flag, path, "-scheme", scheme])

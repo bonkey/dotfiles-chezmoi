@@ -130,25 +130,60 @@ alias cal="gcal -s 1"
     chezmoi "$@"
 }
 
+# Edit through chezmoi, then sync; .chs is the only place that pulls or pushes.
 .che() {
-    chezmoi git -- pull --rebase --autostash && chezmoi edit --apply "$@"
+    chezmoi edit --apply "$@" && .chs
 }
 
 alias .chc=".ch cd"
 alias .cha=".ch add"
 
-# Sync dotfiles: rebase onto remote first so autoPush never hits a rejected
-# push, then re-add, then push anything still local (autoPush skips when
-# re-add commits nothing, and can lose a race with a remote push), then apply.
+# Sync dotfiles both ways. `chezmoi re-add` copies each target over its source
+# with no merge base, so it must run before the pull or it reverts whatever
+# the pull brought in. Local edits are committed first, git rebases them onto
+# the remote (a three-way merge that stops on conflicts), and only the merged
+# result is pushed and applied. Needs git.autoPush = false, or re-add's own
+# push is rejected whenever the remote is ahead.
 .chs() {
-  local src
+  local src gitdir tool=ksdiff
   src="$(chezmoi source-path)" || return
-  git -C "$src" pull --rebase --autostash || return
-  .ch re-add "$@"
-  git -C "$src" push 2>/dev/null \
-    || { git -C "$src" pull --rebase --autostash && git -C "$src" push; } \
+  gitdir="$(git -C "$src" rev-parse --absolute-git-dir)" || return
+
+  if [[ -d $gitdir/rebase-merge ]]; then
+    print -u2 ".chs: a rebase is in progress in $src; finish or abort it first."
+    return 1
+  fi
+
+  .ch re-add "$@" || return
+
+  if ! git -C "$src" pull --rebase --autostash; then
+    [[ -d $gitdir/rebase-merge ]] || return
+    print -u2 "\n.chs: conflicts in $src; nothing pushed or applied."
+    if [[ -t 0 ]]; then
+      read "tool?Merge tool to open, or n for none [ksdiff]: "
+    else
+      tool=n
+    fi
+    tool=${tool:-ksdiff}
+    case $tool in
+      n|N|no) tool= ;;
+      ksdiff) git -C "$src" -c mergetool.keepBackup=false -c mergetool.ksdiff.trustExitCode=true \
+                -c mergetool.ksdiff.cmd='ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot' \
+                mergetool --tool=ksdiff ;;
+      *)      git -C "$src" -c mergetool.keepBackup=false mergetool --tool="$tool" ;;
+    esac
+    if [[ -z $tool ]] || ! GIT_EDITOR=true git -C "$src" rebase --continue; then
+      print -u2 "Resolve in $src, run 'git rebase --continue', then rerun .chs."
+      return 1
+    fi
+  fi
+
+  # Retry once in case another machine pushed in between.
+  git -C "$src" push -q 2>/dev/null \
+    || { git -C "$src" pull --rebase --autostash && git -C "$src" push -q; } \
     || return
-  .ch update --exclude scripts
+
+  .ch apply --exclude scripts
 }
 
 # Update chezmoi in a new terminal window; prefer Ghostty when installed.

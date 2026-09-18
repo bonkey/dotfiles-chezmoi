@@ -120,8 +120,12 @@ open_apps() {
 
 notify() {
     local msg=$1
-    if command -v noti &>/dev/null; then
-        noti -m "$msg" -t 'chezmoi update'
+    # The absolute path skips the mise shim of the terminal-notifier gem, which
+    # comes earlier in PATH and fails because the gem is absent in the active ruby.
+    local notifier=/opt/homebrew/bin/terminal-notifier
+    if [[ -x $notifier ]]; then
+        "$notifier" -title 'chezmoi update' -message "$msg" \
+            -group chezmoi-update -activate com.mitchellh.ghostty
     fi
 }
 

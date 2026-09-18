@@ -5,8 +5,9 @@
 #     ghostty +list-fonts
 # 
 
-font-family = "CodeNewRoman Nerd Font Mono"
-font-size = 18
+# font-family = "CodeNewRoman Nerd Font Mono"
+font-family = "Google Sans Code NF"
+font-size = 16
 # adjust-cell-height = 3
 
 config-file = ?auto/theme.ghostty

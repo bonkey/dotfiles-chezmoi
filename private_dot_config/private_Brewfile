@@ -33,6 +33,7 @@ cask 'jazzyalex/agent-sessions/agent-sessions'
 cask 'agentsview'
 brew 'wilbeibi/tap/catchup'
 brew 'agent-browser'
+brew 'plannotator/tap/plannotator-tui'
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
@@ -70,6 +71,7 @@ brew 'fd' # Simple, fast and user-friendly alternative to find
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'fzf' # Command-line fuzzy finder written in Go
 brew 'glow' # Render markdown on the CLI
+brew 'mdcat' # Render markdown on the CLI
 brew 'html2markdown' # Convert HTML to Markdown
 brew 'liblockfile' # Library providing functions to lock standard mailboxes
 brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
@@ -140,6 +142,7 @@ brew 'worktrunk'
 brew 'modem-dev/tap/hunk'
 
 # Developer tools and runtimes
+brew 'cargo-binstall' # Binary installation for rust projects
 brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 brew 'colima' # Container runtimes on MacOS (and Linux) with minimal setup
 brew 'direnv' # Load/unload environment variables based on $PWD
@@ -153,6 +156,7 @@ brew 'libusb', args: ['head'] # USB library
 brew 'mas' # Mac App Store command-line interface
 brew 'mise' # Multi-language runtime manager
 brew 'openssl' # Cryptography and SSL/TLS Toolkit
+brew 'rust' # Safe, concurrent, practical language
 brew 'swift-sh' # Scripting with easy zero-conf dependency imports
 brew 'tokei' # Program that allows you to count code, quickly
 brew 'uhubctl' # USB hub per-port power control

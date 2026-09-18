@@ -26,6 +26,9 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "pipx:httpie" = "latest"                  # Human-friendly HTTP client
 "pipx:jc" = "latest"                      # Convert command output to JSON
 
+# Rust CLI tools
+"cargo:mlux" = "latest"                   # Rich Markdown viewer for modern terminals
+
 # Git / repository tools
 "pipx:git-filter-repo" = "latest"         # Git history rewriting
 
@@ -61,6 +64,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:@mariozechner/pi-coding-agent" = "latest" # Coding agent CLI
 "npm:opencode-ai" = "latest"              # OpenCode AI CLI
 "npm:opencode-openai-codex-auth" = "latest" # Auth helper for Codex/OpenCode
+"npm:@caveman-ai/cli" = "latest"
 
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related

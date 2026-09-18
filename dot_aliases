@@ -506,24 +506,15 @@ alias xf="xmllint --format"
 }
 
 # Render Markdown with glow when possible, otherwise use bat.
-.mdc() {
-    if [[ "${HERDR_ENV:-}" != 1 ]] && (( $+commands[mlux] )); then
-        mlux --theme catppuccin-latte-latin --allow-remote-images --exp-preset adaptive --watch "$@"
-    elif (( $+commands[mdcat] )); then
-        mdcat -p --toc --smart-punctuation "$@"
-    elif (( $+commands[glow] )); then
-        glow -w 0 -p "$@"
-    else
-        bat "$@"
-    fi
-}
-
 cat() {
-    if [[ -z "$2" && "$1:t:e" == "md" ]]; then
-        .mdc "$1"
-    else
-        bat "$@"
-    fi
+  type glow >/dev/null 2>&1
+  has_glow=$?
+
+  if [[ $has_glow && -z "$2" && "$1:t:e" == "md" ]]; then
+    glow -w 0 -p $1
+  else
+    bat "$@"
+  fi
 }
 
 # Show files with cat using header styling.
@@ -1292,11 +1283,7 @@ alias .gb-prune='_gb-merged-prune'
 alias .wl='wt list'
 alias .wlf='.wl --full'
 
-.wr() {
-    git fetch
-    wt remove "$@"
-}
-
+alias .wr='wt remove'
 alias .wrf='.wr --force'
 alias .wrfd='.wr --force -D'
 

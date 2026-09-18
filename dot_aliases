@@ -749,17 +749,14 @@ ff-gif() {
 # XCODE: VERSION & SIMULATOR
 ###############################################################################
 
-alias .xs="xcodes"
-alias .xss=".xs select"
+alias .xc="xcodectl"
+alias .xss=".xc select"
 
-alias .xsu=".xs uninstall"
-alias .xsuf=".xsu --empty-trash"
+alias .xsu=".xc remove"
 
-alias .xsl=".xs list"
-alias .xsla=".xsl --data-source apple"
+alias .xsl=".xc list"
 
-alias .xsi=".xs install --experimental-unxip --empty-trash --update"
-alias .xsia=".xsi --data-source apple"
+alias .xsi=".xc install"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 
@@ -772,21 +769,8 @@ alias .xk="xcode-proj kill --xcode"
 alias .xkb="xcode-proj kill --xcodebuild"
 alias .xkk="xcode-proj kill"
 
-
-###############################################################################
-# XCODE: BUILD & RESOLVE
-###############################################################################
-
-# Implemented in ~/bin/xcode-proj (see `xcode-proj --help`).
-alias .xcr="xcode-proj resolve"
-alias .xrb="xcode-proj build"
-
-
-###############################################################################
-# XCODE: OPEN PROJECT
-###############################################################################
-
-# Implemented in ~/bin/xcode-proj (see `xcode-proj --help`).
+alias .xpr="xcode-proj resolve"
+alias .xpb="xcode-proj build"
 alias .x="xcode-proj open"
 
 ###############################################################################

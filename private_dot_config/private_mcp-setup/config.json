@@ -23,7 +23,7 @@
     },
     "tavily": {
       "type": "remote",
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=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"
     },
     "sosumi": {
       "type": "remote",
@@ -65,14 +65,14 @@
       "type": "local",
       "command": ["npx", "-y", "firecrawl-mcp"],
       "environment": {
-        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+        "FIRECRAWL_API_KEY": "fc-eda78b5b6bb047679290576ee3749b86"
       }
     },
     "morph": {
       "type": "local",
       "command": ["npx", "--prefer-offline", "-y", "@morphllm/morphmcp"],
       "environment": {
-        "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
+        "MORPH_API_KEY": "sk-mFQXnomhNENsdXBbWw_yoH2dmO77KoOEMxNE5CqjlAnEWtim"
       }
     },
     "deepwiki": {
@@ -81,7 +81,7 @@
     },
     "exa": {
       "type": "remote",
-      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=c337e194-f72b-46dc-8606-92f90cdc61ef"
     },
     "agentsview": {
       "type": "local",

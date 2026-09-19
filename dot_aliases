@@ -750,10 +750,12 @@ ff-gif() {
 ###############################################################################
 
 alias .xc="xcodectl"
-alias .xcs=".xc select"
-alias .xcu=".xc remove"
-alias .xcl=".xc list"
 alias .xci=".xc install"
+alias .xcs=".xc select"
+alias .xcr=".xc remove"
+alias .xcl=".xc list"
+alias .xcli=".xc list-installed"
+alias .xcrn=".xc release-notes"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 

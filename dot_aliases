@@ -750,13 +750,10 @@ ff-gif() {
 ###############################################################################
 
 alias .xc="xcodectl"
-alias .xss=".xc select"
-
-alias .xsu=".xc remove"
-
-alias .xsl=".xc list"
-
-alias .xsi=".xc install"
+alias .xcs=".xc select"
+alias .xcu=".xc remove"
+alias .xcl=".xc list"
+alias .xci=".xc install"
 
 alias xcsv="xcrun xcodebuild -version | head -1 | sed 's/.*Xcode \(.*\)/\1/'"
 
@@ -764,7 +761,6 @@ alias .xrs="xcrun simctl"
 alias .xrsl=".xrs list"
 alias .xrl=".xrs spawn booted log stream --color always --debug --style compact"
 
-# Force-quit Xcode / xcodebuild / both (see `xcode-proj --help`).
 alias .xk="xcode-proj kill --xcode"
 alias .xkb="xcode-proj kill --xcodebuild"
 alias .xkk="xcode-proj kill"

@@ -33,6 +33,7 @@ cask 'agentsview'
 brew 'wilbeibi/tap/catchup'
 brew 'agent-browser'
 brew 'plannotator/tap/plannotator-tui'
+brew 'anomalyco/tap/opencode-v2'
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely

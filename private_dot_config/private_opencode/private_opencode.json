@@ -13,7 +13,7 @@
   },
   "mcp": {
     "tavily": {
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=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",
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
       "type": "remote",
       "enabled": true
     },
@@ -65,7 +65,7 @@
       "command": ["npx", "-y", "firecrawl-mcp"],
       "type": "local",
       "environment": {
-        "FIRECRAWL_API_KEY": "fc-eda78b5b6bb047679290576ee3749b86"
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       },
       "enabled": true
     },
@@ -75,7 +75,7 @@
       "enabled": true
     },
     "exa": {
-      "url": "https://mcp.exa.ai/mcp?exaApiKey=c337e194-f72b-46dc-8606-92f90cdc61ef",
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>",
       "type": "remote",
       "enabled": true
     },
@@ -103,7 +103,7 @@
       "command": ["npx", "-y", "@morphllm/morphmcp"],
       "type": "local",
       "environment": {
-        "MORPH_API_KEY": "sk-mFQXnomhNENsdXBbWw_yoH2dmO77KoOEMxNE5CqjlAnEWtim"
+        "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       },
       "enabled": true
     },

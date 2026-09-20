@@ -1,16 +1,15 @@
-zmodule environment
-zmodule input
-zmodule utility
+zmodule environment --use degit
+zmodule input --use degit
+zmodule utility --use degit
 
-zmodule fzf
+zmodule fzf --use degit
 
-zmodule ellie/atuin
-zmodule jeffreytse/zsh-vi-mode
+zmodule ellie/atuin --use degit
+zmodule jeffreytse/zsh-vi-mode --use degit
 
-zmodule zsh-users/zsh-completions
-zmodule completion
+zmodule zsh-users/zsh-completions --use degit
+zmodule completion --use degit
+zmodule zsh-users/zsh-autosuggestions --use degit
 
-zmodule zsh-users/zsh-autosuggestions
-
-zmodule raimo/zsh-halfpipe
-zmodule kylesnowschwartz/zsh-ai-cmd
+zmodule raimo/zsh-halfpipe --use degit
+zmodule kylesnowschwartz/zsh-ai-cmd --use degit

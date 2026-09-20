@@ -409,6 +409,9 @@ alias gy="gemini --yolo"
     opencode "$@"
 }
 
+alias .ocm=".oc mini -m opencode-go/kimi-k3"
+
+
 # Start opencode inside a worktrunk.
 .oct() {
     opencode-in-worktrunk
@@ -1428,3 +1431,4 @@ git-branches-in-jira-merged() {
 }
 
 # vim:set ft=zsh:
+

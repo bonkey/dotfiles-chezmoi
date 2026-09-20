@@ -88,3 +88,6 @@ fi
 # vim:set ft=zsh:
 
 # Entire CLI shell completion
+
+# opencode
+export PATH=/Users/bonkey/.opencode/bin:$PATH

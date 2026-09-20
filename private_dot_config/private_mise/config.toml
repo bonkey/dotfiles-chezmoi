@@ -61,7 +61,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:@google/gemini-cli" = "latest"       # Google Gemini CLI
 "npm:@qwen-code/qwen-code" = "latest"     # Qwen coding assistant CLI
 "npm:@kilocode/cli" = "latest"            # AI coding assistant CLI
-"npm:@mariozechner/pi-coding-agent" = "latest" # Coding agent CLI
+"npm:@earendil-works/pi-coding-agent" = "latest" # Coding agent CLI
 
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related

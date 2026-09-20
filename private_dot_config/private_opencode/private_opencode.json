@@ -1,8 +1,6 @@
 {
   "plugin": [
-    "opencode-openai-codex-auth@latest",
-    "@plannotator/opencode@latest",
-    "@franlol/opencode-md-table-formatter@latest"
+    "@plannotator/opencode@latest"
   ],
   "disabled_providers": ["anthropic", "openrouter", "perplexity"],
   "formatter": {
@@ -36,15 +34,6 @@
       "command": ["npx", "-y", "simctl-mcp"],
       "type": "local",
       "enabled": true
-    },
-    "xcodebuild": {
-      "enabled": true,
-      "type": "local",
-      "command": ["npx", "-y", "xcodebuildmcp@latest"],
-      "environment": {
-        "XCODEBUILDMCP_ENABLED_WORKFLOWS": "simulator,logging,project-discovery,utilities,session-management,debugging,simulator-management",
-        "INCREMENTAL_BUILDS_ENABLED": "true"
-      }
     },
     "xcstrings-crud": {
       "command": ["xcstrings-crud", "mcp"],
@@ -82,11 +71,6 @@
     "linear": {
       "url": "https://mcp.linear.app/mcp",
       "type": "remote",
-      "enabled": true
-    },
-    "swiftlens": {
-      "command": ["uvx", "swiftlens"],
-      "type": "local",
       "enabled": true
     },
     "xcode-instruments": {

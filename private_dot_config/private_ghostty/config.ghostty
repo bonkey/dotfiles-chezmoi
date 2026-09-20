@@ -1,37 +1,34 @@
-# The font families to use.
-# 
-# You can generate the list of valid values using the CLI:
-# 
-#     ghostty +list-fonts
-# 
+config-file = ?auto/theme.ghostty
 
 # font-family = "CodeNewRoman Nerd Font Mono"
 font-family = "Google Sans Code NF"
 font-size = 16
-# adjust-cell-height = 3
+adjust-cell-height = 2
 
-config-file = ?auto/theme.ghostty
-
-background-opacity = 0.85
-background-blur=16
+background-opacity = 0.96
+background-blur = 10
 
 copy-on-select = clipboard
 mouse-hide-while-typing = true
-
 link-url = true
 
+window-padding-x = 8
+window-padding-y = 8
 window-width = 130
 window-height = 40
 window-theme = auto
 
-# Valid values:
-# 
-#  * `official` - Use the official Ghostty icon.
-#  * `blueprint`, `chalkboard`, `microchip`, `glass`, `holographic`,
-#    `paper`, `retro`, `xray` - Official variants of the Ghostty icon
-#    hand-created by artists (no AI).
-macos-icon = xray
+scrollback-limit = 100000
+
+macos-icon = official
 macos-titlebar-style = tabs
+
+keybind = global:alt+backquote=toggle_quick_terminal
+quick-terminal-position = center
+quick-terminal-size = 40%,40%
+quick-terminal-screen = mouse
+quick-terminal-space-behavior = move
 
 auto-update = download
 auto-update-channel = stable
+

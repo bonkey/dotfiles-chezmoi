@@ -11,5 +11,4 @@ zmodule zsh-users/zsh-completions --use degit
 zmodule completion --use degit
 zmodule zsh-users/zsh-autosuggestions --use degit
 
-zmodule raimo/zsh-halfpipe --use degit
 zmodule kylesnowschwartz/zsh-ai-cmd --use degit

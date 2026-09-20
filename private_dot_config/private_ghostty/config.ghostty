@@ -1,3 +1,4 @@
+window-theme = system
 config-file = ?auto/theme.ghostty
 
 # font-family = "CodeNewRoman Nerd Font Mono"
@@ -7,6 +8,7 @@ adjust-cell-height = 2
 
 background-opacity = 0.96
 background-blur = 10
+unfocused-split-opacity = 0.2
 
 copy-on-select = clipboard
 mouse-hide-while-typing = true
@@ -17,11 +19,17 @@ window-padding-y = 8
 window-width = 130
 window-height = 40
 window-theme = auto
+window-new-tab-position = end
+window-save-state = never
+window-colorspace = display-p3
 
-scrollback-limit = 100000
+scrollback-limit = 50000000
 
 macos-icon = official
 macos-titlebar-style = tabs
+macos-non-native-fullscreen = true
+
+quit-after-last-window-closed = true
 
 keybind = global:alt+backquote=toggle_quick_terminal
 quick-terminal-position = center
@@ -32,3 +40,9 @@ quick-terminal-space-behavior = move
 auto-update = download
 auto-update-channel = stable
 
+
+### Keybindings
+# super==cmd, alt==opt
+# move between panes is cmd+arrow
+keybind = super+left=goto_split:previous
+keybind = super+right=goto_split:next

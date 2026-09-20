@@ -12,4 +12,5 @@ zmodule completion
 
 zmodule zsh-users/zsh-autosuggestions
 
+zmodule raimo/zsh-halfpipe
 zmodule kylesnowschwartz/zsh-ai-cmd

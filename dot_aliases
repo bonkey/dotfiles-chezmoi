@@ -300,11 +300,14 @@ alias brunc="br uninstall --cask"
 
 # Run mise up with the GitHub token exported.
 .m() {
-    export GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN
-    mise "$@"
+    GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN mise "$@"
 }
 
-alias .mu=".m up"
+.mu() {
+    .m cache clean
+    .m up
+}
+
 alias .ml=".m ls"
 alias .mp=".m prune"
 

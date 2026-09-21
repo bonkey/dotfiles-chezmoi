@@ -1,87 +1,19 @@
 #!/usr/bin/env zsh
 
-set +o pipefail
-
 # hour: {{ now.Format "2006-01-02T15" }} - changes hourly, so this runs hourly as well as on every edit
 source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
-skills_to_remove=(
-    cass
-    wayfinder
-    ios-hig-design
-    decision-log
-    claude-plugin-creator
-    show-me
-)
+# The skillet catalog in this gist is the source of truth for every machine.
+catalog_gist=aa1b5c37a1bd7d0df1ee8070d0f55d8c
 
-# whole repos to purge: every skill they installed is looked up in the
-# skill->source map (~/.agents/.skill-lock.json) and removed; the skills
-# CLI itself has no source-level remove
-sources_to_remove=(
-    wisdom-in-a-nutshell/agents
-    twostraws/swiftui-agent-skill
-    twostraws/swift-concurrency-agent-skill
-    twostraws/swift-testing-agent-skill
-
-    subsy/ralph-tui
-    elevenlabs/skills
-    wondelai/skills
-)
-
-skills=(
-    # ios
-    nonameplum/agent-skills@swift-docc
-
-    # personal
-    bonkey/skills
-    bonkey/skills-private
-
-    herdrdev/herdr@herdr
-
-    rebelytics/one-skill-to-rule-them-all@task-observer
-
-    mattpocock/skills@grill-me
-    dietrichgebert/ponytail
-    
-    spillwavesolutions/design-doc-mermaid
-
-    vercel-labs/agent-browser
-)
-
-lock=~/.agents/.skill-lock.json
-
-# skill name installed? (lock file may not exist on a fresh machine)
-_has_skill() {
-    [[ -f $lock ]] && jq -e --arg k "$1" '.skills[$k] != null' "$lock" >/dev/null
-}
-
-# any skill from this repo installed?
-_has_source() {
-    [[ -f $lock ]] && jq -e --arg src "$1" '[.skills[] | select(.source == $src)] | length > 0' "$lock" >/dev/null
-}
-
-# adds only run for what is missing; `skills update` at the end refreshes the rest
-for skill in "${skills[@]}"; do
-    if [[ "$skill" == *@* ]]; then
-        package="${skill%@*}"
-        skill_name="${skill##*@}"
-        _has_skill "$skill_name" && continue
-        _exec "npx -y skills add $package --skill $skill_name --global --yes"
-    else
-        _has_source "$skill" && continue
-        _exec "npx -y skills add $skill --global --yes"
+# skillet reaches gists through gh. mise installs both, and on a fresh machine
+# it runs after this script.
+for tool in skillet gh; do
+    if ! command -v $tool >/dev/null; then
+        log_message "$tool not found, skipping the skills update"
+        exit 0
     fi
 done
 
-# removals run after adds so bundle installs can't resurrect removed skills
-for skill in "${skills_to_remove[@]}"; do
-    _has_skill "$skill" || [[ -d ~/.agents/skills/$skill ]] || continue
-    _exec "npx -y skills remove $skill --global --yes"
-done
-
-for src in "${sources_to_remove[@]}"; do
-    _has_source "$src" || continue
-    _exec "jq -r --arg src $src '.skills | to_entries[] | select(.value.source == \$src) | .key' $lock | xargs -I{} npx -y skills remove {} --global --yes"
-done
-
-_exec "npx -y skills update --global"
+# The pull replaces the local catalog, fetches all sources and syncs the global links.
+_exec "skillet gist pull $catalog_gist"

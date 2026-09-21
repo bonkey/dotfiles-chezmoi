@@ -1,4 +1,3 @@
-###############################################################################
 # GLOBAL PATH ALIASES
 ###############################################################################
 
@@ -212,6 +211,7 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
 .cem() {
     .che $HOME/.config/mise/config.toml
     mise up
+    mise prune --yes
 }
 
 # Edit Brewfile through chezmoi and apply bundle changes.
@@ -1431,4 +1431,3 @@ git-branches-in-jira-merged() {
 }
 
 # vim:set ft=zsh:
-

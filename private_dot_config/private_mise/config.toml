@@ -69,7 +69,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:codeburn" = "latest"
 "pipx:bonkey/mobile-broom" = "latest"
 "npm:impeccable" = "latest"
-"ubi:bonkey/skillet" = "latest"
+"github:bonkey/skillet" = "latest"
 
 [settings]
 experimental = true

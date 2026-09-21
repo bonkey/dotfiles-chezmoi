@@ -7,28 +7,25 @@ source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
 skills_to_remove=(
     cass
-
-    # covered by the axiom plugin (see run_111); from wondelai/skills
+    wayfinder
     ios-hig-design
-
-    # renamed upstream in bonkey/skills (captains-log, plugin-forge)
     decision-log
     claude-plugin-creator
+    show-me
 )
 
 # whole repos to purge: every skill they installed is looked up in the
 # skill->source map (~/.agents/.skill-lock.json) and removed; the skills
 # CLI itself has no source-level remove
 sources_to_remove=(
-    # WIN org internal toolkit; its ios skills are covered by axiom
     wisdom-in-a-nutshell/agents
-
-    # covered by axiom
     twostraws/swiftui-agent-skill
     twostraws/swift-concurrency-agent-skill
     twostraws/swift-testing-agent-skill
 
     subsy/ralph-tui
+    elevenlabs/skills
+    wondelai/skills
 )
 
 skills=(
@@ -39,20 +36,14 @@ skills=(
     bonkey/skills
     bonkey/skills-private
 
-    # control
     herdrdev/herdr@herdr
 
     rebelytics/one-skill-to-rule-them-all@task-observer
 
     mattpocock/skills@grill-me
-    mattpocock/skills@wayfinder
-
     dietrichgebert/ponytail
-    wondelai/skills
-
-    elevenlabs/skills
-
-    humanlayer/skills@show-me
+    
+    spillwavesolutions/design-doc-mermaid
 
     vercel-labs/agent-browser
 )

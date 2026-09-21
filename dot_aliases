@@ -306,10 +306,16 @@ alias brunc="br uninstall --cask"
 .mu() {
     .m cache clean
     .m up
+    .mp
 }
 
-alias .ml=".m ls"
-alias .mp=".m prune"
+.ml() {
+    .m ls "$@"
+}
+
+.mp() {
+    .m prune --yes
+}
 
 
 ###############################################################################

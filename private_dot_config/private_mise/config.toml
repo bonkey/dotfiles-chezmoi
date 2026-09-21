@@ -69,7 +69,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:codeburn" = "latest"
 "pipx:bonkey/mobile-broom" = "latest"
 "npm:impeccable" = "latest"
-"pipx:skillpod" = "latest"
+"cargo:skills-yaml/skm" = "latest"
 
 [settings]
 experimental = true

@@ -134,7 +134,10 @@ alias cal="gcal -s 1"
     chezmoi edit --apply "$@" && .chs
 }
 
-alias .chc=".ch cd"
+.chc() {
+    cd "$(.ch source-path)"
+}
+
 alias .cha=".ch add"
 
 # Sync dotfiles both ways. `chezmoi re-add` copies each target over its source

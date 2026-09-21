@@ -762,7 +762,7 @@ ff-gif() {
 ###############################################################################
 
 alias .xc="xcodectl"
-alias .xci=".xc install"
+alias .xci=".xc install --runtimes ios"
 alias .xcs=".xc select"
 alias .xcr=".xc remove"
 alias .xcl=".xc list"

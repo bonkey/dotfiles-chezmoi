@@ -847,14 +847,13 @@ alias .gs="git show"
 # GIT: BRANCH & CHECKOUT
 ###############################################################################
 
+alias .gco="git checkout"
+alias .gcom="git checkout main"
+
 alias .gb="git branch"
 alias .gbc="git checkout -b"
-
 alias .gbl="git branch --list -vv"
 alias .gbL="git branch --list -vv --all"
-alias .gbu="git branch --unset-upstream"
-
-alias .gcm="git checkout main"
 
 alias .gcl="git clone --recurse-submodules --progress"
 

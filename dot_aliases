@@ -307,8 +307,8 @@ alias brunc="br uninstall --cask"
 }
 
 .mu() {
-    .m cache clean
-    .m up
+    .m cache clean "$@"
+    .m up "$@"
     .mp
 }
 

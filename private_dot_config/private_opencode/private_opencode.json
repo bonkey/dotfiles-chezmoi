@@ -45,11 +45,6 @@
       "type": "local",
       "enabled": false
     },
-    "shellwright": {
-      "command": ["npx", "-y", "@dwmkerr/shellwright"],
-      "type": "local",
-      "enabled": false
-    },
     "firecrawl": {
       "command": ["npx", "-y", "firecrawl-mcp"],
       "type": "local",
@@ -84,8 +79,13 @@
       "enabled": false
     },
     "morph": {
-      "command": ["npx", "-y", "@morphllm/morphmcp"],
       "type": "local",
+      "command": [
+        "npx",
+        "--prefer-offline",
+        "-y",
+        "@morphllm/morphmcp"
+      ],
       "environment": {
         "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       },
@@ -105,6 +105,14 @@
     "xcode-mcpbridge": {
       "command": ["xcrun", "mcpbridge"],
       "type": "local",
+      "enabled": true
+    },
+    "agentsview": {
+      "type": "local",
+      "command": [
+        "agentsview",
+        "mcp"
+      ],
       "enabled": true
     }
   },

@@ -1377,8 +1377,8 @@ alias .wsc='.ws --create'
 jira-ticket-in-branch() {
   local git_branch
   git_branch=$(git symbolic-ref --short HEAD 2> /dev/null)
-  (echo $git_branch | grep -qE "[A-Z]{3,}-[0-9]+") || return
-  echo $git_branch | sd '.*?([A-Z]{3,}-[0-9]+).*' '$1'
+  (echo $git_branch | grep -qE "[A-Z0-9]{3,}-[0-9]+") || return
+  echo $git_branch | sd '.*?([A-Z0-9]{3,}-[0-9]+).*' '$1'
 }
 
 # Extract a Jira-style ticket key from the current branch name.

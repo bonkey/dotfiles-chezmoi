@@ -26,3 +26,51 @@
 
 [diff]
     exclude = ["scripts"]
+
+[[textconv]]
+    pattern = "**/*.kmsync"
+    command = "/bin/zsh"
+    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
+
+# bin/secrets-scrubber.py swaps live API keys for placeholders before chezmoi
+# reads the targets and puts them back afterwards. Without these hooks a
+# re-add commits the live keys.
+[hooks.edit.pre]
+    command = "bin/secrets-scrubber.py"
+    args = ["scrub"]
+
+[hooks.edit.post]
+    command = "bin/secrets-scrubber.py"
+    args = ["restore"]
+
+[hooks.add.pre]
+    command = "bin/secrets-scrubber.py"
+    args = ["scrub"]
+
+[hooks.add.post]
+    command = "bin/secrets-scrubber.py"
+    args = ["restore"]
+
+[hooks.re-add.pre]
+    command = "bin/secrets-scrubber.py"
+    args = ["scrub"]
+
+[hooks.re-add.post]
+    command = "bin/secrets-scrubber.py"
+    args = ["restore"]
+
+[hooks.apply.pre]
+    command = "bin/secrets-scrubber.py"
+    args = ["scrub"]
+
+[hooks.apply.post]
+    command = "bin/secrets-scrubber.py"
+    args = ["restore"]
+
+[hooks.update.pre]
+    command = "bin/secrets-scrubber.py"
+    args = ["scrub"]
+
+[hooks.update.post]
+    command = "bin/secrets-scrubber.py"
+    args = ["restore"]

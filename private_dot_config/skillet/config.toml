@@ -6,35 +6,42 @@ account = "bonkey.1password.com"
 vault = "nt6ulfcinsq7lcobqjhb2cdx5i"
 item = "lk3cxlvcjdbti27r7ivrcj646y"
 
-[packs.agentsview]
+[[packs]]
+name = "agentsview"
 description = "agentsview: a view of agent sessions"
 mcps = ["agentsview"]
 
-[packs.bonkey]
+[[packs]]
+name = "bonkey"
 description = "Own workflow skills: pull requests, rebasing, decision logs, docs and prose cleanup, skill and plugin authoring"
 skills = ["bonkey-skills"]
 
-[packs.cli-dev]
+[[packs]]
+name = "cli-dev"
 description = "Shellwright: terminal automation for CLI and TUI work"
 enabled = false
 mcps = ["shellwright"]
 
-[packs.code-search]
+[[packs]]
+name = "code-search"
 description = "Morph code search"
 mcps = ["morph"]
 
-[packs.elevenlabs]
+[[packs]]
+name = "elevenlabs"
 description = "ElevenLabs audio: speech, transcription, music, sound effects, dubbing, voice changing and voice agents"
 enabled = false
 skills = ["elevenlabs-skills"]
 
-[packs.ios-dev]
+[[packs]]
+name = "ios-dev"
 description = "iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge"
 enabled = false
 skills = ["agent-skills", "ios-hig-design@wondelai-skills"]
 mcps = ["mobile-mcp", "simctl", "sosumi", "xcode-instruments", "xcode-mcpbridge", "xcstrings-crud"]
 
-[packs.ios-bic]
+[[packs]]
+name = "ios-bic"
 description = "Best in Class turned to skills"
 enabled = false
 skills = [
@@ -47,23 +54,28 @@ skills = [
   "swift-docc@agent-skills",
 ]
 
-[packs.linear]
+[[packs]]
+name = "linear"
 description = "Linear issues and projects"
 mcps = ["linear"]
 
-[packs.plannotator]
+[[packs]]
+name = "plannotator"
 description = "Plannotator plan and code review helpers"
 skills = ["herdr-annotate", "plannotator"]
 
-[packs.ponytail]
+[[packs]]
+name = "ponytail"
 description = "Laziest-solution-that-works coding mode, with its review, audit, debt and help companions"
 skills = ["ponytail"]
 
-[packs.knowledge-sources]
+[[packs]]
+name = "knowledge-sources"
 description = "Knowledge sources"
 mcps = ["exa", "firecrawl", "tavily", "deepwiki"]
 
-[packs.tools]
+[[packs]]
+name = "tools"
 description = "Single-purpose tools: browser automation, Mermaid diagrams, herdr panes, show-me visual explanations, UI polish, plan grilling, skill observation"
 skills = [
   "agent-browser",
@@ -74,12 +86,14 @@ skills = [
   "one-skill-to-rule-them-all",
 ]
 
-[packs.web-dev]
+[[packs]]
+name = "web-dev"
 description = "Web development servers: shadcn components and Vibium browser automation"
 enabled = false
 mcps = ["shadcn", "vibium"]
 
-[packs.wondelai]
+[[packs]]
+name = "wondelai"
 description = "Business, product, marketing, UX and software-craft frameworks, with the guided journeys that combine them"
 enabled = false
 skills = ["wondelai-skills"]

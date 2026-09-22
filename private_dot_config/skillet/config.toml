@@ -147,6 +147,10 @@ only = ["impeccable"]
 url = "https://github.com/plannotator/herdr-annotate.git"
 
 [[skills]]
+name = "plannotator"
+url = "https://github.com/backnotprop/plannotator/apps/skills/extra"
+
+[[skills]]
 url = "https://github.com/rebelytics/one-skill-to-rule-them-all.git"
 only = ["task-observer"]
 

@@ -6,8 +6,8 @@
   "language_models": {
     "opencode": {
       "show_free_models": false,
-      "show_zen_models": false
-    }
+      "show_zen_models": false,
+    },
   },
   "cli_default_open_behavior": "new_window",
   "project_panel": {
@@ -24,7 +24,7 @@
   },
   "agent_servers": {
     "opencode": {
-      "type": "registry"
+      "type": "registry",
     },
     "codex-acp": {
       "type": "registry",
@@ -43,23 +43,52 @@
     },
   },
   "context_servers": {
+    "agentsview": {
+      "enabled": true,
+      "command": "agentsview",
+      "args": [
+        "mcp"
+      ]
+    },
     "deepwiki": {
       "enabled": true,
       "url": "https://mcp.deepwiki.com/mcp"
     },
-    "sosumi": {
+    "exa": {
       "enabled": true,
-      "url": "https://sosumi.ai/mcp"
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
     },
-    "tavily": {
+    "firecrawl": {
       "enabled": true,
       "command": "npx",
       "args": [
         "-y",
-        "mcp-remote",
-        "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
+        "firecrawl-mcp"
       ],
+      "env": {
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
+      }
     },
+    "linear": {
+      "enabled": true,
+      "url": "https://mcp.linear.app/mcp"
+    },
+    "morph": {
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "--prefer-offline",
+        "-y",
+        "@morphllm/morphmcp"
+      ],
+      "env": {
+        "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
+      }
+    },
+    "tavily": {
+      "enabled": true,
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
+    }
   },
 
   // ================================
@@ -67,7 +96,7 @@
   // ================================
   "agent": {
     "sandbox_permissions": {
-      "allow_unsandboxed": true
+      "allow_unsandboxed": true,
     },
     "tool_permissions": {
       "default": "allow",
@@ -86,65 +115,65 @@
       {
         "provider": "google",
         "model": "gemini-3-pro-preview",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "opencode",
         "model": "go/deepseek-v4-flash",
         "enable_thinking": true,
-        "effort": "max"
+        "effort": "max",
       },
       {
         "provider": "opencode",
         "model": "go/deepseek-v4-pro",
         "enable_thinking": true,
-        "effort": "max"
+        "effort": "max",
       },
       {
         "provider": "opencode",
         "model": "go/qwen3.6-plus",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "opencode",
         "model": "go/kimi-k2.7-code",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "google",
         "model": "gemini-3.5-flash",
         "enable_thinking": true,
-        "effort": "medium"
+        "effort": "medium",
       },
       {
         "provider": "openai-subscribed",
         "model": "gpt-5.5",
         "enable_thinking": true,
-        "effort": "medium"
+        "effort": "medium",
       },
       {
         "provider": "openai-subscribed",
         "model": "gpt-5.4-mini",
         "enable_thinking": true,
-        "effort": "medium"
+        "effort": "medium",
       },
       {
         "provider": "opencode",
         "model": "go/glm-5.2",
-        "enable_thinking": false
+        "enable_thinking": false,
       },
       {
         "provider": "openai-subscribed",
         "model": "gpt-5.6-terra",
         "enable_thinking": true,
-        "effort": "high"
+        "effort": "high",
       },
       {
         "provider": "openai-subscribed",
         "model": "gpt-5.6-sol",
         "enable_thinking": true,
-        "effort": "xhigh"
-      }
+        "effort": "xhigh",
+      },
     ],
     "inline_assistant_model": {
       "provider": "copilot_chat",

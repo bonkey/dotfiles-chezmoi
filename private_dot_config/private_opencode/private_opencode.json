@@ -15,36 +15,6 @@
       "type": "remote",
       "enabled": true
     },
-    "atlassian": {
-      "type": "remote",
-      "url": "https://mcp.atlassian.com/v1/mcp",
-      "enabled": false
-    },
-    "sosumi": {
-      "url": "https://sosumi.ai/mcp",
-      "type": "remote",
-      "enabled": true
-    },
-    "mobile-mcp": {
-      "command": ["npx", "-y", "@mobilenext/mobile-mcp@latest"],
-      "type": "local",
-      "enabled": true
-    },
-    "simctl": {
-      "command": ["npx", "-y", "simctl-mcp"],
-      "type": "local",
-      "enabled": true
-    },
-    "xcstrings-crud": {
-      "command": ["xcstrings-crud", "mcp"],
-      "type": "local",
-      "enabled": true
-    },
-    "vibium": {
-      "command": ["npx", "-y", "vibium", "mcp"],
-      "type": "local",
-      "enabled": false
-    },
     "firecrawl": {
       "command": ["npx", "-y", "firecrawl-mcp"],
       "type": "local",
@@ -68,16 +38,6 @@
       "type": "remote",
       "enabled": true
     },
-    "xcode-instruments": {
-      "command": ["npx", "-y", "instrumentsmcp@latest"],
-      "type": "local",
-      "enabled": true
-    },
-    "shadcn": {
-      "command": ["npx", "shadcn@latest", "mcp"],
-      "type": "local",
-      "enabled": false
-    },
     "morph": {
       "type": "local",
       "command": [
@@ -89,22 +49,6 @@
       "environment": {
         "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       },
-      "enabled": true
-    },
-    "pencil": {
-      "command": [
-        "/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
-        "--app",
-        "desktop",
-        "--agent",
-        "openCodeCLI"
-      ],
-      "enabled": true,
-      "type": "local"
-    },
-    "xcode-mcpbridge": {
-      "command": ["xcrun", "mcpbridge"],
-      "type": "local",
       "enabled": true
     },
     "agentsview": {

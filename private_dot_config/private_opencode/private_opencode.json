@@ -11,7 +11,7 @@
   },
   "mcp": {
     "tavily": {
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=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",
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
       "type": "remote",
       "enabled": true
     },
@@ -19,7 +19,7 @@
       "command": ["npx", "-y", "firecrawl-mcp"],
       "type": "local",
       "environment": {
-        "FIRECRAWL_API_KEY": "fc-6df4241874cb4f178d9f6a1ca12eb839"
+        "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       },
       "enabled": true
     },
@@ -29,7 +29,7 @@
       "enabled": true
     },
     "exa": {
-      "url": "https://mcp.exa.ai/mcp?exaApiKey=26a2776b-7f18-4bc5-9cdc-0538bd68dda9",
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>",
       "type": "remote",
       "enabled": true
     },
@@ -47,7 +47,7 @@
         "@morphllm/morphmcp"
       ],
       "environment": {
-        "MORPH_API_KEY": "sk-ljlfNyjQxepMydfprVKXLJ5S6dRciCNqMPrmKbJllnRU1hya"
+        "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       },
       "enabled": true
     },

@@ -22,17 +22,16 @@ tap 'ycd/tap'
 
 # AI and coding agents
 brew 'ollama' # Create, run, and share large language models (LLMs)
-brew 'block-goose-cli' # Open source, extensible AI agent that goes beyond code suggestions
-cask 'block-goose' # Open source, extensible AI agent that goes beyond code suggestions
-brew 'mistral-vibe' # Minimal CLI coding agent
 cask 'conductor' # Claude code parallelisation
 cask 'commander'
 cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
 cask 'vibe-island'
 cask 'agentsview'
+
 brew 'wilbeibi/tap/catchup'
-brew 'agent-browser'
 brew 'plannotator/tap/plannotator-tui'
+
+brew 'agent-browser'
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely

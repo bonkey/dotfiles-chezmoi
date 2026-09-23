@@ -100,7 +100,7 @@ skills = ["wondelai-skills"]
 
 [[skills]]
 url = "https://github.com/backnotprop/plannotator.git"
-only = ["plannotator-setup-goal", "plannotator-visual-explainer"]
+path = "apps/skills/extra"
 
 [[skills]]
 url = "https://github.com/bonkey/skills.git"
@@ -145,10 +145,6 @@ only = ["impeccable"]
 
 [[skills]]
 url = "https://github.com/plannotator/herdr-annotate.git"
-
-[[skills]]
-name = "plannotator"
-url = "https://github.com/backnotprop/plannotator/apps/skills/extra"
 
 [[skills]]
 url = "https://github.com/rebelytics/one-skill-to-rule-them-all.git"

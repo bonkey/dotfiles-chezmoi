@@ -1015,43 +1015,6 @@ alias .gcan=".gc -a -np"
     fi
 }
 
-_dot_gc() {
-  _arguments \
-    '(-a --add)'{-a,--add}'[stage all changes before generating the commit]' \
-    '(-np --no-push-pull)'{-np,--no-push-pull}'[skip pull and push]' \
-    '(-d --dry-run)'{-d,--dry-run}'[generate a commit message without committing]' \
-    '(-c --check)'{-c,--check}'[confirm, abort, or regenerate the commit message]' \
-    '(-m --model)'{-m,--model}'[use a specific LLM model]:model' \
-    '*:git diff argument:_files'
-}
-
-(( $+functions[compdef] )) && compdef _dot_gc .gc .gca .gcn .gcan
-
-# Describe the .gc* commands when completing a command name starting with .gc;
-# every other command position falls through to zsh's default (_autocd).
-_dot_gc_variants() {
-  if [[ $PREFIX == .gc* ]]; then
-    local -a variants=(
-      '.gc:pull, commit staged with LLM message, push'
-      '.gca:pull, stage all, commit, push'
-      '.gcn:commit staged only, no pull/push'
-      '.gcan:stage all, commit, no pull/push'
-      '.gcm:git checkout main'
-      '.gcl:git clone with submodules'
-    )
-    _describe -t commands 'gc command' variants && return
-  fi
-  _autocd "$@"
-}
-
-(( $+functions[compdef] )) && compdef _dot_gc_variants -command-
-
-# Push an empty commit to retrigger CI checks.
-.g-empty-commit() {
-  local msg="${1:-Retrigger checks}"
-  git commit -m "$msg" --allow-empty && git push
-}
-
 # Add all changes, commit with a generated or provided message, pull, and push.
 .gacp() {
   git add -A .

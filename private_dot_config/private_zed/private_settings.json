@@ -84,6 +84,10 @@
     "tavily": {
       "enabled": true,
       "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=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"
+    },
+    "contentful": {
+      "enabled": true,
+      "url": "https://mcp.contentful.com/mcp"
     }
   },
 

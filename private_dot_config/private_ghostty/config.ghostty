@@ -26,8 +26,9 @@ window-colorspace = display-p3
 scrollback-limit = 50000000
 
 macos-icon = official
-macos-titlebar-style = tabs
-# macos-non-native-fullscreen = true
+
+# "native", "transparent", "tabs", and "hidden".
+macos-titlebar-style = transparent
 
 quit-after-last-window-closed = true
 

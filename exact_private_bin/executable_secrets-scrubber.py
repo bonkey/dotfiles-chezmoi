@@ -67,10 +67,7 @@ VAULT = "nt6ulfcinsq7lcobqjhb2cdx5i"  # Private
 FILES_TO_SCRUB = [
     Path.home() / ".codex" / "config.toml",
     Path.home() / ".config" / "zed" / "settings.json",
-    Path.home() / ".config" / "chunkhound" / "config.json",
     Path.home() / ".config" / "opencode" / "opencode.json",
-    Path.home() / ".config" / "crush" / "crush.json",
-    Path.home() / ".config" / "mcp-setup" / "config.json",
 ]
 
 def log(message, verbose):
@@ -170,6 +167,38 @@ def validate_json(content):
         return False
 
 
+TOKEN_PATTERN = re.compile(r"[A-Za-z0-9._-]{16,}")
+
+
+def find_stale_values(content, label, secret_value):
+    """Find token values that a key named like the label holds instead of the live secret.
+
+    The key matches the label without regard to case, "_" and "-", so
+    FIRECRAWL_API_KEY matches "FIRECRAWL_API_KEY": "..." and ?firecrawlApiKey=...
+    A value with the vendor prefix of the live secret, such as fc-, is stale.
+    A value without that prefix is unknown.
+    """
+    key = r"[_-]?".join(re.escape(part) for part in re.split(r"[_-]+", label) if part)
+    pattern = re.compile(
+        rf"""(?<![\w-])["']?{key}["']?\s*[:=]\s*["']([^"'\s]+)|[?&]{key}=([^&#"'\s]+)""",
+        re.IGNORECASE,
+    )
+    prefix_match = re.match(r"(?:[a-z]+[-_])+", secret_value)
+    prefix = prefix_match.group(0) if prefix_match else ""
+
+    stale, unknown = set(), set()
+    for match in pattern.finditer(content):
+        value = match.group(1) or match.group(2)
+        if value == secret_value or not TOKEN_PATTERN.fullmatch(value):
+            continue
+        (stale if value.startswith(prefix) else unknown).add(value)
+    return stale, unknown
+
+
+def warn_unknown_value(file_path, label):
+    print(f"⚠ Warning: {label} in {file_path} holds an unknown value. Check it manually.")
+
+
 def create_backup(file_path, verbose):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_path = file_path.with_suffix(f"{file_path.suffix}.backup.{timestamp}")
@@ -202,14 +231,22 @@ def check_mode(fields, verbose):
             placeholder = f"<{label}_REDACTED>"
             secret_value = field_data["value"]
 
+            stale, unknown = find_stale_values(content, label, secret_value)
+
             if placeholder in content:
                 log(f"✓ Found placeholder: {label} (already redacted)", verbose)
                 found_labels.append(label)
             elif secret_value in content:
                 log(f"✓ Found secret value: {label} (needs redaction)", verbose)
                 found_labels.append(label)
-            elif verbose:
+            elif not stale:
                 log(f"Secret not found: {label}", verbose)
+
+            if stale:
+                log(f"✓ Found stale value: {label} (needs redaction)", verbose)
+                found_labels.append(f"{label} (stale)")
+            if unknown:
+                warn_unknown_value(file_path, label)
 
         summary.append((file_path, found_labels))
         total_found += len(found_labels)
@@ -256,6 +293,19 @@ def scrub_mode(fields, verbose):
                 processed_labels.append(label)
             elif verbose:
                 log(f"Value not found for {label}", verbose)
+
+        # Runs after every live value is a placeholder, so no live value counts as stale.
+        for label, field_data in fields.items():
+            placeholder = f"<{label}_REDACTED>"
+            stale, unknown = find_stale_values(content, label, field_data["value"])
+
+            for value in stale:
+                log(f"Scrubbing stale value: {label}", verbose)
+                content = content.replace(value, placeholder)
+            if stale:
+                processed_labels.append(f"{label} (stale)")
+            if unknown:
+                warn_unknown_value(file_path, label)
 
         if processed_labels:
             is_json = file_path.suffix == ".json"

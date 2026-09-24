@@ -35,6 +35,8 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 # Web / media / network utilities
 "pipx:yt-dlp" = "latest"                  # Video/audio downloader
 "npm:fast-cli" = "latest"                 # Network speed test CLI
+"npm:contentful-cli" = "latest"
+
 
 # Mobile development / automation
 "npm:appium" = "latest"                   # Mobile UI automation framework

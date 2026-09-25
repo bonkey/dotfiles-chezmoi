@@ -96,11 +96,7 @@ alias .ss=sudo
 alias .si="sudo -i"
 
 # Flush macOS DNS caches.
-flush-dns() {
-  sudo killall -HUP mDNSResponder
-  sudo killall mDNSResponderHelper
-  sudo dscacheutil -flushcache
-}
+alias flush-dns="set-dns --flush-dns"
 
 
 alias lsg="lsof | grep -i"

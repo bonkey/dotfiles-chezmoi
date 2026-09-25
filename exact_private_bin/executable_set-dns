@@ -20,6 +20,7 @@ presets=(
 
 usage() {
   print "Usage: $script_name [-t SECONDS | -s] [status | dhcp | <preset> | <ip>...]"
+  print "       $script_name --flush-dns"
   print "Without arguments, toggles between DHCP and $default_preset."
   print "Restores the previous servers after $default_duration seconds or on Ctrl-C."
   print "  -t SECONDS  restore after SECONDS instead"
@@ -42,6 +43,11 @@ manual_dns() {
   networksetup -getdnsservers $1 | grep -v "aren't any"
 }
 
+flush_dns() {
+  sudo dscacheutil -flushcache
+  sudo killall -HUP mDNSResponder
+}
+
 show_status() {
   local svc servers
   for svc in "${(@f)$(services)}"; do
@@ -61,7 +67,7 @@ set_dns() {
     previous[$svc]=${$(manual_dns $svc):-empty}
     sudo networksetup -setdnsservers $svc "$@" || exit 1
   done
-  sudo killall -HUP mDNSResponder
+  flush_dns
   (( duration )) || { print "DNS: $label"; return }
 
   print "DNS: $label for ${duration}s, Ctrl-C restores it now"
@@ -71,7 +77,7 @@ set_dns() {
   for svc in ${(k)previous}; do
     sudo networksetup -setdnsservers $svc ${=previous[$svc]}
   done
-  sudo killall -HUP mDNSResponder
+  flush_dns
   print "DNS: restored"
 }
 
@@ -89,6 +95,7 @@ duration=${opt_time[-1]:-$default_duration}
 
 case $1 in
   -h|--help) usage ;;
+  --flush-dns) flush_dns; print "DNS: cache flushed" ;;
   status) show_status ;;
   dhcp) set_dns DHCP empty ;;
   "")

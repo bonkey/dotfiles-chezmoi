@@ -88,6 +88,10 @@
     "contentful": {
       "enabled": true,
       "url": "https://mcp.contentful.com/mcp"
+    },
+    "linear": {
+      "enabled": true,
+      "url": "https://mcp.linear.app/mcp"
     }
   },
 

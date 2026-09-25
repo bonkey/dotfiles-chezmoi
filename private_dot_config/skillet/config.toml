@@ -1,212 +1,212 @@
-gist = "aa1b5c37a1bd7d0df1ee8070d0f55d8c"
-agents = ["claude-code", "codex", "gemini-cli", "opencode", "pi", "zed"]
+gist = 'aa1b5c37a1bd7d0df1ee8070d0f55d8c'
+agents = ['claude-code', 'codex', 'gemini-cli', 'opencode', 'pi', 'zed']
 
 [[secrets]]
-account = "bonkey.1password.com"
-vault = "nt6ulfcinsq7lcobqjhb2cdx5i"
-item = "lk3cxlvcjdbti27r7ivrcj646y"
+account = 'bonkey.1password.com'
+vault = 'nt6ulfcinsq7lcobqjhb2cdx5i'
+item = 'lk3cxlvcjdbti27r7ivrcj646y'
 
 [[packs]]
-name = "agentsview"
-description = "agentsview: a view of agent sessions"
-mcps = ["agentsview"]
+name = 'agentsview'
+description = 'agentsview: a view of agent sessions'
+mcps = ['agentsview']
 
 [[packs]]
-name = "bonkey"
-description = "Own workflow skills: pull requests, rebasing, decision logs, docs and prose cleanup, skill and plugin authoring"
-skills = ["bonkey-skills"]
+name = 'bonkey'
+description = 'Own workflow skills: pull requests, rebasing, decision logs, docs and prose cleanup, skill and plugin authoring'
+skills = ['bonkey-skills']
 
 [[packs]]
-name = "cli-dev"
-description = "Shellwright: terminal automation for CLI and TUI work"
+name = 'cli-dev'
+description = 'Shellwright: terminal automation for CLI and TUI work'
 enabled = false
-mcps = ["shellwright"]
+mcps = ['shellwright']
 
 [[packs]]
-name = "code-search"
-description = "Morph code search"
-mcps = ["morph"]
+name = 'code-search'
+description = 'Morph code search'
+mcps = ['morph']
 
 [[packs]]
-name = "elevenlabs"
-description = "ElevenLabs audio: speech, transcription, music, sound effects, dubbing, voice changing and voice agents"
+name = 'elevenlabs'
+description = 'ElevenLabs audio: speech, transcription, music, sound effects, dubbing, voice changing and voice agents'
 enabled = false
-skills = ["elevenlabs-skills"]
+skills = ['elevenlabs-skills']
 
 [[packs]]
-name = "ios-dev"
-description = "iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge"
-enabled = false
-skills = ["agent-skills", "ios-hig-design@wondelai-skills"]
-mcps = ["mobile-mcp", "simctl", "sosumi", "xcode-instruments", "xcode-mcpbridge", "xcstrings-crud"]
-
-[[packs]]
-name = "ios-bic"
-description = "Best in Class turned to skills"
+name = 'ios-bic'
+description = 'Best in Class turned to skills'
 enabled = false
 skills = [
-  "bic-accessibility@skills-private",
-  "bic-design@skills-private",
-  "bic-dev-toolbox@skills-private",
-  "bic-platform-adoption@skills-private",
-  "bic-scorecard@skills-private",
-  "bic-ux-polish@skills-private",
-  "swift-docc@agent-skills",
+  'bic-accessibility@skills-private',
+  'bic-design@skills-private',
+  'bic-dev-toolbox@skills-private',
+  'bic-platform-adoption@skills-private',
+  'bic-scorecard@skills-private',
+  'bic-ux-polish@skills-private',
+  'swift-docc@agent-skills',
 ]
 
 [[packs]]
-name = "linear"
-description = "Linear issues and projects"
-mcps = ["linear"]
+name = 'ios-dev'
+description = 'iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge'
+enabled = false
+skills = ['agent-skills', 'ios-hig-design@wondelai-skills']
+mcps = ['mobile-mcp', 'simctl', 'sosumi', 'xcode-instruments', 'xcode-mcpbridge', 'xcstrings-crud']
 
 [[packs]]
-name = "plannotator"
-description = "Plannotator plan and code review helpers"
-skills = ["herdr-annotate", "plannotator"]
+name = 'knowledge-sources'
+description = 'Knowledge sources'
+mcps = ['exa', 'firecrawl', 'tavily', 'deepwiki']
 
 [[packs]]
-name = "ponytail"
-description = "Laziest-solution-that-works coding mode, with its review, audit, debt and help companions"
-skills = ["ponytail"]
+name = 'linear'
+description = 'Linear issues and projects'
+mcps = ['linear']
 
 [[packs]]
-name = "knowledge-sources"
-description = "Knowledge sources"
-mcps = ["exa", "firecrawl", "tavily", "deepwiki"]
+name = 'plannotator'
+description = 'Plannotator plan and code review helpers'
+skills = ['herdr-annotate', 'plannotator']
 
 [[packs]]
-name = "tools"
-description = "Single-purpose tools: browser automation, Mermaid diagrams, herdr panes, show-me visual explanations, UI polish, plan grilling, skill observation"
+name = 'ponytail'
+description = 'Laziest-solution-that-works coding mode, with its review, audit, debt and help companions'
+skills = ['ponytail']
+
+[[packs]]
+name = 'tools'
+description = 'Single-purpose tools: browser automation, Mermaid diagrams, herdr panes, show-me visual explanations, UI polish, plan grilling, skill observation'
 skills = [
-  "agent-browser",
-  "design-doc-mermaid",
-  "herdr",
-  "impeccable",
-  "mattpocock-skills",
-  "one-skill-to-rule-them-all",
+  'agent-browser',
+  'design-doc-mermaid',
+  'herdr',
+  'impeccable',
+  'mattpocock-skills',
+  'one-skill-to-rule-them-all',
 ]
 
 [[packs]]
-name = "web-dev"
-description = "Web development servers: shadcn components and Vibium browser automation"
+name = 'web-dev'
+description = 'Web development servers: shadcn components and Vibium browser automation'
 enabled = false
-mcps = ["shadcn", "vibium"]
+mcps = ['shadcn', 'vibium']
 
 [[packs]]
-name = "wondelai"
-description = "Business, product, marketing, UX and software-craft frameworks, with the guided journeys that combine them"
+name = 'wondelai'
+description = 'Business, product, marketing, UX and software-craft frameworks, with the guided journeys that combine them'
 enabled = false
-skills = ["wondelai-skills"]
+skills = ['wondelai-skills']
 
 [[skills]]
-url = "https://github.com/backnotprop/plannotator.git"
-path = "apps/skills/extra"
+url = 'https://github.com/vercel-labs/agent-browser.git'
+only = ['agent-browser']
 
 [[skills]]
-url = "https://github.com/bonkey/skills.git"
+url = 'https://github.com/nonameplum/agent-skills.git'
+only = ['swift-docc']
 
 [[skills]]
-url = "https://github.com/bonkey/skills-private.git"
+url = 'https://github.com/bonkey/skills.git'
 
 [[skills]]
-url = "https://github.com/dietrichgebert/ponytail.git"
+url = 'https://github.com/spillwavesolutions/design-doc-mermaid.git'
 
 [[skills]]
-url = "https://github.com/elevenlabs/skills.git"
+url = 'https://github.com/elevenlabs/skills.git'
 only = [
-  "agents",
-  "dubbing",
-  "music",
-  "setup-api-key",
-  "sound-effects",
-  "speech-engine",
-  "speech-to-text",
-  "text-to-speech",
-  "update-skills-from-changelog",
-  "voice-changer",
-  "voice-isolator",
+  'agents',
+  'dubbing',
+  'music',
+  'setup-api-key',
+  'sound-effects',
+  'speech-engine',
+  'speech-to-text',
+  'text-to-speech',
+  'update-skills-from-changelog',
+  'voice-changer',
+  'voice-isolator',
 ]
 
 [[skills]]
-url = "https://github.com/herdrdev/herdr.git"
-only = ["herdr"]
+url = 'https://github.com/herdrdev/herdr.git'
+only = ['herdr']
 
 [[skills]]
-url = "https://github.com/mattpocock/skills.git"
-only = ["grill-me", "wayfinder"]
+url = 'https://github.com/plannotator/herdr-annotate.git'
 
 [[skills]]
-url = "https://github.com/nonameplum/agent-skills.git"
-only = ["swift-docc"]
+url = 'https://github.com/pbakaus/impeccable.git'
+only = ['impeccable']
 
 [[skills]]
-url = "https://github.com/pbakaus/impeccable.git"
-only = ["impeccable"]
+url = 'https://github.com/mattpocock/skills.git'
+only = ['grill-me', 'wayfinder']
 
 [[skills]]
-url = "https://github.com/plannotator/herdr-annotate.git"
+url = 'https://github.com/rebelytics/one-skill-to-rule-them-all.git'
+only = ['task-observer']
 
 [[skills]]
-url = "https://github.com/rebelytics/one-skill-to-rule-them-all.git"
-only = ["task-observer"]
+url = 'https://github.com/backnotprop/plannotator.git'
+path = 'apps/skills/extra'
 
 [[skills]]
-url = "https://github.com/spillwavesolutions/design-doc-mermaid.git"
+url = 'https://github.com/dietrichgebert/ponytail.git'
 
 [[skills]]
-url = "https://github.com/vercel-labs/agent-browser.git"
-only = ["agent-browser"]
+url = 'https://github.com/bonkey/skills-private.git'
 
 [[skills]]
-url = "https://github.com/wondelai/skills.git"
+url = 'https://github.com/wondelai/skills.git'
 
 [[mcps]]
-command = ["agentsview", "mcp"]
+command = ['agentsview', 'mcp']
 
 [[mcps]]
-url = "https://mcp.deepwiki.com/mcp"
+url = 'https://mcp.deepwiki.com/mcp'
 
 [[mcps]]
-url = "https://mcp.exa.ai/mcp?exaApiKey=${EXA_API_KEY}"
+url = 'https://mcp.exa.ai/mcp?exaApiKey=${EXA_API_KEY}'
 
 [[mcps]]
-name = "firecrawl"
-command = ["npx", "-y", "firecrawl-mcp"]
-environment = { FIRECRAWL_API_KEY = "${FIRECRAWL_API_KEY}" }
+name = 'firecrawl'
+command = ['npx', '-y', 'firecrawl-mcp']
+environment = {FIRECRAWL_API_KEY = '${FIRECRAWL_API_KEY}'}
 
 [[mcps]]
-url = "https://mcp.linear.app/mcp"
+url = 'https://mcp.linear.app/mcp'
 
 [[mcps]]
-command = ["npx", "-y", "@mobilenext/mobile-mcp@latest"]
+command = ['npx', '-y', '@mobilenext/mobile-mcp@latest']
 
 [[mcps]]
-name = "morph"
-command = ["npx", "--prefer-offline", "-y", "@morphllm/morphmcp"]
-environment = { MORPH_API_KEY = "${MORPH_API_KEY}" }
+name = 'morph'
+command = ['npx', '--prefer-offline', '-y', '@morphllm/morphmcp']
+environment = {MORPH_API_KEY = '${MORPH_API_KEY}'}
 
 [[mcps]]
-command = ["npx", "shadcn@latest", "mcp"]
+command = ['npx', 'shadcn@latest', 'mcp']
 
 [[mcps]]
-command = ["npx", "-y", "@dwmkerr/shellwright"]
+command = ['npx', '-y', '@dwmkerr/shellwright']
 
 [[mcps]]
-name = "simctl"
-command = ["npx", "-y", "simctl-mcp"]
+name = 'simctl'
+command = ['npx', '-y', 'simctl-mcp']
 
 [[mcps]]
-url = "https://sosumi.ai/mcp"
+url = 'https://sosumi.ai/mcp'
 
 [[mcps]]
-url = "https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}"
+url = 'https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}'
 
 [[mcps]]
-command = ["npx", "-y", "vibium", "mcp"]
+command = ['npx', '-y', 'vibium', 'mcp']
 
 [[mcps]]
-name = "xcode-instruments"
-command = ["npx", "-y", "instrumentsmcp@latest"]
+name = 'xcode-instruments'
+command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
-command = ["xcstrings-crud", "mcp"]
+command = ['xcstrings-crud', 'mcp']

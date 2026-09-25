@@ -560,7 +560,7 @@ alias xf="xmllint --format"
     if [[ "${HERDR_ENV:-}" != 1 ]] && (( $+commands[mlux] )); then
         mlux --theme catppuccin-latte-latin --allow-remote-images --exp-preset adaptive --watch "$@"
     elif (( $+commands[mdcat] )); then
-        mdcat -p --toc --smart-punctuation "$@"
+        mdcat -p --smart-punctuation "$@"
     elif (( $+commands[glow] )); then
         glow -w 0 -p "$@"
     else
@@ -569,11 +569,14 @@ alias xf="xmllint --format"
 }
 
 cat() {
-    if [[ -z "$2" && "$1:t:e" == "md" ]]; then
-        .mdc "$1"
-    else
-        bat "$@"
-    fi
+    local arg
+    for arg in "$@"; do
+        if [[ "$arg" == *.md ]]; then
+            .mdc "$@"
+            return $?
+        fi
+    done
+    bat "$@"
 }
 
 # Show files with cat using header styling.

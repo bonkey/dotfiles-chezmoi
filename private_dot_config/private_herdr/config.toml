@@ -1,7 +1,9 @@
 onboarding = false
 
 [theme]
-name = "rose-pine-dawn"
+name = "tokyo-night"
+dark_name = "tokyo-night"
+light_name = "rose-pine-dawn"
 auto_switch = false
 
 [experimental]

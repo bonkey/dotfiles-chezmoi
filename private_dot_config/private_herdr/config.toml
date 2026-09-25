@@ -1,7 +1,7 @@
 onboarding = false
 
 [theme]
-name = "tokyo-night"
+name = "vesper"
 dark_name = "tokyo-night"
 light_name = "rose-pine-dawn"
 auto_switch = false

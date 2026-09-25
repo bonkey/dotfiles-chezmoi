@@ -140,16 +140,43 @@ handle_result() {
     fi
 }
 
+# Prints the prompt and reads one key into REPLY without echo.
+wait_for_key() {
+    printf '%s ' "$1"
+    read -k1 -s
+    print
+}
+
+# Closes the Herdr tab this script runs in, which also ends the script. Herdr
+# removes the workspace together with its last tab.
+close_tab() {
+    if [[ -n ${HERDR_TAB_ID:-} ]]; then
+        herdr tab close "$HERDR_TAB_ID" &>/dev/null
+    fi
+}
+
 run_update() {
     print -- "$BANNER"
 
-    stop_apps
+    local exit_code
+    while true; do
+        stop_apps
 
-    chezmoi update
-    local exit_code=$?
+        chezmoi update
+        exit_code=$?
 
-    open_apps
-    handle_result $exit_code
+        open_apps
+        handle_result $exit_code
+
+        if (( exit_code == 0 )); then
+            wait_for_key 'Press any key to close'
+            break
+        fi
+        wait_for_key '[R]etry or any other button to close'
+        [[ $REPLY == [rR] ]] || break
+    done
+
+    close_tab
 }
 
 if [[ -n ${(P)WORKER_ENV:-} ]]; then

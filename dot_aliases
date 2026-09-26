@@ -345,14 +345,7 @@ gvim() {
     vimer -t "$@"
 }
 
-# Open the current directory or provided paths in VS Code Insiders.
-c() {
-  if [[ -z "$1" ]]; then
-    code-insiders .
-  else
-    code-insiders "$@"
-  fi
-}
+
 
 # Open the current directory or provided paths in Zed.
 z() {
@@ -564,7 +557,12 @@ alias xf="xmllint --format"
     fi
 }
 
-cat() {
+c() {
+    if [[ ! -t 1 ]]; then
+        command cat "$@"
+        return $?
+    fi
+
     local arg
     for arg in "$@"; do
         if [[ "$arg" == *.md ]]; then
@@ -573,11 +571,6 @@ cat() {
         fi
     done
     bat "$@"
-}
-
-# Show files with cat using header styling.
-cata() {
-    cat --style=header "$@"
 }
 
 # Strip ANSI escape sequences from command output.
@@ -606,9 +599,9 @@ man() {
 # BUILD TOOLS & BENCHMARKS
 ###############################################################################
 
-alias .j=just
-alias .jt=".j --time --timestamp"
-alias .jl=".j -l --list-submodules"
+alias j=just
+alias jt="j --time --timestamp"
+alias jl="j -l --list-submodules"
 
 alias hyf="hyperfine -m 3"
 

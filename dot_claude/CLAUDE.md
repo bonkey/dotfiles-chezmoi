@@ -63,6 +63,10 @@ The best code is no code. Every extra line adds complexity and risk. Within the 
 
 Do not add code for behavior the request does not require. Omit low-value or speculative code.
 
+## Scripting projects
+
+Use Python by default for new scripting projects. Preserve the language and script engine of existing scripts unless the human explicitly asks to change them.
+
 ## Comment on GitHub only when necessary
 
 GitHub comments create noise for people and agents. Post one only when it serves a required action, such as requesting another pull request review, resolving a review comment, or explaining a rejection. Keep it concise.

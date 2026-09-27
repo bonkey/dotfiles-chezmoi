@@ -120,14 +120,20 @@ alias cal="gcal -s 1"
 # CHEZMOI
 ###############################################################################
 
-# Forward arguments to chezmoi.
+# Forward arguments to chezmoi. chezmoi skips its .post hooks when a command
+# fails or is interrupted, which leaves the secrets-scrubber placeholders in
+# the target files, so restore them here.
 .ch() {
-    chezmoi "$@"
+    {
+        chezmoi "$@"
+    } always {
+        (( $? )) && ~/bin/secrets-scrubber.py restore >&2
+    }
 }
 
 # Edit through chezmoi, then sync; .chs is the only place that pulls or pushes.
 .che() {
-    chezmoi edit --apply "$@" && .chs
+    .ch edit --apply "$@" && .chs
 }
 
 .chc() {

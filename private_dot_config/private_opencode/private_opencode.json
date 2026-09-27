@@ -58,11 +58,6 @@
       ],
       "enabled": true
     },
-    "contentful": {
-      "type": "remote",
-      "url": "https://mcp.contentful.com/mcp",
-      "enabled": true
-    },
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp",

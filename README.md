@@ -29,7 +29,7 @@ brew install chezmoi
 3. Install CLI
 
 ```shell
-brew install 1password-cli
+brew install 1password-cli@beta
 ```
 
 ## Install dotfiles & run scripts

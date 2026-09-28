@@ -1,8 +1,10 @@
+{{- /* .chezmoi.hostname follows the FQDN, which an /etc/hosts entry can change. */ -}}
+{{- $host := output "hostname" "-s" | trim -}}
 . ${HOME}/bin/_common.zsh
 
 export _GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
 
-{{- if eq .chezmoi.hostname "dbauke-mac" "dbauke-mac-2" "DBs-MacBook-Pro" }}
+{{- if eq $host "dbauke-mac" "dbauke-mac-2" "DBs-MacBook-Pro" }}
 
 export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"
 export CIRCLECI_CLI_TOKEN=$CIRCLECI_TOKEN
@@ -18,7 +20,7 @@ export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 
 {{- end }}
 
-{{- if eq .chezmoi.hostname "danbau-personal" }}
+{{- if eq $host "danbau-personal" }}
 
 # export ANTHROPIC_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ANTHROPIC_API_KEY.value -}}"
 export DEEPSEEK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").DEEPSEEK_API_KEY.value -}}"
@@ -74,7 +76,7 @@ export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulf
 export HOMEBREW_AUTOREMOVE=true
 export HOMEBREW_BAT=true
 export HOMEBREW_CASK_OPTS="--no-quarantine"
-{{- if eq .chezmoi.hostname "dbauke-mac" }}
+{{- if eq $host "dbauke-mac" }}
 # A cask target under /Applications makes Homebrew retry `chgrp` under sudo when
 # the unprivileged call fails. An appdir under $HOME skips that retry.
 export HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS} --appdir=${HOME}/Applications"

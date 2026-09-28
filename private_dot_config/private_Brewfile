@@ -24,7 +24,7 @@ tap 'ycd/tap'
 brew 'ollama' # Create, run, and share large language models (LLMs)
 cask 'conductor' # Claude code parallelisation
 cask 'commander' # AI agent operator
-cask 'codex-app' # OpenAI's Codex desktop app for managing coding agents
+cask 'chatgpt' # OpenAI's Codex desktop app for managing coding agents
 cask 'vibe-island' # Dynamic island AI agent utility
 cask 'agentsview' # Browse, search and analyse your past AI coding sessions
 
@@ -47,11 +47,13 @@ brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
 brew 'spacer' # Small command-line utility for adding spacers to command output
 brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'zoxide' # Shell extension to navigate your filesystem faster
-cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 brew 'mole' # Deep clean and optimize your Mac
 brew 'michel-kraemer/zsh-patina/zsh-patina' # Blazingly fast Zsh syntax highlighter
 brew 'duf' # Disk Usage/Free Utility - a better 'df' alternative
 brew 'tlrc' # Official tldr client written in Rust
+
+cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
+cask 'ghostty'
 
 brew 'tmux' # Terminal multiplexer
 brew 'herdr' # Agent multiplexer that lives in your terminal
@@ -98,6 +100,7 @@ brew 'mtr' # 'traceroute' and 'ping' in a single tool
 brew 'nmap' # Port scanning utility for large networks
 brew 'wget' # Internet file retriever
 cask 'firefox' # Web browser
+cask 'zen@twilight'
 
 # Archives, documents, and data formats
 brew 'ghostscript' # Interpreter for PostScript and PDF
@@ -146,6 +149,7 @@ brew 'direnv' # Load/unload environment variables based on $PWD
 brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
 brew 'docker-compose' # Isolated development environments using Docker
 brew 'ffmpeg' # Play, record, convert, and stream audio and video
+
 brew 'golang' # Open source programming language to build simple/reliable/efficient software
 brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
 # brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
@@ -160,16 +164,13 @@ brew 'uhubctl' # USB hub per-port power control
 brew 'xcbeautify' # Little beautifier tool for xcodebuild
 brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 brew 'xcenv' # Xcode version manager
-brew 'xcinfo' # Tool to get information about and install available Xcode versions
-brew 'xcodes' # Best command-line tool to install and switch between multiple versions of Xcode
-cask 'xcodes-app' # Install and switch between multiple versions of Xcode
 cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
 cask 'gcloud-cli' # Set of tools to manage resources and applications hosted on Google Cloud
 cask 'hazel' # Automated organisation
+cask 'just'
 
 # Completions
-brew 'brew-cask-completion' # Fish completion for brew-cask
 brew 'bundler-completion' # Bash completion for Bundler
 brew 'gem-completion' # Bash completion for gem
 brew 'gradle-completion' # Bash and Zsh completion for Gradle
@@ -191,7 +192,7 @@ cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 # Fonts
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-commit-mono-nerd-font' #
+cask 'font-commit-mono-nerd-font'
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fira-code-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -207,15 +208,11 @@ cask 'font-ubuntu-nerd-font' # Developer targeted fonts with a high number of gl
 
 # QuickLook plugins
 cask 'provisionql' # QuickLook plugin for mobile apps and provisioning profiles
-cask 'qlprettypatch' # QuickLook plugin to view patch files
 cask 'quicklook-video' # Thumbnails, static previews, cover art and metadata for video files
-cask 'quicklook-csv' # QuickLook plugin for CSV files
 cask 'syntax-highlight' # Quicklook extension for source files
-cask 'webpquicklook' # QuickLook plugin for webp files
 
 # Productivity and desktop apps
 cask 'cap' # Screen recording software
-cask 'contexts' # Allows switching between application windows
 cask 'daisydisk' # Disk space visualizer
 cask 'rectangle-pro' # Window snapping tool
 cask 'setapp' # Collection of apps available by subscription
@@ -227,7 +224,6 @@ cask 'handbrake-app' # Open-source o transcoder
 cask 'iina' # Free and open-source media player
 
 # Hardware boosting
-cask 'android-file-transfer' # Transfer files from and to an Android smartphone
 cask 'resolutionator' # Use any of your display's available resolutions
 cask 'darrylmorley/whatcable/whatcable' # Menu bar app for USB-C cable diagnostics
 cask 'karabiner-elements' # Keyboard customizer
@@ -248,7 +244,7 @@ cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
 cask 'loopback' # Cable-free audio router
 cask 'obs' # Open-source software for live streaming and screen recording
-cask 'soundsource' # Sound and audio controller
+cask 'soundsource'
 
 mas 'Amphetamine', id: 937_984_704
 mas 'DevCleaner for Xcode', id: 1_388_020_431

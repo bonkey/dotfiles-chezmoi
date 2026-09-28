@@ -16,4 +16,7 @@ clean_if_over() {
 clean_if_over "$HOME/.bun/install/cache" 5
 
 command -v uv >/dev/null && uv cache prune --quiet
-command -v xcrun >/dev/null && xcrun simctl --set testing delete all >/dev/null 2>&1
+xcrun -f simctl >/dev/null 2>&1 && xcrun simctl --set testing delete all >/dev/null 2>&1
+
+# Cache cleanup is best-effort and must never fail chezmoi apply.
+exit 0

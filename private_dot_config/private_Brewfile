@@ -168,7 +168,7 @@ cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
 cask 'gcloud-cli' # Set of tools to manage resources and applications hosted on Google Cloud
 cask 'hazel' # Automated organisation
-cask 'just'
+brew 'just'
 
 # Completions
 brew 'bundler-completion' # Bash completion for Bundler

@@ -46,6 +46,9 @@ plugins=(
     bonkey/herdr-fm-title
 )
 
+# The whole catalog, before this machine skips any of it: a skipped plugin stays installed.
+catalog=("${plugins[@]}")
+
 # ramarivera/herdr-pretty-which needs cargo to build. Dropping it from the
 # catalog keeps a missing Rust toolchain from aborting the whole script.
 if (( ! $+commands[cargo] )); then
@@ -108,6 +111,20 @@ find_outdated_plugins() {
     done
 }
 
+# A plugin installed from GitHub that the catalog does not list is uninstalled.
+# Linked plugins (herdr plugin link) stay. Plugins match by owner and repo, as
+# in find_outdated_plugins. An uninstall does not need the server stopped.
+remove_dropped_plugins() {
+    local keep id
+    keep=$(print -rl -- "${catalog[@]}" | jq -Rn '[inputs | split("/")[0:2] | join("/")]')
+
+    for id in ${(f)"$(herdr plugin list --json 2>/dev/null | jq -r --argjson keep "$keep" \
+        '.result.plugins[] | select(.source.kind == "github")
+            | select((.source.owner + "/" + .source.repo) | IN($keep[]) | not) | .plugin_id')"}; do
+        _exec "herdr plugin uninstall '$id'"
+    done
+}
+
 stop_server_with_consent() {
     server_running || return 0
 
@@ -157,6 +174,7 @@ reload_server_config() {
 
 # Main
 
+remove_dropped_plugins
 find_outdated_plugins
 
 if (( ${#outdated_plugins} == 0 )); then

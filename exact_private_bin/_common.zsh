@@ -41,7 +41,7 @@ _exec() {
     cmd=$*
 
     if [[ $silent -eq 0 ]]; then
-        print -P "$(msg_prefix)Executing: $(color %B%K{blue}%F{white} ${cmd})"
+        print -P "$(msg_prefix)Executing: $(color %B%K{blue}%F{black} ${cmd})"
     fi
 
     exec_start=$(timestamp)

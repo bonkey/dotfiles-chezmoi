@@ -93,3 +93,5 @@ fi
 
 # opencode
 export PATH=/Users/bonkey/.opencode/bin:$PATH
+
+eval "$(atuin init zsh)"

@@ -36,5 +36,10 @@ brew install 1password-cli@beta
 
 ```shell
 chezmoi init git@github.com:bonkey/dotfiles-chezmoi.git
-chezmoi apply
+```
+
+```shell
+chezmoi apply -x scripts \
+  --config <(chezmoi cat-config | sed '/^\[hooks\./,/^$/d') --config-format toml \
+  --persistent-state ~/.config/chezmoi/chezmoistate.boltdb
 ```

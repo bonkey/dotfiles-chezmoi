@@ -48,6 +48,14 @@ chezmoi apply -x scripts \
   --persistent-state ~/.config/chezmoi/chezmoistate.boltdb
 ```
 
+## Install brew
+
+```shell
+chezmoi apply ~/30_install_brew
+```
+
+## Install all the other tools
+
 Run all installation scripts
 
 ```shell

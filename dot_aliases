@@ -158,7 +158,14 @@ alias .cha=".ch add"
     return 1
   fi
 
-  .ch re-add "$@" || return
+  # Re-add only targets edited since chezmoi last wrote them (status column 1).
+  # A plain re-add also reverts source-only changes, such as a git checkout
+  # in $src, back to the stale target.
+  local -a edited
+  edited=(${(f)"$(chezmoi status --exclude scripts "$@" | sed -n 's/^M. //p')"})
+  if (( $#edited )); then
+    .ch re-add "$HOME/"${^edited} || return
+  fi
 
   if ! git -C "$src" pull --rebase --autostash; then
     [[ -d $gitdir/rebase-merge ]] || return

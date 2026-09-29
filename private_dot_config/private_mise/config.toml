@@ -64,6 +64,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:@qwen-code/qwen-code" = "latest"     # Qwen coding assistant CLI
 "npm:@kilocode/cli" = "latest"            # AI coding assistant CLI
 "npm:@earendil-works/pi-coding-agent" = "latest" # Coding agent CLI
+"npm:@opencode/cli" = "latest"
 
 # AI tools
 "npm:btca" = "latest"                     # opencode / micode related

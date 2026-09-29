@@ -40,6 +40,8 @@ export TELEMETRY_DECK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrc
 
 export ELEVENLABS_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ELEVENLABS_API_KEY.value -}}"
 
+export HF_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").HF_TOKEN.value -}}"
+
 {{- end }}
 
 export KAGI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").KAGI_API_KEY.value -}}"

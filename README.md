@@ -12,51 +12,14 @@ Check the latest command on https://brew.sh
 
 ## Setup brew in shell
 
-### Apple Silicon
-
 ```shell
 eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-### Intel
-
-```shell
-eval "$(/usr/local/bin/brew shellenv)"
 ```
 
 ## Install chezmoi
 
 ```shell
 brew install chezmoi
-```
-
-## Configure chezmoi
-
-```toml
-[data]
-    email = "XXXX"
-    gpgkey = "XXXX"
-
-[edit]
-    command = "zed"
-    args = ["--wait", "--new"]
-
-[git]
-    autoCommit = true
-    autoPush = true
-
-[diff]
-    exclude = ["scripts"]
-
-[[textconv]]
-    pattern = "**/*.plist"
-    command = "/bin/zsh"
-    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
-
-[[textconv]]
-    pattern = "**/*.kmsync"
-    command = "/bin/zsh"
-    args = ["-c", "plutil -convert json -o - - | jq -r --sort-keys"]
 ```
 
 ## Add ssh key from 1password
@@ -66,12 +29,36 @@ brew install chezmoi
 3. Install CLI
 
 ```shell
-brew install 1password-cli
+brew install 1password-cli@beta
 ```
 
 ## Install dotfiles & run scripts
 
+Build config
+
 ```shell
 chezmoi init git@github.com:bonkey/dotfiles-chezmoi.git
+```
+
+Install basic files
+
+```shell
+chezmoi apply -x scripts \
+  --config <(chezmoi cat-config | sed '/^\[hooks\./,/^$/d') --config-format toml \
+  --persistent-state ~/.config/chezmoi/chezmoistate.boltdb
+```
+
+## Install brew
+
+```shell
+chezmoi apply ~/30_install_brew
+```
+
+## Install all the other tools
+
+Run all installation scripts
+
+```shell
 chezmoi apply
+
 ```

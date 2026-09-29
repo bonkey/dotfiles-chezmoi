@@ -1,12 +1,22 @@
 {
   "plugin": [
-    "@plannotator/opencode@latest"
+    "@plannotator/opencode@latest",
+    "/Users/bonkey/.config/opencode/plugins/mtplx-session-headers"
   ],
-  "disabled_providers": ["anthropic", "openrouter", "perplexity"],
+  "disabled_providers": [
+    "anthropic",
+    "openrouter",
+    "perplexity"
+  ],
   "formatter": {
     "swiftformat": {
-      "command": ["swiftformat", "$FILE"],
-      "extensions": [".swift"]
+      "command": [
+        "swiftformat",
+        "$FILE"
+      ],
+      "extensions": [
+        ".swift"
+      ]
     }
   },
   "mcp": {
@@ -65,5 +75,67 @@
     }
   },
   "$schema": "https://opencode.ai/config.json",
-  "instructions": ["node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"]
+  "instructions": [
+    "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
+  ],
+  "provider": {
+    "mtplx": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MTPLX (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:18083/v1",
+        "timeout": false,
+        "chunkTimeout": 900000,
+        "headers": {
+          "x-mtplx-client": "opencode"
+        }
+      },
+      "models": {
+        "mtplx-qwen38-27b-optimized-speed": {
+          "name": "MTPLX mtplx-qwen38-27b-optimized-speed",
+          "reasoning": true,
+          "tool_call": true,
+          "temperature": true,
+          "limit": {
+            "context": 262144,
+            "output": 32000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "variants": {
+            "none": {
+              "disabled": true
+            },
+            "minimal": {
+              "disabled": true
+            },
+            "high": {
+              "disabled": true
+            },
+            "xhigh": {
+              "reasoningEffort": "xhigh"
+            },
+            "medium": {
+              "reasoningEffort": "medium"
+            },
+            "low": {
+              "reasoningEffort": "low"
+            }
+          }
+        }
+      }
+    }
+  },
+  "model": "mtplx/mtplx-qwen38-27b-optimized-speed",
+  "small_model": "mtplx/mtplx-qwen38-27b-optimized-speed"
 }

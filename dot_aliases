@@ -1301,6 +1301,9 @@ alias .ws='wt switch'
 alias .wsm='.ws main'
 alias .wsc='.ws --create'
 
+alias .gwl="git worktree lock"
+alias .gwu="git worktree unlock"
+
 # List removable clean worktree branches excluding active agent start markers.
 .wcl() {
     local agents

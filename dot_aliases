@@ -493,7 +493,9 @@ f() { fd --follow "$@"; }
 f0() { f "$@" --print0; }
 
 # Search files with fd.
-ff() { f --type f "$@"; }
+ftf() { f --type f "$@"; }
+# Search files with fd.
+ftd() { f --type d "$@"; }
 
 # Search all hidden and ignored paths with fd.
 fhi() { f --no-ignore --hidden "$@"; }

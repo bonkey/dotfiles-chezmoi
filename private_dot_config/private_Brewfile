@@ -219,6 +219,7 @@ cask 'setapp' # Collection of apps available by subscription
 cask 'superkey' # Search and click text anywhere on screen
 cask 'typora' # Configurable document editor that supports Markdown
 cask 'raycast' # Control your tools with a few keystrokes
+cask 'homerow'
 
 cask 'handbrake-app' # Open-source o transcoder
 cask 'iina' # Free and open-source media player

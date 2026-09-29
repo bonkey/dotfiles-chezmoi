@@ -41,7 +41,7 @@ rows = [
     { contains = "\uF4DC", fg = "#6e7681" },  # closed                                oct-git_pull_request_closed
     { contains = "\uF420", fg = "#6e7681" },  # no pull request                       oct-question
     { contains = "\uF442", fg = "#39c5cf" },  # conversation open                     oct-comment_discussion
-  ] }, "workspace", "tab", { token = "$stack", rules = [
+  ] }, "workspace", "pane", { token = "$stack", rules = [
     { equals = "\ue711\ue70e", fg = "#9061e8" },  # iOS and Android together (KMP)
     { equals = "\ue711", fg = "#7c7c82" },        # iOS/macOS
     { equals = "\ue70e", fg = "#0d9152" },        # Android

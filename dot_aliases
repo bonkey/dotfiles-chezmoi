@@ -1151,12 +1151,15 @@ _git-pull-and-back() {
   src_branch=${1:-main}
   _git-pull-and-back "$src_branch" "git merge --no-edit {branch}"
 }
+alias .gmm=".gm main"
 
 # Pull and rebase the current branch onto a source branch.
 .gr() {
   src_branch=${1:-main}
   _git-pull-and-back "$src_branch" "git rebase {branch}"
 }
+
+alias .grm=".gr main"
 
 
 ###############################################################################

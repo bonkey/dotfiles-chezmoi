@@ -347,9 +347,19 @@ alias brunc="br uninstall --cask"
     GITHUB_TOKEN=$_GITHUB_ACCESS_TOKEN mise "$@"
 }
 
+# Short names (`skillet`) resolve to the configured tool (`github:bonkey/skillet`).
+# The cache directory uses the tool name with `:` and `/` replaced by `-`.
 .mu() {
-    .m cache clean "$@"
-    .m up "$@"
+    local -a tools caches
+    local tool full
+    for tool in "$@"; do
+        full=$(.m ls --json 2>/dev/null | jq -r --arg t "$tool" \
+            'keys[] | select(. == $t or endswith("/" + $t) or endswith(":" + $t))' | head -1)
+        tools+=("${full:-$tool}")
+        caches+=("${${full:-$tool}//[:\/]/-}")
+    done
+    .m cache clean "${caches[@]}"
+    .m up "${tools[@]}"
     .mp
 }
 

@@ -1,4 +1,3 @@
-# GLOBAL PATH ALIASES
 ###############################################################################
 
 alias -g /dow='"$HOME/Downloads"'
@@ -223,7 +222,7 @@ alias .cha=".ch add"
 }
 
 .chr-brew() {
-    .chr update_brew
+    .chr install_brew
 }
 
 .chr-herdr() {

@@ -232,7 +232,6 @@ cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number 
 cask 'font-input' # Input font family
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-monaspace-nerd-font'
 cask 'font-monaspice-nerd-font' # Monaspice Nerd Font families (Monaspace)
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-symbols-only-nerd-font' # Symbols-only Nerd Font glyph set

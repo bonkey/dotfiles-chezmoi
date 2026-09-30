@@ -286,18 +286,21 @@ description = "refresh PR emoji"
 # Open the PR of the branch checked out in the focused pane. Shell commands run
 # from that pane's working directory, so plain `gh pr view -w` hits the right
 # repo and branch. prefix+p is free: previous_tab is bound to ctrl+alt+left.
+# Herdr discards the output of shell commands, so a failure shows gh's error in
+# a notification.
 [[keys.command]]
 key = "prefix+p"
 type = "shell"
-command = "gh pr view -w"
+command = 'err=$(gh pr view -w 2>&1 >/dev/null) || herdr notification show "No PR found" --body "$err"'
 description = "open PR in browser"
 
-# Copy that PR's URL to the clipboard. tr strips the trailing newline that --jq
-# prints, so the clipboard holds the bare URL.
+# Copy that PR's URL to the clipboard. $(...) drops the trailing newline that
+# --jq prints, so the clipboard holds the bare URL. A failure shows gh's error in
+# a notification.
 [[keys.command]]
 key = "prefix+P"
 type = "shell"
-command = 'gh pr view --json url --jq .url | tr -d "\n" | pbcopy'
+command = 'url=$(gh pr view --json url --jq .url 2>&1) && printf %s "$url" | pbcopy || herdr notification show "No PR found" --body "$url"'
 description = "copy PR URL"
 
 # Duplicate the focused pane's running command into a new tab (local plugin: local-plugins/dup-tab)

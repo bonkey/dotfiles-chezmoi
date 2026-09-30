@@ -219,15 +219,20 @@ cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 # Fonts
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-commit-mono-nerd-font' # 
+cask 'font-commit-mono-nerd-font'
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fira-code-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-geist-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-hack-nerd-font'
+cask 'font-ia-writer-duo'
+cask 'font-ia-writer-mono'
+cask 'font-ia-writer-quattro'
 cask 'font-inconsolata-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-input' # Input font family
 cask 'font-iosevka-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-jetbrains-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
+cask 'font-monaspace-nerd-font'
 cask 'font-monaspice-nerd-font' # Monaspice Nerd Font families (Monaspace)
 cask 'font-sf-mono-for-powerline' # Apple's SF Mono font patched with the Nerd Fonts patcher for Powerline support
 cask 'font-symbols-only-nerd-font' # Symbols-only Nerd Font glyph set

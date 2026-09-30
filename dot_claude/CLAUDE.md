@@ -63,6 +63,15 @@ The best code is no code. Every extra line adds complexity and risk. Within the 
 
 Do not add code for behavior the request does not require. Omit low-value or speculative code.
 
+## Designed path first
+
+Before you weigh options for where a value, a setting or a behavior lives, find the path that the platform, SDK or backend already implements for it. Read the code that consumes the value.
+
+- If a designed path exists, answer with that path in one or two sentences, and give the code location as evidence.
+- An option that needs new client, SDK or backend code to do what the designed path does today is not a peer. Say in one line that it has no use here, and why.
+- A request for pros and cons does not change this. Lead with the verdict. List trade-offs only between options that the code supports today.
+- Add no mitigation, fallback or follow-up ticket unless the user asks for it.
+
 ## Scripting projects
 
 Use Python by default for new scripting projects. Preserve the language and script engine of existing scripts unless the human explicitly asks to change them.

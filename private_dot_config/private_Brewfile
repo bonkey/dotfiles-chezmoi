@@ -2,7 +2,7 @@
 #
 # ~/bin/brewfile-describe.rb Brewfile
 # or
-# ruby $HOME/.local/share/chezmoi/exact_bin/executable_brewfile-describe.rb $HOME/.local/share/chezmoi/private_dot_config/private_Brewfile
+# ruby $HOME/.local/share/chezmoi/exact_private_bin/executable_brewfile-describe.rb $HOME/.local/share/chezmoi/private_dot_config/private_Brewfile
 
 tap '1password/tap'
 tap 'abhimanyu003/sttr'
@@ -21,23 +21,25 @@ tap 'steipete/tap'
 tap 'ycd/tap'
 
 # AI and coding agents
-brew 'ollama' # Create, run, and share large language models (LLMs)
-cask 'conductor' # Claude code parallelisation
-cask 'commander' # AI agent operator
-cask 'chatgpt' # OpenAI's Codex desktop app for managing coding agents
-cask 'vibe-island' # Dynamic island AI agent utility
-cask 'agentsview' # Browse, search and analyse your past AI coding sessions
-
-brew 'wilbeibi/tap/catchup' # Hand off coding-agent context across Claude Code, Codex, and more
-brew 'plannotator/tap/plannotator-tui' # Annotate Markdown in the terminal and send the review to your agent
-
 brew 'agent-browser' # Browser automation CLI for AI agents
+brew 'dicklesworthstone/tap/cass' # Cross-agent session search - index and search AI coding agent conversations
+brew 'wilbeibi/tap/catchup' # Hand off coding-agent context across Claude Code, Codex, and more
+brew 'ollama' # Create, run, and share large language models (LLMs)
+brew 'plannotator/tap/plannotator-tui' # Annotate Markdown in the terminal and send the review to your agent
+cask 'agentsview' # Browse, search and analyse your past AI coding sessions
+cask 'chatgpt' # OpenAI's Codex desktop app for managing coding agents
+cask 'commander' # AI agent operator
+cask 'conductor' # Claude code parallelisation
+cask 'vibe-island' # Dynamic island AI agent utility
 
 # Shell and terminal
 brew 'chezmoi' # Manage your dotfiles across multiple diverse machines, securely
+brew 'duf' # Disk Usage/Free Utility - a better 'df' alternative
 brew 'figlet' # Banner-like program prints strings as ASCII art
+brew 'herdr' # Agent multiplexer that lives in your terminal
 brew 'intelli-shell' # Like IntelliSense, but for shells
 brew 'mactop' # Apple Silicon Monitor Top written in Go Lang
+brew 'mole' # Deep clean and optimize your Mac
 brew 'noti' # Trigger notifications when a process completes
 brew 'nushell' # Modern shell for the GitHub era
 brew 'oh-my-posh' # Prompt theme engine for any shell
@@ -45,19 +47,13 @@ brew 'pstree' # Show ps output as a tree
 brew 'shellcheck' # Static analysis and lint tool, for (ba)sh scripts
 brew 'sleepwatcher' # Monitors sleep, wakeup, and idleness of a Mac
 brew 'spacer' # Small command-line utility for adding spacers to command output
+brew 'tlrc' # Official tldr client written in Rust
+brew 'tmux' # Terminal multiplexer
 brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'zoxide' # Shell extension to navigate your filesystem faster
-brew 'mole' # Deep clean and optimize your Mac
 brew 'michel-kraemer/zsh-patina/zsh-patina' # Blazingly fast Zsh syntax highlighter
-brew 'duf' # Disk Usage/Free Utility - a better 'df' alternative
-brew 'tlrc' # Official tldr client written in Rust
-
+cask 'ghostty' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
-cask 'ghostty'
-
-brew 'tmux' # Terminal multiplexer
-brew 'herdr' # Agent multiplexer that lives in your terminal
-brew 'dicklesworthstone/tap/cass' # Cross-agent session search - index and search AI coding agent conversations
 
 # File, text, and search tools
 brew 'ast-grep' # Code searching, linting, rewriting
@@ -70,9 +66,9 @@ brew 'fd' # Simple, fast and user-friendly alternative to find
 brew 'fswatch' # Monitor a directory for changes and run a shell command
 brew 'fzf' # Command-line fuzzy finder written in Go
 brew 'glow' # Render markdown on the CLI
-brew 'mdcat' # Render markdown on the CLI
 brew 'html2markdown' # Convert HTML to Markdown
 brew 'liblockfile' # Library providing functions to lock standard mailboxes
+brew 'mdcat' # Render markdown on the CLI
 brew 'moreutils' # Collection of tools that nobody wrote when UNIX was young
 brew 'rga' # Wrapper around ripgrep that adds multiple rich file types
 brew 'ripgrep' # Search tool like grep and The Silver Searcher
@@ -91,27 +87,6 @@ brew 'gnu-sed' # GNU implementation of the famous stream editor
 brew 'gnu-tar' # GNU version of the tar archiving utility
 brew 'grep' # GNU grep, egrep and fgrep
 
-# Networking and web
-brew 'aria2' # Download with resuming and segmented downloading
-brew 'curlie' # curl alternative with syntax highlighting and more
-brew 'doggo' # Command-line DNS Client for Humans
-brew 'dstp' # Run common networking tests against your site
-brew 'mtr' # 'traceroute' and 'ping' in a single tool
-brew 'nmap' # Port scanning utility for large networks
-brew 'wget' # Internet file retriever
-cask 'firefox' # Web browser
-cask 'zen@twilight'
-
-# Archives, documents, and data formats
-brew 'ghostscript' # Interpreter for PostScript and PDF
-brew 'graphicsmagick' # Image processing tools collection
-brew 'imagemagick' # Tools and libraries to manipulate images in select formats
-brew 'p7zip' # 7-Zip (high compression file archiver) implementation
-brew 'poppler' # PDF rendering library (based on the xpdf-3.0 code base)
-brew 'resvg' # SVG rendering tool and library
-brew 'sevenzip' # 7-Zip is a file archiver with a high compression ratio
-brew 'fx' # Terminal JSON viewer
-
 # JSON + YAML
 brew 'dasel' # JSON, YAML, TOML, XML, and CSV query and modification tool
 brew 'dyff' # δyƒƒ /ˈdʏf/ - A diff tool for YAML files, and sometimes JSON
@@ -122,7 +97,19 @@ brew 'jo' # JSON output from a shell
 brew 'jq' # Lightweight and flexible command-line JSON processor
 brew 'libyaml' # YAML Parser
 brew 'yq' # Process YAML, JSON, XML, CSV and properties documents from the CLI
-#
+
+# Archives, documents, and images
+brew 'ghostscript' # Interpreter for PostScript and PDF
+brew 'graphicsmagick' # Image processing tools collection
+brew 'imagemagick' # Tools and libraries to manipulate images in select formats
+brew 'p7zip' # 7-Zip (high compression file archiver) implementation
+brew 'poppler' # PDF rendering library (based on the xpdf-3.0 code base)
+brew 'resvg' # SVG rendering tool and library
+brew 'sevenzip' # 7-Zip is a file archiver with a high compression ratio
+cask 'imageoptim' # Tool to optimise images to a smaller size
+cask 'yacreader' # Comic reader
+mas 'Pixelmator Pro', id: 1_289_583_905
+
 # Version control and code review
 brew 'colordiff' # Color-highlighted diff(1) output
 brew 'ctags' # Reimplementation of ctags(1)
@@ -133,42 +120,47 @@ brew 'git-delta' # Syntax-highlighting pager for git and diff output
 brew 'git-extras' # Small git utilities
 brew 'git-lfs' # Git extension for versioning large files
 brew 'git-town' # High-level command-line interface for Git
+brew 'modem-dev/tap/hunk' # Desktop-inspired terminal diff viewer for agent-authored changesets
+brew 'worktrunk' # CLI for Git worktree management, designed for parallel AI agent workflows
 cask 'fork' # GIT client
+cask 'gitbutler' # Git client for simultaneous branches on top of your existing workflow
 cask 'gitup-app' # Git interface focused on visual interaction
 cask 'kaleidoscope' # Spot and merge differences in text and image files or folders
 cask 'retcon' # Drag-and-drop Git history editor
 cask 'sublime-merge' # Git client
-brew 'worktrunk' # CLI for Git worktree management, designed for parallel AI agent workflows
-brew 'modem-dev/tap/hunk' # Desktop-inspired terminal diff viewer for agent-authored changesets
 
 # Developer tools and runtimes
 brew 'cargo-binstall' # Binary installation for rust projects
-brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
 brew 'colima' # Container runtimes on MacOS (and Linux) with minimal setup
 brew 'direnv' # Load/unload environment variables based on $PWD
-brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
 brew 'docker-compose' # Isolated development environments using Docker
-brew 'ffmpeg' # Play, record, convert, and stream audio and video
-
 brew 'golang' # Open source programming language to build simple/reliable/efficient software
 brew 'graphviz' # Graph visualization software from AT&T and Bell Labs
-# brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
+brew 'just' # Handy way to save and run project-specific commands
 brew 'libusb', args: ['head'] # USB library
 brew 'mas' # Mac App Store command-line interface
 brew 'mise' # Multi-language runtime manager
 brew 'openssl' # Cryptography and SSL/TLS Toolkit
 brew 'rust' # Safe, concurrent, practical language
-brew 'swift-sh' # Scripting with easy zero-conf dependency imports
 brew 'tokei' # Program that allows you to count code, quickly
-brew 'uhubctl' # USB hub per-port power control
-brew 'xcbeautify' # Little beautifier tool for xcodebuild
-brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
-brew 'xcenv' # Xcode version manager
+cask 'gcloud-cli' # Set of tools to manage resources and applications hosted on Google Cloud
+cask 'jetbrains-toolbox' # JetBrains tools manager
 cask 'mitmproxy' # Intercept, modify, replay, save HTTP/S traffic
 cask 'temurin' # JDK from the Eclipse Foundation (Adoptium)
-cask 'gcloud-cli' # Set of tools to manage resources and applications hosted on Google Cloud
-cask 'hazel' # Automated organisation
-brew 'just'
+
+# Apple platform development
+brew 'chisel' # Collection of LLDB commands to assist debugging iOS apps
+# brew 'idb-companion' # A Powerful Command Line for automating iOS Simulators
+brew 'swift-sh' # Scripting with easy zero-conf dependency imports
+brew 'xcbeautify' # Little beautifier tool for xcodebuild
+brew 'xcenv' # Xcode version manager
+brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
+cask 'sf-symbols' # Tool that provides consistent, highly configurable symbols for apps
+mas 'DevCleaner for Xcode', id: 1_388_020_431
+mas 'Eraser', id: 6_758_531_046
+mas 'Helm for App Store Connect', id: 6_479_357_934
+mas 'RocketSim', id: 1_504_940_162
+mas 'TestFlight', id: 899_247_664
 
 # Completions
 brew 'bundler-completion' # Bash completion for Bundler
@@ -182,17 +174,50 @@ brew 'ruby-completion' # Bash completion for Ruby
 brew 'yarn-completion' # Bash completion for Yarn
 brew 'zsh-completion' # Additional completion definitions for zsh
 
+# Networking, VPN, and remote access
+brew 'aria2' # Download with resuming and segmented downloading
+brew 'curlie' # curl alternative with syntax highlighting and more
+brew 'doggo' # Command-line DNS Client for Humans
+brew 'dstp' # Run common networking tests against your site
+brew 'mtr' # 'traceroute' and 'ping' in a single tool
+brew 'nmap' # Port scanning utility for large networks
+brew 'wget' # Internet file retriever
+cask 'tailscale-app' # Mesh VPN based on WireGuard
+cask 'transmission' # Open-source BitTorrent client
+cask 'winbox' # Administration tool for MikroTik RouterOS
+cask 'windscribe' # VPN client for secure internet access and private browsing
+mas 'Screens 5', id: 1_663_047_912
+mas 'Windows App', id: 1_295_203_466
+
+# Browsers
+cask 'firefox' # Web browser
+cask 'google-chrome' # Web browser
+cask 'orion' # WebKit based web browser
+cask 'zen@twilight' # Gecko based web browser
+mas 'Kagi for Safari', id: 1_622_835_804
+
+# Cloud storage and backup
+cask 'dropbox' # Client for the Dropbox cloud storage service
+cask 'google-drive' # Client for the Google Drive storage service
+cask 'megasync' # Syncs files between computers and MEGA Cloud drives
+mas 'Parachute Backup', id: 6_748_614_170
+
+# Communication
+cask 'discord' # Voice and text chat software
+mas 'Simplify for Gmail', id: 1_544_668_450
+
 # Security and credentials
 brew 'gpg' # GNU Pretty Good Privacy (PGP) package
 brew 'gpg2' # GNU Pretty Good Privacy (PGP) package
 brew 'pinentry-mac' # Pinentry for GPG on Mac
 cask '1password-cli@beta' # Command-line interface for 1Password
+cask 'ente-auth' # Desktop client for Ente Auth
 cask 'yubico-authenticator' # Application for generating TOTP and HOTP codes
 
 # Fonts
 cask 'font-0xproto-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-code-new-roman-nerd-font' # Developer targeted fonts with a high number of glyphs
-cask 'font-commit-mono-nerd-font'
+cask 'font-commit-mono-nerd-font' # 
 cask 'font-droid-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fantasque-sans-mono-nerd-font' # Developer targeted fonts with a high number of glyphs
 cask 'font-fira-code-nerd-font' # Developer targeted fonts with a high number of glyphs
@@ -212,46 +237,55 @@ cask 'quicklook-video' # Thumbnails, static previews, cover art and metadata for
 cask 'syntax-highlight' # Quicklook extension for source files
 
 # Productivity and desktop apps
+cask 'anylist' # Grocery shopping list
 cask 'cap' # Screen recording software
-cask 'daisydisk' # Disk space visualizer
+cask 'hazel' # Automated organisation
+cask 'homerow' # Keyboard shortcuts for every button on your screen
+cask 'notion' # App to write, plan, collaborate, and get organised
+cask 'raindropio' # All-in-one bookmark manager
+cask 'raycast' # Control your tools with a few keystrokes
 cask 'rectangle-pro' # Window snapping tool
 cask 'setapp' # Collection of apps available by subscription
 cask 'superkey' # Search and click text anywhere on screen
-cask 'typora' # Configurable document editor that supports Markdown
-cask 'raycast' # Control your tools with a few keystrokes
-cask 'homerow'
+mas 'Amphetamine', id: 937_984_704
+mas 'Dropover', id: 1_355_679_052
+mas 'Things 3', id: 904_280_696
 
-cask 'handbrake-app' # Open-source o transcoder
-cask 'iina' # Free and open-source media player
-
-# Hardware boosting
-cask 'resolutionator' # Use any of your display's available resolutions
-cask 'darrylmorley/whatcable/whatcable' # Menu bar app for USB-C cable diagnostics
+# Hardware and system utilities
+brew 'displayplacer' # macOS command line utility to configure multi-display resolutions and arrangements. Essentially XRandR for macOS.
+brew 'uhubctl' # USB hub per-port power control
+cask 'daisydisk' # Disk space visualizer
 cask 'karabiner-elements' # Keyboard customizer
 cask 'keyboard-maestro' # Automation software
 cask 'mac-mouse-fix' # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
+cask 'resolutionator' # Use any of your display's available resolutions
+cask 'darrylmorley/whatcable/whatcable' # Menu bar app for USB-C cable diagnostics
+mas 'Mactracker', id: 430_255_202
+mas 'Magic Disk Benchmark', id: 1_608_793_370
 
 # Editors and writing
+brew 'neovide' # No Nonsense Neovim Client in Rust
+brew 'nvim' # Ambitious Vim-fork focused on extensibility and agility
 cask 'macvim-app' # Text editor
 cask 'notepadexe' # Lightweight code editor
-cask 'spokenly' # Dictation and transcription app with AI-powered editing
+cask 'typora' # Configurable document editor that supports Markdown
 cask 'zed@preview' # Multiplayer code editor
-brew 'nvim' # Ambitious Vim-fork focused on extensibility and agility
-brew 'neovide' # No Nonsense Neovim Client in Rust
+mas 'Drafts', id: 1_435_957_248
+
+# Dictation and transcription
+cask 'cotypist' # System-wide AI autocomplete
+cask 'macwhisper' # Speech recognition tool
+cask 'monologue' # AI voice dictation that adapts to your writing style
+cask 'spokenly' # Dictation and transcription app with AI-powered editing
 
 # Audio, video, and streaming
+brew 'ffmpeg' # Play, record, convert, and stream audio and video
 cask 'elgato-control-center' # Control your Elgato key lights
 cask 'elgato-stream-deck' # Assign keys, and then decorate and label them
 cask 'focusrite-control-2' # Focusrite interface controller for devices of the 4th generation and newer
+cask 'handbrake-app' # Open-source o transcoder
+cask 'iina' # Free and open-source media player
 cask 'loopback' # Cable-free audio router
+cask 'mutedeck' # Toggle mute, video, record, share, and leave a meeting in a call app
 cask 'obs' # Open-source software for live streaming and screen recording
-cask 'soundsource'
-
-mas 'Amphetamine', id: 937_984_704
-mas 'DevCleaner for Xcode', id: 1_388_020_431
-mas 'Drafts', id: 1_435_957_248
-mas 'Dropover', id: 1_355_679_052
-mas 'Pixelmator Pro', id: 1_289_583_905
-mas 'RocketSim', id: 1_504_940_162
-mas 'Things 3', id: 904_280_696
-mas 'Windows App', id: 1_295_203_466
+cask 'soundsource' # Sound and audio controller

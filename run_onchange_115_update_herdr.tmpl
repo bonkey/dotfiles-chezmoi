@@ -76,22 +76,56 @@ configure_plugin_integrations() {
 
 stopped_server=0
 outdated_plugins=()
+# Plugin IDs to unlink before their GitHub version installs
+replaced_links=()
 
 server_running() {
     herdr status server 2>/dev/null | grep -q '^status: running'
 }
 
+# herdr refuses to install a plugin from GitHub over a local link, so the link
+# is replaced only after the user agrees. A non-interactive run keeps the link.
+confirm_replace_link() {
+    local spec=$1 root=$2 reply
+
+    if [[ ! -t 0 ]]; then
+        log_message "$spec is linked from $root - non-interactive run, keeping the link"
+        return 1
+    fi
+
+    if ! read -q "reply?$spec is linked from $root. Replace it with the GitHub version? [y/N] "; then
+        print
+        log_message "Keeping the link to $root"
+        return 1
+    fi
+    print
+}
+
 # A plugin is outdated when it is not installed or its resolved commit differs
 # from the remote HEAD. Unreachable remotes count as up to date so a flaky
-# network never triggers a server stop.
+# network never triggers a server stop. A plugin linked from a local checkout
+# (herdr plugin link) matches when the checkout directory has the name of the
+# last segment of the spec; it is outdated only when the user replaces the link.
 find_outdated_plugins() {
-    local installed_json spec parts owner repo installed remote
+    local installed_json spec parts owner repo link_id link_root installed remote
     installed_json=$(herdr plugin list --json 2>/dev/null)
 
     for spec in "${plugins[@]}"; do
         parts=(${(s:/:)spec})
         owner=$parts[1]
         repo=$parts[2]
+
+        read -r link_id link_root <<<"$(jq -r --arg d "${spec:t}" \
+            '.result.plugins[] | select(.source.kind == "local" and (.plugin_root | split("/") | last) == $d) | [.plugin_id, .plugin_root] | @tsv' \
+            <<<"$installed_json")"
+
+        if [[ -n "$link_id" ]]; then
+            if confirm_replace_link "$spec" "$link_root"; then
+                replaced_links+=("$link_id")
+                outdated_plugins+=("$spec")
+            fi
+            continue
+        fi
 
         installed=$(jq -r --arg o "$owner" --arg r "$repo" \
             '.result.plugins[].source | select(.owner==$o and .repo==$r) | .resolved_commit' \
@@ -187,6 +221,10 @@ fi
 log_message "Outdated plugins: ${outdated_plugins[*]}"
 
 stop_server_with_consent
+
+for id in "${replaced_links[@]}"; do
+    _exec "herdr plugin unlink '$id'"
+done
 
 for plugin in "${outdated_plugins[@]}"; do
     _exec "herdr plugin install '$plugin' --yes"

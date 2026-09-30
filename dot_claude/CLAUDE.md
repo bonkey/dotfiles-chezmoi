@@ -84,6 +84,17 @@ The only exception is a pull request comment that the rules in **Comment on GitH
 - Always check paginated data up to the end (e.g. comments in PRs)
 - Prefer the `gh` CLI and its extensions, e.g. `gh stack`
 
+## Link every pull request and issue number
+
+In every response to the user, ALWAYS write a pull request or issue number as a Markdown link to its GitHub page. NEVER write a bare `#123`.
+
+- Pull request: `[#123](https://github.com/<owner>/<repo>/pull/123)`
+- Issue: `[#123](https://github.com/<owner>/<repo>/issues/123)`
+
+The rule applies to every mention: prose, lists, tables, headings, and each repeated mention of the same number.
+
+NEVER guess the URL. Get it from `gh pr view <number> --json url` or `gh issue view <number> --json url`, or build it from the `nameWithOwner` of the repository. If you cannot get the URL, say that the link is missing.
+
 ## iOS Simulators
 
 Create a dedicated simulator for each task to avoid conflicts. Give it a meaningful name based on the branch or worktree.

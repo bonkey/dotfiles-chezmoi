@@ -210,7 +210,3 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
-
-[[skills]]
-name = 'pen-design'
-url = 'https://unpkg.com/@pen.dev/cli@latest/SKILL.md'

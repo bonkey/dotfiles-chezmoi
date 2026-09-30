@@ -202,6 +202,38 @@ alias .cha=".ch add"
     ~/bin/update_chezmoi.sh "$@"
 }
 
+# Rerun one chezmoi script, given by part of its name, its source name or its
+# source path. Clearing its entryState makes run_onchange_ scripts run again.
+.chr() {
+    local src target
+    local -a found
+    src="$(chezmoi source-path)" || return
+    if [[ $1 == /* ]]; then
+        found=($1)
+    else
+        found=($src/**/run_*${1#run_}*(.ND))
+    fi
+    if (( $#found != 1 )); then
+        print -u2 ".chr: $#found scripts match '$1'"
+        print -u2 -l ${found#$src/}
+        return 1
+    fi
+    target="$(chezmoi target-path $found)" || return
+    .ch state delete --bucket=entryState --key=$target && .ch apply $target
+}
+
+.chr-brew() {
+    .chr update_brew
+}
+
+.chr-herdr() {
+    .chr update_herdr
+}
+
+.chr-mise() {
+    .chr update_mise
+}
+
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
 
 # Edit shell initialization files through chezmoi.

@@ -184,7 +184,6 @@ brew 'dstp' # Run common networking tests against your site
 brew 'mtr' # 'traceroute' and 'ping' in a single tool
 brew 'nmap' # Port scanning utility for large networks
 brew 'wget' # Internet file retriever
-cask 'tailscale-app' # Mesh VPN based on WireGuard
 cask 'transmission' # Open-source BitTorrent client
 cask 'winbox' # Administration tool for MikroTik RouterOS
 cask 'windscribe' # VPN client for secure internet access and private browsing

@@ -210,3 +210,7 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
+
+[[mcps]]
+name = 'pencil'
+command = ['/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64', '--app', 'desktop']

@@ -72,6 +72,15 @@
       "type": "remote",
       "url": "https://mcp.linear.app/mcp",
       "enabled": true
+    },
+    "pencil": {
+      "type": "local",
+      "command": [
+        "/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
+        "--app",
+        "desktop"
+      ],
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json",

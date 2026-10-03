@@ -20,6 +20,8 @@ Usage:
     python3 archive_inbox.py all --destination DIR --rule "Office Club"
     python3 archive_inbox.py all --destination DIR --since 2026-03-01
     python3 archive_inbox.py all --destination DIR --force     # ignore stored state
+    python3 archive_inbox.py gmail --destination DIR           # Gmail pass only
+    python3 archive_inbox.py files --destination DIR SRC [SRC ...]  # folder pass only
     python3 archive_inbox.py list-rules                        # show all rules
 """
 
@@ -1788,10 +1790,44 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
+    dest_opts = argparse.ArgumentParser(add_help=False)
+    dest_opts.add_argument(
+        "--destination",
+        required=True,
+        help="Archive root — holds Deutschland/ and .archiver-state.json",
+    )
+
+    gmail_opts = argparse.ArgumentParser(add_help=False)
+    gmail_opts.add_argument(
+        "--since",
+        help="Start date in YYYY-MM-DD or YYYY/M/D format (default: from state or 45 days ago)",
+    )
+    gmail_opts.add_argument(
+        "--rule",
+        help="Run only this rule (by name)",
+    )
+    gmail_opts.add_argument(
+        "--force",
+        action="store_true",
+        help="Ignore stored state — reprocess all matching messages",
+    )
+    gmail_opts.add_argument(
+        "--no-discover",
+        action="store_true",
+        help="Skip the interactive unknown-sender discovery step",
+    )
+
+    files_opts = argparse.ArgumentParser(add_help=False)
+    files_opts.add_argument(
+        "--no-move",
+        action="store_true",
+        help="Classify source folders without moving anything",
+    )
+
     # all — Gmail pass, then each source folder
     run_parser = subparsers.add_parser(
         "all",
-        parents=[common],
+        parents=[common, dest_opts, gmail_opts, files_opts],
         help="Archive Gmail attachments, then classify source folders",
     )
     run_parser.add_argument(
@@ -1800,38 +1836,27 @@ def main():
         help="Folders to classify and move (omit to skip the folder pass)",
     )
     run_parser.add_argument(
-        "--destination",
-        required=True,
-        help="Archive root — holds Deutschland/ and .archiver-state.json",
-    )
-    run_parser.add_argument(
-        "--since",
-        help="Start date in YYYY-MM-DD or YYYY/M/D format (default: from state or 45 days ago)",
-    )
-    run_parser.add_argument(
-        "--rule",
-        help="Run only this rule (by name)",
-    )
-    run_parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Ignore stored state — reprocess all matching messages",
-    )
-    run_parser.add_argument(
         "--no-gmail",
         action="store_true",
         help="Skip the Gmail pass (no gws authentication needed)",
     )
-    run_parser.add_argument(
-        "--no-move",
-        action="store_true",
-        help="Classify source folders without moving anything",
+
+    # gmail — Gmail pass only
+    gmail_parser = subparsers.add_parser(
+        "gmail",
+        parents=[common, dest_opts, gmail_opts],
+        help="Archive Gmail attachments only",
     )
-    run_parser.add_argument(
-        "--no-discover",
-        action="store_true",
-        help="Skip the interactive unknown-sender discovery step",
+    gmail_parser.set_defaults(sources=[], no_gmail=False, no_move=False)
+
+    # files — source folder pass only
+    files_parser = subparsers.add_parser(
+        "files",
+        parents=[common, dest_opts, files_opts],
+        help="Classify and move source folders only",
     )
+    files_parser.add_argument("sources", nargs="+", help="Folders to classify and move")
+    files_parser.set_defaults(no_gmail=True)
 
     # list-rules
     subparsers.add_parser("list-rules", parents=[common], help="List all rules")
@@ -1842,7 +1867,7 @@ def main():
     VERBOSE = args.verbose or getattr(args, "verbose_sub", False)
     DEBUG = args.debug or getattr(args, "debug_sub", False)
 
-    if args.command == "all":
+    if args.command in ("all", "gmail", "files"):
         cmd_all(args)
     elif args.command == "list-rules":
         cmd_list_rules()

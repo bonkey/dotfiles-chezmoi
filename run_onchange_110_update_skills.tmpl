@@ -3,9 +3,6 @@
 # hour: {{ now.Format "2006-01-02T15" }} - changes hourly, so this runs hourly as well as on every edit
 source "{{- .chezmoi.sourceDir}}/exact_private_bin/_common.zsh"
 
-# The skillet catalog in this gist is the source of truth for every machine.
-catalog_gist=aa1b5c37a1bd7d0df1ee8070d0f55d8c
-
 # skillet reaches gists through gh. mise installs both, and on a fresh machine
 # it runs after this script.
 for tool in skillet gh; do
@@ -15,5 +12,6 @@ for tool in skillet gh; do
     fi
 done
 
-# The pull replaces the local catalog, fetches all sources and syncs the global links.
-_exec "skillet gist pull $catalog_gist"
+# The pull replaces the local catalog with the one in the gist that
+# config.toml names, fetches all sources and syncs the global links.
+_exec "skillet gist pull"

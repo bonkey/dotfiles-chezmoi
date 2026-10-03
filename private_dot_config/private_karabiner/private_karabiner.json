@@ -83,6 +83,7 @@
                         "product_id": 164,
                         "vendor_id": 5426
                     },
+                    "ignore": true,
                     "manipulate_caps_lock_led": false,
                     "simple_modifications": [
                         {
@@ -107,15 +108,35 @@
                         "product_id": 164,
                         "vendor_id": 5426
                     },
-                    "ignore": false
+                    "ignore": true,
+                    "simple_modifications": [
+                        {
+                            "from": { "pointing_button": "button4" },
+                            "to": [{ "pointing_button": "button5" }]
+                        },
+                        {
+                            "from": { "pointing_button": "button5" },
+                            "to": [{ "key_code": "vk_none" }]
+                        }
+                    ]
                 },
                 {
                     "identifiers": {
-                        "device_address": "d5-02-ab-c8-37-ce",
-                        "is_keyboard": true,
-                        "is_pointing_device": true
+                        "is_pointing_device": true,
+                        "product_id": 164,
+                        "vendor_id": 5426
                     },
-                    "ignore": false
+                    "ignore": false,
+                    "simple_modifications": [
+                        {
+                            "from": { "pointing_button": "button4" },
+                            "to": [{ "pointing_button": "button5" }]
+                        },
+                        {
+                            "from": { "pointing_button": "button5" },
+                            "to": [{ "pointing_button": "button4" }]
+                        }
+                    ]
                 }
             ],
             "fn_function_keys": [

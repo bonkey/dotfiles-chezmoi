@@ -34,7 +34,7 @@ quit-after-last-window-closed = true
 
 keybind = global:alt+backquote=toggle_quick_terminal
 quick-terminal-position = center
-quick-terminal-size = 40%,40%
+quick-terminal-size = 75%,40%
 quick-terminal-screen = mouse
 quick-terminal-space-behavior = move
 

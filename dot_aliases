@@ -1292,7 +1292,11 @@ _gb-merged-prune() {
 
   printf "Default branch: %s\n" "$default_branch"
   printf "Branches to remove:\n"
-  printf "  %s\n" "${branches_to_remove[@]}"
+  for branch in "${branches_to_remove[@]}"; do
+    printf "  %s\t%s behind\t%s\n" "$branch" \
+      "$(git rev-list --count "refs/heads/$branch..refs/heads/$default_branch")" \
+      "$(git log -1 --format=$'%cr\t%h %s' "refs/heads/$branch")"
+  done | column -t -s $'\t'
 
   if [[ "$confirm" == true ]]; then
     echo -n "Remove these branches? [y/N]: "

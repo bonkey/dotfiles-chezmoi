@@ -134,6 +134,21 @@ When adding or modifying code comments:
 - Include only non-trivial reasons, constraints, or behavior that the code does not make obvious.
 - Use plain language and short, readable sentences.
 
+## Semantic versioning
+
+Version releases as `MAJOR.MINOR.PATCH` per [SemVer 2.0.0](https://semver.org/). The bump depends only on how the public API changes.
+
+- **MAJOR**: any backward-incompatible public API change. Reset MINOR and PATCH to 0.
+- **MINOR**: new backward-compatible functionality, or a newly deprecated API. Reset PATCH to 0.
+- **PATCH**: backward-compatible bug fixes only.
+- **0.y.z** is initial development. Anything MAY change at any time. The public API SHOULD NOT be considered stable. Start at `0.1.0` and bump MINOR for each release.
+- **1.0.0** defines the public API. Software already in production or depended on by users should be at 1.0.0 or later.
+- NEVER modify a released version. Ship every change as a new version. If a MINOR release breaks compatibility by mistake, fix it in a new MINOR release that restores compatibility.
+- Deprecate in at least one MINOR release before removing in a MAJOR release.
+- Pre-release: `1.0.0-rc.1` ranks below `1.0.0`. Build metadata: `1.0.0+sha.5114f85` is ignored for precedence.
+- Precedence: compare MAJOR, MINOR, PATCH numerically, then pre-release identifiers dot by dot. Numeric identifiers rank below alphanumeric ones: `1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0`.
+- Numbers have no leading zeroes. `v1.2.3` is a tag name. The version is `1.2.3`.
+
 ## Shell commands
 
 - Never infer what an unfamiliar command, alias, or shorthand does.

@@ -236,18 +236,10 @@ alias .cha=".ch add"
 
 _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc},.config/{Brewfile,bonkey.omp.json,mise/config.toml}}
 
-# Edit shell initialization files through chezmoi.
+# Edit shell initialization files through chezmoi, then reload zsh.
 .ces() {
     .che $(eval "echo $_shell_init_files")
-    if [[ $TERM_PROGRAM == iTerm.app ]]; then
-        exit
-    else
-        echo -n "Close this shell? [Y/n]: "
-        read -k 1 response
-        echo
-        [[ "$response" =~ ^[Nn]$ ]] || exit
-        echo "Don't forget to reload config"
-    fi
+    _reload_zsh
 }
 
 
@@ -264,18 +256,10 @@ _shell_init_files=${HOME}/{bin/_common.zsh,.{zshenv,zprofile,zshrc,aliases,zimrc
     brew bundle check --file $HOME/.config/Brewfile || brew bundle install --file $HOME/.config/Brewfile
 }
 
-# Edit aliases through chezmoi.
+# Edit aliases through chezmoi, then reload zsh.
 .cea() {
     .che $HOME/.aliases
-    if [[ -n ${ITERM_SESSION_ID:-} ]] ; then
-        exit
-    else
-        echo -n "Close this shell? [Y/n]: "
-        read -k 1 response
-        echo
-        [[ "$response" =~ ^[Nn]$ ]] || exit
-        echo "Don't forget to reload config"
-    fi
+    _reload_zsh
 }
 
 # Edit opencode config through chezmoi.
@@ -376,7 +360,20 @@ alias brunc="br uninstall --cask"
 # SHELL CONFIGURATION
 ###############################################################################
 
-alias src='source ~/.zshrc'
+# Replace this shell with a fresh zsh, unless a zsh startup file fails to parse.
+_reload_zsh() {
+    local f failed=0
+    for f in ~/.zshenv ~/.zprofile ~/.zshrc ~/.zimrc ~/.aliases ~/.aliases.local(N) ~/bin/_common.zsh; do
+        zsh -fn $f || failed=1
+    done
+    if (( failed )); then
+        print -u2 "Not reloading zsh: fix the parse errors above."
+        return 1
+    fi
+    exec zsh
+}
+
+alias src=_reload_zsh
 
 alg() {
     print -l ${(ok@)functions} ${(ok@)aliases} ${(ok@)galiases} | grep -vE '^(_|zvm|azhw)' | sort | grep -E "$@"

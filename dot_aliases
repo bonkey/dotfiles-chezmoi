@@ -377,8 +377,10 @@ alias brunc="br uninstall --cask"
 ###############################################################################
 
 alias src='source ~/.zshrc'
-alias alg='alias | grep'
 
+alg() {
+    print -l ${(ok@)functions} ${(ok@)aliases} ${(ok@)galiases} | grep -vE '^(_|zvm|azhw)' | sort | grep -E "$@"
+}
 
 .aa() {
     archive_inbox.py all \
@@ -400,8 +402,6 @@ gvim() {
     vimer -t "$@"
 }
 
-
-
 # Open the current directory or provided paths in Zed.
 z() {
   if [[ -z "$1" ]]; then
@@ -422,7 +422,10 @@ md() {
 ###############################################################################
 
 alias '??'="llm cmd -m gemini-flash-latest"
-alias gy="gemini --yolo"
+
+.gg() {
+    gemini --yolo "$@"
+}
 
 # Run Claude with permission checks skipped.
 .cc() {
@@ -474,7 +477,7 @@ alias .ocm=".oc mini -m opencode-go/kimi-k3"
 }
 
 # Run Kimi with yolo mode enabled.
-km() {
+.kk() {
     kimi --yolo "$@"
 }
 
@@ -493,17 +496,6 @@ alias .ski=.ska
 alias .skr=".sk remove"
 alias .skl=".sk list"
 alias .sku=".sk update"
-
-# Run the MCP setup helper.
-cm() {
-    mcp-setup.py "$@"
-}
-
-# Launch MCP setup in interactive mode.
-cmi() {
-    cm --mcp-interactive "$@"
-}
-
 
 ###############################################################################
 # NETWORK & HTTP
@@ -535,23 +527,19 @@ f() { fd --follow "$@"; }
 f0() { f "$@" --print0; }
 
 # Search files with fd.
-ftf() { f --type f "$@"; }
+fdf() { f --type f "$@"; }
+
 # Search files with fd.
-ftd() { f --type d "$@"; }
+fdd() { f --type d "$@"; }
+
+# Search all ignored paths with fd.
+fdh() { f --hidden "$@"; }
+
+# Search all ignored paths with fd.
+fdi() { f --no-ignore "$@"; }
 
 # Search all hidden and ignored paths with fd.
-fhi() { f --no-ignore --hidden "$@"; }
-
-# Search all ignored paths with fd.
-fh() { f --hidden "$@"; }
-
-# Search all ignored paths with fd.
-fni() { f --no-ignore "$@"; }
-
-# Search regular files with fd.
-ftf() { f -t f "$@"; }
-# Search directories with fd.
-ftd() { f -t d "$@"; }
+fdu() { f --unrestricted  "$@"; }
 
 alias rgs="rg -t ios"
 alias rgw="rg -w"

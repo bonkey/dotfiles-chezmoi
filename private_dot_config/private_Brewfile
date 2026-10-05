@@ -267,6 +267,7 @@ cask 'resolutionator' # Use any of your display's available resolutions
 cask 'darrylmorley/whatcable/whatcable' # Menu bar app for USB-C cable diagnostics
 mas 'Mactracker', id: 430_255_202
 mas 'Magic Disk Benchmark', id: 1_608_793_370
+cask 'alt-tab'
 
 # Editors and writing
 brew 'neovide' # No Nonsense Neovim Client in Rust

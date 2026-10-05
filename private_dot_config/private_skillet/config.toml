@@ -186,6 +186,10 @@ command = ['npx', '--prefer-offline', '-y', '@morphllm/morphmcp']
 environment = {MORPH_API_KEY = '${MORPH_API_KEY}'}
 
 [[mcps]]
+name = 'pencil'
+command = ['/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64', '--app', 'desktop']
+
+[[mcps]]
 command = ['npx', 'shadcn@latest', 'mcp']
 
 [[mcps]]
@@ -210,7 +214,3 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
-
-[[mcps]]
-name = 'pencil'
-command = ['/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64', '--app', 'desktop']

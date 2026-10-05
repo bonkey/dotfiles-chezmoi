@@ -423,10 +423,6 @@ md() {
 
 alias '??'="llm cmd -m gemini-flash-latest"
 
-.gg() {
-    gemini --yolo "$@"
-}
-
 # Run Claude with permission checks skipped.
 .cc() {
     claude --dangerously-skip-permissions "$@"

@@ -589,7 +589,7 @@ alias xf="xmllint --format"
     .glow -s light "$@"
 }
 
-# Render Markdown with glow when possible, otherwise use bat.
+
 .mdc() {
     if (( $+commands[mlux] )); then
         mlux --theme catppuccin-latte-latin --allow-remote-images --exp-preset adaptive --watch "$@"
@@ -598,8 +598,13 @@ alias xf="xmllint --format"
     elif (( $+commands[glow] )); then
         glow -w 0 -p "$@"
     else
-        bat "$@"
+        return 1
     fi
+}
+
+.plistc() {
+    (( $+commands[plutil] )) || return 1
+    plutil -p "$@"
 }
 
 c() {
@@ -610,10 +615,12 @@ c() {
 
     local arg
     for arg in "$@"; do
-        if [[ "$arg" == *.md ]]; then
-            .mdc "$@"
-            return $?
-        fi
+        case "$arg" in
+            *.md) .mdc "$@" && return 0 ;;
+            *.plist) .plistc "$@" && return 0 ;;
+            *) continue ;;
+        esac
+        break
     done
     bat "$@"
 }

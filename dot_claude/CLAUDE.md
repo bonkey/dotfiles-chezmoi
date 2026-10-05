@@ -164,6 +164,12 @@ Version releases as `MAJOR.MINOR.PATCH` per [SemVer 2.0.0](https://semver.org/).
 - To add to a file, use `>>`.
 - Read the exit code and the message. `file exists` is a `noclobber` refusal, not a permission error or a sandbox block.
 
+## Scratchpads
+
+Keep every scratchpad folder in `~/Desktop/scratchpads`. This rule replaces the session scratchpad directory that the harness supplies, and `/tmp` or `$TMPDIR`. Use one subfolder for each task, named after the branch or the worktree.
+
+The sandbox does not permit a write to the Desktop, and the failure can be silent. Run the first `mkdir -p` for a new scratchpad folder outside the sandbox.
+
 ## Credentials and 1Password
 
 Minimize repeated 1Password approval prompts. Before beginning work that needs multiple secrets, identify the secrets needed and retrieve them together when practical. Reuse secrets securely within the current session; do not request the same secret again unless it is unavailable, expired, or has changed.

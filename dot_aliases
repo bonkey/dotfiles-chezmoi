@@ -342,7 +342,8 @@ alias brunc="br uninstall --cask"
         tools+=("${full:-$tool}")
         caches+=("${${full:-$tool}//[:\/]/-}")
     done
-    .m cache clean "${caches[@]}"
+    # Tools from GitHub rebuild their version list from the shared `github` release cache.
+    .m cache clean github "${caches[@]}"
     .m up "${tools[@]}"
     .mp
 }

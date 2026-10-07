@@ -198,7 +198,7 @@ focus_pane_right = "ctrl+alt+shift+l"
 # split_vertical = "prefix+v"
 # split_horizontal = "prefix+minus"
 close_pane = ""          # freed: prefix+x opens the Xcode project (keys.command below); close panes via shell exit / close_tab
-# zoom = "prefix+z"       # legacy alias: fullscreen
+zoom = "ctrl+alt+z"       # legacy alias: fullscreen
 # resize_mode = "prefix+r"
 # toggle_sidebar = "prefix+b"
 

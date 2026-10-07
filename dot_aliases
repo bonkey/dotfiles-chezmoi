@@ -364,7 +364,7 @@ alias brunc="br uninstall --cask"
 # Replace this shell with a fresh zsh, unless a zsh startup file fails to parse.
 _reload_zsh() {
     local f failed=0
-    for f in ~/.zshenv ~/.zprofile ~/.zshrc ~/.zimrc ~/.aliases ~/.aliases.local(N) ~/bin/_common.zsh; do
+    for f in ~/.zshenv ~/.zprofile ~/.zshrc ~/.zimrc ~/.aliases ~/.aliases.local ~/bin/_common.zsh; do
         zsh -fn $f || failed=1
     done
     if (( failed )); then

@@ -3,7 +3,7 @@ UV_SYSTEM_CERTS = "true"
 
 [tools]
 # Runtime languages
-python = "3.14"
+python = "3.15"
 ruby = "4.0"
 node = "latest"
 bun = "latest"

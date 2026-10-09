@@ -118,6 +118,8 @@ Use a common current model and iOS version, e.g. iPhone 17 / iOS 26.
 
 Remove the simulator when the task is done.
 
+Use `mobilecli` for every interaction with a simulator or a mobile device, such as taps, typing, swipes, screenshots and app launches. Do not use other UI drivers for it.
+
 ## Xcode test failures and abnormal termination
 
 - Never ignore or normalize abnormal Xcode or `xcodebuild` behavior, including a test-host crash, stuck test-session cleanup, missing or corrupt result bundle, signal termination, or other abnormal test exit.

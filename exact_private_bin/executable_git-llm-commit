@@ -1,0 +1,187 @@
+#!/usr/bin/env zsh
+
+# git-llm-commit
+# Commit the staged changes with a one-line message that an llm model writes
+# from the diff. Without -np it pulls before the commit and pushes after it.
+#
+# Usage: git-llm-commit [-a|--add] [-np|--no-push-pull] [-d|--dry-run]
+#                       [-c|--check] [-m|--model MODEL] [git-diff-args...]
+#
+# Inside herdr, a run without -d or -c moves to a new pane below the calling
+# pane, so the calling shell is free at once. The pane closes and posts a
+# notification after a commit. It stays open after a failure.
+
+source "${HOME}/bin/_common.zsh"
+
+commit() {
+    local GIT_PAGER=""
+    export GIT_PAGER
+    local prompt="Create one-liner commit message from the git diff changes. \
+    Make it useful, as high level as possible. \
+    Never use backticks since they can be passed to a shell accidentally"
+    local model="gemini-flash-latest"
+
+    local add_changes=false
+    local no_push_pull=false
+    local check_confirmation=false
+    local dry_run=false
+    local args=()
+    local diff_args=("-w" "--cached")
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -a|--add)
+                add_changes=true
+                shift
+                ;;
+            -np|--no-push-pull)
+                no_push_pull=true
+                shift
+                ;;
+            -d|--dry-run)
+                dry_run=true
+                shift
+                ;;
+            -c|--check)
+                check_confirmation=true
+                shift
+                ;;
+            -m|--model)
+                model="$2"
+                shift 2
+                ;;
+            *)
+                args+=("$1")
+                shift
+                ;;
+        esac
+    done
+
+    if [[ "$dry_run" = true ]]; then
+        log_message "Dry run enabled. Only commit message will be generated"
+    fi
+
+
+    if [[ -z "$(llm models list -m "$model" 2>/dev/null)" ]]; then
+        log_error "Model '$model' does not exist"
+        return 1
+    fi
+
+    if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
+        local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+        if [[ -n "$current_branch" ]]; then
+            git fetch origin "$current_branch" 2>/dev/null
+            if git show-ref --verify --quiet "refs/remotes/origin/$current_branch"; then
+                log_message "Pulling latest changes from remote.."
+                _exec --silent "git pull --autostash"
+            else
+                log_message "Remote branch does not exist, skipping pull"
+            fi
+        else
+            log_message "Not on a named branch, skipping pull"
+        fi
+    fi
+
+    if [[ "$add_changes" = true && "$dry_run" = false ]]; then
+        log_message "Staging all changes.."
+        _exec --silent "git add ."
+    else
+        diff_args+=("HEAD")
+        log_message "Skipping pull..."
+    fi
+
+    _exec --silent "git diff --stat ${diff_args[@]}"
+
+    if [[ "$dry_run" = false ]] && git diff --cached --quiet; then
+        log_message "No changes staged. Please stage your changes before committing"
+        return 1
+    fi
+
+    # The message describes this tree. Another process can stage more changes
+    # while the llm runs, and those must not go into this commit.
+    local tree
+    if [[ "$dry_run" = false ]]; then
+        tree=$(git write-tree) || return
+    fi
+
+    log_message "Generating commit message with ${model}.."
+    local commit_msg
+
+    while true; do
+        commit_msg=$(git diff "${diff_args[@]}" "${args[@]}" | llm -x -m "$model" -s "$prompt")
+        log_message "Generated commit message: $commit_msg"
+
+        if [[ "$dry_run" = true ]]; then
+            break
+        fi
+
+        if [[ "$check_confirmation" = true && "$dry_run" = false ]]; then
+            echo -n "Proceed with this commit message? [y/n/r]: "
+            read -k 1 response
+            echo # Add a newline after the response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                break
+            elif [[ "$response" =~ ^[Rr]$ ]]; then
+                log_message "Regenerating commit message..."
+                continue
+            else
+                log_message "Commit aborted."
+                return 1
+            fi
+        else
+            break
+        fi
+    done
+
+    if [[ "$dry_run" = false ]]; then
+        if [[ "$(git write-tree)" != "$tree" ]]; then
+            log_error "The staged changes changed while the message was generated, so nothing was committed"
+            return 1
+        fi
+        log_message "Committing changes.."
+        _exec --silent "git commit -m ${(q)commit_msg}"
+    fi
+
+    if [[ "$no_push_pull" = false && "$dry_run" = false ]]; then
+        log_message "Pushing commit to remote.."
+        _exec --silent "git push"
+    else
+        log_message "Skipping push"
+    fi
+}
+
+# Open a pane below the calling pane and run this command there.
+open_pane() {
+    local pane
+    pane=$(herdr pane split --current --direction down --cwd "$PWD" \
+        --env GIT_LLM_COMMIT_IN_PANE=1 --no-focus | jq -r '.result.pane.pane_id') || return
+    herdr pane run "$pane" "${ZSH_SCRIPT:t} ${(j: :)${(q)@}}" >/dev/null
+}
+
+# Close this pane after a commit. After a failure, keep it open and notify.
+finish_pane() {
+    local rc=$1 repo
+    repo=$(git rev-parse --show-toplevel 2>/dev/null) || repo=$PWD
+    if (( rc == 0 )); then
+        herdr notification show "Committed in ${repo:t}" --body "$(git log -1 --format=%s)" --sound done >/dev/null
+        herdr pane close "$HERDR_PANE_ID" >/dev/null
+    else
+        herdr notification show "Commit failed in ${repo:t}" --body "The pane stays open" --sound request >/dev/null
+    fi
+    return $rc
+}
+
+# A dry run or a check prints the message for the user to read, so it stays in
+# the calling pane.
+is_dry_run=$(( ${argv[(Ie)-d]} || ${argv[(Ie)--dry-run]} ))
+is_check=$(( ${argv[(Ie)-c]} || ${argv[(Ie)--check]} ))
+
+if [[ ${HERDR_ENV:-} == 1 && -z ${GIT_LLM_COMMIT_IN_PANE:-} ]] && (( ! is_dry_run && ! is_check )); then
+    open_pane "$@"
+elif [[ -n ${GIT_LLM_COMMIT_IN_PANE:-} ]] && (( ! is_dry_run )); then
+    # The subshell catches the exit of a failed _exec.
+    ( commit "$@" )
+    finish_pane $?
+else
+    commit "$@"
+fi

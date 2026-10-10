@@ -19,7 +19,7 @@ pipx = "latest"
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
 "github:bonkey/xcodectl" = "latest"       # Install, switch and remove Xcode versions
 swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
-"github:abacusai/simless" = "latest"
+"spm:abacusai/simless" = "latest"
 
 # Python CLI tools
 "pipx:black" = "latest"                   # Python code formatter

@@ -19,6 +19,7 @@ pipx = "latest"
 "github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
 "github:bonkey/xcodectl" = "latest"       # Install, switch and remove Xcode versions
 swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
+"github:abacusai/simless" = "latest"
 
 # Python CLI tools
 "pipx:black" = "latest"                   # Python code formatter
@@ -36,7 +37,6 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "pipx:yt-dlp" = "latest"                  # Video/audio downloader
 "npm:fast-cli" = "latest"                 # Network speed test CLI
 "npm:contentful-cli" = "latest"
-
 
 # Mobile development / automation
 "npm:appium" = "latest"                   # Mobile UI automation framework

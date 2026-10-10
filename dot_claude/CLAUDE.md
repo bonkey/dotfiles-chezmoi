@@ -110,6 +110,15 @@ A URL inside a code block or a command stays as written.
 
 NEVER guess the URL. Get it from the tool that returned the resource, such as `gh pr view <number> --json url` or `gh issue view <number> --json url`, or build it from the `nameWithOwner` of the repository. If you cannot get the URL, say that the link is missing.
 
+## SwiftUI screen checks with simless
+
+- When `simless` is installed, use it instead of a simulator for SwiftUI screen checks.
+- If the repository has no `.simless.json`, run `simless init` and register the fixtures you need. If `simless init` fails, use a simulator.
+- Run `simless up` once per worktree. After each view edit, run `simless reload --render <Fixture>` and fix every reported issue.
+- Add `--matrix` for layout changes (light and dark on iPhone, small iPhone and iPad). Add `--png <dir>` only when colors, images or clipping matter.
+- simless cannot verify gestures, the keyboard, navigation across screens, system UI, Dynamic Type or exact line breaks, and it runs the app with the iPad idiom. Check those in a simulator, and report what you did not check.
+- If you ran `simless init`, never commit the setup. When the task is done, run `simless clean` first, because it needs `.simless.json`. Then discard everything you added for simless: `.simless.json`, the `Simless/` folder, the hook in the `@main` App's `init()`, and any project-file or `SimlessHost.isActive` edits.
+
 ## iOS Simulators
 
 Create a dedicated simulator for each task to avoid conflicts. Give it a meaningful name based on the branch or worktree.
@@ -119,6 +128,12 @@ Use a common current model and iOS version, e.g. iPhone 17 / iOS 26.
 Remove the simulator when the task is done.
 
 Use `mobilecli` for every interaction with a simulator or a mobile device, such as taps, typing, swipes, screenshots and app launches. Do not use other UI drivers for it.
+
+- `mobilecli` cannot create or delete simulators. Use `xcrun simctl create` and `xcrun simctl delete` for that.
+- Pass `--device <udid>` on every command. Without it, `mobilecli` picks the only online device, which can be a connected personal phone.
+- Read the screen with `mobilecli snapshot`. It prints the UI tree as text and labels each element with a ref such as `@e5`. Tap by ref (`mobilecli io tap @e5`) rather than by coordinates.
+- Refs change after every action, so chain the action and a new snapshot with `&&` in one shell call.
+- Take a screenshot only to check visuals, and keep it small with `--max-size 800` or `--clip x,y,w,h`.
 
 ## Xcode test failures and abnormal termination
 

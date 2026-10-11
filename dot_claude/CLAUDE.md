@@ -117,6 +117,15 @@ NEVER guess the URL. Get it from the tool that returned the resource, such as `g
 - Add `--matrix` for layout changes (light and dark on iPhone, small iPhone and iPad). Add `--png <dir>` only when colors, images or clipping matter.
 - simless cannot verify gestures, the keyboard, navigation across screens, system UI, Dynamic Type or exact line breaks, and it runs the app with the iPad idiom. Check those in a simulator, and report what you did not check.
 
+## Build and run Xcode apps with SweetPad
+
+ALWAYS use the `sweetpad` CLI to build an Xcode app and to refresh it after a change. NEVER use `xcodebuild build` or `xcrun simctl install`/`launch` for these steps.
+
+- Build: `sweetpad build --non-interactive --on <udid>`. Read the errors of the last build with `sweetpad build diagnostics`.
+- Refresh: `sweetpad run --non-interactive --detach --on <udid>` rebuilds, installs and relaunches the app, then returns. Without `--detach`, it keeps streaming logs and does not return.
+- Pass `--non-interactive` on every call. A missing scheme or destination then fails instead of opening a picker that waits for input.
+- Pass the task simulator's UDID with `--on`. Without it, sweetpad uses the destination it remembers for the project, which can be another simulator or a physical device.
+
 ## iOS Simulators
 
 Create a dedicated simulator for each task to avoid conflicts. Give it a meaningful name based on the branch or worktree.

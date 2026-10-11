@@ -75,6 +75,8 @@ _eval_for_cmd entire "entire completion zsh"
 
 _eval_for_cmd skillet "skillet completion zsh"
 
+_eval_for_cmd sweetpad "sweetpad completions zsh"
+
 shell-in-worktrunk() {
     source "$HOME/bin/_exec-in-worktrunk" shell "$@"
 }

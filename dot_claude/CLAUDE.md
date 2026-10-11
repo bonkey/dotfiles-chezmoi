@@ -112,12 +112,10 @@ NEVER guess the URL. Get it from the tool that returned the resource, such as `g
 
 ## SwiftUI screen checks with simless
 
-- When `simless` is installed, use it instead of a simulator for SwiftUI screen checks.
-- If the repository has no `.simless.json`, run `simless init` and register the fixtures you need. If `simless init` fails, use a simulator.
+- When `simless` is installed and the repository has `.simless.json`, use it instead of a simulator for SwiftUI screen checks. Otherwise use a simulator. Never run `simless init`.
 - Run `simless up` once per worktree. After each view edit, run `simless reload --render <Fixture>` and fix every reported issue.
 - Add `--matrix` for layout changes (light and dark on iPhone, small iPhone and iPad). Add `--png <dir>` only when colors, images or clipping matter.
 - simless cannot verify gestures, the keyboard, navigation across screens, system UI, Dynamic Type or exact line breaks, and it runs the app with the iPad idiom. Check those in a simulator, and report what you did not check.
-- If you ran `simless init`, never commit the setup. When the task is done, run `simless clean` first, because it needs `.simless.json`. Then discard everything you added for simless: `.simless.json`, the `Simless/` folder, the hook in the `@main` App's `init()`, and any project-file or `SimlessHost.isActive` edits.
 
 ## iOS Simulators
 

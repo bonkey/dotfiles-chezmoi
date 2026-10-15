@@ -157,6 +157,7 @@ brew 'xcbeautify' # Little beautifier tool for xcodebuild
 brew 'xcenv' # Xcode version manager
 brew 'xcode-build-server' # Build server protocol implementation for integrating Xcode with sourcekit-lsp
 cask 'sf-symbols' # Tool that provides consistent, highly configurable symbols for apps
+brew 'sweetpad-dev/tap/sweetpad'
 mas 'DevCleaner for Xcode', id: 1_388_020_431
 mas 'Eraser', id: 6_758_531_046
 mas 'Helm for App Store Connect', id: 6_479_357_934

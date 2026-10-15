@@ -164,6 +164,10 @@ url = 'https://github.com/wondelai/skills.git'
 command = ['agentsview', 'mcp']
 
 [[mcps]]
+name = 'bear-app'
+command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']
+
+[[mcps]]
 url = 'https://mcp.deepwiki.com/mcp'
 
 [[mcps]]

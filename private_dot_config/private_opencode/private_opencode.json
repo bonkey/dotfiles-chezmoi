@@ -81,6 +81,14 @@
         "desktop"
       ],
       "enabled": true
+    },
+    "bear-app": {
+      "type": "local",
+      "command": [
+        "/Applications/Bear.app/Contents/MacOS/bearcli",
+        "mcp-server"
+      ],
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json",

@@ -96,6 +96,13 @@
         "--app",
         "desktop"
       ]
+    },
+    "bear-app": {
+      "enabled": true,
+      "command": "/Applications/Bear.app/Contents/MacOS/bearcli",
+      "args": [
+        "mcp-server"
+      ]
     }
   },
 

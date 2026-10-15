@@ -218,3 +218,7 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
+
+[[mcps]]
+name = 'bear-app'
+command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']

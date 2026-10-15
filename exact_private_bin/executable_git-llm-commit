@@ -152,8 +152,12 @@ commit() {
 
 # Open a pane below the calling pane and run this command there.
 open_pane() {
-    local pane
-    pane=$(herdr pane split --current --direction down --cwd "$PWD" \
+    local pane ratio
+    # The ratio is the calling pane's share. It leaves about 10 rows for the
+    # new pane, or half of a calling pane shorter than 20 rows.
+    ratio=$(herdr pane layout --current | jq --arg id "$HERDR_PANE_ID" \
+        '.result.layout.panes[] | select(.pane_id == $id) | [1 - 10 / .rect.height, 0.5] | max')
+    pane=$(herdr pane split --current --direction down ${ratio:+--ratio} $ratio --cwd "$PWD" \
         --env GIT_LLM_COMMIT_IN_PANE=1 --no-focus | jq -r '.result.pane.pane_id') || return
     herdr pane run "$pane" "${ZSH_SCRIPT:t} ${(j: :)${(q)@}}" >/dev/null
 }

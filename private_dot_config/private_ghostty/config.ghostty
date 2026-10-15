@@ -1,5 +1,6 @@
 window-theme = system
 config-file = ?auto/theme.ghostty
+minimum-contrast = 3
 
 # font-family = "CodeNewRoman Nerd Font Mono"
 font-family = "Google Sans Code NF"

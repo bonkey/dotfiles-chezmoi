@@ -65,7 +65,7 @@ def fail(msg: str, code: int = 1) -> "NoReturn":
 def run(cmd: list, check: bool = True, pipe_to: list | None = None) -> int:
     """Run a command with the same logging as _exec in _common.zsh."""
     shown = shlex.join(cmd) + (f" | {shlex.join(pipe_to)}" if pipe_to else "")
-    print(f"{PREFIX}Executing: {paint('1;44;37', shown)}", flush=True)
+    print(f"{PREFIX}Executing: {paint('1;44;30', shown)}", flush=True)
     start = time.monotonic()
     if pipe_to:
         producer = subprocess.Popen(cmd, stdout=subprocess.PIPE)

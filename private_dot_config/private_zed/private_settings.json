@@ -103,6 +103,13 @@
       "args": [
         "mcp-server"
       ]
+    },
+    "xcode-mcp": {
+      "enabled": true,
+      "command": "xcrun",
+      "args": [
+        "mcpbridge"
+      ]
     }
   },
 

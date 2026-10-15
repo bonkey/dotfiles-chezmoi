@@ -89,6 +89,14 @@
         "mcp-server"
       ],
       "enabled": true
+    },
+    "xcode-mcp": {
+      "type": "local",
+      "command": [
+        "xcrun",
+        "mcpbridge"
+      ],
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json",

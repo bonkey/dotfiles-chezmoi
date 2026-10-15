@@ -52,7 +52,7 @@ name = 'ios-dev'
 description = 'iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge'
 enabled = false
 skills = ['agent-skills', 'ios-hig-design@wondelai-skills']
-mcps = ['mobile-mcp', 'simctl', 'sosumi', 'xcode-instruments', 'xcode-mcpbridge', 'xcstrings-crud']
+mcps = ['mobile-mcp', 'simctl', 'sosumi', 'xcode-instruments', 'xcstrings-crud']
 
 [[packs]]
 name = 'knowledge-sources'
@@ -164,10 +164,6 @@ url = 'https://github.com/wondelai/skills.git'
 command = ['agentsview', 'mcp']
 
 [[mcps]]
-name = 'bear-app'
-command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']
-
-[[mcps]]
 url = 'https://mcp.deepwiki.com/mcp'
 
 [[mcps]]
@@ -222,3 +218,8 @@ command = ['xcstrings-crud', 'mcp']
 [[mcps]]
 name = 'bear-app'
 command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']
+
+
+[[mcps]]
+name = 'xcode-mcp'
+command = ['xcrun', 'mcpbridge']

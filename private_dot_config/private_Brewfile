@@ -52,7 +52,7 @@ brew 'tlrc' # Official tldr client written in Rust
 brew 'tmux' # Terminal multiplexer
 brew 'tree' # Display directories as trees (with optional color/HTML output)
 brew 'zoxide' # Shell extension to navigate your filesystem faster
-brew 'michel-kraemer/zsh-patina/zsh-patina' # Blazingly fast Zsh syntax highlighter
+brew 'zsh-patina' # Blazingly fast Zsh syntax highlighter
 cask 'ghostty' # Terminal emulator that uses platform-native UI and GPU acceleration
 cask 'iterm2' # Terminal emulator as alternative to Apple's Terminal app
 

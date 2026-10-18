@@ -344,7 +344,8 @@ alias brunc="br uninstall --cask"
     done
     # Tools from GitHub rebuild their version list from the shared `github` release cache.
     .m cache clean github "${caches[@]}"
-    .m up "${tools[@]}"
+    # The mise-versions.jdx.dev mirror lags GitHub after a release; ask api.github.com directly.
+    MISE_USE_VERSIONS_HOST=false .m up "${tools[@]}"
     .mp
 }
 

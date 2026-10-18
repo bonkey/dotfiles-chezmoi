@@ -373,3 +373,9 @@ key = "ctrl+alt+shift+6"
 type = "plugin_action"
 command = "bonkey.bookmark.sort"
 description = "sort worktrees by bookmark"
+
+[[keys.command]]
+key = "ctrl+alt+m"
+type = "shell"
+command = "pane=$(herdr pane split --pane \"$HERDR_ACTIVE_PANE_ID\" --direction down --ratio 0.8 --focus | jq -r '.result.pane.pane_id') && herdr pane run \"$pane\" 'if [ -z \"$OPENCODE_MODEL\" ]; then herdr notification show \"OPENCODE_MODEL not set\" --body \"Set OPENCODE_MODEL in ~/.zshenv\"; exit; else exec opencode mini -m \"$OPENCODE_MODEL\"; fi'"
+description = "open opencode mini in bottom pane"

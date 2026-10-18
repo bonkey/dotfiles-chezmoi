@@ -1,5 +1,6 @@
 {{- /* .chezmoi.hostname follows the FQDN, which an /etc/hosts entry can change. */ -}}
 {{- $host := output "hostname" "-s" | trim -}}
+
 . ${HOME}/bin/_common.zsh
 
 export _GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
@@ -22,7 +23,6 @@ export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "
 
 {{- if eq $host "bonkey-mbp" }}
 
-# export ANTHROPIC_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ANTHROPIC_API_KEY.value -}}"
 export DEEPSEEK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").DEEPSEEK_API_KEY.value -}}"
 export GEMINI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GEMINI_API_KEY.value -}}"
 export GROQ_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GROQ_API_KEY.value -}}"
@@ -30,22 +30,17 @@ export OPENAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "
 export OPENCODE_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENCODE_API_KEY.value -}}"
 export OPENCODE_MODEL="opencode-go/beam-free"
 export OPENROUTER_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").OPENROUTER_API_KEY.value -}}"
-export PERPLEXITY_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PERPLEXITY_API_KEY.value -}}"
-export REPLICATE_API_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").REPLICATE_API_TOKEN.value -}}"
 export ZAI_CODING_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ZAI_CODING_API_KEY.value -}}"
 export ZHIPU_API_KEY=$ZAI_CODING_API_KEY
-export VOYAGEAI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").VOYAGEAI_API_KEY.value -}}"
 export _OP_SERVICE_ACCOUNT_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com")._OP_SERVICE_ACCOUNT_TOKEN.value -}}"
 
 export TELEMETRY_DECK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").TELEMETRY_DECK_API_KEY.value -}}"
-
 export ELEVENLABS_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").ELEVENLABS_API_KEY.value -}}"
-
 export HF_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").HF_TOKEN.value -}}"
 
-{{- end }}
-
 export KAGI_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").KAGI_API_KEY.value -}}"
+
+{{- end }}
 
 export EDITOR="zed -w"
 export CLICOLOR=1
@@ -76,14 +71,12 @@ export FZF_CTRL_R_OPTS="
 
 export PALM_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").PALM_KEY.value -}}"
 
+{{- if eq $host "dbauke-mac" }}
+export HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS} --appdir=${HOME}/Applications"
+{{- end }}
 export HOMEBREW_AUTOREMOVE=true
 export HOMEBREW_BAT=true
 export HOMEBREW_CASK_OPTS="--no-quarantine"
-{{- if eq $host "dbauke-mac" }}
-# A cask target under /Applications makes Homebrew retry `chgrp` under sudo when
-# the unprivileged call fails. An appdir under $HOME skips that retry.
-export HOMEBREW_CASK_OPTS="${HOMEBREW_CASK_OPTS} --appdir=${HOME}/Applications"
-{{- end }}
 export HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=5
 export HOMEBREW_NO_ENV_HINTS=true
 export HOMEBREW_GITHUB_API_TOKEN=$_GITHUB_ACCESS_TOKEN
@@ -126,7 +119,6 @@ if [[ -z "$SANDBOX_RUNTIME" ]]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
     launchctl setenv NODE_EXTRA_CA_CERTS "$NODE_EXTRA_CA_CERTS"
 fi
-
 
 eval_managers
 

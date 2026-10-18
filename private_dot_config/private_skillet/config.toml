@@ -129,6 +129,9 @@ only = [
 ]
 
 [[skills]]
+url = '/Applications/Helm.app/Contents/Resources/AgentSkill_AgentSkill.bundle/Contents/Resources/helm-asc'
+
+[[skills]]
 url = 'https://github.com/herdrdev/herdr.git'
 only = ['herdr']
 
@@ -161,7 +164,14 @@ url = 'https://github.com/bonkey/skills-private.git'
 url = 'https://github.com/wondelai/skills.git'
 
 [[mcps]]
+command = ['/Applications/Kickstart.app/Contents/Helpers/KickstartMCP']
+
+[[mcps]]
 command = ['agentsview', 'mcp']
+
+[[mcps]]
+name = 'bear-app'
+command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']
 
 [[mcps]]
 url = 'https://mcp.deepwiki.com/mcp'
@@ -209,22 +219,12 @@ url = 'https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}'
 command = ['npx', '-y', 'vibium', 'mcp']
 
 [[mcps]]
+name = 'xcode'
+command = ['xcrun', 'mcpbridge']
+
+[[mcps]]
 name = 'xcode-instruments'
 command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
-
-[[mcps]]
-name = 'bear-app'
-command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']
-
-[[mcps]]
-name = 'xcode'
-command = ['xcrun', 'mcpbridge']
-
-[[skills]]
-url = '/Applications/Helm.app/Contents/Resources/AgentSkill_AgentSkill.bundle/Contents/Resources/helm-asc'
-
-[[mcps]]
-command = ['/Applications/Kickstart.app/Contents/Helpers/KickstartMCP']

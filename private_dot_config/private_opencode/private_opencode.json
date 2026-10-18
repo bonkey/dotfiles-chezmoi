@@ -1,8 +1,5 @@
 {
-  "plugin": [
-    "@plannotator/opencode@latest",
-    "/Users/bonkey/.config/opencode/plugins/mtplx-session-headers"
-  ],
+  "$schema": "https://opencode.ai/config.json",
   "disabled_providers": [
     "anthropic",
     "openrouter",
@@ -19,115 +16,114 @@
       ]
     }
   },
+  "instructions": [
+    "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
+  ],
   "mcp": {
-    "tavily": {
+    "KickstartMCP": {
+      "command": [
+        "/Applications/Kickstart.app/Contents/Helpers/KickstartMCP"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "agentsview": {
+      "command": [
+        "agentsview",
+        "mcp"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "bear-app": {
+      "command": [
+        "/Applications/Bear.app/Contents/MacOS/bearcli",
+        "mcp-server"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "deepwiki": {
+      "enabled": true,
       "type": "remote",
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>",
-      "enabled": true
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "exa": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>"
     },
     "firecrawl": {
-      "type": "local",
       "command": [
         "npx",
         "-y",
         "firecrawl-mcp"
       ],
+      "enabled": true,
       "environment": {
         "FIRECRAWL_API_KEY": "<FIRECRAWL_API_KEY_REDACTED>"
       },
-      "enabled": true
+      "type": "local"
     },
-    "deepwiki": {
-      "url": "https://mcp.deepwiki.com/mcp",
+    "linear": {
+      "enabled": true,
       "type": "remote",
-      "enabled": true
-    },
-    "exa": {
-      "type": "remote",
-      "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY_REDACTED>",
-      "enabled": true
+      "url": "https://mcp.linear.app/mcp"
     },
     "morph": {
-      "type": "local",
       "command": [
         "npx",
         "--prefer-offline",
         "-y",
         "@morphllm/morphmcp"
       ],
+      "enabled": true,
       "environment": {
         "MORPH_API_KEY": "<MORPH_API_KEY_REDACTED>"
       },
-      "enabled": true
+      "type": "local"
     },
-    "agentsview": {
-      "type": "local",
-      "command": [
-        "agentsview",
-        "mcp"
-      ],
-      "enabled": true
-    },
-    "linear": {
+    "mxterm": {
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:MXTERM_SESSION}"
+      },
+      "oauth": false,
       "type": "remote",
-      "url": "https://mcp.linear.app/mcp",
-      "enabled": true
+      "url": "{env:MXTERM_MCP_URL}"
     },
     "pencil": {
-      "type": "local",
       "command": [
         "/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64",
         "--app",
         "desktop"
       ],
-      "enabled": true
+      "enabled": true,
+      "type": "local"
     },
-    "bear-app": {
-      "type": "local",
-      "command": [
-        "/Applications/Bear.app/Contents/MacOS/bearcli",
-        "mcp-server"
-      ],
-      "enabled": true
-    },
-    "KickstartMCP": {
-      "type": "local",
-      "command": [
-        "/Applications/Kickstart.app/Contents/Helpers/KickstartMCP"
-      ],
-      "enabled": true
+    "tavily": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<TAVILY_API_KEY_REDACTED>"
     },
     "xcode": {
-      "type": "local",
       "command": [
         "xcrun",
         "mcpbridge"
       ],
-      "enabled": true
+      "enabled": true,
+      "type": "local"
     }
   },
-  "$schema": "https://opencode.ai/config.json",
-  "instructions": [
-    "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
+  "model": "mtplx/mtplx-qwen38-27b-optimized-speed",
+  "plugin": [
+    "@plannotator/opencode@latest",
+    "/Users/bonkey/.config/opencode/plugins/mtplx-session-headers"
   ],
   "provider": {
     "mtplx": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "MTPLX (local)",
-      "options": {
-        "baseURL": "http://127.0.0.1:18083/v1",
-        "timeout": false,
-        "chunkTimeout": 900000,
-        "headers": {
-          "x-mtplx-client": "opencode"
-        }
-      },
       "models": {
         "mtplx-qwen38-27b-optimized-speed": {
-          "name": "MTPLX mtplx-qwen38-27b-optimized-speed",
-          "reasoning": true,
-          "tool_call": true,
-          "temperature": true,
           "limit": {
             "context": 262144,
             "output": 32000
@@ -141,33 +137,46 @@
               "text"
             ]
           },
+          "name": "MTPLX mtplx-qwen38-27b-optimized-speed",
           "options": {
             "reasoningEffort": "medium"
           },
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true,
           "variants": {
-            "none": {
-              "disabled": true
-            },
-            "minimal": {
-              "disabled": true
-            },
             "high": {
               "disabled": true
             },
-            "xhigh": {
-              "reasoningEffort": "xhigh"
+            "low": {
+              "reasoningEffort": "low"
             },
             "medium": {
               "reasoningEffort": "medium"
             },
-            "low": {
-              "reasoningEffort": "low"
+            "minimal": {
+              "disabled": true
+            },
+            "none": {
+              "disabled": true
+            },
+            "xhigh": {
+              "reasoningEffort": "xhigh"
             }
           }
         }
+      },
+      "name": "MTPLX (local)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://127.0.0.1:18083/v1",
+        "chunkTimeout": 900000,
+        "headers": {
+          "x-mtplx-client": "opencode"
+        },
+        "timeout": false
       }
     }
   },
-  "model": "mtplx/mtplx-qwen38-27b-optimized-speed",
   "small_model": "mtplx/mtplx-qwen38-27b-optimized-speed"
 }

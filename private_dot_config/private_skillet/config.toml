@@ -219,7 +219,12 @@ command = ['xcstrings-crud', 'mcp']
 name = 'bear-app'
 command = ['/Applications/Bear.app/Contents/MacOS/bearcli', 'mcp-server']
 
+[[mcps]]
+name = 'xcode'
+command = ['xcrun', 'mcpbridge']
+
+[[skills]]
+url = '/Applications/Helm.app/Contents/Resources/AgentSkill_AgentSkill.bundle/Contents/Resources/helm-asc'
 
 [[mcps]]
-name = 'xcode-mcp'
-command = ['xcrun', 'mcpbridge']
+command = ['/Applications/Kickstart.app/Contents/Helpers/KickstartMCP']

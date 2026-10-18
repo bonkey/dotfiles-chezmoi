@@ -90,7 +90,14 @@
       ],
       "enabled": true
     },
-    "xcode-mcp": {
+    "KickstartMCP": {
+      "type": "local",
+      "command": [
+        "/Applications/Kickstart.app/Contents/Helpers/KickstartMCP"
+      ],
+      "enabled": true
+    },
+    "xcode": {
       "type": "local",
       "command": [
         "xcrun",

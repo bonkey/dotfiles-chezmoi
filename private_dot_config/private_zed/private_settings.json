@@ -104,7 +104,12 @@
         "mcp-server"
       ]
     },
-    "xcode-mcp": {
+    "KickstartMCP": {
+      "enabled": true,
+      "command": "/Applications/Kickstart.app/Contents/Helpers/KickstartMCP",
+      "args": []
+    },
+    "xcode": {
       "enabled": true,
       "command": "xcrun",
       "args": [

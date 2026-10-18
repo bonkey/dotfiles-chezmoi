@@ -126,6 +126,13 @@ ALWAYS use the `sweetpad` CLI to build an Xcode app and to refresh it after a ch
 - Pass `--non-interactive` on every call. A missing scheme or destination then fails instead of opening a picker that waits for input.
 - Pass the task simulator's UDID with `--on`. Without it, sweetpad uses the destination it remembers for the project, which can be another simulator or a physical device.
 
+## Xcode MCP access
+
+Xcode's headless MCP server (`xcrun mcp-server`) grants access per agent and per project folder. Both are durable and already granted: the signed Claude Code binary, and `allow-folder` on the folder that holds every project and worktree. Nothing per worktree is needed.
+
+- If a call fails with "This agent isn't approved to use Xcode's tools yet", run `xcrun mcp-server status`. A missing folder is the human's fix: `sudo xcrun mcp-server allow-folder <parent folder of all worktrees> --always`. A missing agent grant can only be requested by the agent itself calling `XcodeOpenWorkspace`: from Bash, `exec xcrun mcpbridge` with the JSON-RPC `initialize`, `notifications/initialized` and that `tools/call` fed on stdin, run in the background. `exec` makes Claude the bridge's parent so the request carries the signed identity; NEVER pipe the bridge's output, which makes the shell the parent and an unsigned agent. Then reconnect with `/mcp`.
+- The `xcode-mods` pane's red band is a cached error; `/xcode` re-resolves and clears it.
+
 ## iOS Simulators
 
 Create a dedicated simulator for each task to avoid conflicts. Give it a meaningful name based on the branch or worktree.

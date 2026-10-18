@@ -218,6 +218,12 @@ command = "annotate.capture"
 description = "annotate selected text"
 
 [[keys.command]]
+key = "ctrl+alt+a"
+type = "plugin_action"
+command = "annotate.capture"
+description = "annotate selected text (no prefix)"
+
+[[keys.command]]
 key = "prefix+Y"
 type = "plugin_action"
 command = "annotate.copy-context"

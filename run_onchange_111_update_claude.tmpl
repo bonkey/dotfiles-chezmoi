@@ -32,6 +32,12 @@ for marketplace in "${marketplaces[@]}"; do
     claude plugin marketplace add "$marketplace" || log_message "Warning: cannot add marketplace $marketplace"
 done
 
+installed=(${(f)"$(claude plugin list --json 2>/dev/null | jq -r '.[] | select(.scope == "user") | .id')"})
+
 for plugin in "${plugins[@]}"; do
-    claude plugin install "$plugin" || log_message "Warning: cannot install plugin $plugin"
+    if (( ${installed[(Ie)$plugin]} )); then
+        claude plugin update "$plugin" || log_message "Warning: cannot update plugin $plugin"
+    else
+        claude plugin install "$plugin" || log_message "Warning: cannot install plugin $plugin"
+    fi
 done

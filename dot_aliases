@@ -805,7 +805,7 @@ ff-gif() {
 
 alias .xc="xcodectl"
 alias .xci=".xc install --runtimes ios"
-alias .xcu=".xc update --runtimes ios --beta"
+alias .xcu=".xc upgrade --beta"
 alias .xcs=".xc select"
 alias .xcr=".xc remove"
 alias .xcl=".xc list"

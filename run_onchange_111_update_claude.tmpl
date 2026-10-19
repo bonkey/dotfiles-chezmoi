@@ -31,9 +31,9 @@ plugins=(
 )
 
 for marketplace in "${marketplaces[@]}"; do
-    claude plugin marketplace add "$marketplace"
+    claude plugin marketplace add "$marketplace" || log_message "Warning: cannot add marketplace $marketplace"
 done
 
 for plugin in "${plugins[@]}"; do
-    claude plugin install "$plugin"
+    claude plugin install "$plugin" || log_message "Warning: cannot install plugin $plugin"
 done

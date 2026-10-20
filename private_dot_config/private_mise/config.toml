@@ -16,38 +16,38 @@ pipx = "latest"
 "npm:pnpm" = "latest"
 
 # Apple development
-"github:Ryu0118/xcstrings-crud" = "latest" # Manage Apple xcstrings localization files
-"github:bonkey/xcodectl" = "latest"       # Install, switch and remove Xcode versions
+"github:Ryu0118/xcstrings-crud" = "latest"                                        # Manage Apple xcstrings localization files
+"github:bonkey/xcodectl" = "latest"                                               # Install, switch and remove Xcode versions
 swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" }
 
 # Python CLI tools
-"pipx:black" = "latest"                   # Python code formatter
-"pipx:csvkit" = "latest"                  # CSV/TSV/querying utilities
-"pipx:httpie" = "latest"                  # Human-friendly HTTP client
-"pipx:jc" = "latest"                      # Convert command output to JSON
+"pipx:black" = "latest"  # Python code formatter
+"pipx:csvkit" = "latest" # CSV/TSV/querying utilities
+"pipx:httpie" = "latest" # Human-friendly HTTP client
+"pipx:jc" = "latest"     # Convert command output to JSON
 
 # Rust CLI tools
-"cargo:mlux" = "latest"                   # Rich Markdown viewer for modern terminals
+"cargo:mlux" = "latest" # Rich Markdown viewer for modern terminals
 
 # Git / repository tools
-"pipx:git-filter-repo" = "latest"         # Git history rewriting
+"pipx:git-filter-repo" = "latest" # Git history rewriting
 
 # Web / media / network utilities
-"pipx:yt-dlp" = "latest"                  # Video/audio downloader
-"npm:fast-cli" = "latest"                 # Network speed test CLI
+"pipx:yt-dlp" = "latest"        # Video/audio downloader
+"npm:fast-cli" = "latest"       # Network speed test CLI
 "npm:contentful-cli" = "latest"
-
+"pipx:scrapling[ai]" = "latest"
 
 # Mobile development / automation
-"npm:appium" = "latest"                   # Mobile UI automation framework
-"npm:mobilecli" = "latest"    # Mobile development tooling
+"npm:appium" = "latest"     # Mobile UI automation framework
+"npm:mobilecli" = "latest"  # Mobile development tooling
 "npm:@sentry/ai" = "latest"
 
 # Diagramming / visualization
-"npm:@mermaid-js/mermaid-cli" = "latest"  # Render Mermaid diagrams from CLI
+"npm:@mermaid-js/mermaid-cli" = "latest" # Render Mermaid diagrams from CLI
 
 # Observability / delivery tooling
-"npm:@sentry/cli" = "latest"              # Sentry release/debug/upload CLI
+"npm:@sentry/cli" = "latest" # Sentry release/debug/upload CLI
 "npm:vercel" = "latest"
 
 # Google / workspace tooling
@@ -56,18 +56,18 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 
 # LLM foundations / prompt tooling
 "pipx:llm" = { version = "latest", uvx_args = "--with llm-anthropic,llm-gemini,llm-jq,llm-cmd,llm-cmd-comp  --allow-insecure-host pypi.org --allow-insecure-host files.pythonhosted.org" }
-"pipx:files-to-prompt" = "latest"         # Turn files into prompt context
+"pipx:files-to-prompt" = "latest"                                                                                                                                                          # Turn files into prompt context
 
 # AI model CLIs
-"npm:@openai/codex" = "latest"            # OpenAI Codex CLI
-"npm:@google/gemini-cli" = "latest"       # Google Gemini CLI
-"npm:@qwen-code/qwen-code" = "latest"     # Qwen coding assistant CLI
-"npm:@kilocode/cli" = "latest"            # AI coding assistant CLI
+"npm:@openai/codex" = "latest"                   # OpenAI Codex CLI
+"npm:@google/gemini-cli" = "latest"              # Google Gemini CLI
+"npm:@qwen-code/qwen-code" = "latest"            # Qwen coding assistant CLI
+"npm:@kilocode/cli" = "latest"                   # AI coding assistant CLI
 "npm:@earendil-works/pi-coding-agent" = "latest" # Coding agent CLI
 
 # AI tools
-"npm:btca" = "latest"                     # opencode / micode related
-"npm:ccusage" = "latest"                  # AI token/cost/usage tracking
+"npm:btca" = "latest"                 # opencode / micode related
+"npm:ccusage" = "latest"              # AI token/cost/usage tracking
 "npm:codeburn" = "latest"
 "pipx:bonkey/mobile-broom" = "latest"
 "npm:impeccable" = "latest"
@@ -78,7 +78,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 experimental = true
 pipx.uvx = true
 npm.bun = true
-minimum_release_age = "0" # always install newest release; disable mise 2026.x quarantine
+minimum_release_age = "0"                                        # always install newest release; disable mise 2026.x quarantine
 idiomatic_version_file_enable_tools = ["ruby", "python", "node"]
 
 trusted_config_paths = [

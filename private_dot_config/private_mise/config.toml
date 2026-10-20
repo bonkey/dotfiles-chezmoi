@@ -33,9 +33,11 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "pipx:git-filter-repo" = "latest" # Git history rewriting
 
 # Web / media / network utilities
-"pipx:yt-dlp" = "latest"        # Video/audio downloader
-"npm:fast-cli" = "latest"       # Network speed test CLI
+"pipx:yt-dlp" = "latest"              # Video/audio downloader
+"npm:fast-cli" = "latest"             # Network speed test CLI
 "npm:contentful-cli" = "latest"
+"pipx:scrapling" = "latest"
+"pipx:scrapling[fetchers]" = "latest"
 "pipx:scrapling[ai]" = "latest"
 
 # Mobile development / automation

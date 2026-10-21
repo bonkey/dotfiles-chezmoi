@@ -120,6 +120,41 @@
       "enabled": true,
       "command": "scrapling-mcp",
       "args": []
+    },
+    "mobile-mcp": {
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@mobilenext/mobile-mcp@latest"
+      ]
+    },
+    "simctl": {
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "simctl-mcp"
+      ]
+    },
+    "sosumi": {
+      "enabled": true,
+      "url": "https://sosumi.ai/mcp"
+    },
+    "xcode-instruments": {
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "instrumentsmcp@latest"
+      ]
+    },
+    "xcstrings-crud": {
+      "enabled": true,
+      "command": "xcstrings-crud",
+      "args": [
+        "mcp"
+      ]
     }
   },
 

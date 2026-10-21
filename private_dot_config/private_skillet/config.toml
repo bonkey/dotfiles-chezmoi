@@ -38,21 +38,29 @@ name = 'ios-bic'
 description = 'Best in Class turned to skills'
 enabled = false
 skills = [
-  'bic-accessibility@skills-private',
-  'bic-design@skills-private',
-  'bic-dev-toolbox@skills-private',
-  'bic-platform-adoption@skills-private',
-  'bic-scorecard@skills-private',
-  'bic-ux-polish@skills-private',
-  'swift-docc@agent-skills',
+    'bic-accessibility@skills-private',
+    'bic-design@skills-private',
+    'bic-dev-toolbox@skills-private',
+    'bic-platform-adoption@skills-private',
+    'bic-scorecard@skills-private',
+    'bic-ux-polish@skills-private',
+    'swift-docc@agent-skills',
 ]
 
 [[packs]]
 name = 'ios-dev'
 description = 'iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge'
-enabled = false
+enabled = true
 skills = ['agent-skills', 'ios-hig-design@wondelai-skills']
-mcps = ['mobile-mcp', 'simctl', 'sosumi', 'xcode-instruments', 'xcstrings-crud']
+mcps = [
+    'mobile-mcp',
+    'simctl',
+    'sosumi',
+    'xcode-instruments',
+    'xcstrings-crud',
+    'KickstartMCP',
+    'xcode',
+]
 
 [[packs]]
 name = 'knowledge-sources'
@@ -76,15 +84,21 @@ skills = ['ponytail']
 
 [[packs]]
 name = 'tools'
-description = 'Single-purpose tools: browser automation, Mermaid diagrams, herdr panes, show-me visual explanations, UI polish, plan grilling, skill observation'
+description = 'General tools: browser automation, Mermaid diagrams, herdr panes, plan grilling, skill observation and notes'
 skills = [
-  'agent-browser',
-  'design-doc-mermaid',
-  'herdr',
-  'impeccable',
-  'mattpocock-skills',
-  'one-skill-to-rule-them-all',
+    'agent-browser',
+    'design-doc-mermaid',
+    'herdr',
+    'mattpocock-skills',
+    'one-skill-to-rule-them-all',
 ]
+mcps = ['bear-app', 'scrapling-mcp']
+
+[[packs]]
+name = 'design'
+description = 'Design tools: UI polish and Pencil canvas'
+skills = ['impeccable']
+mcps = ['pencil']
 
 [[packs]]
 name = 'web-dev'
@@ -115,17 +129,17 @@ url = 'https://github.com/spillwavesolutions/design-doc-mermaid.git'
 [[skills]]
 url = 'https://github.com/elevenlabs/skills.git'
 only = [
-  'agents',
-  'dubbing',
-  'music',
-  'setup-api-key',
-  'sound-effects',
-  'speech-engine',
-  'speech-to-text',
-  'text-to-speech',
-  'update-skills-from-changelog',
-  'voice-changer',
-  'voice-isolator',
+    'agents',
+    'dubbing',
+    'music',
+    'setup-api-key',
+    'sound-effects',
+    'speech-engine',
+    'speech-to-text',
+    'text-to-speech',
+    'update-skills-from-changelog',
+    'voice-changer',
+    'voice-isolator',
 ]
 
 [[skills]]
@@ -182,7 +196,7 @@ url = 'https://mcp.exa.ai/mcp?exaApiKey=${EXA_API_KEY}'
 [[mcps]]
 name = 'firecrawl'
 command = ['npx', '-y', 'firecrawl-mcp']
-environment = {FIRECRAWL_API_KEY = '${FIRECRAWL_API_KEY}'}
+environment = { FIRECRAWL_API_KEY = '${FIRECRAWL_API_KEY}' }
 
 [[mcps]]
 url = 'https://mcp.linear.app/mcp'
@@ -193,11 +207,15 @@ command = ['npx', '-y', '@mobilenext/mobile-mcp@latest']
 [[mcps]]
 name = 'morph'
 command = ['npx', '--prefer-offline', '-y', '@morphllm/morphmcp']
-environment = {MORPH_API_KEY = '${MORPH_API_KEY}'}
+environment = { MORPH_API_KEY = '${MORPH_API_KEY}' }
 
 [[mcps]]
 name = 'pencil'
-command = ['/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64', '--app', 'desktop']
+command = [
+    '/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64',
+    '--app',
+    'desktop',
+]
 
 [[mcps]]
 command = ['npx', 'shadcn@latest', 'mcp']
@@ -231,3 +249,7 @@ command = ['xcstrings-crud', 'mcp']
 
 [[mcps]]
 command = ['scrapling-mcp']
+
+[[skills]]
+url = 'https://github.com/D4Vinci/Scrapling.git'
+only = ['scrapling-official']

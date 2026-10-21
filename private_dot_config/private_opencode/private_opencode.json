@@ -119,6 +119,46 @@
         "scrapling-mcp"
       ],
       "enabled": true
+    },
+    "mobile-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@mobilenext/mobile-mcp@latest"
+      ],
+      "enabled": true
+    },
+    "simctl": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "simctl-mcp"
+      ],
+      "enabled": true
+    },
+    "sosumi": {
+      "type": "remote",
+      "url": "https://sosumi.ai/mcp",
+      "enabled": true
+    },
+    "xcode-instruments": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "instrumentsmcp@latest"
+      ],
+      "enabled": true
+    },
+    "xcstrings-crud": {
+      "type": "local",
+      "command": [
+        "xcstrings-crud",
+        "mcp"
+      ],
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json",

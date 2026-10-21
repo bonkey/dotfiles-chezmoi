@@ -112,6 +112,13 @@
         "mcpbridge"
       ],
       "enabled": true
+    },
+    "scrapling-mcp": {
+      "type": "local",
+      "command": [
+        "scrapling-mcp"
+      ],
+      "enabled": true
     }
   },
   "$schema": "https://opencode.ai/config.json",

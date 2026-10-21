@@ -228,3 +228,6 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
+
+[[mcps]]
+command = ['scrapling-mcp']

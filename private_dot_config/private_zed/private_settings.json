@@ -115,6 +115,11 @@
       "args": [
         "mcpbridge"
       ]
+    },
+    "scrapling-mcp": {
+      "enabled": true,
+      "command": "scrapling-mcp",
+      "args": []
     }
   },
 

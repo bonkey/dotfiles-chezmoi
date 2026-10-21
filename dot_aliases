@@ -486,10 +486,14 @@ alias .ocm=".oc mini -m opencode-go/kimi-k3"
     skillet "$@"
 }
 
+.sksy() {
+    .sk sync "$@"
+    .sk gist push
+}
+
 alias .ska=".sk add --sync --gist --"
-alias .skr=".sk remove -- "
+alias .skr=".sk remove --"
 alias .skst=".sk status"
-alias .sksy=".sk sync"
 alias .skl=".sk list"
 alias .sku=".sk update"
 

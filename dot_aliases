@@ -483,12 +483,13 @@ alias .ocm=".oc mini -m opencode-go/kimi-k3"
 
 # Manage global skills through the skills CLI.
 .sk() {
-    npx -y skills "$@" --global --yes
+    skillet "$@"
 }
 
-alias .ska=".sk add"
-alias .ski=.ska
-alias .skr=".sk remove"
+alias .ska=".sk add --sync --gist --"
+alias .skr=".sk remove -- "
+alias .skst=".sk status"
+alias .sksy=".sk sync"
 alias .skl=".sk list"
 alias .sku=".sk update"
 

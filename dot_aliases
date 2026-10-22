@@ -591,10 +591,10 @@ alias xf="xmllint --format"
 
 
 .mdc() {
-    if (( $+commands[mlux] )); then
-        mlux --theme catppuccin-latte-latin --allow-remote-images --exp-preset adaptive --watch "$@"
-    elif (( $+commands[mdcat] )); then
+    if (( $+commands[mdcat] )); then
         mdcat -p --smart-punctuation "$@"
+    elif (( $+commands[mlux] )); then
+        mlux --theme catppuccin-latte-latin --allow-remote-images --exp-preset adaptive --watch "$@"
     elif (( $+commands[glow] )); then
         glow -w 0 -p "$@"
     else

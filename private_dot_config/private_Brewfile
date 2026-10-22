@@ -193,7 +193,6 @@ mas 'Windows App', id: 1_295_203_466
 
 # Browsers
 cask 'firefox' # Web browser
-cask 'google-chrome' # Web browser
 cask 'orion' # WebKit based web browser
 cask 'zen@twilight' # Gecko based web browser
 mas 'Kagi for Safari', id: 1_622_835_804

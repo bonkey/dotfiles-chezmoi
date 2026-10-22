@@ -1,5 +1,5 @@
 gist = 'aa1b5c37a1bd7d0df1ee8070d0f55d8c'
-agents = ['claude-code', 'codex', 'gemini-cli', 'opencode', 'pi', 'zed']
+agents = ['claude-code', 'codex', 'gemini-cli', 'opencode', 'pi', 'zed', 'omp']
 
 [[secrets]]
 account = 'bonkey.1password.com'
@@ -44,14 +44,18 @@ skills = [
     'bic-platform-adoption@skills-private',
     'bic-scorecard@skills-private',
     'bic-ux-polish@skills-private',
-    'swift-docc@agent-skills',
 ]
 
 [[packs]]
 name = 'ios-dev'
 description = 'iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge'
 enabled = true
-skills = ['agent-skills', 'ios-hig-design@wondelai-skills']
+skills = [
+    'agent-skills',
+    'ios-hig-design@wondelai-skills',
+    'helm-asc',
+    'swift-docc@agent-skills',
+]
 mcps = [
     'mobile-mcp',
     'simctl',
@@ -91,6 +95,7 @@ skills = [
     'herdr',
     'mattpocock-skills',
     'one-skill-to-rule-them-all',
+    'scrapling-official',
 ]
 mcps = ['bear-app', 'scrapling-mcp']
 

@@ -135,14 +135,12 @@ Xcode's headless MCP server (`xcrun mcp-server`) grants access per agent and per
 
 ## Xcode versions and simulator runtimes with xcodectl
 
-ALWAYS use `xcodectl` to list, install, upgrade, select and remove Xcode versions and simulator runtimes.
+ALWAYS use `xcodectl` to list, install, upgrade, select and remove Xcode versions and simulator runtimes. Run `xcodectl reference` to learn every command and flag in one call.
 
-- Read without asking: `xcodectl installed --no-size --json` (installed Xcodes, the active one, the runtimes each uses), `xcodectl installed runtimes`, `xcodectl list --json` (available versions and the macOS each needs), `xcodectl list ios --json`, `xcodectl release-notes <version> <other>`. `--no-size` skips reading every file in each bundle.
 - Always pass a version. Without one, `xcodectl` opens a picker at a terminal and fails elsewhere.
-- Install a missing runtime with `xcodectl install ios <version>`. Add `--xcode <version>` to install it through an Xcode other than the active one.
-- Xcode downloads and runtimes older than iOS 18, tvOS 18, watchOS 11 and visionOS 2 need the Apple session. `xcodectl auth status` exits 1 when it is missing or expired. Sign-in opens a window, so ask the human to run `xcodectl auth login`.
-- `approve`, `select` and `install-clt` need sudo. So do `install` and `upgrade`, which run `approve` and the Command Line Tools update unless given `--no-approve --no-clt`. Ask the human to run them.
-- `select` changes the active Xcode for every session on the machine. `upgrade` deletes the old Xcode unless given `--keep`. `remove`, `prune` and `--replace-runtimes` delete Xcodes or simulator runtimes. Confirm each with the human first, and preview `upgrade` and `prune` with `--dry-run`.
+- Sign-in opens a window, so ask the human to run `xcodectl auth login`.
+- `approve`, `select` and `install-clt` need sudo. So do `install` and `upgrade` unless given `--no-approve --no-clt`. Ask the human to run them.
+- `remove`, `upgrade` without `--keep`, `--replace-runtimes` and pruning runtimes delete Xcodes or simulator runtimes. Confirm each with the human first. Preview with `--dry-run` where the command has it.
 
 ## iOS Simulators
 

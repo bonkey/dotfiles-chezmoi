@@ -2,6 +2,8 @@ window-theme = system
 config-file = ?auto/theme.ghostty
 minimum-contrast = 3
 
+shell-integration-features = ssh-env,ssh-terminfo
+
 # font-family = "CodeNewRoman Nerd Font Mono"
 font-family = "Google Sans Code NF"
 font-size = 16

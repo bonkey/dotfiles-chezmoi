@@ -133,6 +133,17 @@ Xcode's headless MCP server (`xcrun mcp-server`) grants access per agent and per
 - If a call fails with "This agent isn't approved to use Xcode's tools yet", run `xcrun mcp-server status`. A missing folder is the human's fix: `sudo xcrun mcp-server allow-folder <parent folder of all worktrees> --always`. A missing agent grant can only be requested by the agent itself calling `XcodeOpenWorkspace`: from Bash, `exec xcrun mcpbridge` with the JSON-RPC `initialize`, `notifications/initialized` and that `tools/call` fed on stdin, run in the background. `exec` makes Claude the bridge's parent so the request carries the signed identity; NEVER pipe the bridge's output, which makes the shell the parent and an unsigned agent. Then reconnect with `/mcp`.
 - The `xcode-mods` pane's red band is a cached error; `/xcode` re-resolves and clears it.
 
+## Xcode versions and simulator runtimes with xcodectl
+
+ALWAYS use `xcodectl` to list, install, upgrade, select and remove Xcode versions and simulator runtimes.
+
+- Read without asking: `xcodectl installed --no-size --json` (installed Xcodes, the active one, the runtimes each uses), `xcodectl installed runtimes`, `xcodectl list --json` (available versions and the macOS each needs), `xcodectl list ios --json`, `xcodectl release-notes <version> <other>`. `--no-size` skips reading every file in each bundle.
+- Always pass a version. Without one, `xcodectl` opens a picker at a terminal and fails elsewhere.
+- Install a missing runtime with `xcodectl install ios <version>`. Add `--xcode <version>` to install it through an Xcode other than the active one.
+- Xcode downloads and runtimes older than iOS 18, tvOS 18, watchOS 11 and visionOS 2 need the Apple session. `xcodectl auth status` exits 1 when it is missing or expired. Sign-in opens a window, so ask the human to run `xcodectl auth login`.
+- `approve`, `select` and `install-clt` need sudo. So do `install` and `upgrade`, which run `approve` and the Command Line Tools update unless given `--no-approve --no-clt`. Ask the human to run them.
+- `select` changes the active Xcode for every session on the machine. `upgrade` deletes the old Xcode unless given `--keep`. `remove`, `prune` and `--replace-runtimes` delete Xcodes or simulator runtimes. Confirm each with the human first, and preview `upgrade` and `prune` with `--dry-run`.
+
 ## iOS Simulators
 
 Create a dedicated simulator for each task to avoid conflicts. Give it a meaningful name based on the branch or worktree.

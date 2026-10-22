@@ -3,7 +3,7 @@
 
 Subcommands (with the ~/.aliases one-liners that call them):
 
-  open    [PROJ] [-r]                    open with the selected Xcode              .x
+  open    [PROJ] [--scheme SCHEME] [-r]  open with the selected Xcode              .x
   resolve [PROJ] [SCHEME] [-l] [--remove-package-resolved]
                                          clean + resolve package dependencies      .xcr
   build   [PROJ] [SCHEME] [-r] [xcodebuild args...]
@@ -12,10 +12,11 @@ Subcommands (with the ~/.aliases one-liners that call them):
 
 PROJ defaults to the nearest *.xcworkspace or *.xcodeproj below the current
 directory, walking breadth-first: the shallowest match wins, a workspace beats a
-project, and Package.swift is accepted in the current directory only. SCHEME
-defaults to the project name. `open` honors a .xcode-version file by running
-`xcodes select`. -r/--resolve runs `resolve` first. --kill-xcode and
---kill-xcodebuild run `kill` first; `resolve` always kills Xcode because it
+project, and Package.swift is accepted in the current directory only. SCHEME,
+also given as --scheme, defaults to the scheme that `xcodebuild -list` names
+like the project, else to the first one it lists. `open` honors a .xcode-version
+file by running `xcodes select`. -r/--resolve runs `resolve` first. --kill-xcode
+and --kill-xcodebuild run `kill` first; `resolve` always kills Xcode because it
 deletes package state that a running Xcode would rewrite. `resolve` also points
 every branch pin in Package.resolved at its branch's current commit, which Xcode
 cannot do once a force push has orphaned the pinned one; the alternative,
@@ -118,12 +119,34 @@ def locate(given: str | None) -> Path:
     fail(f"No xcworkspace/xcodeproj below {cwd}, nor Package.swift in it")
 
 
-def build_target(proj: Path, scheme: str | None) -> tuple[str, str, str]:
-    """(-workspace|-project, path, scheme) for xcodebuild."""
+def build_target(proj: Path) -> tuple[str, str]:
+    """(-workspace|-project, path) for xcodebuild."""
     if proj.suffix not in PROJECT_SUFFIXES or not proj.is_dir():
         fail(f"'{proj}' is not an .xcworkspace or .xcodeproj")
     flag = "-workspace" if proj.suffix == ".xcworkspace" else "-project"
-    return flag, str(proj), scheme or proj.stem
+    return flag, str(proj)
+
+
+def pick_scheme(proj: Path, given: str | None) -> str:
+    """`given`, else the listed scheme named like the project, else the first
+    listed one, else the project name.
+    """
+    if given:
+        return given
+    log("Detecting the scheme")
+    listing = subprocess.run(
+        ["xcrun", "xcodebuild", "-list", "-json", *build_target(proj)],
+        capture_output=True,
+        text=True,
+    ).stdout
+    try:
+        info = json.loads(listing)
+        schemes = (info.get("workspace") or info.get("project"))["schemes"]
+    except (ValueError, TypeError, KeyError):
+        schemes = []
+    scheme = proj.stem if proj.stem in schemes or not schemes else schemes[0]
+    log(f"Using scheme {paint('1;32', scheme)}")
+    return scheme
 
 
 # --- xcode selection -------------------------------------------------------------
@@ -225,7 +248,7 @@ def resolve(
     list_schemes: bool = False,
     remove_package_resolved: bool = False,
 ) -> None:
-    flag, path, scheme = build_target(proj, scheme)
+    flag, path = build_target(proj)
     xcodebuild = ["xcrun", "xcodebuild", "-destination", DESTINATION]
 
     if list_schemes:
@@ -233,6 +256,7 @@ def resolve(
         run(xcodebuild + ["-list", flag, path])
         return
 
+    scheme = pick_scheme(proj, scheme)
     kill(xcode=True, xcodebuild=False)
     time.sleep(0.5)
 
@@ -266,7 +290,7 @@ def cmd_open(args: argparse.Namespace) -> None:
     app = xcode_app()
     log(f"Opening {proj} with {app} ({paint('1;32', xcode_version())})")
     if args.resolve:
-        resolve(proj)
+        resolve(proj, args.scheme)
     run(["open", "-a", app, str(proj)])
 
 
@@ -278,9 +302,10 @@ def cmd_resolve(args: argparse.Namespace) -> None:
 def cmd_build(args: argparse.Namespace, extra: list[str]) -> None:
     kill_from_flags(args)
     proj = locate(args.project)
+    scheme = pick_scheme(proj, args.scheme)
     if args.resolve:
-        resolve(proj, args.scheme)
-    flag, path, scheme = build_target(proj, args.scheme)
+        resolve(proj, scheme)
+    flag, path = build_target(proj)
     cmd = ["xcrun", "xcodebuild", flag, path, "-scheme", scheme, "-destination", DESTINATION]
     beautify = ["xcbeautify", "-q", "--disable-logging"] if shutil.which("xcbeautify") else None
     run(cmd + extra, pipe_to=beautify)
@@ -308,7 +333,11 @@ def main(argv: list[str]) -> None:
         p = sub.add_parser(name, help=help_text)
         p.add_argument("project", nargs="?", help="xcworkspace / xcodeproj / Package.swift")
         if scheme:
-            p.add_argument("scheme", nargs="?", help="defaults to the project name")
+            # SUPPRESS keeps an omitted SCHEME from overwriting --scheme.
+            p.add_argument("scheme", nargs="?", default=argparse.SUPPRESS, help="same as --scheme")
+        p.add_argument(
+            "--scheme", help="defaults to the listed scheme named like the project, else the first"
+        )
         if resolve_flag:
             p.add_argument("-r", "--resolve", action="store_true", help="run `resolve` first")
         p.add_argument("--kill-xcode", action="store_true", help="pkill -9 Xcode first")

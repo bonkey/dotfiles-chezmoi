@@ -70,6 +70,7 @@ swiftformat = { version = "latest", no_app = "true", rename_exe = "swiftformat" 
 "npm:ccusage" = "latest"              # AI token/cost/usage tracking
 "npm:codeburn" = "latest"
 "pipx:bonkey/mobile-broom" = "latest"
+"pipx:bonkey/claude-counter-statusbar" = "latest" # Claude Code status line
 "npm:impeccable" = "latest"
 "github:bonkey/skillet" = "latest"
 "npm:@pen.dev/cli" = "latest"

@@ -590,7 +590,7 @@ alias xf="xmllint --format"
 }
 
 
-.mdc() {
+.cat-md() {
     if (( $+commands[mdcat] )); then
         mdcat -p --smart-punctuation "$@"
     elif (( $+commands[mlux] )); then
@@ -602,9 +602,14 @@ alias xf="xmllint --format"
     fi
 }
 
-.plistc() {
+.cat-plist() {
     (( $+commands[plutil] )) || return 1
     plutil -p "$@"
+}
+
+.cat-json() {
+    (( $+commands[jq] )) || return 1
+    jq . "$@"
 }
 
 c() {
@@ -616,8 +621,9 @@ c() {
     local arg
     for arg in "$@"; do
         case "$arg" in
-            *.md) .mdc "$@" && return 0 ;;
-            *.plist) .plistc "$@" && return 0 ;;
+            *.md) .cat-md "$@" && return 0 ;;
+            *.plist) .cat-plist "$@" && return 0 ;;
+            *.json) .cat-json "$@" && return 0 ;;
             *) continue ;;
         esac
         break

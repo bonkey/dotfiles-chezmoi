@@ -609,7 +609,12 @@ alias xf="xmllint --format"
 
 .cat-json() {
     (( $+commands[jq] )) || return 1
-    jq . "$@"
+    local filter=.
+    if (( $# )) && [[ ! -f "$1" ]]; then
+        filter="$1"
+        shift
+    fi
+    jq "$filter" "$@"
 }
 
 c() {
@@ -620,6 +625,7 @@ c() {
 
     local arg
     for arg in "$@"; do
+        [[ -f "$arg" ]] || continue
         case "$arg" in
             *.md) .cat-md "$@" && return 0 ;;
             *.plist) .cat-plist "$@" && return 0 ;;

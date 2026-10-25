@@ -28,6 +28,12 @@ description = 'Morph code search'
 mcps = ['morph']
 
 [[packs]]
+name = 'design'
+description = 'Design tools: UI polish and Pencil canvas'
+skills = ['impeccable']
+mcps = ['pencil']
+
+[[packs]]
 name = 'elevenlabs'
 description = 'ElevenLabs audio: speech, transcription, music, sound effects, dubbing, voice changing and voice agents'
 enabled = false
@@ -38,32 +44,27 @@ name = 'ios-bic'
 description = 'Best in Class turned to skills'
 enabled = false
 skills = [
-    'bic-accessibility@skills-private',
-    'bic-design@skills-private',
-    'bic-dev-toolbox@skills-private',
-    'bic-platform-adoption@skills-private',
-    'bic-scorecard@skills-private',
-    'bic-ux-polish@skills-private',
+  'bic-accessibility@skills-private',
+  'bic-design@skills-private',
+  'bic-dev-toolbox@skills-private',
+  'bic-platform-adoption@skills-private',
+  'bic-scorecard@skills-private',
+  'bic-ux-polish@skills-private',
 ]
 
 [[packs]]
 name = 'ios-dev'
 description = 'iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge'
 enabled = true
-skills = [
-    'agent-skills',
-    'ios-hig-design@wondelai-skills',
-    'helm-asc',
-    'swift-docc@agent-skills',
-]
+skills = ['agent-skills', 'ios-hig-design@wondelai-skills', 'helm-asc', 'swift-docc@agent-skills']
 mcps = [
-    'mobile-mcp',
-    'simctl',
-    'sosumi',
-    'xcode-instruments',
-    'xcstrings-crud',
-    'KickstartMCP',
-    'xcode',
+  'mobile-mcp',
+  'simctl',
+  'sosumi',
+  'xcode-instruments',
+  'xcstrings-crud',
+  'KickstartMCP',
+  'xcode',
 ]
 
 [[packs]]
@@ -90,20 +91,14 @@ skills = ['ponytail']
 name = 'tools'
 description = 'General tools: browser automation, Mermaid diagrams, herdr panes, plan grilling, skill observation and notes'
 skills = [
-    'agent-browser',
-    'design-doc-mermaid',
-    'herdr',
-    'mattpocock-skills',
-    'one-skill-to-rule-them-all',
-    'scrapling-official',
+  'agent-browser',
+  'design-doc-mermaid',
+  'herdr',
+  'mattpocock-skills',
+  'one-skill-to-rule-them-all',
+  'scrapling-official',
 ]
 mcps = ['bear-app', 'scrapling-mcp']
-
-[[packs]]
-name = 'design'
-description = 'Design tools: UI polish and Pencil canvas'
-skills = ['impeccable']
-mcps = ['pencil']
 
 [[packs]]
 name = 'web-dev'
@@ -116,6 +111,10 @@ name = 'wondelai'
 description = 'Business, product, marketing, UX and software-craft frameworks, with the guided journeys that combine them'
 enabled = false
 skills = ['wondelai-skills']
+
+[[skills]]
+url = 'https://github.com/D4Vinci/Scrapling.git'
+only = ['scrapling-official']
 
 [[skills]]
 url = 'https://github.com/vercel-labs/agent-browser.git'
@@ -134,17 +133,17 @@ url = 'https://github.com/spillwavesolutions/design-doc-mermaid.git'
 [[skills]]
 url = 'https://github.com/elevenlabs/skills.git'
 only = [
-    'agents',
-    'dubbing',
-    'music',
-    'setup-api-key',
-    'sound-effects',
-    'speech-engine',
-    'speech-to-text',
-    'text-to-speech',
-    'update-skills-from-changelog',
-    'voice-changer',
-    'voice-isolator',
+  'agents',
+  'dubbing',
+  'music',
+  'setup-api-key',
+  'sound-effects',
+  'speech-engine',
+  'speech-to-text',
+  'text-to-speech',
+  'update-skills-from-changelog',
+  'voice-changer',
+  'voice-isolator',
 ]
 
 [[skills]]
@@ -201,7 +200,7 @@ url = 'https://mcp.exa.ai/mcp?exaApiKey=${EXA_API_KEY}'
 [[mcps]]
 name = 'firecrawl'
 command = ['npx', '-y', 'firecrawl-mcp']
-environment = { FIRECRAWL_API_KEY = '${FIRECRAWL_API_KEY}' }
+environment = {FIRECRAWL_API_KEY = '${FIRECRAWL_API_KEY}'}
 
 [[mcps]]
 url = 'https://mcp.linear.app/mcp'
@@ -212,15 +211,14 @@ command = ['npx', '-y', '@mobilenext/mobile-mcp@latest']
 [[mcps]]
 name = 'morph'
 command = ['npx', '--prefer-offline', '-y', '@morphllm/morphmcp']
-environment = { MORPH_API_KEY = '${MORPH_API_KEY}' }
+environment = {MORPH_API_KEY = '${MORPH_API_KEY}'}
 
 [[mcps]]
 name = 'pencil'
-command = [
-    '/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64',
-    '--app',
-    'desktop',
-]
+command = ['/Applications/Pen.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64', '--app', 'desktop']
+
+[[mcps]]
+command = ['scrapling-mcp']
 
 [[mcps]]
 command = ['npx', 'shadcn@latest', 'mcp']
@@ -251,10 +249,3 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
-
-[[mcps]]
-command = ['scrapling-mcp']
-
-[[skills]]
-url = 'https://github.com/D4Vinci/Scrapling.git'
-only = ['scrapling-official']

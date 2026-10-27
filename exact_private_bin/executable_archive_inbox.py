@@ -29,6 +29,7 @@ import argparse
 import base64
 import concurrent.futures
 import io
+import itertools
 import json
 import threading
 import os
@@ -709,6 +710,62 @@ def _ensure_dest_dir(rule: dict, dest_dir: Path) -> bool:
     return False
 
 
+def _msg_stamp(full_msg: dict) -> datetime:
+    """Return the message's Date header in local time, or now if unparsable."""
+    try:
+        return parsedate_to_datetime(get_header(full_msg, "Date")).astimezone()
+    except (TypeError, ValueError):
+        return datetime.now()
+
+
+def _file_stamp(path: Path) -> datetime:
+    """Return a file's creation time (modification time where unavailable)."""
+    stat = path.stat()
+    return datetime.fromtimestamp(getattr(stat, "st_birthtime", stat.st_mtime))
+
+
+def _free_dest(dest_path: Path, stamp: datetime, data: bytes | None = None) -> Path | None:
+    """Return a path beside ``dest_path`` that holds no file yet.
+
+    A taken name gets a ``YYYYMMDD-HHMMSS_`` prefix from ``stamp``, then a
+    counter. Returns None when ``data`` is given and one of those names
+    already holds exactly these bytes.
+    """
+    prefix = stamp.strftime("%Y%m%d-%H%M%S")
+    name = dest_path.name
+    names = itertools.chain(
+        [name, f"{prefix}_{name}"],
+        (f"{prefix}-{n}_{name}" for n in itertools.count(2)),
+    )
+    for candidate in (dest_path.with_name(n) for n in names):
+        if not candidate.exists():
+            return candidate
+        if data is not None and candidate.read_bytes() == data:
+            return None
+
+
+def _save_new(dest_path: Path, data: bytes, stamp: datetime) -> bool:
+    """Write ``data`` without replacing any existing file.
+
+    Returns False when an identical file is already there.
+    """
+    path = _free_dest(dest_path, stamp, data)
+    if path is None:
+        print(f"    UNCHANGED: identical file already in {dest_path.parent}")
+        return False
+    with open(path, "xb") as f:
+        f.write(data)
+    print(f"    SAVED: {path} ({len(data):,} bytes)")
+    return True
+
+
+def _move_new(src: Path, dest_path: Path) -> Path:
+    """Move ``src`` to ``dest_path``, prefixing the name if it is taken."""
+    path = _free_dest(dest_path, _file_stamp(src))
+    shutil.move(str(src), str(path))
+    return path
+
+
 def _process_attachment_download(
     rule: dict, full_msg: dict, msg_id: str, subject: str, dest_dir: Path, execute: bool
 ) -> tuple[int, bool]:
@@ -749,12 +806,8 @@ def _process_attachment_download(
                 print("    ERROR: Failed to download attachment")
                 any_failed = True
                 continue
-            existed = dest_path.exists()
-            with open(dest_path, "wb") as f:
-                f.write(data)
-            verb = "OVERWROTE" if existed else "SAVED"
-            print(f"    {verb}: {dest_path} ({len(data):,} bytes)")
-            count += 1
+            if _save_new(dest_path, data, _msg_stamp(full_msg)):
+                count += 1
         else:
             print(
                 f"    DRY-RUN: Would download and save ({att.get('mimeType', 'unknown')})"
@@ -862,12 +915,7 @@ def _process_link_download(
         data = download_url(pdf_url)
         if data is None:
             return 0, False  # network failure — retry later
-        existed = dest_path.exists()
-        with open(dest_path, "wb") as f:
-            f.write(data)
-        verb = "OVERWROTE" if existed else "SAVED"
-        print(f"    {verb}: {dest_path} ({len(data):,} bytes)")
-        return 1, True
+        return int(_save_new(dest_path, data, _msg_stamp(full_msg))), True
     else:
         print(f"    DRY-RUN: Would download PDF from link")
         return 1, True
@@ -1275,7 +1323,7 @@ def scan_source(
 
                 if do_move:
                     dest_dir.mkdir(parents=True, exist_ok=True)
-                    shutil.move(str(f), str(dest_path))
+                    dest_path = _move_new(f, dest_path)
                     print(f"    MOVED → {dest_path}")
                     counts["moved"] += 1
                 else:
@@ -1451,12 +1499,7 @@ def discover_unknown_senders(
                 if blob is None:
                     print(f"    ERROR: failed to download {a['filename']}")
                     continue
-                dest_path = dest_dir / a["filename"]
-                existed = dest_path.exists()
-                with open(dest_path, "wb") as fh:
-                    fh.write(blob)
-                verb = "OVERWROTE" if existed else "SAVED"
-                print(f"    {verb}: {dest_path} ({len(blob):,} bytes)")
+                _save_new(dest_dir / a["filename"], blob, _msg_stamp(full_msg))
 
             # Confirmed save -> always add a rule so this sender is automatic next time.
             name = _derive_rule_name(full_from, existing_names)
@@ -1659,8 +1702,7 @@ def run_gmail(args, base_dir: Path, state_file: Path, state: dict) -> dict:
 
                     if do_move:
                         file_dest_dir.mkdir(parents=True, exist_ok=True)
-                        dest_path = file_dest_dir / c["path"].name
-                        shutil.move(str(c["path"]), str(dest_path))
+                        dest_path = _move_new(c["path"], file_dest_dir / c["path"].name)
                         print(f"        MOVED → {dest_path}")
                         moved_any = True
 

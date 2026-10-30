@@ -110,7 +110,7 @@ command = "worktrunk.open"
 description = "Worktree: switch / create from default branch"
 
 [[keys.command]]
-key = "ctrl+alt+shift+w"
+key = "ctrl+shift+alt+w"
 type = "plugin_action"
 command = "worktrunk.open"
 description = "Worktree: switch / create from default branch (no prefix)"
@@ -130,9 +130,9 @@ description = "Worktree: remove"
 
 # Worktree from a purpose / ticket URL, named by Apple's on-device model, scaffolded in the
 # background (local plugin: local-plugins/wt-purpose). prefix+shift+n is free: new_workspace
-# moved to ctrl+alt+w below.
+# is bound to ctrl+shift+w below.
 [[keys.command]]
-key = "ctrl+alt+h"
+key = "ctrl+shift+h"
 type = "plugin_action"
 command = "bonkey.wt-purpose.create"
 description = "Worktree from purpose / ticket URL (on-device slug)"
@@ -180,8 +180,8 @@ next_agent = "ctrl+alt+down"
 previous_agent = "ctrl+alt+up"
 next_workspace = "ctrl+alt+shift+down"
 previous_workspace = "ctrl+alt+shift+up"
-new_tab = "ctrl+alt+t"
-new_workspace = "ctrl+alt+w"
+new_tab = "ctrl+shift+t"
+new_workspace = "ctrl+shift+w"
 # switch_workspace = ""   # optional indexed binding, e.g. "prefix+shift+1..9"
 close_tab = "ctrl+shift+x"
 # rename_pane = "prefix+shift+p"
@@ -210,12 +210,8 @@ zoom = "ctrl+alt+z"       # legacy alias: fullscreen
 # navigate_pane_down = "j"
 # navigate_pane_up = "k"
 # navigate_pane_right = "l"     # right arrow always focuses the pane to the right
+
 # herdr-annotate (plannotator) - terminal annotations + doc/agent-reply review
-[[keys.command]]
-key = "prefix+a"
-type = "plugin_action"
-command = "annotate.capture"
-description = "annotate selected text"
 
 [[keys.command]]
 key = "ctrl+alt+a"
@@ -224,13 +220,13 @@ command = "annotate.capture"
 description = "annotate selected text (no prefix)"
 
 [[keys.command]]
-key = "prefix+Y"
+key = "ctrl+alt+c"
 type = "plugin_action"
 command = "annotate.copy-context"
 description = "copy annotations as context"
 
 [[keys.command]]
-key = "ctrl+shift+m"
+key = "ctrl+alt+shift+a"
 type = "plugin_action"
 command = "annotate.manage"
 description = "manage annotations"
@@ -369,7 +365,7 @@ command = "bonkey.bookmark.clear"
 description = "clear bookmarks"
 
 [[keys.command]]
-key = "ctrl+alt+shift+6"
+key = "ctrl+alt+6"
 type = "plugin_action"
 command = "bonkey.bookmark.sort"
 description = "sort worktrees by bookmark"

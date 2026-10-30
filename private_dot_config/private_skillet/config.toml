@@ -1,5 +1,5 @@
 gist = 'aa1b5c37a1bd7d0df1ee8070d0f55d8c'
-agents = ['claude-code', 'codex', 'gemini-cli', 'opencode', 'pi', 'zed', 'omp']
+agents = ['claude-code', 'codex', 'gemini-cli', 'opencode', 'pi', 'zed', 'omp', 'claude-desktop']
 
 [[secrets]]
 account = 'bonkey.1password.com'

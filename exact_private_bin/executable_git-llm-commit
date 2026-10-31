@@ -7,9 +7,9 @@
 # Usage: git-llm-commit [-a|--add] [-np|--no-push-pull] [-d|--dry-run]
 #                       [-c|--check] [-m|--model MODEL] [git-diff-args...]
 #
-# Inside herdr, a run without -d or -c moves to a new pane below the calling
-# pane, so the calling shell is free at once. The pane closes and posts a
-# notification after a commit. It stays open after a failure.
+# In a herdr terminal, a run without -d or -c moves to a new pane below the
+# calling pane, so the calling shell is free at once. The pane closes and posts
+# a notification after a commit. It stays open after a failure.
 
 source "${HOME}/bin/_common.zsh"
 
@@ -180,7 +180,9 @@ finish_pane() {
 is_dry_run=$(( ${argv[(Ie)-d]} || ${argv[(Ie)--dry-run]} ))
 is_check=$(( ${argv[(Ie)-c]} || ${argv[(Ie)--check]} ))
 
-if [[ ${HERDR_ENV:-} == 1 && -z ${GIT_LLM_COMMIT_IN_PANE:-} ]] && (( ! is_dry_run && ! is_check )); then
+# An app started from a herdr pane, such as Zed, passes HERDR_ENV to its own
+# terminals. Those terminals set their own TERM_PROGRAM.
+if [[ ${HERDR_ENV:-} == 1 && ${TERM_PROGRAM:-} == herdr && -z ${GIT_LLM_COMMIT_IN_PANE:-} ]] && (( ! is_dry_run && ! is_check )); then
     open_pane "$@"
 elif [[ -n ${GIT_LLM_COMMIT_IN_PANE:-} ]] && (( ! is_dry_run )); then
     # The subshell catches the exit of a failed _exec.

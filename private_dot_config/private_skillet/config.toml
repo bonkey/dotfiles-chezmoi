@@ -169,6 +169,10 @@ url = 'https://github.com/rebelytics/one-skill-to-rule-them-all.git'
 only = ['task-observer']
 
 [[skills]]
+name = 'periphery-pro-skills'
+url = 'https://github.com/periphery-pro/skills.git'
+
+[[skills]]
 url = 'https://github.com/backnotprop/plannotator.git'
 path = 'apps/skills/extra'
 

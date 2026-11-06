@@ -5,22 +5,6 @@
 
 export _GITHUB_ACCESS_TOKEN="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").GITHUB_TOKEN.value -}}"
 
-{{- if eq $host "dbauke-mac" "dbauke-mac-2" "DBs-MacBook-Pro" }}
-
-export CIRCLECI_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").CIRCLECI_TOKEN.value -}}"
-export CIRCLECI_CLI_TOKEN=$CIRCLECI_TOKEN
-
-export JIRA_API_TOKEN="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_API_TOKEN.value -}}"
-export JIRA_SERVER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_SERVER.value -}}"
-export JIRA_USER="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").JIRA_USER.value -}}"
-
-export FIGMA_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").FIGMA_API_KEY.value -}}"
-export SENTRY_AUTH_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").SENTRY_AUTH_KEY.value -}}"
-
-export GEMINI_API_KEY="{{- (onepasswordItemFields "c5abdfjbih6jhqripu6yfudc4a" "xorpczupr2kurbbiwa7ifs5t44" "everlong.1password.com").GEMINI_API_KEY.value -}}"
-
-{{- end }}
-
 {{- if eq $host "bonkey-mbp" }}
 
 export DEEPSEEK_API_KEY="{{- (onepasswordItemFields "lk3cxlvcjdbti27r7ivrcj646y" "nt6ulfcinsq7lcobqjhb2cdx5i" "bonkey.1password.com").DEEPSEEK_API_KEY.value -}}"

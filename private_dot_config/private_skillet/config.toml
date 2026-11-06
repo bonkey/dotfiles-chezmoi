@@ -162,7 +162,6 @@ only = ['impeccable']
 
 [[skills]]
 url = 'https://github.com/mattpocock/skills.git'
-only = ['grill-me', 'wayfinder']
 
 [[skills]]
 url = 'https://github.com/rebelytics/one-skill-to-rule-them-all.git'
@@ -253,7 +252,3 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
-
-[[skills]]
-name = 'periphery-pro-skills'
-url = 'https://github.com/periphery-pro/skills.git'

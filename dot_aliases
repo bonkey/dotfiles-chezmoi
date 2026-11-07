@@ -459,10 +459,16 @@ alias '??'="llm cmd -m gemini-flash-latest"
     claude-in-worktrunk --herdr "$@"
 }
 
-# Forward arguments to opencode.
 .oc() {
     opencode "$@"
 }
+
+.vv() {
+    vibe --yolo --trust "$@"
+}
+
+alias .ocm=".oc mini -m opencode-go/kimi-k3"
+
 
 alias .ocm=".oc mini -m opencode-go/kimi-k3"
 

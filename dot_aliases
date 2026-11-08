@@ -137,7 +137,7 @@ alias cal="gcal -s 1"
 }
 
 .chc() {
-    cd "$(.ch source-path)"
+    cd "$(.ch source-path)" || cd ~/.local/shared/chezmoi
 }
 
 alias .cha=".ch add"

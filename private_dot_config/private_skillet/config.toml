@@ -56,7 +56,7 @@ skills = [
 name = 'ios-dev'
 description = 'iOS development: HIG design, Swift DocC, and servers for Apple docs, simulator and device control, string catalogs, Instruments and the Xcode bridge'
 enabled = true
-skills = ['agent-skills', 'ios-hig-design@wondelai-skills', 'helm-asc', 'swift-docc@agent-skills']
+skills = ['agent-skills', 'ios-hig-design@wondelai-skills', 'helm-asc', 'swift-docc@agent-skills', 'Axiom']
 mcps = [
   'mobile-mcp',
   'simctl',
@@ -252,3 +252,6 @@ command = ['npx', '-y', 'instrumentsmcp@latest']
 
 [[mcps]]
 command = ['xcstrings-crud', 'mcp']
+
+[[skills]]
+url = 'https://github.com/CharlesWiltgen/Axiom.git'

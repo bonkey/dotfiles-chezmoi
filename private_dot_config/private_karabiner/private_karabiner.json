@@ -62,7 +62,6 @@
                                         "modifiers": ["left_command", "left_control", "left_option"]
                                     }
                                 ],
-                                "to_if_alone": [{ "key_code": "f19" }],
                                 "type": "basic"
                             }
                         ]

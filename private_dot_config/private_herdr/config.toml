@@ -137,6 +137,14 @@ type = "plugin_action"
 command = "bonkey.wt-purpose.create"
 description = "Worktree from purpose / ticket URL (on-device slug)"
 
+# Same popup, but claude starts without plan mode. ctrl+alt+shift+h is free: the focus_pane_*
+# chords are unbound below.
+[[keys.command]]
+key = "ctrl+alt+shift+h"
+type = "plugin_action"
+command = "bonkey.wt-purpose.create-direct"
+description = "Worktree from purpose / ticket URL, no plan mode"
+
 [keys]
 # Prefix key to enter prefix mode (default: "ctrl+b")
 # Examples: "ctrl+b", "f12", "esc", "-"
@@ -187,10 +195,11 @@ close_tab = "ctrl+shift+x"
 # rename_pane = "prefix+shift+p"
 # edit_scrollback = "prefix+e"
 
-focus_pane_left = "ctrl+alt+shift+h"
-focus_pane_down = "ctrl+alt+shift+j"
-focus_pane_up = "ctrl+alt+shift+k"
-focus_pane_right = "ctrl+alt+shift+l"
+# Unbound: ctrl+alt+shift+h starts bonkey.wt-purpose.create-direct.
+focus_pane_left = ""
+focus_pane_down = ""
+focus_pane_up = ""
+focus_pane_right = ""
 
 # cycle_pane_next = "prefix+n"
 # cycle_pane_previous = "prefix+p"

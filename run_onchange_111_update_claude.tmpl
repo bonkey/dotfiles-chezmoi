@@ -8,17 +8,18 @@ set +o pipefail
 claude update
 
 marketplaces=(
-    CharlesWiltgen/Axiom
+    zed-industries/delta-claude
     max-sixty/worktrunk
     JayDoubleu/aside
     oikon48/prompt-rail
     NahumLitvin/prismantis
     jarrodwatts/claude-image-view
     hamzafer/claude-code-mods
+    vercel/vercel-plugin
 )
 
 plugins=(
-    axiom@axiom-marketplace
+    delta@zed-industries
     worktrunk@worktrunk
     superpowers@claude-plugins-official
     aside@aside
@@ -26,6 +27,7 @@ plugins=(
     prismantis@prismantis
     image-view@claude-image-view
     where-am-i@claude-code-mods
+    vercel-plugin@vercel
 )
 
 for marketplace in "${marketplaces[@]}"; do

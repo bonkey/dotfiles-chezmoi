@@ -11,4 +11,4 @@ command = "llm -m gemini-flash-latest"
 copy = "wt step copy-ignored"
 
 [step.copy-ignored]
-exclude = ["SourcePackages", ".build", ".DS_Store"]
+exclude = ["SourcePackages", ".build", ".DS_Store", ".astro/"]

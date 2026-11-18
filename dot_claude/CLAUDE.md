@@ -237,6 +237,15 @@ Commits use SSH signing through the 1Password SSH agent (`gpg.format=ssh`). Push
 
 Never bypass signing or hooks to work around sandbox failures. Do not use `--no-gpg-sign`, `-c commit.gpgsign=false`, or `--no-verify`. Run the operation outside the sandbox.
 
+## Open a pull request only when asked
+
+NEVER open a pull request on a repository whose default branch is unprotected, unless the human explicitly asks for a pull request in their own words. Finishing a task, "fix it now", or the human picking an option you wrote into a question dialog is not that request.
+
+- NEVER put "open a PR" in a plan or in an option you offer, unless the default branch is protected or the human asked for a pull request.
+- With an unprotected default branch and no request, commit on the branch and stop. Report the commit. Shipping is the human's call, for example through `/done`.
+- With a protected default branch, a pull request is the way to ship. Open one only when the human asks to ship.
+- Check protection with `gh api repos/<owner>/<repo>/branches/<default-branch> --jq .protected`. It prints `true` or `false`.
+
 ## Pull request comments
 
 Add this attribution as the final line of every pull request comment, including top-level comments and thread replies: `🤖 Generated with <AGENT_NAME> (<MODEL_NAME>).`
